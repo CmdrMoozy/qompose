@@ -1,0 +1,81 @@
+####################################################################################################################
+#
+# This is the CMake build file for Qompose. The build process can be controlled in several ways:
+#
+#     - To enable "release" or "debug" builds, CMake should be instantiated as follows:
+#
+#           cmake -DCMAKE_BUILD_TYPE=Release ..		(This is the default, if neither is selected.)
+#           cmake -DCMAKE_BUILD_TYPE=Debug ..
+#
+####################################################################################################################
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(qompose)
+
+SET(CMAKE_COLOR_MAKEFILE ON)
+SET(CMAKE_VERBOSE_MAKEFILE OFF)
+
+# Define what Qt dependencies we have.
+
+FIND_PACKAGE(Qt4 REQUIRED)
+SET(QT_USE_QTCORE TRUE)
+SET(QT_USE_QTGUI TRUE)
+
+# Set INCLUDE and C(XX)FLAGS
+
+IF(NOT CMAKE_BUILD_TYPE)
+	MESSAGE(STATUS "No CMAKE_BUILD_TYPE specified; defaulting to Release mode.")
+	SET(CMAKE_BUILD_TYPE "Release")
+ENDIF()
+
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual -std=c++0x -O0 -DQOMPOSE_DEBUG")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual -std=c++0x -fomit-frame-pointer")
+
+INCLUDE_DIRECTORIES("src")
+
+# Define our project's source files.
+
+SET(qompose_HEADERS
+	
+	src/QomposeWindow.h
+	
+	src/editor/QomposeBuffer.h
+	src/editor/QomposeEditor.h
+	
+	src/editor/highlighting/QomposeSyntaxHighlighter.h
+	
+)
+
+SET(qompose_MOC_HEADERS
+	
+	src/QomposeWindow.h
+	
+	src/editor/QomposeEditor.h
+	
+	src/editor/highlighting/QomposeSyntaxHighlighter.h
+	
+)
+
+SET(qompose_SOURCES
+	
+	src/Qompose.cpp
+	src/QomposeWindow.cpp
+	
+	src/editor/QomposeBuffer.cpp
+	src/editor/QomposeEditor.cpp
+	
+	src/editor/highlighting/QomposeSyntaxHighlighter.cpp
+	
+)
+
+# Build our project!
+
+INCLUDE(${QT_USE_FILE})
+ADD_DEFINITIONS(${QT_DEFINITIONS})
+
+QT4_WRAP_CPP(qompose_MOC_SOURCES ${qompose_MOC_HEADERS})
+
+QT4_ADD_RESOURCES(qompose_RESOURCES_RCC ${qompose_RESOURCES})
+
+ADD_EXECUTABLE(Qompose ${qompose_MOC_SOURCES} ${qompose_SOURCES})
+TARGET_LINK_LIBRARIES(Qompose ${QT_LIBRARIES})
