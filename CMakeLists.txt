@@ -15,9 +15,13 @@ PROJECT(qompose)
 SET(CMAKE_COLOR_MAKEFILE ON)
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
+
 # Define what Qt dependencies we have.
 
 FIND_PACKAGE(Qt4 REQUIRED)
+FIND_PACKAGE(ICU REQUIRED)
+
 SET(QT_USE_QTCORE TRUE)
 SET(QT_USE_QTGUI TRUE)
 
@@ -39,6 +43,9 @@ SET(qompose_HEADERS
 	
 	src/QomposeWindow.h
 	
+	src/dialogs/QomposeEncodingDialog.h
+	src/dialogs/QomposeFileDialog.h
+	
 	src/editor/QomposeBuffer.h
 	src/editor/QomposeEditor.h
 	
@@ -50,6 +57,8 @@ SET(qompose_MOC_HEADERS
 	
 	src/QomposeWindow.h
 	
+	src/dialogs/QomposeEncodingDialog.h
+	
 	src/editor/QomposeEditor.h
 	
 	src/editor/highlighting/QomposeSyntaxHighlighter.h
@@ -60,6 +69,9 @@ SET(qompose_SOURCES
 	
 	src/Qompose.cpp
 	src/QomposeWindow.cpp
+	
+	src/dialogs/QomposeEncodingDialog.cpp
+	src/dialogs/QomposeFileDialog.cpp
 	
 	src/editor/QomposeBuffer.cpp
 	src/editor/QomposeEditor.cpp
@@ -78,4 +90,4 @@ QT4_WRAP_CPP(qompose_MOC_SOURCES ${qompose_MOC_HEADERS})
 QT4_ADD_RESOURCES(qompose_RESOURCES_RCC ${qompose_RESOURCES})
 
 ADD_EXECUTABLE(Qompose ${qompose_MOC_SOURCES} ${qompose_SOURCES})
-TARGET_LINK_LIBRARIES(Qompose ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(Qompose icuuc icui18n ${QT_LIBRARIES})

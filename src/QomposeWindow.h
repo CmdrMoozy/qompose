@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+class QMenu;
+class QAction;
+
 class QomposeBuffer;
 
 class QomposeWindow : public QMainWindow
@@ -14,7 +17,17 @@ class QomposeWindow : public QMainWindow
 		virtual ~QomposeWindow();
 		
 	private:
+		QMenu *fileMenu;
+		
+		QAction *openAction;
+		
 		QomposeBuffer *editor;
+		
+		void initializeActions();
+		void initializeMenus();
+		
+	private slots:
+		void doOpen(bool c);
 };
 
 #endif
