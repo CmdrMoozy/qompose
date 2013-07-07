@@ -24,6 +24,7 @@ FIND_PACKAGE(ICU REQUIRED)
 
 SET(QT_USE_QTCORE TRUE)
 SET(QT_USE_QTGUI TRUE)
+SET(QT_USE_QTNETWORK TRUE)
 
 # Set INCLUDE and C(XX)FLAGS
 
@@ -41,6 +42,7 @@ INCLUDE_DIRECTORIES("src")
 
 SET(qompose_HEADERS
 	
+	src/QomposeApplication.h
 	src/QomposeWindow.h
 	
 	src/dialogs/QomposeEncodingDialog.h
@@ -55,6 +57,7 @@ SET(qompose_HEADERS
 
 SET(qompose_MOC_HEADERS
 	
+	src/QomposeApplication.h
 	src/QomposeWindow.h
 	
 	src/dialogs/QomposeEncodingDialog.h
@@ -68,6 +71,7 @@ SET(qompose_MOC_HEADERS
 SET(qompose_SOURCES
 	
 	src/Qompose.cpp
+	src/QomposeApplication.cpp
 	src/QomposeWindow.cpp
 	
 	src/dialogs/QomposeEncodingDialog.cpp
