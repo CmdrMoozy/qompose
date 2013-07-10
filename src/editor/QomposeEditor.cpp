@@ -1,5 +1,7 @@
 #include "QomposeEditor.h"
 
+#include <cstddef>
+
 #include <QGridLayout>
 #include <QPainter>
 #include <QTextBlock>
@@ -73,7 +75,7 @@ void QomposeEditor::QomposeGutter::paintEvent(QPaintEvent *e)
  * \param p Our parent widget. 
  */
 QomposeEditor::QomposeEditor(QWidget *p)
-	: QPlainTextEdit(p)
+	: QPlainTextEdit(p), highlighter(NULL)
 {
 	gutter = new QomposeGutter(this);
 	highlighter = new QomposeSyntaxHighlighter(document());
@@ -100,6 +102,8 @@ QomposeEditor::QomposeEditor(QWidget *p)
  */
 QomposeEditor::~QomposeEditor()
 {
+	if(highlighter != NULL)
+		delete highlighter;
 }
 
 /*!
