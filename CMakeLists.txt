@@ -40,6 +40,12 @@ INCLUDE_DIRECTORIES("src")
 
 # Define our project's source files.
 
+SET(qompose_RESOURCES
+	
+	icons.qrc
+	
+)
+
 SET(qompose_HEADERS
 	
 	src/QomposeApplication.h
@@ -93,5 +99,5 @@ QT4_WRAP_CPP(qompose_MOC_SOURCES ${qompose_MOC_HEADERS})
 
 QT4_ADD_RESOURCES(qompose_RESOURCES_RCC ${qompose_RESOURCES})
 
-ADD_EXECUTABLE(Qompose ${qompose_MOC_SOURCES} ${qompose_SOURCES})
+ADD_EXECUTABLE(Qompose ${qompose_RESOURCES_RCC} ${qompose_MOC_SOURCES} ${qompose_SOURCES})
 TARGET_LINK_LIBRARIES(Qompose icuuc icui18n ${QT_LIBRARIES})

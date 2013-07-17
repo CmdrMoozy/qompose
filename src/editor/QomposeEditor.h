@@ -10,8 +10,6 @@ class QKeyEvent;
 class QWheelEvent;
 class QMouseEvent;
 
-class QomposeSyntaxHighlighter;
-
 class QomposeEditor : public QPlainTextEdit
 {
 	Q_OBJECT
@@ -62,8 +60,6 @@ class QomposeEditor : public QPlainTextEdit
 		int currentFontZoom;
 		
 		int tabWidth;
-		
-		QomposeSyntaxHighlighter *highlighter;
 		
 		void gutterPaintEvent(QPaintEvent *e);
 		int gutterWidth();

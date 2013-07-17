@@ -17,8 +17,6 @@
 #include <QRegExp>
 #include <QMouseEvent>
 
-#include "highlighting/QomposeSyntaxHighlighter.h"
-
 /*****************
  * QomposeGutter *
  *****************/
@@ -75,10 +73,9 @@ void QomposeEditor::QomposeGutter::paintEvent(QPaintEvent *e)
  * \param p Our parent widget. 
  */
 QomposeEditor::QomposeEditor(QWidget *p)
-	: QPlainTextEdit(p), highlighter(NULL)
+	: QPlainTextEdit(p)
 {
 	gutter = new QomposeGutter(this);
-	highlighter = new QomposeSyntaxHighlighter(document());
 	
 	QObject::connect( this, SIGNAL( blockCountChanged(int)            ), this, SLOT( updateGutterWidth()              ) );
 	QObject::connect( this, SIGNAL( updateRequest(const QRect &, int) ), this, SLOT( updateGutter(const QRect &, int) ) );
@@ -102,8 +99,6 @@ QomposeEditor::QomposeEditor(QWidget *p)
  */
 QomposeEditor::~QomposeEditor()
 {
-	if(highlighter != NULL)
-		delete highlighter;
 }
 
 /*!
