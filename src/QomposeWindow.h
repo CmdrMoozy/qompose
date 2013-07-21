@@ -6,8 +6,9 @@
 
 class QMenu;
 class QAction;
+class QStatusBar;
 
-class QomposeBuffer;
+class QomposeTabWidget;
 
 class QomposeWindow : public QMainWindow
 {
@@ -60,7 +61,9 @@ class QomposeWindow : public QMainWindow
 		QAction *aboutQomposeAction;
 		QAction *aboutQtAction;
 		
-		QomposeBuffer *editor;
+		QomposeTabWidget *buffers;
+		
+		QStatusBar *statusBar;
 		
 		void initializeActions();
 		void initializeMenus();
@@ -68,8 +71,6 @@ class QomposeWindow : public QMainWindow
 		QIcon getIconFromTheme(const QString &n) const;
 		
 	private slots:
-		void doNew(bool c);
-		void doOpen(bool c);
 		void doRevert(bool c);
 		void doSave(bool c);
 		void doSaveAs(bool c);

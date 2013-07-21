@@ -3,14 +3,12 @@
 #include <QMenu>
 #include <QAction>
 #include <QMenuBar>
-#include <QList>
-#include <QDir>
-#include <QFile>
 #include <QApplication>
+#include <QStatusBar>
+#include <QFile>
 
 #include "QomposeDefines.h"
-#include "dialogs/QomposeFileDialog.h"
-#include "editor/QomposeBuffer.h"
+#include "gui/QomposeTabWidget.h"
 
 /*!
  * This is our default constructor, which creates a new Qompose window, and initializes
@@ -22,8 +20,12 @@
 QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	: QMainWindow(p, f)
 {
-	editor = new QomposeBuffer(this);
-	setCentralWidget(editor);
+	buffers = new QomposeTabWidget(this);
+	buffers->doNew();
+	setCentralWidget(buffers);
+	
+	statusBar = new QStatusBar(this);
+	setStatusBar(statusBar);
 	
 	initializeActions();
 	initializeMenus();
@@ -154,8 +156,9 @@ void QomposeWindow::initializeActions()
 	aboutQtAction = new QAction(tr("About &Qt..."), this);
 	aboutQtAction->setIcon(getIconFromTheme("help-about"));
 	
-	QObject::connect( newAction,             SIGNAL( triggered(bool) ), this, SLOT( doNew(bool)             ) );
-	QObject::connect( openAction,            SIGNAL( triggered(bool) ), this, SLOT( doOpen(bool)            ) );
+	QObject::connect( newAction,  SIGNAL( triggered(bool) ), buffers, SLOT( doNew()  ) );
+	QObject::connect( openAction, SIGNAL( triggered(bool) ), buffers, SLOT( doOpen() ) );
+	
 	QObject::connect( revertAction,          SIGNAL( triggered(bool) ), this, SLOT( doRevert(bool)          ) );
 	QObject::connect( saveAction,            SIGNAL( triggered(bool) ), this, SLOT( doSave(bool)            ) );
 	QObject::connect( saveAsAction,          SIGNAL( triggered(bool) ), this, SLOT( doSaveAs(bool)          ) );
@@ -279,20 +282,6 @@ QIcon QomposeWindow::getIconFromTheme(const QString &n) const
 		qDebug("Couldn't find icon: %s", qPrintable(n));
 	
 	return QIcon::fromTheme(n, defaultIcon);
-}
-
-void QomposeWindow::doNew(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doOpen(bool QUNUSED(c))
-{ /* SLOT */
-	
-	QList<QomposeFileDescriptor> files = QomposeFileDialog::getOpenFileNames(
-		this, tr("Open Files"), QDir::homePath());
-	
-	qDebug("File list length: %d", files.length());
-	
 }
 
 void QomposeWindow::doRevert(bool QUNUSED(c))
