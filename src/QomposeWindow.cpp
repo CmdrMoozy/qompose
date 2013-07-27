@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QStatusBar>
 #include <QFile>
+#include <QLabel>
 
 #include "QomposeDefines.h"
 #include "dialogs/QomposeAboutDialog.h"
@@ -44,11 +45,19 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	setCentralWidget(buffers);
 	
 	statusBar = new QStatusBar(this);
+	
+	tabPathLabel = new QLabel(statusBar);
+	tabPathLabel->setAlignment(Qt::AlignRight);
+	
+	statusBar->addWidget(tabPathLabel, 1);
 	setStatusBar(statusBar);
 	
 	initializeActions();
 	initializeMenus();
 	initializeDialogs();
+	
+	QObject::connect( buffers, SIGNAL( pathChanged(const QString &) ),
+		this, SLOT( doTabPathChanged(const QString &) ) );
 }
 
 /*!
@@ -310,6 +319,13 @@ QIcon QomposeWindow::getIconFromTheme(const QString &n) const
 		qDebug("Couldn't find icon: %s", qPrintable(n));
 	
 	return QIcon::fromTheme(n, defaultIcon);
+}
+
+void QomposeWindow::doTabPathChanged(const QString &p)
+{ /* SLOT */
+	
+	tabPathLabel->setText(p);
+	
 }
 
 void QomposeWindow::doRevert(bool QUNUSED(c))

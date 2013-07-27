@@ -18,28 +18,75 @@
 
 #include "QomposeBuffer.h"
 
+#include <QTextCodec>
+#include <QFile>
+#include <QTextStream>
+#include <QTextCursor>
+#include <QFileInfo>
+
 QomposeBuffer::QomposeBuffer(QWidget *p)
-	: QomposeEditor(p)
+	: QomposeEditor(p), path(QString())
 {
+	QObject::connect( this, SIGNAL( modificationChanged(bool) ),
+		this, SLOT( doModificationChanged(bool) ) );
 }
 
 QomposeBuffer::~QomposeBuffer()
 {
 }
 
-void QomposeBuffer::open(const QomposeFileDescriptor &f)
+bool QomposeBuffer::open(const QomposeFileDescriptor &f)
 {
+	QTextCodec *codec = QTextCodec::codecForName(f.textCodec.toStdString().c_str());
 	
+	if(codec == 0)
+		return false;
+	
+	QFile file(f.fileName);
+	
+	if(!file.open(QIODevice::ReadOnly))
+		return false;
+	
+	QTextStream reader(&file);
+	reader.setCodec(codec);
+	
+	setPlainText(reader.readAll());
+	
+	QTextCursor curs = textCursor();
+	curs.movePosition(QTextCursor::Start);
+	setTextCursor(curs);
+	
+	path = f.fileName;
+	
+	setModified(false);
+	emit pathChanged(path);
+	
+	return true;
 }
 
 QString QomposeBuffer::getTitle() const
 {
-	return "Untitled";
+	QString title;
+	
+	if(hasBeenSaved())
+	{
+		QFileInfo fi(getPath());
+		title = fi.fileName();
+	}
+	else
+	{
+		title = tr("Untitled");
+	}
+	
+	if(isModified())
+		title.append(" *");
+	
+	return title;
 }
 
 QString QomposeBuffer::getPath() const
 {
-	return "";
+	return path;
 }
 
 /*!
@@ -48,13 +95,23 @@ QString QomposeBuffer::getPath() const
  */
 bool QomposeBuffer::hasBeenSaved() const
 {
-	return false;
+	return (!path.isNull());
 }
 
-/*!
- * This function returns whether or not this buffer has any unsaved changes.
- */
 bool QomposeBuffer::isModified() const
 {
-	return false;
+	return document()->isModified();
+}
+
+void QomposeBuffer::setModified(bool m)
+{
+	document()->setModified(m);
+	emit modificationChanged(m);
+}
+
+void QomposeBuffer::doModificationChanged(bool c)
+{ /* SLOT */
+	
+	emit titleChanged(getTitle());
+	
 }

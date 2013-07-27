@@ -31,13 +31,20 @@ class QomposeBuffer : public QomposeEditor
 		QomposeBuffer(QWidget *p = NULL);
 		virtual ~QomposeBuffer();
 		
-		void open(const QomposeFileDescriptor &f);
+		bool open(const QomposeFileDescriptor &f);
 		
 		QString getTitle() const;
 		QString getPath() const;
 		
 		bool hasBeenSaved() const;
 		bool isModified() const;
+		void setModified(bool m);
+		
+	private:
+		QString path;
+		
+	private slots:
+		void doModificationChanged(bool c);
 		
 	signals:
 		void titleChanged(const QString &);

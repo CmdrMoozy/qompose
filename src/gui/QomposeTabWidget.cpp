@@ -73,12 +73,12 @@ QomposeBuffer *QomposeTabWidget::newBuffer()
 	QObject::connect(b, SIGNAL(pathChanged(const QString &)),
 		this, SLOT(doTabPathChanged(const QString &)));
 	
-	int i = tabBar->addTab(b->getTitle());
-	tabBar->setCurrentIndex(i);
+	tabDisplayLayout->addWidget(b);
 	
+	int i = tabBar->addTab(b->getTitle());
 	tabs.insert(i, b);
 	
-	tabDisplayLayout->addWidget(b);
+	tabBar->setCurrentIndex(i);
 	
 	return b;
 }
@@ -152,6 +152,7 @@ void QomposeTabWidget::doTabTitleChanged(const QString &t)
 	
 	if(b != NULL)
 	{
+
 		int i = tabs.key(b, -1);
 		
 		if(i != -1)

@@ -25,6 +25,7 @@
 class QMenu;
 class QAction;
 class QStatusBar;
+class QLabel;
 
 class QomposeAboutDialog;
 class QomposeTabWidget;
@@ -85,6 +86,7 @@ class QomposeWindow : public QMainWindow
 		QomposeTabWidget *buffers;
 		
 		QStatusBar *statusBar;
+		QLabel *tabPathLabel;
 		
 		void initializeActions();
 		void initializeMenus();
@@ -93,6 +95,8 @@ class QomposeWindow : public QMainWindow
 		QIcon getIconFromTheme(const QString &n) const;
 		
 	private slots:
+		void doTabPathChanged(const QString &p);
+		
 		void doRevert(bool c);
 		void doSave(bool c);
 		void doSaveAs(bool c);
