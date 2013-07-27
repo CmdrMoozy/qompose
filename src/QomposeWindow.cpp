@@ -185,15 +185,15 @@ void QomposeWindow::initializeActions()
 	aboutQtAction = new QAction(tr("About &Qt..."), this);
 	aboutQtAction->setIcon(getIconFromTheme("help-about"));
 	
-	QObject::connect( newAction,  SIGNAL( triggered(bool) ), buffers, SLOT( doNew()  ) );
-	QObject::connect( openAction, SIGNAL( triggered(bool) ), buffers, SLOT( doOpen() ) );
+	QObject::connect( newAction,    SIGNAL( triggered(bool) ), buffers, SLOT( doNew()    ) );
+	QObject::connect( openAction,   SIGNAL( triggered(bool) ), buffers, SLOT( doOpen()   ) );
+	QObject::connect( revertAction, SIGNAL( triggered(bool) ), buffers, SLOT( doRevert() ) );
+	QObject::connect( saveAction,   SIGNAL( triggered(bool) ), buffers, SLOT( doSave()   ) );
+	QObject::connect( saveAsAction, SIGNAL( triggered(bool) ), buffers, SLOT( doSaveAs() ) );
+	QObject::connect( closeAction,  SIGNAL( triggered(bool) ), buffers, SLOT( doClose()  ) );
 	
-	QObject::connect( revertAction,          SIGNAL( triggered(bool) ), this, SLOT( doRevert(bool)          ) );
-	QObject::connect( saveAction,            SIGNAL( triggered(bool) ), this, SLOT( doSave(bool)            ) );
-	QObject::connect( saveAsAction,          SIGNAL( triggered(bool) ), this, SLOT( doSaveAs(bool)          ) );
 	QObject::connect( printAction,           SIGNAL( triggered(bool) ), this, SLOT( doPrint(bool)           ) );
 	QObject::connect( printPreviewAction,    SIGNAL( triggered(bool) ), this, SLOT( doPrintPreview(bool)    ) );
-	QObject::connect( closeAction,           SIGNAL( triggered(bool) ), this, SLOT( doClose(bool)           ) );
 	QObject::connect( exitAction,            SIGNAL( triggered(bool) ), this, SLOT( doExit(bool)            ) );
 	QObject::connect( undoAction,            SIGNAL( triggered(bool) ), this, SLOT( doUndo(bool)            ) );
 	QObject::connect( redoAction,            SIGNAL( triggered(bool) ), this, SLOT( doRedo(bool)            ) );
@@ -328,27 +328,11 @@ void QomposeWindow::doTabPathChanged(const QString &p)
 	
 }
 
-void QomposeWindow::doRevert(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doSave(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doSaveAs(bool QUNUSED(c))
-{ /* SLOT */
-}
-
 void QomposeWindow::doPrint(bool QUNUSED(c))
 { /* SLOT */
 }
 
 void QomposeWindow::doPrintPreview(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doClose(bool QUNUSED(c))
 { /* SLOT */
 }
 

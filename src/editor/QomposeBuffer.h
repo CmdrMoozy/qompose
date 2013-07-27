@@ -32,6 +32,8 @@ class QomposeBuffer : public QomposeEditor
 		virtual ~QomposeBuffer();
 		
 		bool open(const QomposeFileDescriptor &f);
+		bool revert();
+		bool save(const QString &p = QString());
 		
 		QString getTitle() const;
 		QString getPath() const;
@@ -42,6 +44,10 @@ class QomposeBuffer : public QomposeEditor
 		
 	private:
 		QString path;
+		QString codec;
+		
+		bool read(bool u = false);
+		bool write();
 		
 	private slots:
 		void doModificationChanged(bool c);

@@ -22,6 +22,9 @@
 #include <QTabBar>
 #include <QList>
 #include <QStackedLayout>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QDir>
 
 #include "dialogs/QomposeFileDialog.h"
 #include "editor/QomposeBuffer.h"
@@ -45,8 +48,8 @@ QomposeTabWidget::QomposeTabWidget(QWidget *p)
 	layout->setColumnStretch(0, 1);
 	setLayout(layout);
 	
-	QObject::connect( tabBar, SIGNAL( currentChanged(int)    ), this, SLOT( doTabChanged(int) ) );
-	QObject::connect( tabBar, SIGNAL( tabCloseRequested(int) ), this, SLOT( doCloseTab(int)   ) );
+	QObject::connect( tabBar, SIGNAL( currentChanged(int)    ), this, SLOT( doTabChanged(int)        ) );
+	QObject::connect( tabBar, SIGNAL( tabCloseRequested(int) ), this, SLOT( doTabCloseRequested(int) ) );
 }
 
 QomposeTabWidget::~QomposeTabWidget()
@@ -81,6 +84,17 @@ QomposeBuffer *QomposeTabWidget::newBuffer()
 	tabBar->setCurrentIndex(i);
 	
 	return b;
+}
+
+void QomposeTabWidget::removeCurrentBuffer()
+{
+	int i = tabBar->currentIndex();
+	QomposeBuffer *b = tabs.take(i);
+	
+	tabBar->removeTab(i);
+	
+	tabDisplayLayout->removeWidget(b);
+	delete b;
 }
 
 void QomposeTabWidget::doNew()
@@ -124,6 +138,94 @@ void QomposeTabWidget::doOpen()
 	
 }
 
+void QomposeTabWidget::doRevert()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->revert();
+	
+}
+
+void QomposeTabWidget::doSave()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	if(buf->hasBeenSaved())
+		buf->save();
+	else
+		doSaveAs();
+	
+}
+
+void QomposeTabWidget::doSaveAs()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	QString p = QFileDialog::getSaveFileName(this, tr("Save File"),
+		QDir::homePath());
+	
+	if(p.length() <= 0)
+		return;
+	
+	buf->save(p);
+	
+}
+
+void QomposeTabWidget::doClose()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	if(buf->isModified())
+	{
+		QMessageBox::StandardButton b = QMessageBox::question(
+			this, tr("Qompose - Unsaved Changes"),
+			tr("Save changes to this buffer before closing?"),
+			QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+			QMessageBox::Yes);
+		
+		switch(b)
+		{
+			case QMessageBox::Yes:
+				doSave();
+				
+				if(!buf->isModified())
+					removeCurrentBuffer();
+				
+				break;
+				
+			case QMessageBox::No:
+				removeCurrentBuffer();
+				break;
+				
+			case QMessageBox::Cancel:
+			default:
+				return;
+				break;
+		};
+	}
+	else
+	{
+		removeCurrentBuffer();
+	}
+	
+}
+
 void QomposeTabWidget::doTabChanged(int i)
 { /* SLOT */
 	
@@ -132,16 +234,24 @@ void QomposeTabWidget::doTabChanged(int i)
 	if(b != NULL)
 	{
 		tabDisplayLayout->setCurrentWidget(b);
+		b->setFocus(Qt::OtherFocusReason);
 		
 		emit pathChanged(b->getPath());
 	}
 	
 }
 
-void QomposeTabWidget::doCloseTab(int i)
+/*!
+ * This function handles a tab close request by clicking the "close" button
+ * on our tab bar.
+ *
+ * \param i The index of the tab being closed.
+ */
+void QomposeTabWidget::doTabCloseRequested(int i)
 { /* SLOT */
 	
-	
+	tabBar->setCurrentIndex(i);
+	doClose();
 	
 }
 

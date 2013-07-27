@@ -48,14 +48,19 @@ class QomposeTabWidget : public QWidget
 		QMap<int, QomposeBuffer *> tabs;
 		
 		QomposeBuffer *newBuffer();
+		void removeCurrentBuffer();
 		
 	public slots:
 		void doNew();
 		void doOpen();
+		void doRevert();
+		void doSave();
+		void doSaveAs();
+		void doClose();
 		
 	private slots:
 		void doTabChanged(int i);
-		void doCloseTab(int i);
+		void doTabCloseRequested(int i);
 		
 		void doTabTitleChanged(const QString &t);
 		void doTabPathChanged(const QString &p);

@@ -23,6 +23,10 @@
 #include <QTextStream>
 #include <QTextCursor>
 #include <QFileInfo>
+#include <QTextDocumentWriter>
+#include <QByteArray>
+
+#include "QomposeDefines.h"
 
 QomposeBuffer::QomposeBuffer(QWidget *p)
 	: QomposeEditor(p), path(QString())
@@ -37,31 +41,70 @@ QomposeBuffer::~QomposeBuffer()
 
 bool QomposeBuffer::open(const QomposeFileDescriptor &f)
 {
-	QTextCodec *codec = QTextCodec::codecForName(f.textCodec.toStdString().c_str());
-	
-	if(codec == 0)
-		return false;
-	
-	QFile file(f.fileName);
-	
-	if(!file.open(QIODevice::ReadOnly))
-		return false;
-	
-	QTextStream reader(&file);
-	reader.setCodec(codec);
-	
-	setPlainText(reader.readAll());
-	
-	QTextCursor curs = textCursor();
-	curs.movePosition(QTextCursor::Start);
-	setTextCursor(curs);
-	
 	path = f.fileName;
+	codec = f.textCodec;
 	
-	setModified(false);
 	emit pathChanged(path);
 	
-	return true;
+	bool r = read();
+	
+	if(r)
+	{
+		QTextCursor curs = textCursor();
+		curs.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+		setTextCursor(curs);
+	}
+	
+	return r;
+}
+
+bool QomposeBuffer::revert()
+{
+	if(!hasBeenSaved())
+		return false;
+	
+	QTextCursor curs = textCursor();
+	int cursPos = curs.position();
+	
+	bool r = read(true);
+	
+	if(r)
+	{
+		QTextCursor endCurs = textCursor();
+		endCurs.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+		
+		int endPos = endCurs.position();
+		
+		if(cursPos <= endPos)
+			curs.setPosition(cursPos, QTextCursor::MoveAnchor);
+		else
+			curs.setPosition(QTextCursor::End, QTextCursor::MoveAnchor);
+		
+		setTextCursor(curs);
+	}
+	
+	return r;
+}
+
+bool QomposeBuffer::save(const QString &p)
+{
+	if(p.isNull())
+	{
+		if(!hasBeenSaved())
+			return false;
+		
+		return write();
+	}
+	else
+	{
+		if(path.isNull())
+			codec = "UTF-8";
+		
+		path = p;
+		emit pathChanged(path);
+		
+		return write();
+	}
 }
 
 QString QomposeBuffer::getTitle() const
@@ -109,7 +152,69 @@ void QomposeBuffer::setModified(bool m)
 	emit modificationChanged(m);
 }
 
-void QomposeBuffer::doModificationChanged(bool c)
+/*!
+ * This function (re-)reads our buffer's contents from the disk, using our object's
+ * current path and text codec attributes.
+ *
+ * \param u Whether or not "undo" operations should be supported.
+ */
+bool QomposeBuffer::read(bool u)
+{
+	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
+	
+	if(c == 0)
+		return false;
+	
+	QFile file(path);
+	
+	if(!file.open(QIODevice::ReadOnly))
+		return false;
+	
+	QTextStream reader(&file);
+	reader.setCodec(c);
+	
+	if(u)
+	{
+		selectAll();
+		insertPlainText(reader.readAll());
+	}
+	else
+	{
+		setPlainText(reader.readAll());
+	}
+	
+	setModified(false);
+	
+	return true;
+}
+
+bool QomposeBuffer::write()
+{
+	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
+	
+	if(c == 0)
+		return false;
+	
+	QFile file(path);
+	
+	if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+		return false;
+	
+	QByteArray format("plaintext");
+	QTextDocumentWriter writer(&file, format);
+	
+	writer.setCodec(c);
+	bool r = writer.write(document());
+	
+	file.close();
+	
+	if(r)
+		setModified(false);
+	
+	return r;
+}
+
+void QomposeBuffer::doModificationChanged(bool QUNUSED(c))
 { /* SLOT */
 	
 	emit titleChanged(getTitle());

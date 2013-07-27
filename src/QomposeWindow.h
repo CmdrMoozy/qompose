@@ -97,12 +97,8 @@ class QomposeWindow : public QMainWindow
 	private slots:
 		void doTabPathChanged(const QString &p);
 		
-		void doRevert(bool c);
-		void doSave(bool c);
-		void doSaveAs(bool c);
 		void doPrint(bool c);
 		void doPrintPreview(bool c);
-		void doClose(bool c);
 		void doExit(bool c);
 		void doUndo(bool c);
 		void doRedo(bool c);
