@@ -16,52 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_TAB_WIDGET_H
-#define INCLUDE_QOMPOSE_TAB_WIDGET_H
+#ifndef INCLUDE_QOMPOSE_ABOUT_DIALOG_H
+#define INCLUDE_QOMPOSE_ABOUT_DIALOG_H
 
-#include <QWidget>
-#include <QMap>
+#include <QDialog>
 
 class QGridLayout;
-class QTabBar;
-class QStackedLayout;
+class QTabWidget;
+class QTextEdit;
+class QPushButton;
 
-class QomposeBuffer;
-
-class QomposeTabWidget : public QWidget
+class QomposeAboutDialog : public QDialog
 {
 	Q_OBJECT
 	
 	public:
-		QomposeTabWidget(QWidget *p = 0);
-		virtual ~QomposeTabWidget();
-		
-		QomposeBuffer *currentBuffer() const;
+		QomposeAboutDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
+		virtual ~QomposeAboutDialog();
 		
 	private:
 		QGridLayout *layout;
-		QTabBar *tabBar;
+		QTabWidget *tabs;
 		
-		QWidget *tabDisplayWidget;
-		QStackedLayout *tabDisplayLayout;
+		QTextEdit *licenseTextEdit;
 		
-		QMap<int, QomposeBuffer *> tabs;
+		QPushButton *closeButton;
 		
-		QomposeBuffer *newBuffer();
-		
-	public slots:
-		void doNew();
-		void doOpen();
+		void loadLicense();
 		
 	private slots:
-		void doTabChanged(int i);
-		void doCloseTab(int i);
-		
-		void doTabTitleChanged(const QString &t);
-		void doTabPathChanged(const QString &p);
-		
-	signals:
-		void pathChanged(const QString &);
+		void doClose();
 };
 
 #endif

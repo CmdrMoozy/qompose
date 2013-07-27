@@ -42,6 +42,7 @@ INCLUDE_DIRECTORIES("src")
 
 SET(qompose_RESOURCES
 	
+	data.qrc
 	icons.qrc
 	
 )
@@ -51,6 +52,7 @@ SET(qompose_HEADERS
 	src/QomposeApplication.h
 	src/QomposeWindow.h
 	
+	src/dialogs/QomposeAboutDialog.h
 	src/dialogs/QomposeEncodingDialog.h
 	src/dialogs/QomposeFileDialog.h
 	
@@ -68,6 +70,7 @@ SET(qompose_MOC_HEADERS
 	src/QomposeApplication.h
 	src/QomposeWindow.h
 	
+	src/dialogs/QomposeAboutDialog.h
 	src/dialogs/QomposeEncodingDialog.h
 	
 	src/editor/QomposeBuffer.h
@@ -85,6 +88,7 @@ SET(qompose_SOURCES
 	src/QomposeApplication.cpp
 	src/QomposeWindow.cpp
 	
+	src/dialogs/QomposeAboutDialog.cpp
 	src/dialogs/QomposeEncodingDialog.cpp
 	src/dialogs/QomposeFileDialog.cpp
 	

@@ -1,3 +1,21 @@
+/*
+ * Qompose - A simple programmer's text editor.
+ * Copyright (C) 2013 Axel Rasmussen
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "QomposeWindow.h"
 
 #include <QMenu>
@@ -8,6 +26,7 @@
 #include <QFile>
 
 #include "QomposeDefines.h"
+#include "dialogs/QomposeAboutDialog.h"
 #include "gui/QomposeTabWidget.h"
 
 /*!
@@ -29,6 +48,7 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	
 	initializeActions();
 	initializeMenus();
+	initializeDialogs();
 }
 
 /*!
@@ -254,6 +274,14 @@ void QomposeWindow::initializeMenus()
 }
 
 /*!
+ * This function initializes our dialog objects.
+ */
+void QomposeWindow::initializeDialogs()
+{
+	aboutDialog = new QomposeAboutDialog(this);
+}
+
+/*!
  * This function will return the icon for the given standard name. We try to
  * use an icon from the operating system's icon theme, but failing that, we
  * try to use a fallback from our internal icon store.
@@ -394,6 +422,9 @@ void QomposeWindow::doMoveBufferRight(bool QUNUSED(c))
 
 void QomposeWindow::doAboutQompose(bool QUNUSED(c))
 { /* SLOT */
+	
+	aboutDialog->show();
+	
 }
 
 void QomposeWindow::doAboutQt(bool QUNUSED(c))
