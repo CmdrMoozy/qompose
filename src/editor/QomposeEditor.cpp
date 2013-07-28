@@ -342,20 +342,6 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 			
 			break;
 		
-		case Qt::ControlModifier | Qt::AltModifier:
-			
-			switch(e->key())
-			{
-				// Ignore Ctrl+Shift+Left and Ctrl+Shift+Right.
-				case Qt::Key_Left:
-				case Qt::Key_Right:
-					e->ignore();
-					processed = true;
-					break;
-			};
-			
-			break;
-		
 		case Qt::ShiftModifier:
 			
 			switch(e->key())

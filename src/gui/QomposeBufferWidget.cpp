@@ -55,9 +55,77 @@ QomposeBufferWidget::~QomposeBufferWidget()
 	tabs.empty();
 }
 
+int QomposeBufferWidget::count() const
+{
+	return tabWidget->count();
+}
+
+QomposeBuffer *QomposeBufferWidget::bufferAt(int i) const
+{
+	return dynamic_cast<QomposeBuffer *>(tabWidget->widget(i));
+}
+
 QomposeBuffer *QomposeBufferWidget::currentBuffer() const
 {
 	return dynamic_cast<QomposeBuffer *>(tabWidget->currentWidget());
+}
+
+void QomposeBufferWidget::setCurrentBuffer(int i)
+{
+	tabWidget->setCurrentIndex(i);
+}
+
+/*!
+ * This function prepares our buffers for a close event on our parent widget -
+ * for example, if we are a component of a window, and that window is about to
+ * be closed. We do this by ensuring each one of our buffers is saved (or
+ * doesn't need to be saved).
+ *
+ * We return whether or not we are totally prepared for the impending close,
+ * but our caller is in no way required to listen to us unless they are nice.
+ *
+ * \return True if we are ready to be closed, or false otherwise.
+ */
+bool QomposeBufferWidget::prepareCloseParent()
+{
+	for(int i = 0; i < count(); ++i)
+	{
+		QomposeBuffer *buf = bufferAt(i);
+		
+		if(buf == NULL)
+			continue;
+		
+		setCurrentBuffer(i);
+		
+		if(buf->isModified())
+		{
+			QMessageBox::StandardButton b = QMessageBox::question(
+				this, tr("Qompose - Unsaved Changes"),
+				tr("Save changes to this buffer before closing?"),
+				QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+				QMessageBox::Yes);
+			
+			switch(b)
+			{
+				case QMessageBox::Yes:
+					doSave();
+					
+					if(buf->isModified())
+						return false;
+					
+					break;
+				
+				case QMessageBox::No:
+					continue;
+				
+				case QMessageBox::Cancel:
+				default:
+					return false;
+			};
+		}
+	}
+	
+	return true;
 }
 
 QomposeBuffer *QomposeBufferWidget::newBuffer()

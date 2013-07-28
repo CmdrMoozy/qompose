@@ -26,6 +26,7 @@ class QMenu;
 class QAction;
 class QStatusBar;
 class QLabel;
+class QCloseEvent;
 
 class QomposeAboutDialog;
 class QomposeBufferWidget;
@@ -37,6 +38,9 @@ class QomposeWindow : public QMainWindow
 	public:
 		QomposeWindow(QWidget *p = NULL, Qt::WindowFlags f = 0);
 		virtual ~QomposeWindow();
+		
+	protected:
+		void closeEvent(QCloseEvent *e);
 		
 	private:
 		QomposeAboutDialog *aboutDialog;
@@ -99,7 +103,6 @@ class QomposeWindow : public QMainWindow
 		
 		void doPrint(bool c);
 		void doPrintPreview(bool c);
-		void doExit(bool c);
 		void doUndo(bool c);
 		void doRedo(bool c);
 		void doCut(bool c);

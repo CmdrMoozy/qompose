@@ -25,6 +25,7 @@
 #include <QStatusBar>
 #include <QFile>
 #include <QLabel>
+#include <QCloseEvent>
 
 #include "QomposeDefines.h"
 #include "dialogs/QomposeAboutDialog.h"
@@ -65,6 +66,14 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
  */
 QomposeWindow::~QomposeWindow()
 {
+}
+
+void QomposeWindow::closeEvent(QCloseEvent *e)
+{
+	if(buffers->prepareCloseParent())
+		e->accept();
+	else
+		e->ignore();
 }
 
 /*!
@@ -191,6 +200,7 @@ void QomposeWindow::initializeActions()
 	QObject::connect( saveAction,            SIGNAL( triggered(bool) ), buffers, SLOT( doSave()            ) );
 	QObject::connect( saveAsAction,          SIGNAL( triggered(bool) ), buffers, SLOT( doSaveAs()          ) );
 	QObject::connect( closeAction,           SIGNAL( triggered(bool) ), buffers, SLOT( doClose()           ) );
+	QObject::connect( exitAction,            SIGNAL( triggered(bool) ), this,    SLOT( close()             ) );
 	QObject::connect( previousBufferAction,  SIGNAL( triggered(bool) ), buffers, SLOT( doPreviousBuffer()  ) );
 	QObject::connect( nextBufferAction,      SIGNAL( triggered(bool) ), buffers, SLOT( doNextBuffer()      ) );
 	QObject::connect( moveBufferLeftAction,  SIGNAL( triggered(bool) ), buffers, SLOT( doMoveBufferLeft()  ) );
@@ -198,7 +208,6 @@ void QomposeWindow::initializeActions()
 	
 	QObject::connect( printAction,           SIGNAL( triggered(bool) ), this, SLOT( doPrint(bool)           ) );
 	QObject::connect( printPreviewAction,    SIGNAL( triggered(bool) ), this, SLOT( doPrintPreview(bool)    ) );
-	QObject::connect( exitAction,            SIGNAL( triggered(bool) ), this, SLOT( doExit(bool)            ) );
 	QObject::connect( undoAction,            SIGNAL( triggered(bool) ), this, SLOT( doUndo(bool)            ) );
 	QObject::connect( redoAction,            SIGNAL( triggered(bool) ), this, SLOT( doRedo(bool)            ) );
 	QObject::connect( cutAction,             SIGNAL( triggered(bool) ), this, SLOT( doCut(bool)             ) );
@@ -333,10 +342,6 @@ void QomposeWindow::doPrint(bool QUNUSED(c))
 }
 
 void QomposeWindow::doPrintPreview(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doExit(bool QUNUSED(c))
 { /* SLOT */
 }
 

@@ -35,7 +35,12 @@ class QomposeBufferWidget : public QWidget
 		QomposeBufferWidget(QWidget *p = 0);
 		virtual ~QomposeBufferWidget();
 		
+		int count() const;
+		QomposeBuffer *bufferAt(int i) const;
 		QomposeBuffer *currentBuffer() const;
+		void setCurrentBuffer(int i);
+		
+		bool prepareCloseParent();
 		
 	private:
 		QGridLayout *layout;
