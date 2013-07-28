@@ -201,6 +201,13 @@ void QomposeWindow::initializeActions()
 	QObject::connect( saveAsAction,          SIGNAL( triggered(bool) ), buffers, SLOT( doSaveAs()          ) );
 	QObject::connect( closeAction,           SIGNAL( triggered(bool) ), buffers, SLOT( doClose()           ) );
 	QObject::connect( exitAction,            SIGNAL( triggered(bool) ), this,    SLOT( close()             ) );
+	QObject::connect( undoAction,            SIGNAL( triggered(bool) ), buffers, SLOT( doUndo()            ) );
+	QObject::connect( redoAction,            SIGNAL( triggered(bool) ), buffers, SLOT( doRedo()            ) );
+	QObject::connect( cutAction,             SIGNAL( triggered(bool) ), buffers, SLOT( doCut()             ) );
+	QObject::connect( copyAction,            SIGNAL( triggered(bool) ), buffers, SLOT( doCopy()            ) );
+	QObject::connect( pasteAction,           SIGNAL( triggered(bool) ), buffers, SLOT( doPaste()           ) );
+	QObject::connect( selectAllAction,       SIGNAL( triggered(bool) ), buffers, SLOT( doSelectAll()       ) );
+	QObject::connect( deselectAction,        SIGNAL( triggered(bool) ), buffers, SLOT( doDeselect()        ) );
 	QObject::connect( previousBufferAction,  SIGNAL( triggered(bool) ), buffers, SLOT( doPreviousBuffer()  ) );
 	QObject::connect( nextBufferAction,      SIGNAL( triggered(bool) ), buffers, SLOT( doNextBuffer()      ) );
 	QObject::connect( moveBufferLeftAction,  SIGNAL( triggered(bool) ), buffers, SLOT( doMoveBufferLeft()  ) );
@@ -208,14 +215,7 @@ void QomposeWindow::initializeActions()
 	
 	QObject::connect( printAction,           SIGNAL( triggered(bool) ), this, SLOT( doPrint(bool)           ) );
 	QObject::connect( printPreviewAction,    SIGNAL( triggered(bool) ), this, SLOT( doPrintPreview(bool)    ) );
-	QObject::connect( undoAction,            SIGNAL( triggered(bool) ), this, SLOT( doUndo(bool)            ) );
-	QObject::connect( redoAction,            SIGNAL( triggered(bool) ), this, SLOT( doRedo(bool)            ) );
-	QObject::connect( cutAction,             SIGNAL( triggered(bool) ), this, SLOT( doCut(bool)             ) );
-	QObject::connect( copyAction,            SIGNAL( triggered(bool) ), this, SLOT( doCopy(bool)            ) );
-	QObject::connect( pasteAction,           SIGNAL( triggered(bool) ), this, SLOT( doPaste(bool)           ) );
 	QObject::connect( duplicateLineAction,   SIGNAL( triggered(bool) ), this, SLOT( doDuplicateLine(bool)   ) );
-	QObject::connect( selectAllAction,       SIGNAL( triggered(bool) ), this, SLOT( doSelectAll(bool)       ) );
-	QObject::connect( deselectAction,        SIGNAL( triggered(bool) ), this, SLOT( doDeselect(bool)        ) );
 	QObject::connect( increaseIndentAction,  SIGNAL( triggered(bool) ), this, SLOT( doIncreaseIndent(bool)  ) );
 	QObject::connect( decreaseIndentAction,  SIGNAL( triggered(bool) ), this, SLOT( doDecreaseIndent(bool)  ) );
 	QObject::connect( preferencesAction,     SIGNAL( triggered(bool) ), this, SLOT( doPreferences(bool)     ) );
@@ -345,35 +345,7 @@ void QomposeWindow::doPrintPreview(bool QUNUSED(c))
 { /* SLOT */
 }
 
-void QomposeWindow::doUndo(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doRedo(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doCut(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doCopy(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doPaste(bool QUNUSED(c))
-{ /* SLOT */
-}
-
 void QomposeWindow::doDuplicateLine(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doSelectAll(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doDeselect(bool QUNUSED(c))
 { /* SLOT */
 }
 

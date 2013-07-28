@@ -86,9 +86,10 @@ class QomposeEditor : public QPlainTextEdit
 		void doMoveHome(bool moveAnchor = true);
 	
 	public slots:
-		void highlightCurrentLine();
+		void deselect();
 	
 	private slots:
+		void highlightCurrentLine();
 		void updateGutterWidth();
 		void updateGutter(const QRect &r, int dy);
 		

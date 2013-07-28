@@ -614,33 +614,12 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 	}
 }
 
-/*!
- * This function updates our gutter's width, e.g. when the number of lines in our document changes.
- */
-void QomposeEditor::updateGutterWidth()
+void QomposeEditor::deselect()
 { /* SLOT */
 	
-	setViewportMargins(gutterWidth(), 0, 0, 0);
-	
-}
-
-/*!
- * This function updates our gutter, e.g. when our editor widget's state is updated, by resetting the
- * gutter's scroll and width.
- *
- * \param r The viewport rect being updated.
- * \param dy The editor's current y scroll offset.
- */
-void QomposeEditor::updateGutter(const QRect &r, int dy)
-{ /* SLOT */
-	
-	if(dy)
-		gutter->scroll(0, dy);
-	else
-		gutter->update(0, r.y(), gutter->width(), r.height());
-	
-	if(r.contains(viewport()->rect()))
-		updateGutterWidth();
+	QTextCursor curs = textCursor();
+	curs.setPosition(curs.position(), QTextCursor::MoveAnchor);
+	setTextCursor(curs);
 	
 }
 
@@ -668,5 +647,35 @@ void QomposeEditor::highlightCurrentLine()
 		
 		setExtraSelections(es);
 	}
+	
+}
+
+/*!
+ * This function updates our gutter's width, e.g. when the number of lines in our document changes.
+ */
+void QomposeEditor::updateGutterWidth()
+{ /* SLOT */
+	
+	setViewportMargins(gutterWidth(), 0, 0, 0);
+	
+}
+
+/*!
+ * This function updates our gutter, e.g. when our editor widget's state is updated, by resetting the
+ * gutter's scroll and width.
+ *
+ * \param r The viewport rect being updated.
+ * \param dy The editor's current y scroll offset.
+ */
+void QomposeEditor::updateGutter(const QRect &r, int dy)
+{ /* SLOT */
+	
+	if(dy)
+		gutter->scroll(0, dy);
+	else
+		gutter->update(0, r.y(), gutter->width(), r.height());
+	
+	if(r.contains(viewport()->rect()))
+		updateGutterWidth();
 	
 }

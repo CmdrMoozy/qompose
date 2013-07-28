@@ -103,14 +103,7 @@ class QomposeWindow : public QMainWindow
 		
 		void doPrint(bool c);
 		void doPrintPreview(bool c);
-		void doUndo(bool c);
-		void doRedo(bool c);
-		void doCut(bool c);
-		void doCopy(bool c);
-		void doPaste(bool c);
 		void doDuplicateLine(bool c);
-		void doSelectAll(bool c);
-		void doDeselect(bool c);
 		void doIncreaseIndent(bool c);
 		void doDecreaseIndent(bool c);
 		void doPreferences(bool c);

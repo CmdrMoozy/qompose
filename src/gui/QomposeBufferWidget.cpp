@@ -297,6 +297,90 @@ void QomposeBufferWidget::doClose()
 	
 }
 
+void QomposeBufferWidget::doUndo()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->undo();
+	
+}
+
+void QomposeBufferWidget::doRedo()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->redo();
+	
+}
+
+void QomposeBufferWidget::doCut()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->cut();
+	
+}
+
+void QomposeBufferWidget::doCopy()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->copy();
+	
+}
+
+void QomposeBufferWidget::doPaste()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->paste();
+	
+}
+
+void QomposeBufferWidget::doSelectAll()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->selectAll();
+	
+}
+
+void QomposeBufferWidget::doDeselect()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->deselect();
+	
+}
+
 void QomposeBufferWidget::doPreviousBuffer()
 { /* SLOT */
 	

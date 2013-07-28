@@ -59,6 +59,13 @@ class QomposeBufferWidget : public QWidget
 		void doSave();
 		void doSaveAs();
 		void doClose();
+		void doUndo();
+		void doRedo();
+		void doCut();
+		void doCopy();
+		void doPaste();
+		void doSelectAll();
+		void doDeselect();
 		void doPreviousBuffer();
 		void doNextBuffer();
 		void doMoveBufferLeft();
