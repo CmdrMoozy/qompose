@@ -56,6 +56,10 @@ SET(qompose_HEADERS
 	src/dialogs/QomposeEncodingDialog.h
 	src/dialogs/QomposeFileDialog.h
 	
+	src/dialogs/preferences/QomposePreferencesDialog.h
+	src/dialogs/preferences/QomposePreferencesListView.h
+	src/dialogs/preferences/QomposePreferencesListModel.h
+	
 	src/editor/QomposeBuffer.h
 	src/editor/QomposeEditor.h
 	
@@ -73,6 +77,8 @@ SET(qompose_MOC_HEADERS
 	
 	src/dialogs/QomposeAboutDialog.h
 	src/dialogs/QomposeEncodingDialog.h
+	
+	src/dialogs/preferences/QomposePreferencesDialog.h
 	
 	src/editor/QomposeBuffer.h
 	src/editor/QomposeEditor.h
@@ -92,6 +98,10 @@ SET(qompose_SOURCES
 	src/dialogs/QomposeAboutDialog.cpp
 	src/dialogs/QomposeEncodingDialog.cpp
 	src/dialogs/QomposeFileDialog.cpp
+	
+	src/dialogs/preferences/QomposePreferencesDialog.cpp
+	src/dialogs/preferences/QomposePreferencesListView.cpp
+	src/dialogs/preferences/QomposePreferencesListModel.cpp
 	
 	src/editor/QomposeBuffer.cpp
 	src/editor/QomposeEditor.cpp

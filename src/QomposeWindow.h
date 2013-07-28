@@ -29,6 +29,7 @@ class QLabel;
 class QCloseEvent;
 
 class QomposeAboutDialog;
+class QomposePreferencesDialog;
 class QomposeBufferWidget;
 
 class QomposeWindow : public QMainWindow
@@ -44,6 +45,7 @@ class QomposeWindow : public QMainWindow
 		
 	private:
 		QomposeAboutDialog *aboutDialog;
+		QomposePreferencesDialog *preferencesDialog;
 		
 		QMenu *fileMenu;
 		QMenu *editMenu;
@@ -106,14 +108,11 @@ class QomposeWindow : public QMainWindow
 		void doDuplicateLine(bool c);
 		void doIncreaseIndent(bool c);
 		void doDecreaseIndent(bool c);
-		void doPreferences(bool c);
 		void doFind(bool c);
 		void doFindNext(bool c);
 		void doFindPrevious(bool c);
 		void doReplace(bool c);
 		void doGoTo(bool c);
-		void doAboutQompose(bool c);
-		void doAboutQt(bool c);
 };
 
 #endif
