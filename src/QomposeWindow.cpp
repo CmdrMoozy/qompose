@@ -185,12 +185,16 @@ void QomposeWindow::initializeActions()
 	aboutQtAction = new QAction(tr("About &Qt..."), this);
 	aboutQtAction->setIcon(getIconFromTheme("help-about"));
 	
-	QObject::connect( newAction,    SIGNAL( triggered(bool) ), buffers, SLOT( doNew()    ) );
-	QObject::connect( openAction,   SIGNAL( triggered(bool) ), buffers, SLOT( doOpen()   ) );
-	QObject::connect( revertAction, SIGNAL( triggered(bool) ), buffers, SLOT( doRevert() ) );
-	QObject::connect( saveAction,   SIGNAL( triggered(bool) ), buffers, SLOT( doSave()   ) );
-	QObject::connect( saveAsAction, SIGNAL( triggered(bool) ), buffers, SLOT( doSaveAs() ) );
-	QObject::connect( closeAction,  SIGNAL( triggered(bool) ), buffers, SLOT( doClose()  ) );
+	QObject::connect( newAction,             SIGNAL( triggered(bool) ), buffers, SLOT( doNew()             ) );
+	QObject::connect( openAction,            SIGNAL( triggered(bool) ), buffers, SLOT( doOpen()            ) );
+	QObject::connect( revertAction,          SIGNAL( triggered(bool) ), buffers, SLOT( doRevert()          ) );
+	QObject::connect( saveAction,            SIGNAL( triggered(bool) ), buffers, SLOT( doSave()            ) );
+	QObject::connect( saveAsAction,          SIGNAL( triggered(bool) ), buffers, SLOT( doSaveAs()          ) );
+	QObject::connect( closeAction,           SIGNAL( triggered(bool) ), buffers, SLOT( doClose()           ) );
+	QObject::connect( previousBufferAction,  SIGNAL( triggered(bool) ), buffers, SLOT( doPreviousBuffer()  ) );
+	QObject::connect( nextBufferAction,      SIGNAL( triggered(bool) ), buffers, SLOT( doNextBuffer()      ) );
+	QObject::connect( moveBufferLeftAction,  SIGNAL( triggered(bool) ), buffers, SLOT( doMoveBufferLeft()  ) );
+	QObject::connect( moveBufferRightAction, SIGNAL( triggered(bool) ), buffers, SLOT( doMoveBufferRight() ) );
 	
 	QObject::connect( printAction,           SIGNAL( triggered(bool) ), this, SLOT( doPrint(bool)           ) );
 	QObject::connect( printPreviewAction,    SIGNAL( triggered(bool) ), this, SLOT( doPrintPreview(bool)    ) );
@@ -211,10 +215,6 @@ void QomposeWindow::initializeActions()
 	QObject::connect( findPreviousAction,    SIGNAL( triggered(bool) ), this, SLOT( doFindPrevious(bool)    ) );
 	QObject::connect( replaceAction,         SIGNAL( triggered(bool) ), this, SLOT( doReplace(bool)         ) );
 	QObject::connect( goToAction,            SIGNAL( triggered(bool) ), this, SLOT( doGoTo(bool)            ) );
-	QObject::connect( previousBufferAction,  SIGNAL( triggered(bool) ), this, SLOT( doPreviousBuffer(bool)  ) );
-	QObject::connect( nextBufferAction,      SIGNAL( triggered(bool) ), this, SLOT( doNextBuffer(bool)      ) );
-	QObject::connect( moveBufferLeftAction,  SIGNAL( triggered(bool) ), this, SLOT( doMoveBufferLeft(bool)  ) );
-	QObject::connect( moveBufferRightAction, SIGNAL( triggered(bool) ), this, SLOT( doMoveBufferRight(bool) ) );
 	QObject::connect( aboutQomposeAction,    SIGNAL( triggered(bool) ), this, SLOT( doAboutQompose(bool)    ) );
 	QObject::connect( aboutQtAction,         SIGNAL( triggered(bool) ), this, SLOT( doAboutQt(bool)         ) );
 }
@@ -401,22 +401,6 @@ void QomposeWindow::doReplace(bool QUNUSED(c))
 }
 
 void QomposeWindow::doGoTo(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doPreviousBuffer(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doNextBuffer(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doMoveBufferLeft(bool QUNUSED(c))
-{ /* SLOT */
-}
-
-void QomposeWindow::doMoveBufferRight(bool QUNUSED(c))
 { /* SLOT */
 }
 

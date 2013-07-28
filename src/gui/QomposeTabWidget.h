@@ -20,11 +20,10 @@
 #define INCLUDE_QOMPOSE_TAB_WIDGET_H
 
 #include <QWidget>
-#include <QMap>
+#include <QSet>
 
 class QGridLayout;
-class QTabBar;
-class QStackedLayout;
+class QTabWidget;
 
 class QomposeBuffer;
 
@@ -40,15 +39,13 @@ class QomposeTabWidget : public QWidget
 		
 	private:
 		QGridLayout *layout;
-		QTabBar *tabBar;
+		QTabWidget *tabWidget;
 		
-		QWidget *tabDisplayWidget;
-		QStackedLayout *tabDisplayLayout;
-		
-		QMap<int, QomposeBuffer *> tabs;
+		QSet<QomposeBuffer *> tabs;
 		
 		QomposeBuffer *newBuffer();
 		void removeCurrentBuffer();
+		void moveBuffer(int f, int t);
 		
 	public slots:
 		void doNew();
@@ -57,6 +54,10 @@ class QomposeTabWidget : public QWidget
 		void doSave();
 		void doSaveAs();
 		void doClose();
+		void doPreviousBuffer();
+		void doNextBuffer();
+		void doMoveBufferLeft();
+		void doMoveBufferRight();
 		
 	private slots:
 		void doTabChanged(int i);

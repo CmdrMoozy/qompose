@@ -19,9 +19,8 @@
 #include "QomposeTabWidget.h"
 
 #include <QGridLayout>
-#include <QTabBar>
-#include <QList>
-#include <QStackedLayout>
+#include <QTabWidget>
+#include <QSet>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDir>
@@ -34,22 +33,16 @@ QomposeTabWidget::QomposeTabWidget(QWidget *p)
 {
 	layout = new QGridLayout(this);
 	
-	tabBar = new QTabBar(this);
-	tabBar->setMovable(true);
-	tabBar->setTabsClosable(true);
-	tabBar->setUsesScrollButtons(true);
+	tabWidget = new QTabWidget(this);
+	tabWidget->setMovable(true);
+	tabWidget->setTabsClosable(true);
+	tabWidget->setUsesScrollButtons(true);
 	
-	tabDisplayWidget = new QWidget(this);
-	tabDisplayLayout = new QStackedLayout(tabDisplayWidget);
-	
-	layout->addWidget(tabBar, 0, 0, 1, 1);
-	layout->addWidget(tabDisplayWidget, 1, 0, 1, 1);
-	layout->setRowStretch(1, 1);
-	layout->setColumnStretch(0, 1);
+	layout->addWidget(tabWidget, 0, 0, 1, 1);
 	setLayout(layout);
 	
-	QObject::connect( tabBar, SIGNAL( currentChanged(int)    ), this, SLOT( doTabChanged(int)        ) );
-	QObject::connect( tabBar, SIGNAL( tabCloseRequested(int) ), this, SLOT( doTabCloseRequested(int) ) );
+	QObject::connect( tabWidget, SIGNAL( currentChanged(int)    ), this, SLOT( doTabChanged(int)        ) );
+	QObject::connect( tabWidget, SIGNAL( tabCloseRequested(int) ), this, SLOT( doTabCloseRequested(int) ) );
 }
 
 QomposeTabWidget::~QomposeTabWidget()
@@ -64,37 +57,46 @@ QomposeTabWidget::~QomposeTabWidget()
 
 QomposeBuffer *QomposeTabWidget::currentBuffer() const
 {
-	return tabs.value(tabBar->currentIndex(), NULL);
+	return dynamic_cast<QomposeBuffer *>(tabWidget->currentWidget());
 }
 
 QomposeBuffer *QomposeTabWidget::newBuffer()
 {
-	QomposeBuffer *b = new QomposeBuffer(this);
+	QomposeBuffer *b = new QomposeBuffer(tabWidget);
 	
 	QObject::connect(b, SIGNAL(titleChanged(const QString &)),
 		this, SLOT(doTabTitleChanged(const QString &)));
 	QObject::connect(b, SIGNAL(pathChanged(const QString &)),
 		this, SLOT(doTabPathChanged(const QString &)));
 	
-	tabDisplayLayout->addWidget(b);
+	int i = tabWidget->addTab(b, b->getTitle());
+	tabWidget->setCurrentIndex(i);
 	
-	int i = tabBar->addTab(b->getTitle());
-	tabs.insert(i, b);
-	
-	tabBar->setCurrentIndex(i);
+	tabs.insert(b);
 	
 	return b;
 }
 
 void QomposeTabWidget::removeCurrentBuffer()
 {
-	int i = tabBar->currentIndex();
-	QomposeBuffer *b = tabs.take(i);
+	int i = tabWidget->currentIndex();
+	QomposeBuffer *b = currentBuffer();
 	
-	tabBar->removeTab(i);
+	tabWidget->removeTab(i);
 	
-	tabDisplayLayout->removeWidget(b);
+	tabs.remove(b);
 	delete b;
+}
+
+void QomposeTabWidget::moveBuffer(int f, int t)
+{
+	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(tabWidget->widget(f));
+	
+	if(b == NULL)
+		return;
+	
+	tabWidget->removeTab(f);
+	tabWidget->insertTab(t, b, b->getTitle());
 }
 
 void QomposeTabWidget::doNew()
@@ -116,13 +118,14 @@ void QomposeTabWidget::doOpen()
 		
 		if(tabs.count() == 1)
 		{
-			QMap<int, QomposeBuffer *>::iterator i = tabs.begin();
+			QSet<QomposeBuffer *>::iterator i = tabs.begin();
+			QomposeBuffer *b = *i;
+			int idx = tabWidget->indexOf(b);
 			
-			if( (!i.value()->hasBeenSaved()) && (!i.value()->isModified()) )
+			if( (!b->hasBeenSaved()) && (!b->isModified()) )
 			{
-				tabBar->removeTab(i.key());
-				delete i.value();
-				
+				tabWidget->removeTab(idx);
+				delete b;
 				tabs.empty();
 			}
 		}
@@ -226,16 +229,66 @@ void QomposeTabWidget::doClose()
 	
 }
 
+void QomposeTabWidget::doPreviousBuffer()
+{ /* SLOT */
+	
+	int i = tabWidget->currentIndex() - 1;
+	
+	if(i < 0)
+		i = tabWidget->count() - 1;
+	
+	tabWidget->setCurrentIndex(i);
+	
+}
+
+void QomposeTabWidget::doNextBuffer()
+{ /* SLOT */
+	
+	int i = tabWidget->currentIndex() + 1;
+	
+	if(i >= tabWidget->count())
+		i = 0;
+	
+	tabWidget->setCurrentIndex(i);
+	
+}
+
+void QomposeTabWidget::doMoveBufferLeft()
+{ /* SLOT */
+	
+	int f = tabWidget->currentIndex();
+	int t = f - 1;
+	
+	if(t < 0)
+		return;
+	
+	moveBuffer(f, t);
+	tabWidget->setCurrentIndex(t);
+	
+}
+
+void QomposeTabWidget::doMoveBufferRight()
+{ /* SLOT */
+	
+	int f = tabWidget->currentIndex();
+	int t = f + 1;
+	
+	if(t >= tabWidget->count())
+		return;
+	
+	moveBuffer(f, t);
+	tabWidget->setCurrentIndex(t);
+	
+}
+
 void QomposeTabWidget::doTabChanged(int i)
 { /* SLOT */
 	
-	QomposeBuffer *b = tabs.value(i, NULL);
+	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(tabWidget->widget(i));
 	
 	if(b != NULL)
 	{
-		tabDisplayLayout->setCurrentWidget(b);
 		b->setFocus(Qt::OtherFocusReason);
-		
 		emit pathChanged(b->getPath());
 	}
 	
@@ -250,7 +303,7 @@ void QomposeTabWidget::doTabChanged(int i)
 void QomposeTabWidget::doTabCloseRequested(int i)
 { /* SLOT */
 	
-	tabBar->setCurrentIndex(i);
+	tabWidget->setCurrentIndex(i);
 	doClose();
 	
 }
@@ -262,11 +315,10 @@ void QomposeTabWidget::doTabTitleChanged(const QString &t)
 	
 	if(b != NULL)
 	{
-
-		int i = tabs.key(b, -1);
+		int i = tabWidget->indexOf(b);
 		
 		if(i != -1)
-			tabBar->setTabText(i, t);
+			tabWidget->setTabText(i, t);
 	}
 	
 }

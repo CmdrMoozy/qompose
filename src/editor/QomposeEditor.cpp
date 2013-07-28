@@ -267,44 +267,46 @@ void QomposeEditor::resizeEvent(QResizeEvent *e)
  * We implement the following hotkeys:
  *
  * Custom (implemented by QomposeTextEdit):
- * 	Return          Move to a new line, maintaining indent.
- * 	Enter           Move to a new line, maintaining indent.
- * 	Tab             Increase indent on selection.
- * 	Shift+Backtab   Decrease indent on selection.
- *      Shift+Tab       Decrease indent on selection.
- * 	Home            Move to start of non-indent, then to start of line.
- * 	Ctrl+Wheel      Zoom text in and out.
- *      Ctrl+D          Duplicate the current line.
- *      Shift+Return    The same as Return.
- *      Shift+Ender     The same as Enter.
- *      Ctrl+(Zero)     Reset text zoom to default level.
+ * 	Return           Move to a new line, maintaining indent.
+ * 	Enter            Move to a new line, maintaining indent.
+ * 	Tab              Increase indent on selection.
+ * 	Shift+Backtab    Decrease indent on selection.
+ *      Shift+Tab        Decrease indent on selection.
+ * 	Home             Move to start of non-indent, then to start of line.
+ * 	Ctrl+Wheel       Zoom text in and out.
+ *      Ctrl+D           Duplicate the current line.
+ *      Shift+Return     The same as Return.
+ *      Shift+Ender      The same as Enter.
+ *      Ctrl+(Zero)      Reset text zoom to default level.
  * 
  * Inherited (implemented by QPlainTextEdit):
- * 	Backspace       Deletes the character to the left of the cursor.
- * 	Delete          Deletes the character to the right of the cursor.
- * 	Ctrl+C          Copy selected text to clipboard.
- * 	Ctrl+V          Paste clipboard into text edit.
- * 	Ctrl+X          Deletes selected text + copies to clipboard.
- * 	Ctrl+Z          Undo.
- * 	Ctrl+Y          Redo.
- * 	Left            Moves the cursor one character left.
- * 	Ctrl+Left       Moves the cursor one word left.
- * 	Right           Moves the cursor one character right.
- * 	Ctrl+Right      Moves the cursor one word right.
- * 	Up              Moves the cursor one line up.
- * 	Down            Moves the cursor one line down.
- * 	PageUp          Moves the cursor one page up.
- * 	PageDown        Moves the cursor one page down.
- * 	Ctrl+Home       Moves the cursor to the beginning of the document.
- * 	End             Moves the cursor to the end of the line.
- * 	Ctrl+End        Moves the cursor to the end of the document.
- * 	Alt+Wheel       Scrolls the page horizontally.
+ * 	Backspace        Deletes the character to the left of the cursor.
+ * 	Delete           Deletes the character to the right of the cursor.
+ * 	Ctrl+C           Copy selected text to clipboard.
+ * 	Ctrl+V           Paste clipboard into text edit.
+ * 	Ctrl+X           Deletes selected text + copies to clipboard.
+ * 	Ctrl+Z           Undo.
+ * 	Ctrl+Y           Redo.
+ * 	Left             Moves the cursor one character left.
+ * 	Ctrl+Left        Moves the cursor one word left.
+ * 	Right            Moves the cursor one character right.
+ * 	Ctrl+Right       Moves the cursor one word right.
+ * 	Up               Moves the cursor one line up.
+ * 	Down             Moves the cursor one line down.
+ * 	PageUp           Moves the cursor one page up.
+ * 	PageDown         Moves the cursor one page down.
+ * 	Ctrl+Home        Moves the cursor to the beginning of the document.
+ * 	End              Moves the cursor to the end of the line.
+ * 	Ctrl+End         Moves the cursor to the end of the document.
+ * 	Alt+Wheel        Scrolls the page horizontally.
  * 
  * Inherited but ignored (implemented by QPlainTextEdit, but ignored by QomposeTextEdit):
- * 	Ctrl+Insert     Copy selected text to clipboard.
- * 	Ctrl+K          Deletes to the end of the line.
- * 	Shift+Insert    Paste clipboard into text edit.
- * 	Shift+Delete    Deletes selected text + copies to clipboard.
+ *      Ctrl+Shift+Left  Select to beginning of line.
+ *      Ctrl+Shift+Right Select to end of line.
+ * 	Ctrl+Insert      Copy selected text to clipboard.
+ * 	Ctrl+K           Deletes to the end of the line.
+ * 	Shift+Insert     Paste clipboard into text edit.
+ * 	Shift+Delete     Deletes selected text + copies to clipboard.
  *
  * \param e The event being handled.
  */
@@ -335,6 +337,20 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 					e->accept();
 					processed = true;
 					doMoveHome();
+					break;
+			};
+			
+			break;
+		
+		case Qt::ShiftModifier | Qt::ControlModifier:
+			
+			switch(e->key())
+			{
+				// Ignore Ctrl+Shift+Left and Ctrl+Shift+Right.
+				case Qt::Key_Left:
+				case Qt::Key_Right:
+					e->ignore();
+					processed = true;
 					break;
 			};
 			

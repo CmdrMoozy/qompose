@@ -116,10 +116,6 @@ class QomposeWindow : public QMainWindow
 		void doFindPrevious(bool c);
 		void doReplace(bool c);
 		void doGoTo(bool c);
-		void doPreviousBuffer(bool c);
-		void doNextBuffer(bool c);
-		void doMoveBufferLeft(bool c);
-		void doMoveBufferRight(bool c);
 		void doAboutQompose(bool c);
 		void doAboutQt(bool c);
 };
