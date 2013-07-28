@@ -19,55 +19,18 @@
 #ifndef INCLUDE_QOMPOSE_TAB_WIDGET_H
 #define INCLUDE_QOMPOSE_TAB_WIDGET_H
 
-#include <QWidget>
-#include <QSet>
+#include <QTabWidget>
 
-class QGridLayout;
-class QTabWidget;
+class QKeyEvent;
 
-class QomposeBuffer;
-
-class QomposeTabWidget : public QWidget
+class QomposeTabWidget : public QTabWidget
 {
-	Q_OBJECT
-	
 	public:
 		QomposeTabWidget(QWidget *p = 0);
 		virtual ~QomposeTabWidget();
 		
-		QomposeBuffer *currentBuffer() const;
-		
-	private:
-		QGridLayout *layout;
-		QTabWidget *tabWidget;
-		
-		QSet<QomposeBuffer *> tabs;
-		
-		QomposeBuffer *newBuffer();
-		void removeCurrentBuffer();
-		void moveBuffer(int f, int t);
-		
-	public slots:
-		void doNew();
-		void doOpen();
-		void doRevert();
-		void doSave();
-		void doSaveAs();
-		void doClose();
-		void doPreviousBuffer();
-		void doNextBuffer();
-		void doMoveBufferLeft();
-		void doMoveBufferRight();
-		
-	private slots:
-		void doTabChanged(int i);
-		void doTabCloseRequested(int i);
-		
-		void doTabTitleChanged(const QString &t);
-		void doTabPathChanged(const QString &p);
-		
-	signals:
-		void pathChanged(const QString &);
+	protected:
+		virtual void keyPressEvent(QKeyEvent *e);
 };
 
 #endif

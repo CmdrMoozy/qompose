@@ -61,6 +61,7 @@ SET(qompose_HEADERS
 	
 	src/editor/highlighting/QomposeSyntaxHighlighter.h
 	
+	src/gui/QomposeBufferWidget.h
 	src/gui/QomposeTabWidget.h
 	
 )
@@ -78,7 +79,7 @@ SET(qompose_MOC_HEADERS
 	
 	src/editor/highlighting/QomposeSyntaxHighlighter.h
 	
-	src/gui/QomposeTabWidget.h
+	src/gui/QomposeBufferWidget.h
 	
 )
 
@@ -97,6 +98,7 @@ SET(qompose_SOURCES
 	
 	src/editor/highlighting/QomposeSyntaxHighlighter.cpp
 	
+	src/gui/QomposeBufferWidget.cpp
 	src/gui/QomposeTabWidget.cpp
 	
 )

@@ -342,7 +342,7 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 			
 			break;
 		
-		case Qt::ShiftModifier | Qt::ControlModifier:
+		case Qt::ControlModifier | Qt::AltModifier:
 			
 			switch(e->key())
 			{

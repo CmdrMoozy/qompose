@@ -28,7 +28,7 @@ class QStatusBar;
 class QLabel;
 
 class QomposeAboutDialog;
-class QomposeTabWidget;
+class QomposeBufferWidget;
 
 class QomposeWindow : public QMainWindow
 {
@@ -83,7 +83,7 @@ class QomposeWindow : public QMainWindow
 		QAction *aboutQomposeAction;
 		QAction *aboutQtAction;
 		
-		QomposeTabWidget *buffers;
+		QomposeBufferWidget *buffers;
 		
 		QStatusBar *statusBar;
 		QLabel *tabPathLabel;

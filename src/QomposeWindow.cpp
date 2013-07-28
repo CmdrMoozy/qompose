@@ -28,7 +28,7 @@
 
 #include "QomposeDefines.h"
 #include "dialogs/QomposeAboutDialog.h"
-#include "gui/QomposeTabWidget.h"
+#include "gui/QomposeBufferWidget.h"
 
 /*!
  * This is our default constructor, which creates a new Qompose window, and initializes
@@ -40,7 +40,7 @@
 QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	: QMainWindow(p, f)
 {
-	buffers = new QomposeTabWidget(this);
+	buffers = new QomposeBufferWidget(this);
 	buffers->doNew();
 	setCentralWidget(buffers);
 	
@@ -172,11 +172,11 @@ void QomposeWindow::initializeActions()
 	nextBufferAction->setIcon(getIconFromTheme("go-next"));
 	
 	moveBufferLeftAction = new QAction(tr("Move Buffer &Left"), this);
-	moveBufferLeftAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Left);
+	moveBufferLeftAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Left);
 	moveBufferLeftAction->setIcon(getIconFromTheme("go-previous"));
 	
 	moveBufferRightAction = new QAction(tr("Move Buffer &Right"), this);
-	moveBufferRightAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Right);
+	moveBufferRightAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Right);
 	moveBufferRightAction->setIcon(getIconFromTheme("go-next"));
 	
 	aboutQomposeAction = new QAction(tr("&About Qompose..."), this);
