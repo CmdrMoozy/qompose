@@ -22,14 +22,20 @@
 #include <QStackedLayout>
 #include <QPushButton>
 
+#include "dialogs/preferences/QomposePreferencesListModel.h"
 #include "dialogs/preferences/QomposePreferencesListView.h"
+#include "dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h"
+#include "dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h"
 
 QomposePreferencesDialog::QomposePreferencesDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f)
 {
 	layout = new QGridLayout(this);
 	
+	createPreferencesModel();
+	
 	preferencesView = new QomposePreferencesListView(this);
+	preferencesView->setModel(preferencesModel);
 	
 	preferencesDisplayWidget = new QWidget(this);
 	preferencesDisplayLayout = new QStackedLayout(preferencesDisplayWidget);
@@ -70,6 +76,18 @@ QomposePreferencesDialog::QomposePreferencesDialog(QWidget *p, Qt::WindowFlags f
 
 QomposePreferencesDialog::~QomposePreferencesDialog()
 {
+}
+
+void QomposePreferencesDialog::createPreferencesModel()
+{
+	preferencesModel = new QomposePreferencesListModel(preferencesView);
+	
+	generalPreferencesWidget = new QomposeGeneralPreferencesWidget(this);
+	
+	editorPreferencesWidget = new QomposeEditorPreferencesWidget(this);
+	
+	preferencesModel->addPreferencesWidget(generalPreferencesWidget);
+	preferencesModel->addPreferencesWidget(editorPreferencesWidget);
 }
 
 void QomposePreferencesDialog::doOk()

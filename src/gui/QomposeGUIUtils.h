@@ -16,31 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_PREFERENCES_LIST_MODEL_H
-#define INCLUDE_QOMPOSE_PREFERENCES_LIST_MODEL_H
+#ifndef INCLUDE_QOMPOSE_GUI_UTILS_H
+#define INCLUDE_QOMPOSE_GUI_UTILS_H
 
-#include <QAbstractListModel>
+#include <QIcon>
+#include <QString>
 
-#include <QModelIndex>
-#include <QVariant>
-#include <QList>
-
-class QomposePreferencesWidget;
-
-class QomposePreferencesListModel : public QAbstractListModel
+class QomposeGUIUtils
 {
 	public:
-		QomposePreferencesListModel(QObject *p = 0);
-		virtual ~QomposePreferencesListModel();
-		
-		virtual int rowCount(const QModelIndex &p = QModelIndex()) const;
-		virtual QVariant data(const QModelIndex &i, int r = Qt::DisplayRole) const;
-		virtual QVariant headerData(int s, Qt::Orientation o, int r = Qt::DisplayRole) const;
-		
-		void addPreferencesWidget(QomposePreferencesWidget *w);
-		
-	private:
-		QList<QomposePreferencesWidget *> widgets;
+		static QIcon getIconFromTheme(const QString &n);
 };
 
 #endif

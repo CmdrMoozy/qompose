@@ -31,6 +31,7 @@
 #include "dialogs/QomposeAboutDialog.h"
 #include "dialogs/preferences/QomposePreferencesDialog.h"
 #include "gui/QomposeBufferWidget.h"
+#include "gui/QomposeGUIUtils.h"
 
 /*!
  * This is our default constructor, which creates a new Qompose window, and initializes
@@ -85,64 +86,64 @@ void QomposeWindow::initializeActions()
 {
 	newAction = new QAction(tr("&New"), this);
 	newAction->setShortcut(Qt::CTRL + Qt::Key_N);
-	newAction->setIcon(getIconFromTheme("document-new"));
+	newAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-new"));
 	
 	openAction = new QAction(tr("&Open..."), this);
 	openAction->setShortcut(Qt::CTRL + Qt::Key_O);
-	openAction->setIcon(getIconFromTheme("document-open"));
+	openAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-open"));
 	
 	revertAction = new QAction(tr("&Revert"), this);
 	revertAction->setShortcut(Qt::CTRL + Qt::Key_R);
-	revertAction->setIcon(getIconFromTheme("document-revert"));
+	revertAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-revert"));
 	
 	saveAction = new QAction(tr("&Save"), this);
 	saveAction->setShortcut(Qt::CTRL + Qt::Key_S);
-	saveAction->setIcon(getIconFromTheme("document-save"));
+	saveAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-save"));
 	
 	saveAsAction = new QAction(tr("Save &As..."), this);
 	saveAsAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-	saveAsAction->setIcon(getIconFromTheme("document-save-as"));
+	saveAsAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-save-as"));
 	
 	printAction = new QAction(tr("&Print..."), this);
 	printAction->setShortcut(Qt::CTRL + Qt::Key_P);
-	printAction->setIcon(getIconFromTheme("document-print"));
+	printAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-print"));
 	
 	printPreviewAction = new QAction(tr("Print Pre&view..."), this);
-	printPreviewAction->setIcon(getIconFromTheme("document-print-preview"));
+	printPreviewAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-print-preview"));
 	
 	closeAction = new QAction(tr("Clos&e"), this);
 	closeAction->setShortcut(Qt::CTRL + Qt::Key_W);
-	closeAction->setIcon(getIconFromTheme("window-close"));
+	closeAction->setIcon(QomposeGUIUtils::getIconFromTheme("window-close"));
 	
 	exitAction = new QAction(tr("E&xit"), this);
-	exitAction->setIcon(getIconFromTheme("application-exit"));
+	exitAction->setIcon(QomposeGUIUtils::getIconFromTheme("application-exit"));
 	
 	undoAction = new QAction(tr("&Undo"), this);
 	undoAction->setShortcut(Qt::CTRL + Qt::Key_Z);
-	undoAction->setIcon(getIconFromTheme("edit-undo"));
+	undoAction->setIcon(QomposeGUIUtils::getIconFromTheme("edit-undo"));
 	
 	redoAction = new QAction(tr("&Redo"), this);
 	redoAction->setShortcut(Qt::CTRL + Qt::Key_Y);
-	redoAction->setIcon(getIconFromTheme("edit-redo"));
+	redoAction->setIcon(QomposeGUIUtils::getIconFromTheme("edit-redo"));
 	
 	cutAction = new QAction(tr("Cu&t"), this);
 	cutAction->setShortcut(Qt::CTRL + Qt::Key_X);
-	cutAction->setIcon(getIconFromTheme("edit-cut"));
+	cutAction->setIcon(QomposeGUIUtils::getIconFromTheme("edit-cut"));
 	
 	copyAction = new QAction(tr("&Copy"), this);
 	copyAction->setShortcut(Qt::CTRL + Qt::Key_C);
-	copyAction->setIcon(getIconFromTheme("edit-copy"));
+	copyAction->setIcon(QomposeGUIUtils::getIconFromTheme("edit-copy"));
 	
 	pasteAction = new QAction(tr("&Paste"), this);
 	pasteAction->setShortcut(Qt::CTRL + Qt::Key_V);
-	pasteAction->setIcon(getIconFromTheme("edit-paste"));
+	pasteAction->setIcon(QomposeGUIUtils::getIconFromTheme("edit-paste"));
 	
 	duplicateLineAction = new QAction(tr("Duplicat&e Line"), this);
 	duplicateLineAction->setShortcut(Qt::CTRL + Qt::Key_D);
 	
 	selectAllAction = new QAction(tr("Select &All"), this);
 	selectAllAction->setShortcut(Qt::CTRL + Qt::Key_A);
-	selectAllAction->setIcon(getIconFromTheme("edit-select-all"));
+	selectAllAction->setIcon(QomposeGUIUtils::getIconFromTheme("edit-select-all"));
 	
 	deselectAction = new QAction(tr("Dese&lect"), this);
 	deselectAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
@@ -152,48 +153,48 @@ void QomposeWindow::initializeActions()
 	decreaseIndentAction = new QAction(tr("&Decrease Selection Indent"), this);
 	
 	preferencesAction = new QAction(tr("Pre&ferences..."), this);
-	preferencesAction->setIcon(getIconFromTheme("preferences-other"));
+	preferencesAction->setIcon(QomposeGUIUtils::getIconFromTheme("preferences-other"));
 	
 	findAction = new QAction(tr("&Find..."), this);
 	findAction->setShortcut(Qt::CTRL + Qt::Key_F);
-	findAction->setIcon(getIconFromTheme("edit-find"));
+	findAction->setIcon(QomposeGUIUtils::getIconFromTheme("edit-find"));
 	
 	findNextAction = new QAction(tr("Find &Next"), this);
 	findNextAction->setShortcut(Qt::Key_F3);
-	findNextAction->setIcon(getIconFromTheme("go-next"));
+	findNextAction->setIcon(QomposeGUIUtils::getIconFromTheme("go-next"));
 	
 	findPreviousAction = new QAction(tr("Find Previou&s"), this);
 	findPreviousAction->setShortcut(Qt::SHIFT + Qt::Key_F3);
-	findPreviousAction->setIcon(getIconFromTheme("go-previous"));
+	findPreviousAction->setIcon(QomposeGUIUtils::getIconFromTheme("go-previous"));
 	
 	replaceAction = new QAction(tr("R&eplace..."), this);
 	replaceAction->setShortcut(Qt::CTRL + Qt::Key_H);
-	replaceAction->setIcon(getIconFromTheme("edit-find-replace"));
+	replaceAction->setIcon(QomposeGUIUtils::getIconFromTheme("edit-find-replace"));
 	
 	goToAction = new QAction(tr("&Go To Line..."), this);
 	goToAction->setShortcut(Qt::CTRL + Qt::Key_G);
 	
 	previousBufferAction = new QAction(tr("&Previous Buffer"), this);
 	previousBufferAction->setShortcut(Qt::ALT + Qt::Key_Left);
-	previousBufferAction->setIcon(getIconFromTheme("go-previous"));
+	previousBufferAction->setIcon(QomposeGUIUtils::getIconFromTheme("go-previous"));
 	
 	nextBufferAction = new QAction(tr("&Next Buffer"), this);
 	nextBufferAction->setShortcut(Qt::ALT + Qt::Key_Right);
-	nextBufferAction->setIcon(getIconFromTheme("go-next"));
+	nextBufferAction->setIcon(QomposeGUIUtils::getIconFromTheme("go-next"));
 	
 	moveBufferLeftAction = new QAction(tr("Move Buffer &Left"), this);
 	moveBufferLeftAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Left);
-	moveBufferLeftAction->setIcon(getIconFromTheme("go-previous"));
+	moveBufferLeftAction->setIcon(QomposeGUIUtils::getIconFromTheme("go-previous"));
 	
 	moveBufferRightAction = new QAction(tr("Move Buffer &Right"), this);
 	moveBufferRightAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Right);
-	moveBufferRightAction->setIcon(getIconFromTheme("go-next"));
+	moveBufferRightAction->setIcon(QomposeGUIUtils::getIconFromTheme("go-next"));
 	
 	aboutQomposeAction = new QAction(tr("&About Qompose..."), this);
-	aboutQomposeAction->setIcon(getIconFromTheme("help-about"));
+	aboutQomposeAction->setIcon(QomposeGUIUtils::getIconFromTheme("help-about"));
 	
 	aboutQtAction = new QAction(tr("About &Qt..."), this);
-	aboutQtAction->setIcon(getIconFromTheme("help-about"));
+	aboutQtAction->setIcon(QomposeGUIUtils::getIconFromTheme("help-about"));
 	
 	QObject::connect( newAction,             SIGNAL( triggered(bool) ), buffers,           SLOT( doNew()             ) );
 	QObject::connect( openAction,            SIGNAL( triggered(bool) ), buffers,           SLOT( doOpen()            ) );
@@ -300,37 +301,6 @@ void QomposeWindow::initializeDialogs()
 	aboutDialog = new QomposeAboutDialog(this);
 	
 	preferencesDialog = new QomposePreferencesDialog(this);
-}
-
-/*!
- * This function will return the icon for the given standard name. We try to
- * use an icon from the operating system's icon theme, but failing that, we
- * try to use a fallback from our internal icon store.
- *
- * If no icon can be found, a null QIcon is returned instead.
- *
- * The default names supported by QIcon (and, therefore, this function) can be
- * found here:
- *
- *     http://standards.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
- *
- * \param n The name of the icon to find.
- * \return An icon object corresponding to the given name.
- */
-QIcon QomposeWindow::getIconFromTheme(const QString &n) const
-{
-	QIcon defaultIcon;
-	
-	QString defaultPath = n;
-	defaultPath.prepend(":/icons/");
-	defaultPath.append(".png");
-	
-	if(QFile::exists(defaultPath))
-		defaultIcon = QIcon(defaultPath);
-	else
-		qDebug("Couldn't find icon: %s", qPrintable(n));
-	
-	return QIcon::fromTheme(n, defaultIcon);
 }
 
 void QomposeWindow::doTabPathChanged(const QString &p)

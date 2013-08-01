@@ -18,6 +18,9 @@
 
 #include "QomposePreferencesListModel.h"
 
+#include "QomposeDefines.h"
+#include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
+
 QomposePreferencesListModel::QomposePreferencesListModel(QObject *p)
 	: QAbstractListModel(p)
 {
@@ -25,19 +28,53 @@ QomposePreferencesListModel::QomposePreferencesListModel(QObject *p)
 
 QomposePreferencesListModel::~QomposePreferencesListModel()
 {
+	while(!widgets.empty())
+	{
+		QomposePreferencesWidget *w = widgets.takeFirst();
+		delete w;
+	}
 }
 
-int QomposePreferencesListModel::rowCount(const QModelIndex &p) const
+int QomposePreferencesListModel::rowCount(const QModelIndex &QUNUSED(p)) const
 {
-	return 0;
+	return widgets.count();
 }
 
 QVariant QomposePreferencesListModel::data(const QModelIndex &i, int r) const
 {
+	int idx = i.row();
+	
+	if( (idx < 0) || (idx >= widgets.count()) )
+		return QVariant(QVariant::Invalid);
+	
+	QomposePreferencesWidget *widget = widgets.at(idx);
+	
+	switch(r)
+	{
+		case Qt::DisplayRole:
+			return widget->getPreferencesTitle();
+			break;
+		
+		case Qt::DecorationRole:
+			return widget->getPreferencesIcon();
+			break;
+		
+		default:
+			return QVariant(QVariant::Invalid);
+			break;
+	};
+	
+	
 	return QVariant(QVariant::Invalid);
 }
 
-QVariant QomposePreferencesListModel::headerData(int s, Qt::Orientation o, int r) const
+QVariant QomposePreferencesListModel::headerData(int QUNUSED(s),
+	Qt::Orientation QUNUSED(o), int QUNUSED(r)) const
 {
 	return QVariant(QVariant::Invalid);
+}
+
+void QomposePreferencesListModel::addPreferencesWidget(QomposePreferencesWidget *w)
+{
+	widgets.append(w);
 }

@@ -1,6 +1,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
 	<qresource>
+		<file>icons/accessories-text-editor.png</file>
 		<file>icons/document-new.png</file>
 		<file>icons/document-open.png</file>
 		<file>icons/document-revert.png</file>

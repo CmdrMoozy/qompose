@@ -16,31 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_PREFERENCES_LIST_MODEL_H
-#define INCLUDE_QOMPOSE_PREFERENCES_LIST_MODEL_H
+#ifndef INCLUDE_QOMPOSE_PREFERENCES_WIDGET_H
+#define INCLUDE_QOMPOSE_PREFERENCES_WIDGET_H
 
-#include <QAbstractListModel>
+#include <QWidget>
+#include <QIcon>
+#include <QString>
 
-#include <QModelIndex>
-#include <QVariant>
-#include <QList>
-
-class QomposePreferencesWidget;
-
-class QomposePreferencesListModel : public QAbstractListModel
+class QomposePreferencesWidget : public QWidget
 {
 	public:
-		QomposePreferencesListModel(QObject *p = 0);
-		virtual ~QomposePreferencesListModel();
+		QomposePreferencesWidget(QWidget *p = 0, Qt::WindowFlags f = 0);
+		virtual ~QomposePreferencesWidget();
 		
-		virtual int rowCount(const QModelIndex &p = QModelIndex()) const;
-		virtual QVariant data(const QModelIndex &i, int r = Qt::DisplayRole) const;
-		virtual QVariant headerData(int s, Qt::Orientation o, int r = Qt::DisplayRole) const;
+		QIcon getPreferencesIcon() const;
+		void setPreferencesIcon(const QIcon &i);
 		
-		void addPreferencesWidget(QomposePreferencesWidget *w);
+		QString getPreferencesTitle() const;
+		void setPreferencesTitle(const QString &t);
 		
 	private:
-		QList<QomposePreferencesWidget *> widgets;
+		QIcon icon;
+		QString title;
 };
 
 #endif

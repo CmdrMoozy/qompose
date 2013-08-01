@@ -60,12 +60,17 @@ SET(qompose_HEADERS
 	src/dialogs/preferences/QomposePreferencesListView.h
 	src/dialogs/preferences/QomposePreferencesListModel.h
 	
+	src/dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h
+	src/dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h
+	src/dialogs/preferences/widgets/QomposePreferencesWidget.h
+	
 	src/editor/QomposeBuffer.h
 	src/editor/QomposeEditor.h
 	
 	src/editor/highlighting/QomposeSyntaxHighlighter.h
 	
 	src/gui/QomposeBufferWidget.h
+	src/gui/QomposeGUIUtils.h
 	src/gui/QomposeTabWidget.h
 	
 )
@@ -103,12 +108,17 @@ SET(qompose_SOURCES
 	src/dialogs/preferences/QomposePreferencesListView.cpp
 	src/dialogs/preferences/QomposePreferencesListModel.cpp
 	
+	src/dialogs/preferences/widgets/QomposeEditorPreferencesWidget.cpp
+	src/dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.cpp
+	src/dialogs/preferences/widgets/QomposePreferencesWidget.cpp
+	
 	src/editor/QomposeBuffer.cpp
 	src/editor/QomposeEditor.cpp
 	
 	src/editor/highlighting/QomposeSyntaxHighlighter.cpp
 	
 	src/gui/QomposeBufferWidget.cpp
+	src/gui/QomposeGUIUtils.cpp
 	src/gui/QomposeTabWidget.cpp
 	
 )

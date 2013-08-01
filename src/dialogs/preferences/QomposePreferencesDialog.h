@@ -25,7 +25,10 @@ class QGridLayout;
 class QStackedLayout;
 class QPushButton;
 
+class QomposeGeneralPreferencesWidget;
+class QomposeEditorPreferencesWidget;
 class QomposePreferencesListView;
+class QomposePreferencesListModel;
 
 class QomposePreferencesDialog : public QDialog
 {
@@ -37,16 +40,25 @@ class QomposePreferencesDialog : public QDialog
 	
 	private:
 		QGridLayout *layout;
+		
+		QomposeGeneralPreferencesWidget *generalPreferencesWidget;
+		QomposeEditorPreferencesWidget *editorPreferencesWidget;
+		
 		QomposePreferencesListView *preferencesView;
+		QomposePreferencesListModel *preferencesModel;
+		
 		QWidget *preferencesDisplayWidget;
 		QStackedLayout *preferencesDisplayLayout;
+		
 		QWidget *buttonsWidget;
 		QGridLayout *buttonsLayout;
 		QPushButton *okButton;
 		QPushButton *applyButton;
 		QPushButton *cancelButton;
 		QPushButton *defaultsButton;
-	
+		
+		void createPreferencesModel();
+		
 	private slots:
 		void doOk();
 		void doApply();
