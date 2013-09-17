@@ -20,12 +20,24 @@
 #define INCLUDE_QOMPOSE_PREFERENCES_LIST_VIEW_H
 
 #include <QListView>
+#include <QSize>
+
+class QAbstractItemModel;
+
+class QomposePreferencesListModel;
 
 class QomposePreferencesListView : public QListView
 {
 	public:
 		QomposePreferencesListView(QWidget *p = 0);
 		virtual ~QomposePreferencesListView();
+		
+		void setModel(QomposePreferencesListModel *m);
+		
+		virtual QSize sizeHint() const;
+		
+	private:
+		virtual void setModel(QAbstractItemModel *m);
 };
 
 #endif

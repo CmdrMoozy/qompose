@@ -32,9 +32,8 @@ QomposePreferencesDialog::QomposePreferencesDialog(QWidget *p, Qt::WindowFlags f
 {
 	layout = new QGridLayout(this);
 	
-	createPreferencesModel();
-	
 	preferencesView = new QomposePreferencesListView(this);
+	createPreferencesModel();
 	preferencesView->setModel(preferencesModel);
 	
 	preferencesDisplayWidget = new QWidget(this);

@@ -37,6 +37,8 @@ class QomposePreferencesListModel : public QAbstractListModel
 		virtual QVariant data(const QModelIndex &i, int r = Qt::DisplayRole) const;
 		virtual QVariant headerData(int s, Qt::Orientation o, int r = Qt::DisplayRole) const;
 		
+		const QomposePreferencesWidget *widgetAt(int i) const;
+		
 		void addPreferencesWidget(QomposePreferencesWidget *w);
 		
 	private:

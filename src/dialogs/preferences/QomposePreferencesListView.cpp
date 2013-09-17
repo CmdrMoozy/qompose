@@ -18,11 +18,78 @@
 
 #include "QomposePreferencesListView.h"
 
+#include <QFont>
+#include <QAbstractItemModel>
+#include <QString>
+#include <QFontMetrics>
+
+#include "dialogs/preferences/QomposePreferencesListModel.h"
+#include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
+
 QomposePreferencesListView::QomposePreferencesListView(QWidget *p)
 	: QListView(p)
 {
+	setIconSize(QSize(30, 30));
+	setSpacing(5);
+	
+	QFont f = font();
+	f.setPointSize(10);
+	setFont(f);
 }
 
 QomposePreferencesListView::~QomposePreferencesListView()
 {
+}
+
+void QomposePreferencesListView::setModel(QomposePreferencesListModel *m)
+{
+	QAbstractItemModel *aim = dynamic_cast<QAbstractItemModel *>(m);
+	
+	setModel(aim);
+}
+
+QSize QomposePreferencesListView::sizeHint() const
+{
+	// Get our view's model (if applicable).
+	
+	QSize s;
+	QomposePreferencesListModel *m = dynamic_cast<QomposePreferencesListModel *>(model());
+	
+	if(m == NULL)
+		return QListView::sizeHint();
+	
+	// Compute the height and width we need to display all of our items.
+	
+	s.setHeight(50 * m->rowCount());
+	
+	QFontMetrics fm(font());
+	int maxWidth = 0;
+	
+	for(int i = 0; i < m->rowCount(); ++i)
+	{
+		const QomposePreferencesWidget *w = m->widgetAt(i);
+		
+		if(w == NULL)
+			continue;
+		
+		QString text = w->getPreferencesTitle();
+		
+		maxWidth = qMax(maxWidth, fm.width(text));
+	}
+	
+	s.setWidth( maxWidth + 75 );
+	
+	// Use some default minimums.
+	
+	s.setWidth( qMax(s.width(), 100) );
+	s.setHeight( qMax(s.height(), 200) );
+	
+	// Done!
+	
+	return s;
+}
+
+void QomposePreferencesListView::setModel(QAbstractItemModel *m)
+{
+	QListView::setModel(m);
 }
