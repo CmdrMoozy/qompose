@@ -21,8 +21,10 @@
 
 #include <QDialog>
 
+#include <QModelIndex>
+
 class QGridLayout;
-class QStackedLayout;
+class QStackedWidget;
 class QPushButton;
 
 class QomposeGeneralPreferencesWidget;
@@ -47,8 +49,7 @@ class QomposePreferencesDialog : public QDialog
 		QomposePreferencesListView *preferencesView;
 		QomposePreferencesListModel *preferencesModel;
 		
-		QWidget *preferencesDisplayWidget;
-		QStackedLayout *preferencesDisplayLayout;
+		QStackedWidget *preferencesDisplayWidget;
 		
 		QWidget *buttonsWidget;
 		QGridLayout *buttonsLayout;
@@ -60,6 +61,7 @@ class QomposePreferencesDialog : public QDialog
 		void createPreferencesModel();
 		
 	private slots:
+		void doWidgetActivated(const QModelIndex &i);
 		void doOk();
 		void doApply();
 		void doCancel();

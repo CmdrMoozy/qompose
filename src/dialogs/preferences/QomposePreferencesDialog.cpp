@@ -19,7 +19,7 @@
 #include "QomposePreferencesDialog.h"
 
 #include <QGridLayout>
-#include <QStackedLayout>
+#include <QStackedWidget>
 #include <QPushButton>
 
 #include "dialogs/preferences/QomposePreferencesListModel.h"
@@ -36,9 +36,16 @@ QomposePreferencesDialog::QomposePreferencesDialog(QWidget *p, Qt::WindowFlags f
 	createPreferencesModel();
 	preferencesView->setModel(preferencesModel);
 	
-	preferencesDisplayWidget = new QWidget(this);
-	preferencesDisplayLayout = new QStackedLayout(preferencesDisplayWidget);
-	preferencesDisplayWidget->setLayout(preferencesDisplayLayout);
+	preferencesDisplayWidget = new QStackedWidget(this);
+	
+	for(int i = 0; i < preferencesModel->rowCount(); ++i)
+	{
+		preferencesDisplayWidget->insertWidget(i,
+			preferencesModel->widgetAt(i));
+	}
+	
+	preferencesView->setCurrentIndex(preferencesModel->index(0));
+	preferencesDisplayWidget->setCurrentIndex(0);
 	
 	buttonsWidget = new QWidget(this);
 	buttonsLayout = new QGridLayout(buttonsWidget);
@@ -67,6 +74,9 @@ QomposePreferencesDialog::QomposePreferencesDialog(QWidget *p, Qt::WindowFlags f
 	
 	setWindowTitle(tr("Qompose - Preferences"));
 	
+	QObject::connect( preferencesView, SIGNAL( activated(const QModelIndex &) ),
+		this, SLOT( doWidgetActivated(const QModelIndex &) ) );
+	
 	QObject::connect( okButton,       SIGNAL( clicked(bool) ), this, SLOT( doOk()       ) );
 	QObject::connect( applyButton,    SIGNAL( clicked(bool) ), this, SLOT( doApply()    ) );
 	QObject::connect( cancelButton,   SIGNAL( clicked(bool) ), this, SLOT( doCancel()   ) );
@@ -87,6 +97,14 @@ void QomposePreferencesDialog::createPreferencesModel()
 	
 	preferencesModel->addPreferencesWidget(generalPreferencesWidget);
 	preferencesModel->addPreferencesWidget(editorPreferencesWidget);
+}
+
+void QomposePreferencesDialog::doWidgetActivated(const QModelIndex &i)
+{ /* SLOT */
+	
+	preferencesDisplayWidget->setCurrentWidget(
+		preferencesModel->widgetAt(i.row()));
+	
 }
 
 void QomposePreferencesDialog::doOk()

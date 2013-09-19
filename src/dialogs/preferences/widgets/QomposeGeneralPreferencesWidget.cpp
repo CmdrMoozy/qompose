@@ -18,6 +18,11 @@
 
 #include "QomposeGeneralPreferencesWidget.h"
 
+#include <QGridLayout>
+#include <QCheckBox>
+#include <QLabel>
+#include <QSpinBox>
+
 #include "gui/QomposeGUIUtils.h"
 
 QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(QWidget *p, Qt::WindowFlags f)
@@ -25,8 +30,35 @@ QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(QWidget *p, Qt:
 {
 	setPreferencesIcon(QomposeGUIUtils::getIconFromTheme("preferences-other"));
 	setPreferencesTitle(tr("General"));
+	
+	initializeGUI();
 }
 
 QomposeGeneralPreferencesWidget::~QomposeGeneralPreferencesWidget()
 {
+}
+
+void QomposeGeneralPreferencesWidget::initializeGUI()
+{
+	layout = new QGridLayout(this);
+	
+	statusBarCheckBox = new QCheckBox(tr("Show Status Bar"), this);
+	
+	recentListSizeLabel = new QLabel(tr("Recently Opened List Size"), this);
+	
+	recentListSizeSpinBox = new QSpinBox(this);
+	recentListSizeSpinBox->setMinimum(0);
+	recentListSizeSpinBox->setMaximum(50);
+	
+	saveWindowAttribsCheckBox = new QCheckBox(tr("Save Window Attributes on Exit"), this);
+	
+	layout->addWidget( statusBarCheckBox,         0, 0, 1, 1 );
+	layout->addWidget( recentListSizeLabel,       1, 0, 1, 1 );
+	layout->addWidget( recentListSizeSpinBox,     1, 1, 1, 1 );
+	layout->addWidget( saveWindowAttribsCheckBox, 2, 0, 1, 1 );
+	
+	layout->setColumnStretch(0, 1);
+	layout->setRowStretch(3, 1);
+	
+	setLayout(layout);
 }

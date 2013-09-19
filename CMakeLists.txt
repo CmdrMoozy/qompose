@@ -70,6 +70,8 @@ SET(qompose_HEADERS
 	src/editor/highlighting/QomposeSyntaxHighlighter.h
 	
 	src/gui/QomposeBufferWidget.h
+	src/gui/QomposeColorPickerButton.h
+	src/gui/QomposeFontPickerButton.h
 	src/gui/QomposeGUIUtils.h
 	src/gui/QomposeTabWidget.h
 	
@@ -91,6 +93,8 @@ SET(qompose_MOC_HEADERS
 	src/editor/highlighting/QomposeSyntaxHighlighter.h
 	
 	src/gui/QomposeBufferWidget.h
+	src/gui/QomposeColorPickerButton.h
+	src/gui/QomposeFontPickerButton.h
 	
 )
 
@@ -118,6 +122,8 @@ SET(qompose_SOURCES
 	src/editor/highlighting/QomposeSyntaxHighlighter.cpp
 	
 	src/gui/QomposeBufferWidget.cpp
+	src/gui/QomposeColorPickerButton.cpp
+	src/gui/QomposeFontPickerButton.cpp
 	src/gui/QomposeGUIUtils.cpp
 	src/gui/QomposeTabWidget.cpp
 	

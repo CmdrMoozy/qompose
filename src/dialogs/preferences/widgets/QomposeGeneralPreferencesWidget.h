@@ -21,11 +21,25 @@
 
 #include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
 
+class QGridLayout;
+class QCheckBox;
+class QLabel;
+class QSpinBox;
+
 class QomposeGeneralPreferencesWidget : public QomposePreferencesWidget
 {
 	public:
 		QomposeGeneralPreferencesWidget(QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeGeneralPreferencesWidget();
+		
+	private:
+		QGridLayout *layout;
+		QCheckBox *statusBarCheckBox;
+		QLabel *recentListSizeLabel;
+		QSpinBox *recentListSizeSpinBox;
+		QCheckBox *saveWindowAttribsCheckBox;
+		
+		void initializeGUI();
 };
 
 #endif

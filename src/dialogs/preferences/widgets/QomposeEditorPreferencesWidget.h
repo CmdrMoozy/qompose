@@ -21,11 +21,46 @@
 
 #include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
 
+class QGroupBox;
+class QGridLayout;
+class QCheckBox;
+class QLabel;
+class QSpinBox;
+
+class QomposeColorPickerButton;
+class QomposeFontPickerButton;
+
 class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 {
 	public:
 		QomposeEditorPreferencesWidget(QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeEditorPreferencesWidget();
+	
+	private:
+		QGridLayout *layout;
+		
+		QGroupBox *generalGroupBox;
+		QGridLayout *generalLayout;
+		QCheckBox *showGutterCheckBox;
+		QLabel *editorFontLabel;
+		QomposeFontPickerButton *editorFontButton;
+		QLabel *tabWidthLabel;
+		QSpinBox *tabWidthSpinBox;
+		
+		QGroupBox *colorsGroupBox;
+		QGridLayout *colorsLayout;
+		QLabel *editorFGLabel;
+		QomposeColorPickerButton *editorFGButton;
+		QLabel *editorBGLabel;
+		QomposeColorPickerButton *editorBGButton;
+		QLabel *currentLineBGLabel;
+		QomposeColorPickerButton *currentLineBGButton;
+		QLabel *gutterFGLabel;
+		QomposeColorPickerButton *gutterFGButton;
+		QLabel *gutterBGLabel;
+		QomposeColorPickerButton *gutterBGButton;
+		
+		void initializeGUI();
 };
 
 #endif

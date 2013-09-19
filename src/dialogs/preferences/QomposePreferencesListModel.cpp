@@ -74,7 +74,7 @@ QVariant QomposePreferencesListModel::headerData(int QUNUSED(s),
 	return QVariant(QVariant::Invalid);
 }
 
-const QomposePreferencesWidget *QomposePreferencesListModel::widgetAt(int i) const
+QomposePreferencesWidget *QomposePreferencesListModel::widgetAt(int i) const
 {
 	if( (i < 0) || (i >= rowCount()) )
 		return NULL;
