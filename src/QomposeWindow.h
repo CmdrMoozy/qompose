@@ -31,6 +31,7 @@ class QCloseEvent;
 class QomposeAboutDialog;
 class QomposePreferencesDialog;
 class QomposeBufferWidget;
+class QomposeSettings;
 
 class QomposeWindow : public QMainWindow
 {
@@ -44,6 +45,8 @@ class QomposeWindow : public QMainWindow
 		void closeEvent(QCloseEvent *e);
 		
 	private:
+		QomposeSettings *settings;
+		
 		QomposeAboutDialog *aboutDialog;
 		QomposePreferencesDialog *preferencesDialog;
 		

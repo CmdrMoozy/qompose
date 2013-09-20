@@ -32,6 +32,7 @@
 #include "dialogs/preferences/QomposePreferencesDialog.h"
 #include "gui/QomposeBufferWidget.h"
 #include "gui/QomposeGUIUtils.h"
+#include "util/QomposeSettings.h"
 
 /*!
  * This is our default constructor, which creates a new Qompose window, and initializes
@@ -43,6 +44,8 @@
 QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	: QMainWindow(p, f)
 {
+	settings = new QomposeSettings(this);
+	
 	buffers = new QomposeBufferWidget(this);
 	buffers->doNew();
 	setCentralWidget(buffers);
