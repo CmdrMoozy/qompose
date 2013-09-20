@@ -26,9 +26,11 @@
 #include "dialogs/preferences/QomposePreferencesListView.h"
 #include "dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h"
 #include "dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h"
+#include "util/QomposeSettings.h"
 
-QomposePreferencesDialog::QomposePreferencesDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f)
+QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
+	QWidget *p, Qt::WindowFlags f)
+	: QDialog(p, f), settings(s)
 {
 	layout = new QGridLayout(this);
 	
@@ -87,13 +89,21 @@ QomposePreferencesDialog::~QomposePreferencesDialog()
 {
 }
 
+void QomposePreferencesDialog::discardChanges()
+{
+	for(int i = 0; i < preferencesModel->rowCount(); ++i)
+	{
+		preferencesModel->widgetAt(i)->discardChanges();
+	}
+}
+
 void QomposePreferencesDialog::createPreferencesModel()
 {
 	preferencesModel = new QomposePreferencesListModel(preferencesView);
 	
-	generalPreferencesWidget = new QomposeGeneralPreferencesWidget(this);
+	generalPreferencesWidget = new QomposeGeneralPreferencesWidget(settings, this);
 	
-	editorPreferencesWidget = new QomposeEditorPreferencesWidget(this);
+	editorPreferencesWidget = new QomposeEditorPreferencesWidget(settings, this);
 	
 	preferencesModel->addPreferencesWidget(generalPreferencesWidget);
 	preferencesModel->addPreferencesWidget(editorPreferencesWidget);

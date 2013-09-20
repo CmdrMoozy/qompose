@@ -23,10 +23,13 @@
 #include <QIcon>
 #include <QString>
 
+class QomposeSettings;
+
 class QomposePreferencesWidget : public QWidget
 {
 	public:
-		QomposePreferencesWidget(QWidget *p = 0, Qt::WindowFlags f = 0);
+		QomposePreferencesWidget(QomposeSettings *s, QWidget *p = 0,
+			Qt::WindowFlags f = 0);
 		virtual ~QomposePreferencesWidget();
 		
 		QIcon getPreferencesIcon() const;
@@ -35,7 +38,14 @@ class QomposePreferencesWidget : public QWidget
 		QString getPreferencesTitle() const;
 		void setPreferencesTitle(const QString &t);
 		
+		virtual void discardChanges() = 0;
+		
+	protected:
+		QomposeSettings *getSettings() const;
+		
 	private:
+		QomposeSettings *settings;
+		
 		QIcon icon;
 		QString title;
 };

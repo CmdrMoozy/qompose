@@ -27,15 +27,19 @@ class QCheckBox;
 class QLabel;
 class QSpinBox;
 
+class QomposeSettings;
 class QomposeColorPickerButton;
 class QomposeFontPickerButton;
 
 class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 {
 	public:
-		QomposeEditorPreferencesWidget(QWidget *p = 0, Qt::WindowFlags f = 0);
+		QomposeEditorPreferencesWidget(QomposeSettings *s,
+			QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeEditorPreferencesWidget();
-	
+		
+		virtual void discardChanges();
+		
 	private:
 		QGridLayout *layout;
 		

@@ -26,11 +26,16 @@ class QCheckBox;
 class QLabel;
 class QSpinBox;
 
+class QomposeSettings;
+
 class QomposeGeneralPreferencesWidget : public QomposePreferencesWidget
 {
 	public:
-		QomposeGeneralPreferencesWidget(QWidget *p = 0, Qt::WindowFlags f = 0);
+		QomposeGeneralPreferencesWidget(QomposeSettings *s,
+			QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeGeneralPreferencesWidget();
+		
+		virtual void discardChanges();
 		
 	private:
 		QGridLayout *layout;

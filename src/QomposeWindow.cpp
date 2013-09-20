@@ -199,27 +199,27 @@ void QomposeWindow::initializeActions()
 	aboutQtAction = new QAction(tr("About &Qt..."), this);
 	aboutQtAction->setIcon(QomposeGUIUtils::getIconFromTheme("help-about"));
 	
-	QObject::connect( newAction,             SIGNAL( triggered(bool) ), buffers,           SLOT( doNew()             ) );
-	QObject::connect( openAction,            SIGNAL( triggered(bool) ), buffers,           SLOT( doOpen()            ) );
-	QObject::connect( revertAction,          SIGNAL( triggered(bool) ), buffers,           SLOT( doRevert()          ) );
-	QObject::connect( saveAction,            SIGNAL( triggered(bool) ), buffers,           SLOT( doSave()            ) );
-	QObject::connect( saveAsAction,          SIGNAL( triggered(bool) ), buffers,           SLOT( doSaveAs()          ) );
-	QObject::connect( closeAction,           SIGNAL( triggered(bool) ), buffers,           SLOT( doClose()           ) );
-	QObject::connect( exitAction,            SIGNAL( triggered(bool) ), this,              SLOT( close()             ) );
-	QObject::connect( undoAction,            SIGNAL( triggered(bool) ), buffers,           SLOT( doUndo()            ) );
-	QObject::connect( redoAction,            SIGNAL( triggered(bool) ), buffers,           SLOT( doRedo()            ) );
-	QObject::connect( cutAction,             SIGNAL( triggered(bool) ), buffers,           SLOT( doCut()             ) );
-	QObject::connect( copyAction,            SIGNAL( triggered(bool) ), buffers,           SLOT( doCopy()            ) );
-	QObject::connect( pasteAction,           SIGNAL( triggered(bool) ), buffers,           SLOT( doPaste()           ) );
-	QObject::connect( selectAllAction,       SIGNAL( triggered(bool) ), buffers,           SLOT( doSelectAll()       ) );
-	QObject::connect( deselectAction,        SIGNAL( triggered(bool) ), buffers,           SLOT( doDeselect()        ) );
-	QObject::connect( preferencesAction,     SIGNAL( triggered(bool) ), preferencesDialog, SLOT( show()              ) );
-	QObject::connect( previousBufferAction,  SIGNAL( triggered(bool) ), buffers,           SLOT( doPreviousBuffer()  ) );
-	QObject::connect( nextBufferAction,      SIGNAL( triggered(bool) ), buffers,           SLOT( doNextBuffer()      ) );
-	QObject::connect( moveBufferLeftAction,  SIGNAL( triggered(bool) ), buffers,           SLOT( doMoveBufferLeft()  ) );
-	QObject::connect( moveBufferRightAction, SIGNAL( triggered(bool) ), buffers,           SLOT( doMoveBufferRight() ) );
-	QObject::connect( aboutQomposeAction,    SIGNAL( triggered(bool) ), aboutDialog,       SLOT( show()              ) );
-	QObject::connect( aboutQtAction,         SIGNAL( triggered(bool) ), qApp,              SLOT( aboutQt()           ) );
+	QObject::connect( newAction,             SIGNAL( triggered(bool) ), buffers,     SLOT( doNew()                   ) );
+	QObject::connect( openAction,            SIGNAL( triggered(bool) ), buffers,     SLOT( doOpen()                  ) );
+	QObject::connect( revertAction,          SIGNAL( triggered(bool) ), buffers,     SLOT( doRevert()                ) );
+	QObject::connect( saveAction,            SIGNAL( triggered(bool) ), buffers,     SLOT( doSave()                  ) );
+	QObject::connect( saveAsAction,          SIGNAL( triggered(bool) ), buffers,     SLOT( doSaveAs()                ) );
+	QObject::connect( closeAction,           SIGNAL( triggered(bool) ), buffers,     SLOT( doClose()                 ) );
+	QObject::connect( exitAction,            SIGNAL( triggered(bool) ), this,        SLOT( close()                   ) );
+	QObject::connect( undoAction,            SIGNAL( triggered(bool) ), buffers,     SLOT( doUndo()                  ) );
+	QObject::connect( redoAction,            SIGNAL( triggered(bool) ), buffers,     SLOT( doRedo()                  ) );
+	QObject::connect( cutAction,             SIGNAL( triggered(bool) ), buffers,     SLOT( doCut()                   ) );
+	QObject::connect( copyAction,            SIGNAL( triggered(bool) ), buffers,     SLOT( doCopy()                  ) );
+	QObject::connect( pasteAction,           SIGNAL( triggered(bool) ), buffers,     SLOT( doPaste()                 ) );
+	QObject::connect( selectAllAction,       SIGNAL( triggered(bool) ), buffers,     SLOT( doSelectAll()             ) );
+	QObject::connect( deselectAction,        SIGNAL( triggered(bool) ), buffers,     SLOT( doDeselect()              ) );
+	QObject::connect( preferencesAction,     SIGNAL( triggered(bool) ), this,        SLOT( doPreferencesDialog(bool) ) );
+	QObject::connect( previousBufferAction,  SIGNAL( triggered(bool) ), buffers,     SLOT( doPreviousBuffer()        ) );
+	QObject::connect( nextBufferAction,      SIGNAL( triggered(bool) ), buffers,     SLOT( doNextBuffer()            ) );
+	QObject::connect( moveBufferLeftAction,  SIGNAL( triggered(bool) ), buffers,     SLOT( doMoveBufferLeft()        ) );
+	QObject::connect( moveBufferRightAction, SIGNAL( triggered(bool) ), buffers,     SLOT( doMoveBufferRight()       ) );
+	QObject::connect( aboutQomposeAction,    SIGNAL( triggered(bool) ), aboutDialog, SLOT( show()                    ) );
+	QObject::connect( aboutQtAction,         SIGNAL( triggered(bool) ), qApp,        SLOT( aboutQt()                 ) );
 	
 	QObject::connect( printAction,           SIGNAL( triggered(bool) ), this, SLOT( doPrint(bool)           ) );
 	QObject::connect( printPreviewAction,    SIGNAL( triggered(bool) ), this, SLOT( doPrintPreview(bool)    ) );
@@ -303,13 +303,24 @@ void QomposeWindow::initializeDialogs()
 {
 	aboutDialog = new QomposeAboutDialog(this);
 	
-	preferencesDialog = new QomposePreferencesDialog(this);
+	preferencesDialog = new QomposePreferencesDialog(settings, this);
 }
 
 void QomposeWindow::doTabPathChanged(const QString &p)
 { /* SLOT */
 	
 	tabPathLabel->setText(p);
+	
+}
+
+void QomposeWindow::doPreferencesDialog(bool QUNUSED(c))
+{ /* SLOT */
+	
+	if(!preferencesDialog->isVisible())
+	{
+		preferencesDialog->discardChanges();
+		preferencesDialog->show();
+	}
 	
 }
 

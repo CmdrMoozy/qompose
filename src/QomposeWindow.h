@@ -106,6 +106,7 @@ class QomposeWindow : public QMainWindow
 	private slots:
 		void doTabPathChanged(const QString &p);
 		
+		void doPreferencesDialog(bool c);
 		void doPrint(bool c);
 		void doPrintPreview(bool c);
 		void doDuplicateLine(bool c);

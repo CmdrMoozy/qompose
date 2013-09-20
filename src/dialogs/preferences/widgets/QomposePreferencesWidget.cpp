@@ -18,8 +18,11 @@
 
 #include "QomposePreferencesWidget.h"
 
-QomposePreferencesWidget::QomposePreferencesWidget(QWidget *p, Qt::WindowFlags f)
-	: QWidget(p, f), icon(QIcon()), title(QString())
+#include "util/QomposeSettings.h"
+
+QomposePreferencesWidget::QomposePreferencesWidget(QomposeSettings *s,
+	QWidget *p, Qt::WindowFlags f)
+	: QWidget(p, f), settings(s), icon(QIcon()), title(QString())
 {
 }
 
@@ -45,4 +48,9 @@ QString QomposePreferencesWidget::getPreferencesTitle() const
 void QomposePreferencesWidget::setPreferencesTitle(const QString &t)
 {
 	title = t;
+}
+
+QomposeSettings *QomposePreferencesWidget::getSettings() const
+{
+	return settings;
 }

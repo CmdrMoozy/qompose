@@ -31,16 +31,22 @@ class QomposeGeneralPreferencesWidget;
 class QomposeEditorPreferencesWidget;
 class QomposePreferencesListView;
 class QomposePreferencesListModel;
+class QomposeSettings;
 
 class QomposePreferencesDialog : public QDialog
 {
 	Q_OBJECT
 	
 	public:
-		QomposePreferencesDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
+		QomposePreferencesDialog(QomposeSettings *s, QWidget *p = 0,
+			Qt::WindowFlags f = 0);
 		virtual ~QomposePreferencesDialog();
-	
+		
+		void discardChanges();
+		
 	private:
+		QomposeSettings *settings;
+		
 		QGridLayout *layout;
 		
 		QomposeGeneralPreferencesWidget *generalPreferencesWidget;

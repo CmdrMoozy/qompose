@@ -27,9 +27,11 @@
 #include "gui/QomposeColorPickerButton.h"
 #include "gui/QomposeFontPickerButton.h"
 #include "gui/QomposeGUIUtils.h"
+#include "util/QomposeSettings.h"
 
-QomposeEditorPreferencesWidget::QomposeEditorPreferencesWidget(QWidget *p, Qt::WindowFlags f)
-	: QomposePreferencesWidget(p, f)
+QomposeEditorPreferencesWidget::QomposeEditorPreferencesWidget(QomposeSettings *s,
+	QWidget *p, Qt::WindowFlags f)
+	: QomposePreferencesWidget(s, p, f)
 {
 	setPreferencesIcon(QomposeGUIUtils::getIconFromTheme("accessories-text-editor"));
 	setPreferencesTitle(tr("Editor"));
@@ -39,6 +41,52 @@ QomposeEditorPreferencesWidget::QomposeEditorPreferencesWidget(QWidget *p, Qt::W
 
 QomposeEditorPreferencesWidget::~QomposeEditorPreferencesWidget()
 {
+}
+
+void QomposeEditorPreferencesWidget::discardChanges()
+{
+	// Show Gutter
+	
+	bool showGutter = getSettings()->getSetting(
+		"show-gutter").toBool();
+	
+	showGutterCheckBox->setCheckState(showGutter ?
+		Qt::Checked : Qt::Unchecked);
+	
+	// Editor Font
+	
+	editorFontButton->setSelectedFont(getSettings()->getSetting(
+		"editor-font").value<QFont>());
+	
+	// Tab Width
+	
+	tabWidthSpinBox->setValue(getSettings()->getSetting(
+		"editor-tab-width").toInt());
+	
+	// Editor Foreground
+	
+	editorFGButton->setSelectedColor(getSettings()->getSetting(
+		"editor-foreground").value<QColor>());
+	
+	// Editor Background
+	
+	editorBGButton->setSelectedColor(getSettings()->getSetting(
+		"editor-background").value<QColor>());
+	
+	// Current Line Background
+	
+	currentLineBGButton->setSelectedColor(getSettings()->getSetting(
+		"editor-current-line").value<QColor>());
+	
+	// Gutter Foreground
+	
+	gutterFGButton->setSelectedColor(getSettings()->getSetting(
+		"gutter-foreground").value<QColor>());
+	
+	// Gutter Background
+	
+	gutterBGButton->setSelectedColor(getSettings()->getSetting(
+		"gutter-background").value<QColor>());
 }
 
 void QomposeEditorPreferencesWidget::initializeGUI()

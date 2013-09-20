@@ -24,9 +24,11 @@
 #include <QSpinBox>
 
 #include "gui/QomposeGUIUtils.h"
+#include "util/QomposeSettings.h"
 
-QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(QWidget *p, Qt::WindowFlags f)
-	: QomposePreferencesWidget(p, f)
+QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(QomposeSettings *s,
+	QWidget *p, Qt::WindowFlags f)
+	: QomposePreferencesWidget(s, p, f)
 {
 	setPreferencesIcon(QomposeGUIUtils::getIconFromTheme("preferences-other"));
 	setPreferencesTitle(tr("General"));
@@ -36,6 +38,30 @@ QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(QWidget *p, Qt:
 
 QomposeGeneralPreferencesWidget::~QomposeGeneralPreferencesWidget()
 {
+}
+
+void QomposeGeneralPreferencesWidget::discardChanges()
+{
+	// Show Status Bar
+	
+	bool showStatusBar = getSettings()->getSetting(
+		"show-status-bar").toBool();
+	
+	statusBarCheckBox->setCheckState(showStatusBar ?
+		Qt::Checked : Qt::Unchecked);
+	
+	// Recently Opened List Size
+	
+	recentListSizeSpinBox->setValue(getSettings()->getSetting(
+		"recent-list-size").toInt());
+	
+	// Save Window Attributes
+	
+	bool saveWindowAttribs = getSettings()->getSetting(
+		"window-save-attributes").toBool();
+	
+	saveWindowAttribsCheckBox->setCheckState(saveWindowAttribs ?
+		Qt::Checked : Qt::Unchecked);
 }
 
 void QomposeGeneralPreferencesWidget::initializeGUI()
