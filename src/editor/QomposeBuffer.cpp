@@ -25,12 +25,31 @@
 #include <QFileInfo>
 #include <QTextDocumentWriter>
 #include <QByteArray>
+#include <QString>
+#include <QVariant>
 
 #include "QomposeDefines.h"
+#include "util/QomposeSettings.h"
 
-QomposeBuffer::QomposeBuffer(QWidget *p)
-	: QomposeEditor(p), path(QString())
+QomposeBuffer::QomposeBuffer(QomposeSettings *s, QWidget *p)
+	: QomposeEditor(p), settings(s), path(QString())
 {
+	// Load our initial settings, and connect our settings object.
+	
+	setGutterVisible(settings->getSetting("show-gutter").toBool());
+	setFont(settings->getSetting("editor-font").value<QFont>());
+	setTabWidthSpaces(settings->getSetting("editor-tab-width").toInt());
+	setEditorForeground(settings->getSetting("editor-foreground").value<QColor>());
+	setEditorBackground(settings->getSetting("editor-background").value<QColor>());
+	setCurrentLineColor(settings->getSetting("editor-current-line").value<QColor>());
+	setGutterForeground(settings->getSetting("gutter-foreground").value<QColor>());
+	setGutterBackground(settings->getSetting("gutter-background").value<QColor>());
+	
+	QObject::connect( settings, SIGNAL( settingChanged(const QString &, const QVariant &) ),
+		this, SLOT( doSettingChanged(const QString &, const QVariant &) ) );
+	
+	// Connect other various signals.
+	
 	QObject::connect( this, SIGNAL( modificationChanged(bool) ),
 		this, SLOT( doModificationChanged(bool) ) );
 }
@@ -218,5 +237,34 @@ void QomposeBuffer::doModificationChanged(bool QUNUSED(c))
 { /* SLOT */
 	
 	emit titleChanged(getTitle());
+	
+}
+
+/*!
+ * This function handles a setting being changed by, if it's a setting this widget
+ * cares about, updating our object's properties accordingly.
+ *
+ * \param k The setting key whose value was changed.
+ * \param v The new value for this particular setting.
+ */
+void QomposeBuffer::doSettingChanged(const QString &k, const QVariant &v)
+{ /* SLOT */
+	
+	if(k == "show-gutter")
+		setGutterVisible(v.toBool());
+	else if(k == "editor-font")
+		setFont(v.value<QFont>());
+	else if(k == "editor-tab-width")
+		setTabWidthSpaces(v.toInt());
+	else if(k == "editor-foreground")
+		setEditorForeground(v.value<QColor>());
+	else if(k == "editor-background")
+		setEditorBackground(v.value<QColor>());
+	else if(k == "editor-current-line")
+		setCurrentLineColor(v.value<QColor>());
+	else if(k == "gutter-foreground")
+		setGutterForeground(v.value<QColor>());
+	else if(k == "gutter-background")
+		setGutterBackground(v.value<QColor>());
 	
 }

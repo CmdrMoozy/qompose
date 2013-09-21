@@ -26,13 +26,17 @@ class QGridLayout;
 
 class QomposeBuffer;
 class QomposeTabWidget;
+class QomposeSettings;
 
+/*!
+ * \brief This class provides high-level management of a set of buffers.
+ */
 class QomposeBufferWidget : public QWidget
 {
 	Q_OBJECT
 	
 	public:
-		QomposeBufferWidget(QWidget *p = 0);
+		QomposeBufferWidget(QomposeSettings *s, QWidget *p = 0);
 		virtual ~QomposeBufferWidget();
 		
 		int count() const;
@@ -43,6 +47,8 @@ class QomposeBufferWidget : public QWidget
 		bool prepareCloseParent();
 		
 	private:
+		QomposeSettings *settings;
+		
 		QGridLayout *layout;
 		QomposeTabWidget *tabWidget;
 		

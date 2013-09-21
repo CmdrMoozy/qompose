@@ -27,9 +27,10 @@
 #include "dialogs/QomposeFileDialog.h"
 #include "editor/QomposeBuffer.h"
 #include "gui/QomposeTabWidget.h"
+#include "util/QomposeSettings.h"
 
-QomposeBufferWidget::QomposeBufferWidget(QWidget *p)
-	: QWidget(p)
+QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
+	: QWidget(p), settings(s)
 {
 	layout = new QGridLayout(this);
 	
@@ -130,7 +131,7 @@ bool QomposeBufferWidget::prepareCloseParent()
 
 QomposeBuffer *QomposeBufferWidget::newBuffer()
 {
-	QomposeBuffer *b = new QomposeBuffer(tabWidget);
+	QomposeBuffer *b = new QomposeBuffer(settings, tabWidget);
 	
 	QObject::connect(b, SIGNAL(titleChanged(const QString &)),
 		this, SLOT(doTabTitleChanged(const QString &)));

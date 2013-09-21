@@ -46,7 +46,9 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 {
 	settings = new QomposeSettings(this);
 	
-	buffers = new QomposeBufferWidget(this);
+	// Initialize our window.
+	
+	buffers = new QomposeBufferWidget(settings, this);
 	buffers->doNew();
 	setCentralWidget(buffers);
 	
@@ -64,6 +66,13 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	
 	QObject::connect( buffers, SIGNAL( pathChanged(const QString &) ),
 		this, SLOT( doTabPathChanged(const QString &) ) );
+	
+	// Load our initial settings, and connect our settings object.
+	
+	statusBar->setVisible(settings->getSetting("show-status-bar").toBool());
+	
+	QObject::connect( settings, SIGNAL( settingChanged(const QString &, const QVariant &) ),
+		this, SLOT( doSettingChanged(const QString &, const QVariant &) ) );
 }
 
 /*!
@@ -382,4 +391,12 @@ void QomposeWindow::doReplace(bool QUNUSED(c))
 
 void QomposeWindow::doGoTo(bool QUNUSED(c))
 { /* SLOT */
+}
+
+void QomposeWindow::doSettingChanged(const QString &k, const QVariant &v)
+{ /* SLOT */
+	
+	if(k == "show-status-bar")
+		statusBar->setVisible(v.toBool());
+	
 }

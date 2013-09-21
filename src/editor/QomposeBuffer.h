@@ -23,12 +23,17 @@
 
 #include "dialogs/QomposeFileDialog.h"
 
+class QomposeSettings;
+
+/*!
+ * \brief This class provides high-level open/save/etc. functionality for editors.
+ */
 class QomposeBuffer : public QomposeEditor
 {
 	Q_OBJECT
 	
 	public:
-		QomposeBuffer(QWidget *p = NULL);
+		QomposeBuffer(QomposeSettings *s, QWidget *p = NULL);
 		virtual ~QomposeBuffer();
 		
 		bool open(const QomposeFileDescriptor &f);
@@ -43,6 +48,8 @@ class QomposeBuffer : public QomposeEditor
 		void setModified(bool m);
 		
 	private:
+		QomposeSettings *settings;
+		
 		QString path;
 		QString codec;
 		
@@ -51,6 +58,7 @@ class QomposeBuffer : public QomposeEditor
 		
 	private slots:
 		void doModificationChanged(bool c);
+		void doSettingChanged(const QString &k, const QVariant &v);
 		
 	signals:
 		void titleChanged(const QString &);

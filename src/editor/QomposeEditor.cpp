@@ -34,6 +34,7 @@
 #include <QTextCursor>
 #include <QRegExp>
 #include <QMouseEvent>
+#include <QFontMetrics>
 
 /*****************
  * QomposeGutter *
@@ -93,13 +94,21 @@ void QomposeEditor::QomposeGutter::paintEvent(QPaintEvent *e)
 QomposeEditor::QomposeEditor(QWidget *p)
 	: QPlainTextEdit(p)
 {
+	// Set some default colors.
+	
+	currentLineHighlight = QColor(127, 127, 127);
+	gutterForeground = QColor(255, 255, 255);
+	gutterBackground = QColor(0, 0, 0);
+	
+	// Initialize our widget.
+	
 	gutter = new QomposeGutter(this);
 	
 	QObject::connect( this, SIGNAL( blockCountChanged(int)            ), this, SLOT( updateGutterWidth()              ) );
 	QObject::connect( this, SIGNAL( updateRequest(const QRect &, int) ), this, SLOT( updateGutter(const QRect &, int) ) );
 	QObject::connect( this, SIGNAL( cursorPositionChanged()           ), this, SLOT( highlightCurrentLine()           ) );
 	
-	setTabStopWidth(fontMetrics().width(QLatin1Char(' ')) * 8);
+	setTabWidthSpaces(8);
 	
 	setLineWrapMode(QPlainTextEdit::NoWrap);
 	setFocusPolicy(Qt::ClickFocus);
@@ -108,7 +117,7 @@ QomposeEditor::QomposeEditor(QWidget *p)
 	
 	highlightCurrentLine();
 	
-	setFont(QFont("Droid Sans Mono", 10));
+	setFont(QFont("Courier", 11));
 	setFontZoom(0);
 }
 
@@ -166,9 +175,13 @@ QFont QomposeEditor::font() const
  */
 void QomposeEditor::setFont(const QFont &f)
 {
-	currentFont = f;
+	// Make a note of our current tab width (in spaces).
+	
+	int oldWidth = tabWidthSpaces();
 	
 	// Make sure we aren't given a pixel-sized font.
+	
+	currentFont = f;
 	
 	if(currentFont.pointSize() == -1)
 		currentFont.setPointSize(10);
@@ -178,6 +191,10 @@ void QomposeEditor::setFont(const QFont &f)
 	// Set our font!
 	
 	QPlainTextEdit::setFont(currentFont);
+	
+	// Make sure our tab width is still the same (in spaces).
+	
+	setTabWidthSpaces(oldWidth);
 }
 
 /*!
@@ -226,6 +243,158 @@ void QomposeEditor::setFontZoom(int z)
 	
 	currentFont.setPointSizeF(fsize);
 	QPlainTextEdit::setFont(currentFont);
+}
+
+/*!
+ * This function returns the width of a tab stop, in spaces (based upon the current
+ * font) - NOT in pixels.
+ *
+ * \return The editor's tab width.
+ */
+int QomposeEditor::tabWidthSpaces() const
+{
+	double w = static_cast<double>(tabStopWidth());
+	
+	QFontMetrics m(font());
+	
+	w /= static_cast<double>(m.width(' '));
+	qRound(w);
+	
+	return static_cast<int>(w);
+}
+
+/*!
+ * This function sets the width of our editor's tab stops, in spaces (based upon the
+ * current font) - NOT in pixels.
+ *
+ * \param w The new tab width to use.
+ */
+void QomposeEditor::setTabWidthSpaces(int w)
+{
+	w = qAbs(w);
+	
+	QFontMetrics m(font());
+	
+	setTabStopWidth(w * m.width(' '));
+}
+
+/*!
+ * This function returns our editor's foreground (text) color.
+ *
+ * \return Our editor's foreground color.
+ */
+QColor QomposeEditor::getEditorForeground() const
+{
+	return palette().color(QPalette::Text);
+}
+
+/*!
+ * This function sets our editor's foreground (text) color.
+ *
+ * \param c The new foreground color to use.
+ */
+void QomposeEditor::setEditorForeground(const QColor &c)
+{
+	QPalette p = palette();
+	
+	p.setColor(QPalette::Window, c);
+	p.setColor(QPalette::WindowText, c);
+	p.setColor(QPalette::Text, c);
+	
+	setPalette(p);
+}
+
+/*!
+ * This function returns our editor's background color.
+ *
+ * \return Our editor's background color.
+ */
+QColor QomposeEditor::getEditorBackground() const
+{
+	return palette().color(QPalette::Active, QPalette::Base);
+}
+
+/*!
+ * This function sets our editor's background color.
+ *
+ * \param c The new background color to use.
+ */
+void QomposeEditor::setEditorBackground(const QColor &c)
+{
+	QPalette p = palette();
+	
+	p.setColor(QPalette::Active, QPalette::Base, c);
+	p.setColor(QPalette::Inactive, QPalette::Base, c);
+	
+	setPalette(p);
+}
+
+/*!
+ * This function returns our editor's current line highlight color.
+ *
+ * \return Our editor's current line color.
+ */
+QColor QomposeEditor::getCurrentLineColor() const
+{
+	return currentLineHighlight;
+}
+
+/*!
+ * This function sets our editor's current line highlight color.
+ *
+ * \param c The new current line color to use.
+ */
+void QomposeEditor::setCurrentLineColor(const QColor &c)
+{
+	currentLineHighlight = c;
+	
+	highlightCurrentLine();
+}
+
+/*!
+ * This function returns our editor's gutter's foreground (text) color.
+ *
+ * \return Our gutter's foreground color.
+ */
+QColor QomposeEditor::getGutterForeground() const
+{
+	return gutterForeground;
+}
+
+/*!
+ * This function sets our editor's gutter's foreground (text) color. This
+ * automatically repaints our gutter, so this change takes effect immediately.
+ *
+ * \param c The new gutter foreground color to use.
+ */
+void QomposeEditor::setGutterForeground(const QColor &c)
+{
+	gutterForeground = c;
+	
+	gutter->update();
+}
+
+/*!
+ * This function returns our editor's gutter's background color.
+ *
+ * \return Our gutter's background color.
+ */
+QColor QomposeEditor::getGutterBackground() const
+{
+	return gutterBackground;
+}
+
+/*!
+ * This function sets our editor's gutter's background color. This automatically
+ * repaints our gutter, so this change takes effect immediately.
+ *
+ * \param c The new gutter background color to use.
+ */
+void QomposeEditor::setGutterBackground(const QColor &c)
+{
+	gutterBackground = c;
+	
+	gutter->update();
 }
 
 /*!
@@ -464,10 +633,8 @@ void QomposeEditor::gutterPaintEvent(QPaintEvent *e)
 {
 	QPainter painter(gutter);
 	
-	QColor background(0, 0, 0), foreground(255, 255, 255);
-	
 	// Paint our background.
-	painter.fillRect(e->rect(), Qt::black);
+	painter.fillRect(e->rect(), gutterBackground);
 	
 	// Paint our line numbers.
 	
@@ -481,7 +648,7 @@ void QomposeEditor::gutterPaintEvent(QPaintEvent *e)
 		if(block.isVisible() && bottom >= e->rect().top())
 		{
 			QString number = QString::number(blockNumber + 1);
-			painter.setPen(Qt::white);
+			painter.setPen(gutterForeground);
 			painter.drawText(0, top, gutter->width(), fontMetrics().height(), Qt::AlignCenter, number);
 		}
 		
@@ -633,13 +800,11 @@ void QomposeEditor::highlightCurrentLine()
 	{
 		QList<QTextEdit::ExtraSelection> es;
 		
-		QColor background(225, 225, 225);
-		
 		// Highlight our current line (only if we are not read only and we have focus).
 		
 		QTextEdit::ExtraSelection selection;
 		
-		selection.format.setBackground(background);
+		selection.format.setBackground(currentLineHighlight);
 		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
 		selection.cursor = textCursor();
 		selection.cursor.clearSelection();

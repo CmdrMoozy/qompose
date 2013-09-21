@@ -28,6 +28,9 @@ class QKeyEvent;
 class QWheelEvent;
 class QMouseEvent;
 
+/*!
+ * \brief This class implements a text editor widget.
+ */
 class QomposeEditor : public QPlainTextEdit
 {
 	Q_OBJECT
@@ -44,6 +47,20 @@ class QomposeEditor : public QPlainTextEdit
 		int fontZoom() const;
 		qreal fontZoomSize() const;
 		void setFontZoom(int z);
+		
+		int tabWidthSpaces() const;
+		void setTabWidthSpaces(int w);
+		
+		QColor getEditorForeground() const;
+		void setEditorForeground(const QColor &c);
+		QColor getEditorBackground() const;
+		void setEditorBackground(const QColor &c);
+		QColor getCurrentLineColor() const;
+		void setCurrentLineColor(const QColor &c);
+		QColor getGutterForeground() const;
+		void setGutterForeground(const QColor &c);
+		QColor getGutterBackground() const;
+		void setGutterBackground(const QColor &c);
 		
 	protected:
 		virtual void focusInEvent(QFocusEvent *e);
@@ -78,6 +95,10 @@ class QomposeEditor : public QPlainTextEdit
 		int currentFontZoom;
 		
 		int tabWidth;
+		
+		QColor currentLineHighlight;
+		QColor gutterForeground;
+		QColor gutterBackground;
 		
 		void gutterPaintEvent(QPaintEvent *e);
 		int gutterWidth();

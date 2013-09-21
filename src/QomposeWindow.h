@@ -120,6 +120,8 @@ class QomposeWindow : public QMainWindow
 		void doFindPrevious(bool c);
 		void doReplace(bool c);
 		void doGoTo(bool c);
+		
+		void doSettingChanged(const QString &k, const QVariant &v);
 };
 
 #endif
