@@ -25,32 +25,72 @@
 #include "QomposeDefines.h"
 #include "QomposeWindow.h"
 
+/*!
+ * Initializes a new QomposeApplication instance.
+ *
+ * \param ac The number of command-line arguments.
+ * \param av The command-line arguments.
+ */
 QomposeApplication::QomposeApplication(int &ac, char **av)
 	: QApplication(ac, av), sappServer(NULL)
 {
 }
 
+/*!
+ * Initializes a new QomposeApplication instance.
+ *
+ * \param ac The number of command-line arguments.
+ * \param av The command-line arguments.
+ * \param g Whether or not GUI functionality is enabled.
+ */
 QomposeApplication::QomposeApplication(int &ac, char **av, bool g)
 	: QApplication(ac, av, g), sappServer(NULL)
 {
 }
 
+/*!
+ * Initializes a new QomposeApplication instance.
+ *
+ * \param ac The number of command-line arguments.
+ * \param av The command-line arguments.
+ * \param t The type of application to initialize.
+ */
 QomposeApplication::QomposeApplication(int &ac, char **av, Type t)
 	: QApplication(ac, av, t), sappServer(NULL)
 {
 }
 
+/*!
+ * Initializes a new QomposeApplication instance.
+ *
+ * \param d An already open display to use.
+ * \param v The visual context to use.
+ * \param c The colormap context to use.
+ */
 QomposeApplication::QomposeApplication(Display *d, Qt::HANDLE v, Qt::HANDLE c)
 	: QApplication(d, v, c), sappServer(NULL)
 {
 }
 
+/*!
+ * Initializes a new QomposeApplication instance.
+ *
+ * \param d An already open display to use.
+ * \param ac The number of command-line arguments.
+ * \param av The command-line arguments.
+ * \param v The visual context to use.
+ * \param c The colormap context to use.
+ */
 QomposeApplication::QomposeApplication(Display *d, int &ac, char **av,
 	Qt::HANDLE v, Qt::HANDLE c)
 	: QApplication(d, ac, av, v, c), sappServer(NULL)
 {
 }
 
+/*!
+ * This is our default destructor, which cleans up our local "single application
+ * server," and destroys all of our open window objects.
+ */
 QomposeApplication::~QomposeApplication()
 {
 	if(sappServer != NULL)
@@ -63,6 +103,12 @@ QomposeApplication::~QomposeApplication()
 	}
 }
 
+/*!
+ * This function initializes our QLocalServer instance by attempting to listen using
+ * our pre-defined GUID value, to ensure that only one instance of our application is
+ * running at a time. Duplicate instances will be handled by notifying the original
+ * process.
+ */
 void QomposeApplication::initializeLocalServer()
 {
 	sappServer = new QLocalServer();
@@ -85,6 +131,10 @@ void QomposeApplication::initializeLocalServer()
 		this, SLOT(doDuplicateInstanceDetected()));
 }
 
+/*!
+ * This slot handles a duplicate instance of our application being started by simply
+ * opening a new window on the existing instance instead.
+ */
 void QomposeApplication::doDuplicateInstanceDetected()
 { /* SLOT */
 	

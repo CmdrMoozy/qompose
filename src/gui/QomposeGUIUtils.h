@@ -22,6 +22,9 @@
 #include <QIcon>
 #include <QString>
 
+/*!
+ * \brief This class provides various GUI-related utility functions.
+ */
 class QomposeGUIUtils
 {
 	public:

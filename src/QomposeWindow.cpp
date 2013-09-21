@@ -73,6 +73,13 @@ QomposeWindow::~QomposeWindow()
 {
 }
 
+/*!
+ * This function handles our window being closed by notifying our buffers of the
+ * imminent close event, and then proceeding according to what it reports back to
+ * us.
+ *
+ * \param e The event being handled.
+ */
 void QomposeWindow::closeEvent(QCloseEvent *e)
 {
 	if(buffers->prepareCloseParent())
@@ -306,6 +313,12 @@ void QomposeWindow::initializeDialogs()
 	preferencesDialog = new QomposePreferencesDialog(settings, this);
 }
 
+/*!
+ * This slot handles one of our tab's paths being changed by updating that
+ * tab's path label.
+ *
+ * \param p The new path for the current tab.
+ */
 void QomposeWindow::doTabPathChanged(const QString &p)
 { /* SLOT */
 	
@@ -313,6 +326,13 @@ void QomposeWindow::doTabPathChanged(const QString &p)
 	
 }
 
+/*!
+ * This slot handles our preferences dialog action being triggered
+ * by resetting and showing our preferences dialog (if it isn't already
+ * visible).
+ *
+ * \param c The action's check state (ignored).
+ */
 void QomposeWindow::doPreferencesDialog(bool QUNUSED(c))
 { /* SLOT */
 	

@@ -23,6 +23,9 @@
 
 class QKeyEvent;
 
+/*!
+ * \brief This class extends QTabWidget with additional hotkeys and functionality.
+ */
 class QomposeTabWidget : public QTabWidget
 {
 	public:

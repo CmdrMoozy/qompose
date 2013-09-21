@@ -26,6 +26,9 @@
 class QSettings;
 class QString;
 
+/*!
+ * \brief This class uses QSettings to provide persistent settings for Qompose.
+ */
 class QomposeSettings : public QObject
 {
 	Q_OBJECT

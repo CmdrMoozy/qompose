@@ -25,6 +25,9 @@
 class QLocalServer;
 class QomposeWindow;
 
+/*!
+ * \brief This class extends QApplication by allowing only one instance to exist at a time.
+ */
 class QomposeApplication : public QApplication
 {
 	Q_OBJECT

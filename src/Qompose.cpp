@@ -22,6 +22,12 @@
 #include "QomposeDefines.h"
 #include "QomposeWindow.h"
 
+/*!
+ * This is our main function, which initializes our application.
+ *
+ * \param argc The number of command-line arguments.
+ * \param argv The command-line arguments.
+ */
 int main(int argc, char *argv[])
 {
 	QomposeApplication app(argc, argv);

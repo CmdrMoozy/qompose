@@ -33,8 +33,12 @@
 			#define QLUNUSED(x)
 		#endif
 	#endif
-
-	// Define our QUNUSED() macro
+	
+	/*
+	 * Define our QUNUSED macro, which is used to suppress unused variable warnings
+	 * by indicating that the variable is intended to be unused. Note that this only
+	 * does anything significant for GNU compilers.
+	 */
 	#ifndef QUNUSED
 		#if defined(__GNUC__)
 			#define QUNUSED(x) UNUSED_ ## x __attribute__((unused))

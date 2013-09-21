@@ -20,15 +20,30 @@
 
 #include <QKeyEvent>
 
+/*!
+ * This is our default constructor, which initializes a new tab widget with
+ * the given parent widget.
+ *
+ * \param p Our new widget's parent.
+ */
 QomposeTabWidget::QomposeTabWidget(QWidget *p)
 	: QTabWidget(p)
 {
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our widget.
+ */
 QomposeTabWidget::~QomposeTabWidget()
 {
 }
 
+/*!
+ * This function handles a key press event by deciding if it's one of the
+ * keystrokes we consider a hotkey, and proceeds accordingly.
+ *
+ * \param e The event being handled.
+ */
 void QomposeTabWidget::keyPressEvent(QKeyEvent *e)
 {
 	bool processed = false;

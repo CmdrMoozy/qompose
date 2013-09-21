@@ -33,6 +33,9 @@ class QomposePreferencesDialog;
 class QomposeBufferWidget;
 class QomposeSettings;
 
+/*!
+ * \brief This class implements one of our application's standard windows.
+ */
 class QomposeWindow : public QMainWindow
 {
 	Q_OBJECT
