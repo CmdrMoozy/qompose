@@ -35,6 +35,7 @@ class QomposeGeneralPreferencesWidget : public QomposePreferencesWidget
 			QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeGeneralPreferencesWidget();
 		
+		virtual void apply();
 		virtual void discardChanges();
 		
 	private:

@@ -38,6 +38,7 @@ class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 			QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeEditorPreferencesWidget();
 		
+		virtual void apply();
 		virtual void discardChanges();
 		
 	private:

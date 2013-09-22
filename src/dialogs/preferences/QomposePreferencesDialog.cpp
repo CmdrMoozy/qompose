@@ -92,9 +92,7 @@ QomposePreferencesDialog::~QomposePreferencesDialog()
 void QomposePreferencesDialog::discardChanges()
 {
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
-	{
 		preferencesModel->widgetAt(i)->discardChanges();
-	}
 }
 
 void QomposePreferencesDialog::createPreferencesModel()
@@ -120,27 +118,33 @@ void QomposePreferencesDialog::doWidgetActivated(const QModelIndex &i)
 void QomposePreferencesDialog::doOk()
 { /* SLOT */
 	
+	doApply();
 	
+	close();
 	
 }
 
 void QomposePreferencesDialog::doApply()
 { /* SLOT */
 	
-	
+	for(int i = 0; i < preferencesModel->rowCount(); ++i)
+		preferencesModel->widgetAt(i)->apply();
 	
 }
 
 void QomposePreferencesDialog::doCancel()
 { /* SLOT */
 	
-	
+	close();
 	
 }
 
 void QomposePreferencesDialog::doDefaults()
 { /* SLOT */
 	
+	settings->resetDefaults();
 	
+	for(int i = 0; i < preferencesModel->rowCount(); ++i)
+		preferencesModel->widgetAt(i)->discardChanges();
 	
 }

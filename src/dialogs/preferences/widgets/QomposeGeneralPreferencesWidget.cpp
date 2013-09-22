@@ -40,6 +40,24 @@ QomposeGeneralPreferencesWidget::~QomposeGeneralPreferencesWidget()
 {
 }
 
+void QomposeGeneralPreferencesWidget::apply()
+{
+	// Show Status Bar
+	
+	getSettings()->setSetting("show-status-bar", QVariant(
+		statusBarCheckBox->checkState() == Qt::Checked));
+	
+	// Recently Opened List Size
+	
+	getSettings()->setSetting("recent-list-size", QVariant(
+		recentListSizeSpinBox->value()));
+	
+	// Save Window Attributes
+	
+	getSettings()->setSetting("window-save-attributes", QVariant(
+		saveWindowAttribsCheckBox->checkState() == Qt::Checked));
+}
+
 void QomposeGeneralPreferencesWidget::discardChanges()
 {
 	// Show Status Bar

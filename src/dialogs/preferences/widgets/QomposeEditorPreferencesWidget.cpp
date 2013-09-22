@@ -43,6 +43,49 @@ QomposeEditorPreferencesWidget::~QomposeEditorPreferencesWidget()
 {
 }
 
+void QomposeEditorPreferencesWidget::apply()
+{
+	// Show Gutter
+	
+	getSettings()->setSetting("show-gutter", QVariant(
+		showGutterCheckBox->checkState() == Qt::Checked));
+	
+	// Editor Font
+	
+	getSettings()->setSetting("editor-font", QVariant(
+		editorFontButton->getSelectedFont()));
+	
+	// Tab Width
+	
+	getSettings()->setSetting("editor-tab-width", QVariant(
+		tabWidthSpinBox->value()));
+	
+	// Editor Foreground
+	
+	getSettings()->setSetting("editor-foreground", QVariant(
+		editorFGButton->getSelectedColor()));
+	
+	// Editor Background
+	
+	getSettings()->setSetting("editor-background", QVariant(
+		editorBGButton->getSelectedColor()));
+	
+	// Current Line Background
+	
+	getSettings()->setSetting("editor-current-line", QVariant(
+		currentLineBGButton->getSelectedColor()));
+	
+	// Gutter Foreground
+	
+	getSettings()->setSetting("editor-foreground", QVariant(
+		gutterFGButton->getSelectedColor()));
+	
+	// Gutter Background
+	
+	getSettings()->setSetting("gutter-background", QVariant(
+		gutterBGButton->getSelectedColor()));
+}
+
 void QomposeEditorPreferencesWidget::discardChanges()
 {
 	// Show Gutter

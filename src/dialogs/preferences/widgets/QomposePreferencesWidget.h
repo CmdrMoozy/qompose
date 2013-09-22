@@ -38,6 +38,7 @@ class QomposePreferencesWidget : public QWidget
 		QString getPreferencesTitle() const;
 		void setPreferencesTitle(const QString &t);
 		
+		virtual void apply() = 0;
 		virtual void discardChanges() = 0;
 		
 	protected:
