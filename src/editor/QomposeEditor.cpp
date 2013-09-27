@@ -303,9 +303,13 @@ void QomposeEditor::setEditorForeground(const QColor &c)
 {
 	QPalette p = palette();
 	
-	p.setColor(QPalette::Window, c);
-	p.setColor(QPalette::WindowText, c);
-	p.setColor(QPalette::Text, c);
+	p.setColor(QPalette::Active, QPalette::Window, c);
+	p.setColor(QPalette::Active, QPalette::WindowText, c);
+	p.setColor(QPalette::Active, QPalette::Text, c);
+	
+	p.setColor(QPalette::Inactive, QPalette::Window, c);
+	p.setColor(QPalette::Inactive, QPalette::WindowText, c);
+	p.setColor(QPalette::Inactive, QPalette::Text, c);
 	
 	setPalette(p);
 }
@@ -802,22 +806,19 @@ void QomposeEditor::deselect()
 void QomposeEditor::highlightCurrentLine()
 { /* SLOT */
 	
-	if( hasFocus() && (!isReadOnly()) )
-	{
-		QList<QTextEdit::ExtraSelection> es;
-		
-		// Highlight our current line (only if we are not read only and we have focus).
-		
-		QTextEdit::ExtraSelection selection;
-		
-		selection.format.setBackground(currentLineHighlight);
-		selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-		selection.cursor = textCursor();
-		selection.cursor.clearSelection();
-		es.append(selection);
-		
-		setExtraSelections(es);
-	}
+	QList<QTextEdit::ExtraSelection> es;
+	
+	// Highlight our current line (only if we are not read only and we have focus).
+	
+	QTextEdit::ExtraSelection selection;
+	
+	selection.format.setBackground(currentLineHighlight);
+	selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+	selection.cursor = textCursor();
+	selection.cursor.clearSelection();
+	es.append(selection);
+	
+	setExtraSelections(es);
 	
 }
 

@@ -77,7 +77,7 @@ void QomposeEditorPreferencesWidget::apply()
 	
 	// Gutter Foreground
 	
-	getSettings()->setSetting("editor-foreground", QVariant(
+	getSettings()->setSetting("gutter-foreground", QVariant(
 		gutterFGButton->getSelectedColor()));
 	
 	// Gutter Background
