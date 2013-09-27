@@ -32,6 +32,9 @@ class QomposeAboutDialog;
 class QomposePreferencesDialog;
 class QomposeBufferWidget;
 class QomposeSettings;
+class QomposeFindDialog;
+class QomposeReplaceDialog;
+class QomposeGoToDialog;
 
 /*!
  * \brief This class implements one of our application's standard windows.
@@ -50,8 +53,11 @@ class QomposeWindow : public QMainWindow
 	private:
 		QomposeSettings *settings;
 		
-		QomposeAboutDialog *aboutDialog;
 		QomposePreferencesDialog *preferencesDialog;
+		QomposeFindDialog *findDialog;
+		QomposeReplaceDialog *replaceDialog;
+		QomposeGoToDialog *goToDialog;
+		QomposeAboutDialog *aboutDialog;
 		
 		QMenu *fileMenu;
 		QMenu *editMenu;

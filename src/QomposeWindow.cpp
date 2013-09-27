@@ -29,6 +29,9 @@
 
 #include "QomposeDefines.h"
 #include "dialogs/QomposeAboutDialog.h"
+#include "dialogs/QomposeFindDialog.h"
+#include "dialogs/QomposeGoToDialog.h"
+#include "dialogs/QomposeReplaceDialog.h"
 #include "dialogs/preferences/QomposePreferencesDialog.h"
 #include "gui/QomposeBufferWidget.h"
 #include "gui/QomposeGUIUtils.h"
@@ -317,9 +320,15 @@ void QomposeWindow::initializeMenus()
  */
 void QomposeWindow::initializeDialogs()
 {
-	aboutDialog = new QomposeAboutDialog(this);
-	
 	preferencesDialog = new QomposePreferencesDialog(settings, this);
+	
+	findDialog = new QomposeFindDialog(this);
+	
+	replaceDialog = new QomposeReplaceDialog(this);
+	
+	goToDialog = new QomposeGoToDialog(this);
+	
+	aboutDialog = new QomposeAboutDialog(this);
 }
 
 /*!
@@ -375,6 +384,9 @@ void QomposeWindow::doDecreaseIndent(bool QUNUSED(c))
 
 void QomposeWindow::doFind(bool QUNUSED(c))
 { /* SLOT */
+	
+	findDialog->show();
+	
 }
 
 void QomposeWindow::doFindNext(bool QUNUSED(c))
@@ -387,10 +399,16 @@ void QomposeWindow::doFindPrevious(bool QUNUSED(c))
 
 void QomposeWindow::doReplace(bool QUNUSED(c))
 { /* SLOT */
+	
+	replaceDialog->show();
+	
 }
 
 void QomposeWindow::doGoTo(bool QUNUSED(c))
 { /* SLOT */
+	
+	goToDialog->show();
+	
 }
 
 void QomposeWindow::doSettingChanged(const QString &k, const QVariant &v)
