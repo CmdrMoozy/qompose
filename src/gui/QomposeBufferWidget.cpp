@@ -48,12 +48,6 @@ QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
 
 QomposeBufferWidget::~QomposeBufferWidget()
 {
-	QList<QomposeBuffer *> t = tabs.values();
-	
-	while(!t.empty())
-		delete t.takeLast();
-	
-	tabs.empty();
 }
 
 int QomposeBufferWidget::count() const

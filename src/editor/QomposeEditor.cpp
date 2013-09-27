@@ -92,13 +92,16 @@ void QomposeEditor::QomposeGutter::paintEvent(QPaintEvent *e)
  * \param p Our parent widget. 
  */
 QomposeEditor::QomposeEditor(QWidget *p)
-	: QPlainTextEdit(p)
+	: QPlainTextEdit(p), currentFont(QFont("Courier", 10)),
+		originalFontSize(10.0), currentFontZoom(1)
 {
 	// Set some default colors.
 	
 	currentLineHighlight = QColor(127, 127, 127);
 	gutterForeground = QColor(255, 255, 255);
 	gutterBackground = QColor(0, 0, 0);
+	
+	setFont(QFont("Courier", 10));
 	
 	// Initialize our widget.
 	
@@ -187,6 +190,7 @@ void QomposeEditor::setFont(const QFont &f)
 		currentFont.setPointSize(10);
 	
 	originalFontSize = currentFont.pointSizeF();
+	originalFontSize = qMax(originalFontSize, 1.0);
 	
 	// Set our font!
 	
@@ -240,6 +244,8 @@ void QomposeEditor::setFontZoom(int z)
 	
 	qreal scale = static_cast<qreal>(currentFontZoom) / 100.0;
 	qreal fsize = originalFontSize + (scale * originalFontSize);
+	
+	fsize = qMax(fsize, 1.0);
 	
 	currentFont.setPointSizeF(fsize);
 	QPlainTextEdit::setFont(currentFont);
