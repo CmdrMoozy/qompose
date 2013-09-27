@@ -23,10 +23,10 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDir>
+#include <QTabWidget>
 
 #include "dialogs/QomposeFileDialog.h"
 #include "editor/QomposeBuffer.h"
-#include "gui/QomposeTabWidget.h"
 #include "util/QomposeSettings.h"
 
 QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
@@ -34,7 +34,7 @@ QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
 {
 	layout = new QGridLayout(this);
 	
-	tabWidget = new QomposeTabWidget(this);
+	tabWidget = new QTabWidget(this);
 	tabWidget->setMovable(true);
 	tabWidget->setTabsClosable(true);
 	tabWidget->setUsesScrollButtons(true);

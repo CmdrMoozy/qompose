@@ -23,9 +23,9 @@
 #include <QSet>
 
 class QGridLayout;
+class QTabWidget;
 
 class QomposeBuffer;
-class QomposeTabWidget;
 class QomposeSettings;
 
 /*!
@@ -50,7 +50,7 @@ class QomposeBufferWidget : public QWidget
 		QomposeSettings *settings;
 		
 		QGridLayout *layout;
-		QomposeTabWidget *tabWidget;
+		QTabWidget *tabWidget;
 		
 		QSet<QomposeBuffer *> tabs;
 		
