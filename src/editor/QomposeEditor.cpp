@@ -509,7 +509,13 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 					break;
 				
 				case Qt::Key_Tab:
-					qDebug("HOTKEY: Indent (selection).");
+					if(textCursor().hasSelection())
+					{
+						e->accept();
+						processed = true;
+						
+						increaseSelectionIndent();
+					}
 					break;
 				
 				case Qt::Key_Home:
@@ -539,7 +545,13 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 				
 				case Qt::Key_Backtab:
 				case Qt::Key_Tab:
-					qDebug("HOTKEY: De-indent (selection).");
+					if(textCursor().hasSelection())
+					{
+						e->accept();
+						processed = true;
+						
+						decreaseSelectionIndent();
+					}
 					break;
 				
 				case Qt::Key_Home:
@@ -572,10 +584,6 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 				case Qt::Key_K:
 					e->ignore();
 					processed = true;
-					break;
-				
-				case Qt::Key_D:
-					qDebug("HOTKEY: Duplicate current line.");
 					break;
 				
 				// CTRL+(Zero) resets our text zoom to 100%.
@@ -838,14 +846,167 @@ void QomposeEditor::deselect()
 void QomposeEditor::increaseSelectionIndent()
 { /* SLOT */
 	
+	QTextCursor curs = textCursor();
 	
+	// Do nothing if we don't have a selection.
+	
+	if(!curs.hasSelection())
+		return;
+	
+	// Get the first and count of lines to indent.
+	
+	int spos = curs.anchor(), epos = curs.position();
+	
+	if(spos > epos)
+	{
+		spos = spos ^ epos;
+		epos = spos ^ epos;
+		spos = spos ^ epos;
+	}
+	
+	curs.setPosition(spos, QTextCursor::MoveAnchor);
+	int sblock = curs.block().blockNumber();
+	
+	curs.setPosition(epos, QTextCursor::MoveAnchor);
+	int eblock = curs.block().blockNumber();
+	
+	// Do the indent.
+	
+	curs.setPosition(spos, QTextCursor::MoveAnchor);
+	
+	curs.beginEditBlock();
+	
+	for(int i = 0; i <= (eblock - sblock); ++i)
+	{
+		curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+		
+		curs.insertText("\t");
+		
+		curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+	}
+	
+	curs.endEditBlock();
+	
+	// Set our cursor's selection to span all of the involved lines.
+	
+	curs.setPosition(spos, QTextCursor::MoveAnchor);
+	curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+	
+	while(curs.block().blockNumber() < eblock)
+	{
+		curs.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+	}
+	
+	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+	
+	// Done!
+	
+	setTextCursor(curs);
 	
 }
 
 void QomposeEditor::decreaseSelectionIndent()
 { /* SLOT */
 	
+	QTextCursor curs = textCursor();
 	
+	// Do nothing if we don't have a selection.
+	
+	if(!curs.hasSelection())
+		return;
+	
+	// Get the first and count of lines to de-indent.
+	
+	int spos = curs.anchor(), epos = curs.position();
+	
+	if(spos > epos)
+	{
+		spos = spos ^ epos;
+		epos = spos ^ epos;
+		spos = spos ^ epos;
+	}
+	
+	curs.setPosition(spos, QTextCursor::MoveAnchor);
+	int sblock = curs.block().blockNumber();
+	int sblockpos = curs.block().position();
+	
+	curs.setPosition(epos, QTextCursor::MoveAnchor);
+	int eblock = curs.block().blockNumber();
+	
+	// Do the de-indent.
+	
+	curs.setPosition(spos, QTextCursor::MoveAnchor);
+	
+	curs.beginEditBlock();
+	
+	bool foundIndent = false;
+	
+	for(int i = 0; i <= (eblock - sblock); ++i)
+	{
+		curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+		
+		QString text = curs.block().text();
+		
+		if(text.startsWith("\t"))
+		{
+			curs.deleteChar();
+			foundIndent = true;
+		}
+		else if(text.startsWith(QString(tabWidthSpaces(), ' ')))
+		{
+			for(int j = 0; j < tabWidthSpaces(); ++j)
+			{
+				curs.deleteChar();
+				foundIndent = true;
+			}
+		}
+		
+		curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+	}
+	
+	if(!foundIndent)
+	{
+		// If no lines were indented, try to remove any leading whitespace at all.
+		
+		curs.setPosition(spos, QTextCursor::MoveAnchor);
+		
+		for(int i = 0; i <= (eblock - sblock); ++i)
+		{
+			curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+			
+			for(int j = 0; j < tabWidthSpaces(); ++j)
+			{
+				QChar c = curs.block().text().at(0);
+				
+				if(!c.isSpace())
+					break;
+				
+				if( (j > 0) && (c == '\t') )
+					break;
+				
+				curs.deleteChar();
+			}
+			
+			curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+		}
+	}
+	
+	curs.endEditBlock();
+	
+	// Set our cursor's selection to span all of the involved lines.
+	
+	curs.setPosition(sblockpos, QTextCursor::MoveAnchor);
+	
+	while(curs.block().blockNumber() < eblock)
+	{
+		curs.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+	}
+	
+	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+	
+	// Done!
+	
+	setTextCursor(curs);
 	
 }
 
