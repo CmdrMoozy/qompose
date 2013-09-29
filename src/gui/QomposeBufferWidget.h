@@ -70,8 +70,11 @@ class QomposeBufferWidget : public QWidget
 		void doCut();
 		void doCopy();
 		void doPaste();
+		void doDuplicateLine();
 		void doSelectAll();
 		void doDeselect();
+		void doIncreaseIndent();
+		void doDecreaseIndent();
 		void doPreviousBuffer();
 		void doNextBuffer();
 		void doMoveBufferLeft();

@@ -107,7 +107,10 @@ class QomposeEditor : public QPlainTextEdit
 		void doMoveHome(bool moveAnchor = true);
 	
 	public slots:
+		void duplicateLine();
 		void deselect();
+		void increaseSelectionIndent();
+		void decreaseSelectionIndent();
 	
 	private slots:
 		void highlightCurrentLine();

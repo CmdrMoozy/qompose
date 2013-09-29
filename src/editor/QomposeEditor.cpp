@@ -791,12 +791,61 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 	}
 }
 
+void QomposeEditor::duplicateLine()
+{ /* SLOT */
+	
+	// Save our cursor's initial state.
+	
+	QTextCursor curs = textCursor();
+	
+	int cpos = curs.position();
+	int apos = curs.anchor();
+	
+	curs.beginEditBlock();
+	
+	// Get into position, and copy this block (line).
+	
+	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+	QString line = curs.block().text();
+	
+	// Duplicate the line.
+	
+	curs.insertText("\n");
+	curs.insertText(line);
+	
+	// End our edit block, and reset our cursor position.
+	
+	curs.endEditBlock();
+	
+	curs.setPosition(apos, QTextCursor::MoveAnchor);
+	curs.setPosition(cpos, QTextCursor::KeepAnchor);
+	
+	// Done.
+	
+	setTextCursor(curs);
+	
+}
+
 void QomposeEditor::deselect()
 { /* SLOT */
 	
 	QTextCursor curs = textCursor();
 	curs.setPosition(curs.position(), QTextCursor::MoveAnchor);
 	setTextCursor(curs);
+	
+}
+
+void QomposeEditor::increaseSelectionIndent()
+{ /* SLOT */
+	
+	
+	
+}
+
+void QomposeEditor::decreaseSelectionIndent()
+{ /* SLOT */
+	
+	
 	
 }
 

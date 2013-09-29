@@ -118,9 +118,6 @@ class QomposeWindow : public QMainWindow
 		void doPreferencesDialog(bool c);
 		void doPrint(bool c);
 		void doPrintPreview(bool c);
-		void doDuplicateLine(bool c);
-		void doIncreaseIndent(bool c);
-		void doDecreaseIndent(bool c);
 		void doFind(bool c);
 		void doFindNext(bool c);
 		void doFindPrevious(bool c);

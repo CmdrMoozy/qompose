@@ -352,6 +352,18 @@ void QomposeBufferWidget::doPaste()
 	
 }
 
+void QomposeBufferWidget::doDuplicateLine()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->duplicateLine();
+	
+}
+
 void QomposeBufferWidget::doSelectAll()
 { /* SLOT */
 	
@@ -373,6 +385,30 @@ void QomposeBufferWidget::doDeselect()
 		return;
 	
 	buf->deselect();
+	
+}
+
+void QomposeBufferWidget::doIncreaseIndent()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->increaseSelectionIndent();
+	
+}
+
+void QomposeBufferWidget::doDecreaseIndent()
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->decreaseSelectionIndent();
 	
 }
 
