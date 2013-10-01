@@ -1010,6 +1010,18 @@ void QomposeEditor::decreaseSelectionIndent()
 	
 }
 
+void QomposeEditor::goToLine(int l)
+{ /* SLOT */
+	
+	QTextCursor curs = textCursor();
+	
+	curs.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+	curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, qMax(l - 1, 0));
+	
+	setTextCursor(curs);
+	
+}
+
 /*!
  * This function handles highlighting the current line in our editor.
  */

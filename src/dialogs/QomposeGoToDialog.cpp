@@ -23,9 +23,12 @@
 #include <QLineEdit>
 #include <QWidget>
 #include <QPushButton>
+#include <QShowEvent>
+
+#include "QomposeDefines.h"
 
 QomposeGoToDialog::QomposeGoToDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f)
+	: QDialog(p, f), selectedLine(0)
 {
 	setWindowTitle(tr("Go To Line"));
 	
@@ -34,6 +37,35 @@ QomposeGoToDialog::QomposeGoToDialog(QWidget *p, Qt::WindowFlags f)
 
 QomposeGoToDialog::~QomposeGoToDialog()
 {
+}
+
+int QomposeGoToDialog::getSelectedLine() const
+{
+	return selectedLine;
+}
+
+void QomposeGoToDialog::showEvent(QShowEvent *e)
+{
+	// Setup our line text edit.
+	
+	lineTextEdit->setFocus();
+	
+	int l = getSelectedLine();
+	
+	if(l > 0)
+		lineTextEdit->setText(QString("%1").arg(getSelectedLine()));
+	else
+		lineTextEdit->setText(QString(""));
+	
+	lineTextEdit->selectAll();
+	
+	// Bring our dialog to the front.
+	
+	raise();
+	
+	// Let our parent class do its thing.
+	
+	QDialog::showEvent(e);
 }
 
 void QomposeGoToDialog::initializeGUI()
@@ -54,6 +86,7 @@ void QomposeGoToDialog::initializeGUI()
 	closeButton = new QPushButton(tr("Clos&e"), buttonsWidget);
 	
 	goToButton = new QPushButton(tr("&Go To"), buttonsWidget);
+	goToButton->setDefault(true);
 	
 	buttonsLayout->addWidget(closeButton, 0, 1, 1, 1);
 	buttonsLayout->addWidget(goToButton, 0, 2, 1, 1);
@@ -68,4 +101,24 @@ void QomposeGoToDialog::initializeGUI()
 	layout->setColumnStretch(1, 1);
 	layout->setRowStretch(1, 1);
 	setLayout(layout);
+	
+	// Connect our actions.
+	
+	QObject::connect( goToButton,  SIGNAL( clicked(bool) ), this, SLOT( doGoTo(bool) ) );
+	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close()      ) );
+}
+
+void QomposeGoToDialog::doGoTo(bool QUNUSED(c))
+{
+	QString l  = lineTextEdit->text();
+	
+	bool ok = false;
+	int lint = l.trimmed().toInt(&ok, 10);
+	
+	if(ok)
+	{
+		selectedLine = lint;
+		emit accepted();
+		close();
+	}
 }

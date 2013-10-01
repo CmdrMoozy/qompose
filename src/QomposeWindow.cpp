@@ -320,6 +320,8 @@ void QomposeWindow::initializeMenus()
  */
 void QomposeWindow::initializeDialogs()
 {
+	// Create our dialog objects.
+	
 	preferencesDialog = new QomposePreferencesDialog(settings, this);
 	
 	findDialog = new QomposeFindDialog(this);
@@ -329,6 +331,10 @@ void QomposeWindow::initializeDialogs()
 	goToDialog = new QomposeGoToDialog(this);
 	
 	aboutDialog = new QomposeAboutDialog(this);
+	
+	// Connect our dialog actions.
+	
+	QObject::connect( goToDialog, SIGNAL( accepted() ), this, SLOT( doGoToAccepted() ) );
 }
 
 /*!
@@ -396,6 +402,13 @@ void QomposeWindow::doGoTo(bool QUNUSED(c))
 { /* SLOT */
 	
 	goToDialog->show();
+	
+}
+
+void QomposeWindow::doGoToAccepted()
+{ /* SLOT */
+	
+	buffers->doGoTo(goToDialog->getSelectedLine());
 	
 }
 

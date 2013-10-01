@@ -111,6 +111,7 @@ class QomposeEditor : public QPlainTextEdit
 		void deselect();
 		void increaseSelectionIndent();
 		void decreaseSelectionIndent();
+		void goToLine(int l);
 	
 	private slots:
 		void highlightCurrentLine();

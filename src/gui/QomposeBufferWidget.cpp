@@ -412,6 +412,18 @@ void QomposeBufferWidget::doDecreaseIndent()
 	
 }
 
+void QomposeBufferWidget::doGoTo(int l)
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->goToLine(l);
+	
+}
+
 void QomposeBufferWidget::doPreviousBuffer()
 { /* SLOT */
 	

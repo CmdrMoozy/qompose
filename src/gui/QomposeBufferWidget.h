@@ -75,6 +75,7 @@ class QomposeBufferWidget : public QWidget
 		void doDeselect();
 		void doIncreaseIndent();
 		void doDecreaseIndent();
+		void doGoTo(int l);
 		void doPreviousBuffer();
 		void doNextBuffer();
 		void doMoveBufferLeft();

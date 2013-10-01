@@ -26,6 +26,7 @@ class QLabel;
 class QLineEdit;
 class QWidget;
 class QPushButton;
+class QShowEvent;
 
 class QomposeGoToDialog : public QDialog
 {
@@ -35,7 +36,14 @@ class QomposeGoToDialog : public QDialog
 		QomposeGoToDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeGoToDialog();
 		
+		int getSelectedLine() const;
+		
+	protected:
+		virtual void showEvent(QShowEvent *e);
+		
 	private:
+		int selectedLine;
+		
 		QGridLayout *layout;
 		
 		QLabel *lineLabel;
@@ -47,6 +55,12 @@ class QomposeGoToDialog : public QDialog
 		QPushButton *goToButton;
 		
 		void initializeGUI();
+		
+	private slots:
+		void doGoTo(bool c);
+		
+	signals:
+		void accepted();
 };
 
 #endif
