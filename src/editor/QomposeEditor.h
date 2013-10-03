@@ -28,6 +28,8 @@ class QKeyEvent;
 class QWheelEvent;
 class QMouseEvent;
 
+class QomposeFindQuery;
+
 /*!
  * \brief This class implements a text editor widget.
  */
@@ -36,6 +38,14 @@ class QomposeEditor : public QPlainTextEdit
 	Q_OBJECT
 	
 	public:
+		enum FindResult
+		{
+			NoDocument,
+			BadRegularExpression,
+			NoMatches,
+			Found
+		};
+		
 		QomposeEditor(QWidget *p = NULL);
 		virtual ~QomposeEditor();
 		
@@ -105,14 +115,18 @@ class QomposeEditor : public QPlainTextEdit
 		
 		void doNewline(bool preserveIndent = false);
 		void doMoveHome(bool moveAnchor = true);
+		
+		FindResult doFind(bool forward, const QomposeFindQuery *q);
 	
 	public slots:
 		void duplicateLine();
 		void deselect();
 		void increaseSelectionIndent();
 		void decreaseSelectionIndent();
+		FindResult findNext(const QomposeFindQuery *q);
+		FindResult findPrevious(const QomposeFindQuery *q);
 		void goToLine(int l);
-	
+		
 	private slots:
 		void highlightCurrentLine();
 		void updateGutterWidth();

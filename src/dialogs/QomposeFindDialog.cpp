@@ -25,17 +25,60 @@
 #include <QCheckBox>
 #include <QWidget>
 #include <QPushButton>
+#include <QShowEvent>
+
+#include "QomposeDefines.h"
+#include "util/QomposeFindQuery.h"
 
 QomposeFindDialog::QomposeFindDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f)
 {
 	setWindowTitle(tr("Find"));
 	
+	query = new QomposeFindQuery(this);
+	
 	initializeGUI();
 }
 
 QomposeFindDialog::~QomposeFindDialog()
 {
+}
+
+const QomposeFindQuery *QomposeFindDialog::getQuery() const
+{
+	return query;
+}
+
+void QomposeFindDialog::showEvent(QShowEvent *e)
+{
+	// Setup our line text edit.
+	
+	findTextEdit->setFocus();
+	findTextEdit->setText(query->getExpression());
+	findTextEdit->selectAll();
+	
+	wrapCheckBox->setCheckState(query->isWrapping() ?
+		Qt::Checked : Qt::Unchecked);
+	
+	wholeWordsCheckBox->setCheckState(query->isWholeWords() ?
+		Qt::Checked : Qt::Unchecked);
+	
+	caseSensitiveCheckBox->setCheckState(query->isCaseSensitive() ?
+		Qt::Checked : Qt::Unchecked);
+	
+	reverseCheckBox->setCheckState(query->isReversed() ?
+		Qt::Checked : Qt::Unchecked);
+	
+	regexCheckBox->setCheckState(query->isRegularExpression() ?
+		Qt::Checked : Qt::Unchecked);
+	
+	// Bring our dialog to the front.
+	
+	raise();
+	
+	// Let our parent class do its thing.
+	
+	QDialog::showEvent(e);
 }
 
 void QomposeFindDialog::initializeGUI()
@@ -62,11 +105,14 @@ void QomposeFindDialog::initializeGUI()
 	
 	reverseCheckBox = new QCheckBox(tr("Reverse search direction?"), optionsGroupBox);
 	
+	regexCheckBox = new QCheckBox(tr("Regular expression search?"), optionsGroupBox);
+	
 	optionsLayout->addWidget(wrapCheckBox, 0, 0, 1, 1);
 	optionsLayout->addWidget(wholeWordsCheckBox, 1, 0, 1, 1);
 	optionsLayout->addWidget(caseSensitiveCheckBox, 2, 0, 1, 1);
 	optionsLayout->addWidget(reverseCheckBox, 3, 0, 1, 1);
-	optionsLayout->setRowStretch(4, 1);
+	optionsLayout->addWidget(regexCheckBox, 4, 0, 1, 1);
+	optionsLayout->setRowStretch(5, 1);
 	optionsGroupBox->setLayout(optionsLayout);
 	
 	// Create our buttons widget.
@@ -92,4 +138,28 @@ void QomposeFindDialog::initializeGUI()
 	layout->setRowStretch(1, 1);
 	layout->setColumnStretch(1, 1);
 	setLayout(layout);
+	
+	// Connect our button actions.
+	
+	QObject::connect( findButton, SIGNAL( clicked(bool) ), this, SLOT( doFind(bool) ) );
+}
+
+void QomposeFindDialog::doFind(bool QUNUSED(c))
+{ /* SLOT */
+	
+	// Set our query's properties according to our dialog state.
+	
+	query->setExpression(findTextEdit->text());
+	query->setWrapping(wrapCheckBox->checkState() == Qt::Checked);
+	query->setWholeWords(wholeWordsCheckBox->checkState() == Qt::Checked);
+	query->setCaseSensitive(caseSensitiveCheckBox->checkState() == Qt::Checked);
+	query->setReversed(reverseCheckBox->checkState() == Qt::Checked);
+	query->setRegularExpression(regexCheckBox->checkState() == Qt::Checked);
+	
+	// Done!
+	
+	emit accepted();
+	
+	close();
+	
 }

@@ -77,6 +77,7 @@ SET(qompose_HEADERS
 	src/gui/QomposeFontPickerButton.h
 	src/gui/QomposeGUIUtils.h
 	
+	src/util/QomposeFindQuery.h
 	src/util/QomposeSettings.h
 	
 )
@@ -138,6 +139,7 @@ SET(qompose_SOURCES
 	src/gui/QomposeFontPickerButton.cpp
 	src/gui/QomposeGUIUtils.cpp
 	
+	src/util/QomposeFindQuery.cpp
 	src/util/QomposeSettings.cpp
 	
 )

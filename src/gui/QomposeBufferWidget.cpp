@@ -27,6 +27,7 @@
 
 #include "dialogs/QomposeFileDialog.h"
 #include "editor/QomposeBuffer.h"
+#include "util/QomposeFindQuery.h"
 #include "util/QomposeSettings.h"
 
 QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
@@ -409,6 +410,30 @@ void QomposeBufferWidget::doDecreaseIndent()
 		return;
 	
 	buf->decreaseSelectionIndent();
+	
+}
+
+QomposeEditor::FindResult QomposeBufferWidget::doFindNext(const QomposeFindQuery *q)
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return QomposeEditor::NoDocument;
+	
+	return buf->findNext(q);
+	
+}
+
+QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(const QomposeFindQuery *q)
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return QomposeEditor::NoDocument;
+	
+	return buf->findPrevious(q);
 	
 }
 

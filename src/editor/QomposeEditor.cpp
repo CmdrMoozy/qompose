@@ -35,6 +35,9 @@
 #include <QRegExp>
 #include <QMouseEvent>
 #include <QFontMetrics>
+#include <QRegExp>
+
+#include "util/QomposeFindQuery.h"
 
 /*****************
  * QomposeGutter *
@@ -799,6 +802,85 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 	}
 }
 
+/*!
+ * This function executes a given find query, using the given predefined direction. Note
+ * that we do not inspect the direction properties of the given query - it is assumed that
+ * our caller has resolved these into a single direction, based upon whether this is a
+ * "find next" or a "find previous" operation, and whether or not the query is reversed.
+ *
+ * \param f True means we should go forward, false means backward.
+ * \param q The query to execute.
+ * \return The results of executing this find query.
+ */
+QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *q)
+{
+	// Prepare our find flags.
+	
+	QTextDocument::FindFlags flags = q->getFindFlags();
+	
+	if(!f)
+		flags |= QTextDocument::FindBackward;
+	
+	// Prepare our cursors.
+	
+	QTextCursor current = textCursor();
+	
+	QTextCursor restart = textCursor();
+	
+	if(f)
+		restart.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+	else
+		restart.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+	
+	// Execute the find query, based on type.
+	
+	if(q->isRegularExpression())
+	{
+		QRegExp regex(q->getExpression(), Qt::CaseSensitive, QRegExp::RegExp2);
+		
+		if(!regex.isValid())
+			return BadRegularExpression;
+		
+		QTextCursor found = document()->find(regex, current, flags);
+		
+		if(found.isNull())
+		{
+			if(q->isWrapping())
+			{
+				found = document()->find(regex, restart, flags);
+			}
+		}
+		
+		if(!found.isNull())
+		{
+			setTextCursor(found);
+			return Found;
+		}
+	}
+	else
+	{
+		QString expression = q->getExpression();
+		
+		QTextCursor found = document()->find(expression, current, flags);
+		
+		if(found.isNull())
+		{
+			if(q->isWrapping())
+			{
+				found = document()->find(expression, restart, flags);
+			}
+		}
+		
+		if(!found.isNull())
+		{
+			setTextCursor(found);
+			return Found;
+		}
+	}
+	
+	return NoMatches;
+}
+
 void QomposeEditor::duplicateLine()
 { /* SLOT */
 	
@@ -1008,6 +1090,26 @@ void QomposeEditor::decreaseSelectionIndent()
 	
 	setTextCursor(curs);
 	
+}
+
+QomposeEditor::FindResult QomposeEditor::findNext(const QomposeFindQuery *q)
+{
+	bool forward = true;
+	
+	if(q->isReversed())
+		forward = false;
+	
+	return doFind(forward, q);
+}
+
+QomposeEditor::FindResult QomposeEditor::findPrevious(const QomposeFindQuery *q)
+{
+	bool forward = false;
+	
+	if(q->isReversed())
+		forward = true;
+	
+	return doFind(forward, q);
 }
 
 void QomposeEditor::goToLine(int l)

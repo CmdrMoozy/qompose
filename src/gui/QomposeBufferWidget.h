@@ -22,11 +22,14 @@
 #include <QWidget>
 #include <QSet>
 
+#include "editor/QomposeEditor.h"
+
 class QGridLayout;
 class QTabWidget;
 
 class QomposeBuffer;
 class QomposeSettings;
+class QomposeFindQuery;
 
 /*!
  * \brief This class provides high-level management of a set of buffers.
@@ -75,6 +78,8 @@ class QomposeBufferWidget : public QWidget
 		void doDeselect();
 		void doIncreaseIndent();
 		void doDecreaseIndent();
+		QomposeEditor::FindResult doFindNext(const QomposeFindQuery *q);
+		QomposeEditor::FindResult doFindPrevious(const QomposeFindQuery *q);
 		void doGoTo(int l);
 		void doPreviousBuffer();
 		void doNextBuffer();

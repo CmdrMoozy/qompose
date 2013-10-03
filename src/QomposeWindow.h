@@ -22,6 +22,8 @@
 #include <QMainWindow>
 #include <QIcon>
 
+#include "editor/QomposeEditor.h"
+
 class QMenu;
 class QAction;
 class QStatusBar;
@@ -110,19 +112,16 @@ class QomposeWindow : public QMainWindow
 		void initializeMenus();
 		void initializeDialogs();
 		
-		QIcon getIconFromTheme(const QString &n) const;
+		void handleFindResult(QomposeEditor::FindResult r) const;
 		
 	private slots:
 		void doTabPathChanged(const QString &p);
 		
-		void doPreferencesDialog(bool c);
-		void doPrint(bool c);
-		void doPrintPreview(bool c);
-		void doFind(bool c);
-		void doFindNext(bool c);
-		void doFindPrevious(bool c);
-		void doReplace(bool c);
-		void doGoTo(bool c);
+		void doPreferencesDialog();
+		void doPrint();
+		void doPrintPreview();
+		void doFindNext();
+		void doFindPrevious();
 		void doGoToAccepted();
 		
 		void doSettingChanged(const QString &k, const QVariant &v);
