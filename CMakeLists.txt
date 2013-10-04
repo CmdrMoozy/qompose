@@ -82,31 +82,6 @@ SET(qompose_HEADERS
 	
 )
 
-SET(qompose_MOC_HEADERS
-	
-	src/QomposeApplication.h
-	src/QomposeWindow.h
-	
-	src/dialogs/QomposeEncodingDialog.h
-	src/dialogs/QomposeFindDialog.h
-	src/dialogs/QomposeGoToDialog.h
-	src/dialogs/QomposeReplaceDialog.h
-	
-	src/dialogs/preferences/QomposePreferencesDialog.h
-	
-	src/editor/QomposeBuffer.h
-	src/editor/QomposeEditor.h
-	
-	src/editor/highlighting/QomposeSyntaxHighlighter.h
-	
-	src/gui/QomposeBufferWidget.h
-	src/gui/QomposeColorPickerButton.h
-	src/gui/QomposeFontPickerButton.h
-	
-	src/util/QomposeSettings.h
-	
-)
-
 SET(qompose_SOURCES
 	
 	src/Qompose.cpp
