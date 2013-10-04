@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QLabel>
 #include <QCloseEvent>
+#include <QMessageBox>
 
 #include "QomposeDefines.h"
 #include "dialogs/QomposeAboutDialog.h"
@@ -346,21 +347,23 @@ void QomposeWindow::initializeDialogs()
  *
  * \param r The find result to process.
  */
-void QomposeWindow::handleFindResult(QomposeEditor::FindResult r) const
+void QomposeWindow::handleFindResult(QomposeEditor::FindResult r)
 {
 	switch(r)
 	{
-		case QomposeEditor::NoDocument:
-			break;
-		
 		case QomposeEditor::BadRegularExpression:
+			QMessageBox::critical(this, tr("Invalid Regular Expression"),
+				tr("The regular expression you were trying to find was invalid."),
+				QMessageBox::Ok, QMessageBox::Ok);
 			break;
 			
 		case QomposeEditor::NoMatches:
+			QMessageBox::information(this, tr("No Matches Found"),
+				tr("No more matches could be found."),
+				QMessageBox::Ok, QMessageBox::Ok);
 			break;
 		
-		case QomposeEditor::Found:
-			break;
+		default: break;
 	};
 }
 

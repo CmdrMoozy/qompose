@@ -24,6 +24,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QShowEvent>
+#include <QMessageBox>
 
 #include "QomposeDefines.h"
 
@@ -156,6 +157,15 @@ void QomposeGoToDialog::doGoTo()
 		selectedLine = lint;
 		emit accepted();
 		close();
+	}
+	else
+	{
+		QMessageBox::critical(this, tr("Invalid Line Number"),
+			tr("The line number you entered was invalid."),
+			QMessageBox::Ok, QMessageBox::Ok);
+		
+		lineTextEdit->setFocus();
+		lineTextEdit->selectAll();
 	}
 	
 }

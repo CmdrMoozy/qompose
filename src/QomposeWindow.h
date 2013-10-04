@@ -112,7 +112,7 @@ class QomposeWindow : public QMainWindow
 		void initializeMenus();
 		void initializeDialogs();
 		
-		void handleFindResult(QomposeEditor::FindResult r) const;
+		void handleFindResult(QomposeEditor::FindResult r);
 		
 	private slots:
 		void doTabPathChanged(const QString &p);

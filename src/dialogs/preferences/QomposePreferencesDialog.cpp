@@ -21,6 +21,7 @@
 #include <QGridLayout>
 #include <QStackedWidget>
 #include <QPushButton>
+#include <QMessageBox>
 
 #include "dialogs/preferences/QomposePreferencesListModel.h"
 #include "dialogs/preferences/QomposePreferencesListView.h"
@@ -175,6 +176,14 @@ void QomposePreferencesDialog::doApply()
  */
 void QomposePreferencesDialog::doDefaults()
 { /* SLOT */
+	
+	QMessageBox::StandardButton ret = QMessageBox::question(this,
+		tr("Confirm Resetting Defaults"),
+		tr("Are you sure you want to reset all settings to their default values?"),
+		QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+	
+	if(ret != QMessageBox::Yes)
+		return;
 	
 	settings->resetDefaults();
 	
