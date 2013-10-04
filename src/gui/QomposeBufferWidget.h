@@ -30,6 +30,7 @@ class QTabWidget;
 class QomposeBuffer;
 class QomposeSettings;
 class QomposeFindQuery;
+class QomposeReplaceQuery;
 
 /*!
  * \brief This class provides high-level management of a set of buffers.
@@ -80,6 +81,9 @@ class QomposeBufferWidget : public QWidget
 		void doDecreaseIndent();
 		QomposeEditor::FindResult doFindNext(const QomposeFindQuery *q);
 		QomposeEditor::FindResult doFindPrevious(const QomposeFindQuery *q);
+		QomposeEditor::FindResult doReplace(const QomposeReplaceQuery *q);
+		QomposeEditor::FindResult doReplaceSelection(const QomposeReplaceQuery *q);
+		QomposeEditor::FindResult doReplaceAll(const QomposeReplaceQuery *q);
 		void doGoTo(int l);
 		void doPreviousBuffer();
 		void doNextBuffer();

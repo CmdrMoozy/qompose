@@ -36,6 +36,8 @@
 #include "dialogs/preferences/QomposePreferencesDialog.h"
 #include "gui/QomposeBufferWidget.h"
 #include "gui/QomposeGUIUtils.h"
+#include "util/QomposeFindQuery.h"
+#include "util/QomposeReplaceQuery.h"
 #include "util/QomposeSettings.h"
 
 /*!
@@ -237,10 +239,10 @@ void QomposeWindow::initializeActions()
 	QObject::connect( increaseIndentAction,  SIGNAL( triggered(bool) ), buffers,       SLOT( doIncreaseIndent()        ) );
 	QObject::connect( decreaseIndentAction,  SIGNAL( triggered(bool) ), buffers,       SLOT( doDecreaseIndent()        ) );
 	QObject::connect( preferencesAction,     SIGNAL( triggered(bool) ), this,          SLOT( doPreferencesDialog()     ) );
-	QObject::connect( findAction,            SIGNAL( triggered(bool) ), findDialog,    SLOT( show()                    ) );
+	QObject::connect( findAction,            SIGNAL( triggered(bool) ), this,          SLOT( doFindDialog()            ) );
 	QObject::connect( findNextAction,        SIGNAL( triggered(bool) ), this,          SLOT( doFindNext()              ) );
 	QObject::connect( findPreviousAction,    SIGNAL( triggered(bool) ), this,          SLOT( doFindPrevious()          ) );
-	QObject::connect( replaceAction,         SIGNAL( triggered(bool) ), replaceDialog, SLOT( show()                    ) );
+	QObject::connect( replaceAction,         SIGNAL( triggered(bool) ), this,          SLOT( doReplaceDialog()         ) );
 	QObject::connect( goToAction,            SIGNAL( triggered(bool) ), goToDialog,    SLOT( show()                    ) );
 	QObject::connect( previousBufferAction,  SIGNAL( triggered(bool) ), buffers,       SLOT( doPreviousBuffer()        ) );
 	QObject::connect( nextBufferAction,      SIGNAL( triggered(bool) ), buffers,       SLOT( doNextBuffer()            ) );
@@ -335,8 +337,12 @@ void QomposeWindow::initializeDialogs()
 	
 	// Connect our dialog actions.
 	
-	QObject::connect( findDialog, SIGNAL( accepted() ), this, SLOT( doFindNext()     ) );
-	QObject::connect( goToDialog, SIGNAL( accepted() ), this, SLOT( doGoToAccepted() ) );
+	QObject::connect( findDialog,    SIGNAL( accepted()                ), this, SLOT( doFindNext()         ) );
+	QObject::connect( replaceDialog, SIGNAL( replaceClicked()          ), this, SLOT( doReplace()          ) );
+	QObject::connect( replaceDialog, SIGNAL( findClicked()             ), this, SLOT( doReplaceFind()      ) );
+	QObject::connect( replaceDialog, SIGNAL( replaceSelectionClicked() ), this, SLOT( doReplaceSelection() ) );
+	QObject::connect( replaceDialog, SIGNAL( replaceAllClicked()       ), this, SLOT( doReplaceAll()       ) );
+	QObject::connect( goToDialog,    SIGNAL( accepted()                ), this, SLOT( doGoToAccepted()     ) );
 }
 
 /*!
@@ -349,6 +355,8 @@ void QomposeWindow::initializeDialogs()
  */
 void QomposeWindow::handleFindResult(QomposeEditor::FindResult r)
 {
+	// Deal with the find result.
+	
 	switch(r)
 	{
 		case QomposeEditor::BadRegularExpression:
@@ -365,6 +373,20 @@ void QomposeWindow::handleFindResult(QomposeEditor::FindResult r)
 		
 		default: break;
 	};
+	
+	// Re-focus the dialog that generated this result, if any.
+	
+	if(findDialog->isVisible())
+	{
+		findDialog->setFocus();
+		findDialog->raise();
+	}
+	
+	if(replaceDialog->isVisible())
+	{
+		replaceDialog->setFocus();
+		replaceDialog->raise();
+	}
 }
 
 /*!
@@ -406,7 +428,21 @@ void QomposeWindow::doPrintPreview()
 }
 
 /*!
- * This function performs a "find next" operation by extracting the current
+ * This function handles our "find" action being triggered by showing our find
+ * dialog, if our replace dialog isn't already open (they are mutually exclusive).
+ */
+void QomposeWindow::doFindDialog()
+{ /* SLOT */
+	
+	if(!replaceDialog->isVisible())
+	{
+		findDialog->show();
+	}
+	
+}
+
+/*!
+ * This slot performs a "find next" operation by extracting the current
  * find query from the find dialog, telling our buffers widget to execute the
  * query, and then dealing with the result.
  */
@@ -418,7 +454,7 @@ void QomposeWindow::doFindNext()
 }
 
 /*!
- * This function performs a "find previous" operation by extracting the current
+ * This slot performs a "find previous" operation by extracting the current
  * find query from the find dialog, telling our buffers widget to execute the
  * query, and then dealing with the result.
  */
@@ -426,6 +462,72 @@ void QomposeWindow::doFindPrevious()
 { /* SLOT */
 	
 	handleFindResult(buffers->doFindPrevious(findDialog->getQuery()));
+	
+}
+
+/*!
+ * This function handles our "replace" action being triggered by showing our
+ * replace dialog, if our find dialog isn't already open (they are mutually
+ * exclusive).
+ */
+void QomposeWindow::doReplaceDialog()
+{ /* SLOT */
+	
+	if(!findDialog->isVisible())
+	{
+		replaceDialog->show();
+	}
+	
+}
+
+/*!
+ * This slot performs a single "replace" operation by extracting the current
+ * replace query from the replace dialog, telling our buffers widget to execute
+ * the query, and then dealing with the result.
+ */
+void QomposeWindow::doReplace()
+{ /* SLOT */
+	
+	handleFindResult(buffers->doReplace(replaceDialog->getQuery()));
+	
+}
+
+/*!
+ * This slot performs a "replace find" operation. This is effectively the same
+ * as a "find next" operation, but we use the query from the replace dialog,
+ * instead of the one from the find dialog. We perform this operation by
+ * extracting the current replace query from the replace dialog, telling our
+ * buffers widget to execute the query as a "find next" operation, and then
+ * we deal with the result.
+ */
+void QomposeWindow::doReplaceFind()
+{ /* SLOT */
+	
+	handleFindResult(buffers->doFindNext(replaceDialog->getQuery()));
+	
+}
+
+/*!
+ * This slot performs a "replace in selection" operation by extracting the
+ * current replace query from the replace dialog, telling our buffers widget
+ * to execute the query, and then dealing with the result.
+ */
+void QomposeWindow::doReplaceSelection()
+{ /* SLOT */
+	
+	handleFindResult(buffers->doReplaceSelection(replaceDialog->getQuery()));
+	
+}
+
+/*!
+ * This slot performs a "replace all" operation by extracting the current
+ * replace query from the replace dialog, telling our buffers widget to
+ * execute the query, and then dealing with the result.
+ */
+void QomposeWindow::doReplaceAll()
+{ /* SLOT */
+	
+	handleFindResult(buffers->doReplaceAll(replaceDialog->getQuery()));
 	
 }
 

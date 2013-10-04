@@ -25,19 +25,91 @@
 #include <QCheckBox>
 #include <QWidget>
 #include <QPushButton>
+#include <QShowEvent>
 
+#include "util/QomposeReplaceQuery.h"
+
+/*!
+ * This is our default constructor, which creates a new instance of our
+ * replace dialog.
+ *
+ * \param p The parent widget to use for this dialog.
+ * \param f The window flags to use for this dialog.
+ */
 QomposeReplaceDialog::QomposeReplaceDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f)
 {
 	setWindowTitle(tr("Replace"));
 	
+	query = new QomposeReplaceQuery(this);
+	
 	initializeGUI();
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our dialog.
+ */
 QomposeReplaceDialog::~QomposeReplaceDialog()
 {
 }
 
+/*!
+ * This function returns a pointer to the replace query our dialog currently
+ * has. This pointer is still good even after the dialog has been re-shown.
+ *
+ * \return The replace query containing our dialog's selected data.
+ */
+const QomposeReplaceQuery *QomposeReplaceDialog::getQuery() const
+{
+	return query;
+}
+
+/*!
+ * This function handles our dialog being shown by resetting its
+ * contents using our currently selected replace query, by setting
+ * focus on the expression input box, and by raising our dialog to
+ * the front.
+ *
+ * \param e The event being handled.
+ */
+void QomposeReplaceDialog::showEvent(QShowEvent *e)
+{
+	// Setup our line text edit.
+	
+	findTextEdit->setFocus();
+	findTextEdit->setText(query->getExpression());
+	findTextEdit->selectAll();
+	
+	replaceTextEdit->setText(query->getReplaceValue());
+	
+	wrapCheckBox->setCheckState(query->isWrapping() ?
+		Qt::Checked : Qt::Unchecked);
+	
+	wholeWordsCheckBox->setCheckState(query->isWholeWords() ?
+		Qt::Checked : Qt::Unchecked);
+	
+	caseSensitiveCheckBox->setCheckState(query->isCaseSensitive() ?
+		Qt::Checked : Qt::Unchecked);
+	
+	reverseCheckBox->setCheckState(query->isReversed() ?
+		Qt::Checked : Qt::Unchecked);
+	
+	regexCheckBox->setCheckState(query->isRegularExpression() ?
+		Qt::Checked : Qt::Unchecked);
+	
+	// Bring our dialog to the front.
+	
+	raise();
+	
+	// Let our parent class do its thing.
+	
+	QDialog::showEvent(e);
+}
+
+/*!
+ * This function initializes our GUI by creating the various widgets we contain,
+ * and adding them to our layout.
+ */
 void QomposeReplaceDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
@@ -66,11 +138,14 @@ void QomposeReplaceDialog::initializeGUI()
 	
 	reverseCheckBox = new QCheckBox(tr("Reverse search direction?"), optionsGroupBox);
 	
+	regexCheckBox = new QCheckBox(tr("Regular expression search?"), optionsGroupBox);
+	
 	optionsLayout->addWidget(wrapCheckBox, 0, 0, 1, 1);
 	optionsLayout->addWidget(wholeWordsCheckBox, 1, 0, 1, 1);
 	optionsLayout->addWidget(caseSensitiveCheckBox, 2, 0, 1, 1);
 	optionsLayout->addWidget(reverseCheckBox, 3, 0, 1, 1);
-	optionsLayout->setRowStretch(4, 1);
+	optionsLayout->addWidget(regexCheckBox, 4, 0, 1, 1);
+	optionsLayout->setRowStretch(5, 1);
 	optionsGroupBox->setLayout(optionsLayout);
 	
 	// Create our buttons widget.
@@ -82,7 +157,7 @@ void QomposeReplaceDialog::initializeGUI()
 	
 	findButton = new QPushButton(tr("&Find"), buttonsWidget);
 	
-	replaceInSelectionButton = new QPushButton(tr("Replace in &Selection"), buttonsWidget);
+	replaceSelButton = new QPushButton(tr("Replace in &Selection"), buttonsWidget);
 	
 	replaceAllButton = new QPushButton(tr("Replace &All"), buttonsWidget);
 	
@@ -90,7 +165,7 @@ void QomposeReplaceDialog::initializeGUI()
 	
 	buttonsLayout->addWidget(replaceButton, 0, 0, 1, 1);
 	buttonsLayout->addWidget(findButton, 1, 0, 1, 1);
-	buttonsLayout->addWidget(replaceInSelectionButton, 2, 0, 1, 1);
+	buttonsLayout->addWidget(replaceSelButton, 2, 0, 1, 1);
 	buttonsLayout->addWidget(replaceAllButton, 3, 0, 1, 1);
 	buttonsLayout->addWidget(closeButton, 4, 0, 1, 1);
 	buttonsLayout->setRowStretch(5, 1);
@@ -107,4 +182,85 @@ void QomposeReplaceDialog::initializeGUI()
 	layout->setRowStretch(2, 1);
 	layout->setColumnStretch(1, 1);
 	setLayout(layout);
+	
+	QObject::connect( replaceButton,    SIGNAL( clicked(bool) ), this, SLOT( doReplace()          ) );
+	QObject::connect( findButton,       SIGNAL( clicked(bool) ), this, SLOT( doFind()             ) );
+	QObject::connect( replaceSelButton, SIGNAL( clicked(bool) ), this, SLOT( doReplaceSelection() ) );
+	QObject::connect( replaceAllButton, SIGNAL( clicked(bool) ), this, SLOT( doReplaceAll()       ) );
+	QObject::connect( closeButton,      SIGNAL( clicked(bool) ), this, SLOT( close()              ) );
+}
+
+/*!
+ * This is a utility function which applies the currently selected options to
+ * our dialog's internal replace query.
+ */
+void QomposeReplaceDialog::applyValues()
+{
+	query->setExpression(findTextEdit->text());
+	query->setReplaceValue(replaceTextEdit->text());
+	query->setWrapping(wrapCheckBox->checkState() == Qt::Checked);
+	query->setWholeWords(wholeWordsCheckBox->checkState() == Qt::Checked);
+	query->setCaseSensitive(caseSensitiveCheckBox->checkState() == Qt::Checked);
+	query->setReversed(reverseCheckBox->checkState() == Qt::Checked);
+	query->setRegularExpression(regexCheckBox->checkState() == Qt::Checked);
+}
+
+/*!
+ * This slot handles our "replace" button being clicked by applying our
+ * dialog's options to our query, and then notifying any listeners that our
+ * replace action has been triggered.
+ */
+void QomposeReplaceDialog::doReplace()
+{ /* SLOT */
+	
+	applyValues();
+	
+	emit replaceClicked();
+	
+}
+
+/*!
+ * This slot handles our "find" button being clicked by applying our dialog's
+ * options to our query, and then notifying any listeners that our find action
+ * has been triggered.
+ */
+void QomposeReplaceDialog::doFind()
+{ /* SLOT */
+	
+	applyValues();
+	
+	emit findClicked();
+	
+}
+
+/*!
+ * This slot handles our "replace in selection" button being clicked by applying
+ * our dialog's options to our query, closing our dialog and then notifying any
+ * listeners that our "replace in selection" action has been triggered.
+ */
+void QomposeReplaceDialog::doReplaceSelection()
+{ /* SLOT */
+	
+	applyValues();
+	
+	close();
+	
+	emit replaceSelectionClicked();
+	
+}
+
+/*!
+ * This slot handles our "replace all" button being clicked by applying our dialog's
+ * options to our query, closing our dialog and then notifying any listeners that
+ * our "replace all" action has been triggered.
+ */
+void QomposeReplaceDialog::doReplaceAll()
+{ /* SLOT */
+	
+	applyValues();
+	
+	close();
+	
+	emit replaceAllClicked();
+	
 }

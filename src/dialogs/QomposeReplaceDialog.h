@@ -28,7 +28,13 @@ class QGroupBox;
 class QWidget;
 class QPushButton;
 class QCheckBox;
+class QShowEvent;
 
+class QomposeReplaceQuery;
+
+/*!
+ * \brief This class implements a dialog to configure the options of a replace query.
+ */
 class QomposeReplaceDialog : public QDialog
 {
 	Q_OBJECT
@@ -37,7 +43,14 @@ class QomposeReplaceDialog : public QDialog
 		QomposeReplaceDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeReplaceDialog();
 		
+		const QomposeReplaceQuery *getQuery() const;
+		
+	protected:
+		virtual void showEvent(QShowEvent *e);
+		
 	private:
+		QomposeReplaceQuery *query;
+		
 		QGridLayout *layout;
 		
 		QLabel *findLabel;
@@ -51,16 +64,31 @@ class QomposeReplaceDialog : public QDialog
 		QCheckBox *wholeWordsCheckBox;
 		QCheckBox *caseSensitiveCheckBox;
 		QCheckBox *reverseCheckBox;
+		QCheckBox *regexCheckBox;
 		
 		QWidget *buttonsWidget;
 		QGridLayout *buttonsLayout;
 		QPushButton *replaceButton;
 		QPushButton *findButton;
-		QPushButton *replaceInSelectionButton;
+		QPushButton *replaceSelButton;
 		QPushButton *replaceAllButton;
 		QPushButton *closeButton;
 		
 		void initializeGUI();
+		
+		void applyValues();
+		
+	private slots:
+		void doReplace();
+		void doFind();
+		void doReplaceSelection();
+		void doReplaceAll();
+		
+	signals:
+		void replaceClicked();
+		void findClicked();
+		void replaceSelectionClicked();
+		void replaceAllClicked();
 };
 
 #endif

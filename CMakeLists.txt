@@ -78,6 +78,7 @@ SET(qompose_HEADERS
 	src/gui/QomposeGUIUtils.h
 	
 	src/util/QomposeFindQuery.h
+	src/util/QomposeReplaceQuery.h
 	src/util/QomposeSettings.h
 	
 )
@@ -114,6 +115,7 @@ SET(qompose_SOURCES
 	src/gui/QomposeGUIUtils.cpp
 	
 	src/util/QomposeFindQuery.cpp
+	src/util/QomposeReplaceQuery.cpp
 	src/util/QomposeSettings.cpp
 	
 )

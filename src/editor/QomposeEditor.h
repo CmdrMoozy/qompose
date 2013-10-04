@@ -29,6 +29,7 @@ class QWheelEvent;
 class QMouseEvent;
 
 class QomposeFindQuery;
+class QomposeReplaceQuery;
 
 /*!
  * \brief This class implements a text editor widget.
@@ -38,6 +39,9 @@ class QomposeEditor : public QPlainTextEdit
 	Q_OBJECT
 	
 	public:
+		/*!
+		 * \brief This enum denotes the possible results of a find operation.
+		 */
 		enum FindResult
 		{
 			NoDocument,
@@ -117,6 +121,8 @@ class QomposeEditor : public QPlainTextEdit
 		void doMoveHome(bool moveAnchor = true);
 		
 		FindResult doFind(bool forward, const QomposeFindQuery *q);
+		FindResult doBatchReplace(const QomposeReplaceQuery *q,
+			int start = -1, int end = -1);
 	
 	public slots:
 		void duplicateLine();
@@ -125,6 +131,9 @@ class QomposeEditor : public QPlainTextEdit
 		void decreaseSelectionIndent();
 		FindResult findNext(const QomposeFindQuery *q);
 		FindResult findPrevious(const QomposeFindQuery *q);
+		FindResult replace(const QomposeReplaceQuery *q);
+		FindResult replaceSelection(const QomposeReplaceQuery *q);
+		FindResult replaceAll(const QomposeReplaceQuery *q);
 		void goToLine(int l);
 		
 	private slots:

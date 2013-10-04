@@ -28,6 +28,7 @@
 #include "dialogs/QomposeFileDialog.h"
 #include "editor/QomposeBuffer.h"
 #include "util/QomposeFindQuery.h"
+#include "util/QomposeReplaceQuery.h"
 #include "util/QomposeSettings.h"
 
 /*!
@@ -565,6 +566,63 @@ QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(const QomposeFindQ
 		return QomposeEditor::NoDocument;
 	
 	return buf->findPrevious(q);
+	
+}
+
+/*!
+ * This slot executes a "replace" action by instructing our current buffer to execute
+ * the given replace query.
+ *
+ * \param q The replace query to execute.
+ * \return The result of this replace action.
+ */
+QomposeEditor::FindResult QomposeBufferWidget::doReplace(const QomposeReplaceQuery *q)
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return QomposeEditor::NoDocument;
+	
+	return buf->replace(q);
+	
+}
+
+/*!
+ * This slot executes a "replace in selection" action by instructing our current buffer
+ * to execute the given replace query.
+ *
+ * \param q The replace query to execute.
+ * \return The result of this "replace in selection" action.
+ */
+QomposeEditor::FindResult QomposeBufferWidget::doReplaceSelection(const QomposeReplaceQuery *q)
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return QomposeEditor::NoDocument;
+	
+	return buf->replaceSelection(q);
+	
+}
+
+/*!
+ * This slot executes a "replace all" action by instructing our current buffer to
+ * execute the given replace query.
+ *
+ * \param q The replace query to execute.
+ * \return The result of this "replace all" action.
+ */
+QomposeEditor::FindResult QomposeBufferWidget::doReplaceAll(const QomposeReplaceQuery *q)
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return QomposeEditor::NoDocument;
+	
+	return buf->replaceAll(q);
 	
 }
 

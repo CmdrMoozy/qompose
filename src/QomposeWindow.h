@@ -120,8 +120,14 @@ class QomposeWindow : public QMainWindow
 		void doPreferencesDialog();
 		void doPrint();
 		void doPrintPreview();
+		void doFindDialog();
 		void doFindNext();
 		void doFindPrevious();
+		void doReplaceDialog();
+		void doReplace();
+		void doReplaceFind();
+		void doReplaceSelection();
+		void doReplaceAll();
 		void doGoToAccepted();
 		
 		void doSettingChanged(const QString &k, const QVariant &v);

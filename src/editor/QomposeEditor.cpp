@@ -38,6 +38,7 @@
 #include <QRegExp>
 
 #include "util/QomposeFindQuery.h"
+#include "util/QomposeReplaceQuery.h"
 
 /*****************
  * QomposeGutter *
@@ -884,7 +885,103 @@ QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *
 }
 
 /*!
- * This function duplicates the current line. The new line is inserted below the current
+ * This is a utility function which will replace ever match of the given replace
+ * query from the given start position until the given end position.
+ *
+ * If the start position is omitted, then we will simply use the starting position
+ * from the current cursor (the smaller of its anchor and position).
+ *
+ * If the end position is omitted, then we will simply continue until the end of
+ * the document.
+ *
+ * \param q The replace query to execute.
+ * \param start The cursor position to start searching from.
+ * \param end The cursor position to stop searching at.
+ * \return The result of this replacement's find operation.
+ */
+QomposeEditor::FindResult QomposeEditor::doBatchReplace(
+	const QomposeReplaceQuery *q, int start, int end)
+{
+	// If we weren't given a start position, use the current cursor.
+	
+	if(start < 0)
+	{
+		QTextCursor curs = textCursor();
+		start = qMin(curs.anchor(), curs.position());
+	}
+	
+	// Create a new query with "replace in selection"-compatible properties.
+	
+	QomposeReplaceQuery query;
+	
+	query.setExpression(q->getExpression());
+	query.setReplaceValue(q->getReplaceValue());
+	query.setWrapping(false);
+	query.setWholeWords(q->isWholeWords());
+	query.setCaseSensitive(q->isCaseSensitive());
+	query.setReversed(false);
+	query.setRegularExpression(q->isRegularExpression());
+	
+	q = NULL;
+	
+	// Move our cursor to our start position.
+	
+	QTextCursor curs = textCursor();
+	curs.setPosition(start, QTextCursor::MoveAnchor);
+	setTextCursor(curs);
+	
+	// Replace each match we find after our start position.
+	
+	curs = textCursor();
+	QomposeEditor::FindResult r = findNext(&query);
+	bool found = false;
+	
+	curs.beginEditBlock();
+	
+	while(r == QomposeEditor::Found)
+	{
+		// Make sure this match is good to go.
+		
+		int finda = textCursor().anchor(), findp = textCursor().position();
+		
+		if(end >= 0)
+			if(qMax(finda, findp) > end)
+				break;
+		
+		curs.setPosition(finda, QTextCursor::MoveAnchor);
+		curs.setPosition(findp, QTextCursor::KeepAnchor);
+		
+		found = true;
+		
+		// Replace this match.
+		
+		int anchor = qMin(curs.anchor(), curs.position());
+		
+		curs.insertText(query.getReplaceValue());
+		
+		curs.setPosition(anchor, QTextCursor::MoveAnchor);
+		curs.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+			query.getReplaceValue().length());
+		
+		// Find the next match!
+		
+		r = findNext(&query);
+	}
+	
+	curs.endEditBlock();
+	
+	setTextCursor(curs);
+	
+	// Return an appropriate find result.
+	
+	if(found)
+		return QomposeEditor::Found;
+	else
+		return r;
+}
+
+/*!
+ * This slot duplicates the current line. The new line is inserted below the current
  * line, without altering our cursor position. Note that this entire operation is a single
  * "edit block," for undo/redo operations.
  */
@@ -924,7 +1021,7 @@ void QomposeEditor::duplicateLine()
 }
 
 /*!
- * This function clears any selection our editor may have. This is done by simply
+ * This slot clears any selection our editor may have. This is done by simply
  * discarding the "anchor" portion of the current cursor, leaving its actual
  * "position" where it was.
  */
@@ -938,7 +1035,7 @@ void QomposeEditor::deselect()
 }
 
 /*!
- * This function increases the indent of all the lines in the current selection.
+ * This slot increases the indent of all the lines in the current selection.
  * Partially selected lines are included. This function will insert a single tab
  * character at the beginning of each included line.
  *
@@ -1011,10 +1108,10 @@ void QomposeEditor::increaseSelectionIndent()
 }
 
 /*!
- * This function decreases the indent of all the lines in the current selection.
+ * This slot decreases the indent of all the lines in the current selection.
  * Partially selected lines are included.
  *
- * This function considers tabs and sets of spaces the same length as the tab width
+ * This slot considers tabs and sets of spaces the same length as the tab width
  * to be a single "indentation." This function will remove one indentation from
  * each line in the selection. If no indentations are present, then we will instead
  * look for any arbitrary leading spaces to remove.
@@ -1131,37 +1228,139 @@ void QomposeEditor::decreaseSelectionIndent()
 }
 
 /*!
- * This function moves to the next match based upon the given find query and the
+ * This slot moves to the next match based upon the given find query and the
  * current cursor location.
  *
  * \param q The query to execute.
  * \return The result of the find query's execution.
  */
 QomposeEditor::FindResult QomposeEditor::findNext(const QomposeFindQuery *q)
-{
+{ /* SLOT */
+	
 	bool forward = true;
 	
 	if(q->isReversed())
 		forward = false;
 	
 	return doFind(forward, q);
+	
 }
 
 /*!
- * This function moves to the previous find match based upon the given find query
+ * This slot moves to the previous find match based upon the given find query
  * and the current cursor location.
  *
  * \param q The query to execute.
  * \return The result of the find query's execution.
  */
 QomposeEditor::FindResult QomposeEditor::findPrevious(const QomposeFindQuery *q)
-{
+{ /* SLOT */
+	
 	bool forward = false;
 	
 	if(q->isReversed())
 		forward = true;
 	
 	return doFind(forward, q);
+	
+}
+
+/*!
+ * This slot performs a single replace operation. We will replace the very next
+ * match of the given query with the query's replace value. Note that we will
+ * begin searching at the start of the current cursor's selection (or its position,
+ * if it has no selection).
+ *
+ * \param q The replace query to execute.
+ * \return The result of this replacement's find operation.
+ */
+QomposeEditor::FindResult QomposeEditor::replace(const QomposeReplaceQuery *q)
+{ /* SLOT */
+	
+	// Reset our cursor's position.
+	
+	QTextCursor curs = textCursor();
+	
+	curs.setPosition(qMin(curs.anchor(), curs.position()),
+		QTextCursor::MoveAnchor);
+	
+	setTextCursor(curs);
+	
+	// Try to find the next match.
+	
+	QomposeEditor::FindResult r = findNext(q);
+	
+	// If we got a match, replace it with our replace value.
+	
+	if(r == QomposeEditor::Found)
+	{
+		curs = textCursor();
+		
+		if(curs.hasSelection())
+		{
+			curs.beginEditBlock();
+			
+			int anchor = qMin(curs.anchor(), curs.position());
+			
+			curs.insertText(q->getReplaceValue());
+			
+			curs.setPosition(anchor, QTextCursor::MoveAnchor);
+			curs.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+				qMax(q->getReplaceValue().length(), 0));
+			
+			curs.endEditBlock();
+			
+			setTextCursor(curs);
+		}
+	}
+	
+	// Done!
+	
+	return r;
+	
+}
+
+/*!
+ * This slot performs a "replace in selection" operation. We will replace every single
+ * match of the given query in our editor's current selection. If we do not have any
+ * selection, then we will return NoMatches instead.
+ *
+ * Note that we will return Found if at least one match is replaced, or NoMatches
+ * otherwise.
+ *
+ * \param q The replace query to execute.
+ * \return The result of this replacement's find operation.
+ */
+QomposeEditor::FindResult QomposeEditor::replaceSelection(const QomposeReplaceQuery *q)
+{ /* SLOT */
+	
+	QTextCursor curs = textCursor();
+	
+	if(!curs.hasSelection())
+		return QomposeEditor::NoMatches;
+	
+	int start = qMin(curs.anchor(), curs.position());
+	int end = qMax(curs.anchor(), curs.position());
+	
+	return doBatchReplace(q, start, end);
+	
+}
+
+/*!
+ * This slot performs a "replace all" operation. We will replace every single match
+ * of the given query in our editor's document.
+ *
+ * Note that we will return Found if at least one match is replaced, or NoMatches
+ * otherwise.
+ *
+ * \param q The replace query to execute.
+ * \return The result of this replacement's find operation.
+ */
+QomposeEditor::FindResult QomposeEditor::replaceAll(const QomposeReplaceQuery *q)
+{ /* SLOT */
+	
+	return doBatchReplace(q, 0);
+	
 }
 
 /*!
