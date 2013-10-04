@@ -34,11 +34,6 @@ class QomposeApplication : public QApplication
 	
 	public:
 		QomposeApplication(int &ac, char **av);
-		QomposeApplication(int &ac, char **av, bool g);
-		QomposeApplication(int &ac, char **av, Type t);
-		QomposeApplication(Display *d, Qt::HANDLE v = 0, Qt::HANDLE c = 0);
-		QomposeApplication(Display *d, int &ac, char **av,
-			Qt::HANDLE v = 0, Qt::HANDLE c = 0);
 		virtual ~QomposeApplication();
 		
 		void initializeLocalServer();
