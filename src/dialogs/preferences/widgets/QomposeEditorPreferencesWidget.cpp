@@ -29,6 +29,14 @@
 #include "gui/QomposeGUIUtils.h"
 #include "util/QomposeSettings.h"
 
+/*!
+ * This is our default constructor, which creates a new instance of our
+ * editor preferences widget.
+ *
+ * \param s The settings instance to use to save preferences values.
+ * \param p The parent widget to use for this widget.
+ * \param f The window flags to use for this widget.
+ */
 QomposeEditorPreferencesWidget::QomposeEditorPreferencesWidget(QomposeSettings *s,
 	QWidget *p, Qt::WindowFlags f)
 	: QomposePreferencesWidget(s, p, f)
@@ -39,10 +47,17 @@ QomposeEditorPreferencesWidget::QomposeEditorPreferencesWidget(QomposeSettings *
 	initializeGUI();
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our widget.
+ */
 QomposeEditorPreferencesWidget::~QomposeEditorPreferencesWidget()
 {
 }
 
+/*!
+ * We implement our superclass's apply() function to save our various editor
+ * preferences values using our settings instance.
+ */
 void QomposeEditorPreferencesWidget::apply()
 {
 	// Show Gutter
@@ -86,6 +101,11 @@ void QomposeEditorPreferencesWidget::apply()
 		gutterBGButton->getSelectedColor()));
 }
 
+/*!
+ * We implement our superclass's discardChanges() function to discard
+ * any preferences changes that may have been made to our widget by
+ * reloading the existing values from our settings instance.
+ */
 void QomposeEditorPreferencesWidget::discardChanges()
 {
 	// Show Gutter
@@ -132,6 +152,10 @@ void QomposeEditorPreferencesWidget::discardChanges()
 		"gutter-background").value<QColor>());
 }
 
+/*!
+ * This function initializes our widget's GUI by creating the various widgets
+ * we contain, and adding them to our layout.
+ */
 void QomposeEditorPreferencesWidget::initializeGUI()
 {
 	layout = new QGridLayout(this);

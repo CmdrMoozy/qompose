@@ -629,14 +629,16 @@ void QomposeEditor::wheelEvent(QWheelEvent *e)
 
 }
 
+/*!
+ * This function handles any "mouse release" events on our editor by re-highlighting
+ * the current line. Ths is necessary to avoid a bug where rapidly clicking/arrow-key-ing
+ * can result in the wrong line being highlighted - cursorPositionChanged is somewhat
+ * unreliable.
+ *
+ * \param e The event being handled.
+ */
 void QomposeEditor::mouseReleaseEvent(QMouseEvent *e)
 {
-	/*
-	 * This is necessary to prevent a state where rapid clicking/arrow-key-ing can
-	 * result in the wrong line being highlighted - cursorPositionChanged is somewhat
-	 * unreliable.
-	 */
-	
 	highlightCurrentLine();
 	
 	// Do our superclass's normal mouse action.
@@ -881,6 +883,11 @@ QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *
 	return NoMatches;
 }
 
+/*!
+ * This function duplicates the current line. The new line is inserted below the current
+ * line, without altering our cursor position. Note that this entire operation is a single
+ * "edit block," for undo/redo operations.
+ */
 void QomposeEditor::duplicateLine()
 { /* SLOT */
 	
@@ -916,6 +923,11 @@ void QomposeEditor::duplicateLine()
 	
 }
 
+/*!
+ * This function clears any selection our editor may have. This is done by simply
+ * discarding the "anchor" portion of the current cursor, leaving its actual
+ * "position" where it was.
+ */
 void QomposeEditor::deselect()
 { /* SLOT */
 	
@@ -925,6 +937,17 @@ void QomposeEditor::deselect()
 	
 }
 
+/*!
+ * This function increases the indent of all the lines in the current selection.
+ * Partially selected lines are included. This function will insert a single tab
+ * character at the beginning of each included line.
+ *
+ * The resulting selection will have an anchor at the beginning of the first line,
+ * and a cursor position at the end of the last line.
+ *
+ * Also note that this operation is done in a single "edit block," for undo/redo
+ * actions.
+ */
 void QomposeEditor::increaseSelectionIndent()
 { /* SLOT */
 	
@@ -987,6 +1010,21 @@ void QomposeEditor::increaseSelectionIndent()
 	
 }
 
+/*!
+ * This function decreases the indent of all the lines in the current selection.
+ * Partially selected lines are included.
+ *
+ * This function considers tabs and sets of spaces the same length as the tab width
+ * to be a single "indentation." This function will remove one indentation from
+ * each line in the selection. If no indentations are present, then we will instead
+ * look for any arbitrary leading spaces to remove.
+ *
+ * The resulting selection will have an anchor at the beginning of the first line,
+ * and a cursor position at the end of the last line.
+ *
+ * Also note that this operation is done in a single "edit block," for undo/redo
+ * actions.
+ */
 void QomposeEditor::decreaseSelectionIndent()
 { /* SLOT */
 	
@@ -1092,6 +1130,13 @@ void QomposeEditor::decreaseSelectionIndent()
 	
 }
 
+/*!
+ * This function moves to the next match based upon the given find query and the
+ * current cursor location.
+ *
+ * \param q The query to execute.
+ * \return The result of the find query's execution.
+ */
 QomposeEditor::FindResult QomposeEditor::findNext(const QomposeFindQuery *q)
 {
 	bool forward = true;
@@ -1102,6 +1147,13 @@ QomposeEditor::FindResult QomposeEditor::findNext(const QomposeFindQuery *q)
 	return doFind(forward, q);
 }
 
+/*!
+ * This function moves to the previous find match based upon the given find query
+ * and the current cursor location.
+ *
+ * \param q The query to execute.
+ * \return The result of the find query's execution.
+ */
 QomposeEditor::FindResult QomposeEditor::findPrevious(const QomposeFindQuery *q)
 {
 	bool forward = false;
@@ -1112,8 +1164,22 @@ QomposeEditor::FindResult QomposeEditor::findPrevious(const QomposeFindQuery *q)
 	return doFind(forward, q);
 }
 
+/*!
+ * This function will move our cursor to the very beginning of the given line number.
+ * Note that the resulting cursor will be at the very beginning of the block (i.e., line),
+ * and it will have no selection.
+ *
+ * Line numbers less than 1 will result in the cursor being positioned at the very
+ * beginning of the document, and line numbers larger than our document's last line
+ * will result in the cursor being positioned at the beginning of the very last line
+ * in the document.
+ *
+ * \param l The destination line number.
+ */
 void QomposeEditor::goToLine(int l)
 { /* SLOT */
+	
+	l = qMax(l, 1);
 	
 	QTextCursor curs = textCursor();
 	

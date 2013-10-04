@@ -23,12 +23,18 @@
 #include <QString>
 #include <QList>
 
+/*!
+ * \brief This structure stores a filename and its detected character encoding.
+ */
 typedef struct QomposeFileDescriptor
 {
 	QString fileName;
 	QString textCodec;
 } QomposeFileDescriptor;
 
+/*!
+ * \brief This class extends QFileDialog with character encoding detection.
+ */
 class QomposeFileDialog : public QFileDialog
 {
 	public:

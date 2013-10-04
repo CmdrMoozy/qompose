@@ -26,6 +26,14 @@
 #include "gui/QomposeGUIUtils.h"
 #include "util/QomposeSettings.h"
 
+/*!
+ * This is our default constructor, which creates a new instance of our general
+ * preferences widget.
+ *
+ * \param s The settings instance to use to persist settings values.
+ * \param p The parent widget to use for this widget.
+ * \param f The window flags to use for this widget.
+ */
 QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(QomposeSettings *s,
 	QWidget *p, Qt::WindowFlags f)
 	: QomposePreferencesWidget(s, p, f)
@@ -36,10 +44,17 @@ QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(QomposeSettings
 	initializeGUI();
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our widget.
+ */
 QomposeGeneralPreferencesWidget::~QomposeGeneralPreferencesWidget()
 {
 }
 
+/*!
+ * We implement our superclass's apply() function to save our various general
+ * preferences values using our settings instance.
+ */
 void QomposeGeneralPreferencesWidget::apply()
 {
 	// Show Status Bar
@@ -58,6 +73,11 @@ void QomposeGeneralPreferencesWidget::apply()
 		saveWindowAttribsCheckBox->checkState() == Qt::Checked));
 }
 
+/*!
+ * We implement our superclass's discardChanges() function to discard
+ * any preferences changes that may have been made to our widget by
+ * reloading the existing values from our settings instance.
+ */
 void QomposeGeneralPreferencesWidget::discardChanges()
 {
 	// Show Status Bar
@@ -82,6 +102,10 @@ void QomposeGeneralPreferencesWidget::discardChanges()
 		Qt::Checked : Qt::Unchecked);
 }
 
+/*!
+ * This function initializes our widget's GUI by creating the various widgets
+ * we contain, and adding them to our layout.
+ */
 void QomposeGeneralPreferencesWidget::initializeGUI()
 {
 	layout = new QGridLayout(this);

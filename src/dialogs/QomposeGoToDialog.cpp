@@ -27,6 +27,13 @@
 
 #include "QomposeDefines.h"
 
+/*!
+ * This is our default constructor, which initializes a new instance of our
+ * "go to" dialog.
+ *
+ * \param p The parent widget for our dialog.
+ * \param f The window falgs to use for our dialog.
+ */
 QomposeGoToDialog::QomposeGoToDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f), selectedLine(0)
 {
@@ -35,15 +42,31 @@ QomposeGoToDialog::QomposeGoToDialog(QWidget *p, Qt::WindowFlags f)
 	initializeGUI();
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our dialog.
+ */
 QomposeGoToDialog::~QomposeGoToDialog()
 {
 }
 
+/*!
+ * This function returns the currently selected line. This value is 0 by
+ * default, and is only updated when our "Go To" button is clicked.
+ *
+ * \return Our dialog's currently selected line.
+ */
 int QomposeGoToDialog::getSelectedLine() const
 {
 	return selectedLine;
 }
 
+/*!
+ * This function handles our dialog being shown by resetting our dialog's contents,
+ * setting focus on the correct dialog elements, and by raising our dialog to the
+ * front.
+ *
+ * \param e The event being handled.
+ */
 void QomposeGoToDialog::showEvent(QShowEvent *e)
 {
 	// Setup our line text edit.
@@ -68,6 +91,10 @@ void QomposeGoToDialog::showEvent(QShowEvent *e)
 	QDialog::showEvent(e);
 }
 
+/*!
+ * This function initializes our dialog's GUI by creating our various
+ * widgets and adding them to our layout.
+ */
 void QomposeGoToDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
@@ -104,12 +131,21 @@ void QomposeGoToDialog::initializeGUI()
 	
 	// Connect our actions.
 	
-	QObject::connect( goToButton,  SIGNAL( clicked(bool) ), this, SLOT( doGoTo(bool) ) );
-	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close()      ) );
+	QObject::connect( goToButton,  SIGNAL( clicked(bool) ), this, SLOT( doGoTo() ) );
+	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close()  ) );
 }
 
-void QomposeGoToDialog::doGoTo(bool QUNUSED(c))
-{
+/*!
+ * This function performs our "Go To" operation by updating our selected line,
+ * and then emitting a signal letting our callers know that our dialog has been
+ * accepted.
+ *
+ * If the currently selected line number is invalid (i.e., isn't an integer), then
+ * we will show an error instead, and avoid closing the dialog.
+ */
+void QomposeGoToDialog::doGoTo()
+{ /* SLOT */
+	
 	QString l  = lineTextEdit->text();
 	
 	bool ok = false;
@@ -121,4 +157,5 @@ void QomposeGoToDialog::doGoTo(bool QUNUSED(c))
 		emit accepted();
 		close();
 	}
+	
 }

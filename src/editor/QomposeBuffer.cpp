@@ -31,6 +31,13 @@
 #include "QomposeDefines.h"
 #include "util/QomposeSettings.h"
 
+/*!
+ * This is our default constructor, which creates a new instance of
+ * our buffer widget.
+ *
+ * \param s The settings instance to get our preferences from.
+ * \param p The parent widget for our buffer widget.
+ */
 QomposeBuffer::QomposeBuffer(QomposeSettings *s, QWidget *p)
 	: QomposeEditor(p), settings(s), path(QString())
 {
@@ -54,10 +61,20 @@ QomposeBuffer::QomposeBuffer(QomposeSettings *s, QWidget *p)
 		this, SLOT( doModificationChanged(bool) ) );
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our widget.
+ */
 QomposeBuffer::~QomposeBuffer()
 {
 }
 
+/*!
+ * This function attempts to open the file denoted by the given file descriptor,
+ * and using the associated character encoding.
+ *
+ * \param f The file descriptor we will attempt to open.
+ * \return True on success, or false otherwise.
+ */
 bool QomposeBuffer::open(const QomposeFileDescriptor &f)
 {
 	path = f.fileName;
@@ -77,6 +94,12 @@ bool QomposeBuffer::open(const QomposeFileDescriptor &f)
 	return r;
 }
 
+/*!
+ * This function reverts any unsaved changes our buffer might have by
+ * re-reading the contents of our currently open file.
+ *
+ * \return True on success, or false otherwise.
+ */
 bool QomposeBuffer::revert()
 {
 	if(!hasBeenSaved())
@@ -105,6 +128,14 @@ bool QomposeBuffer::revert()
 	return r;
 }
 
+/*!
+ * This function attempts to save the current contents of our buffer to a
+ * file. If the given path is QString(), then we will use our existing
+ * internal path instead of saving to a brand new file.
+ *
+ * \param p The path to save our contents to.
+ * \return True on success, or false otherwise.
+ */
 bool QomposeBuffer::save(const QString &p)
 {
 	if(p.isNull())
@@ -126,6 +157,13 @@ bool QomposeBuffer::save(const QString &p)
 	}
 }
 
+/*!
+ * This function computes the "title" of our buffer, which is dependant on our
+ * currently open filename, as well as whether or not our buffer has ever been
+ * saved.
+ *
+ * \return Our buffer's human-readable title.
+ */
 QString QomposeBuffer::getTitle() const
 {
 	QString title;
@@ -146,6 +184,12 @@ QString QomposeBuffer::getTitle() const
 	return title;
 }
 
+/*!
+ * This function returns the path to the file this buffer is currently representing,
+ * or QString() if we don't have a valid file.
+ *
+ * \return The path to this buffer's current file.
+ */
 QString QomposeBuffer::getPath() const
 {
 	return path;
@@ -160,11 +204,23 @@ bool QomposeBuffer::hasBeenSaved() const
 	return (!path.isNull());
 }
 
+/*!
+ * This function returns whether or not our contents have been altered since our buffer's
+ * last save or load action.
+ *
+ * \return True if our buffer has been modified, or false otherwise.
+ */
 bool QomposeBuffer::isModified() const
 {
 	return document()->isModified();
 }
 
+/*!
+ * This function sets our buffer's modified status to the given value, and emits a
+ * modificationChanged() signal.
+ *
+ * \param m The new modified status for our buffer.
+ */
 void QomposeBuffer::setModified(bool m)
 {
 	document()->setModified(m);
@@ -176,6 +232,7 @@ void QomposeBuffer::setModified(bool m)
  * current path and text codec attributes.
  *
  * \param u Whether or not "undo" operations should be supported.
+ * \return True on success, or false otherwise.
  */
 bool QomposeBuffer::read(bool u)
 {
@@ -207,6 +264,12 @@ bool QomposeBuffer::read(bool u)
 	return true;
 }
 
+/*!
+ * This is a utility function which writes the contents of our buffer to our
+ * buffer's current file path.
+ *
+ * \return True on success, or false otherwise.
+ */
 bool QomposeBuffer::write()
 {
 	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
@@ -233,6 +296,12 @@ bool QomposeBuffer::write()
 	return r;
 }
 
+/*!
+ * This function handles our modification state being changed by emitting a
+ * titleChanged() signal, letting our callers know that we have a new title.
+ *
+ * \param c The new modification status - this is ignored.
+ */
 void QomposeBuffer::doModificationChanged(bool QUNUSED(c))
 { /* SLOT */
 	

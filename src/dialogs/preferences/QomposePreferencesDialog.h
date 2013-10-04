@@ -33,6 +33,9 @@ class QomposePreferencesListView;
 class QomposePreferencesListModel;
 class QomposeSettings;
 
+/*!
+ * \brief This class implements a dialog containing a list of preferences widgets.
+ */
 class QomposePreferencesDialog : public QDialog
 {
 	Q_OBJECT
@@ -70,7 +73,6 @@ class QomposePreferencesDialog : public QDialog
 		void doWidgetActivated(const QModelIndex &i);
 		void doOk();
 		void doApply();
-		void doCancel();
 		void doDefaults();
 };
 

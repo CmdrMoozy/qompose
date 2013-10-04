@@ -30,6 +30,13 @@
 #include "util/QomposeFindQuery.h"
 #include "util/QomposeSettings.h"
 
+/*!
+ * This is our default constructor, which creates a new instance of our buffers
+ * tab widget.
+ *
+ * \param s The settings instance to give to our buffers.
+ * \param p The parent widget to use for this widget.
+ */
 QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
 	: QWidget(p), settings(s)
 {
@@ -47,25 +54,52 @@ QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
 	QObject::connect( tabWidget, SIGNAL( tabCloseRequested(int) ), this, SLOT( doTabCloseRequested(int) ) );
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our widget.
+ */
 QomposeBufferWidget::~QomposeBufferWidget()
 {
 }
 
+/*!
+ * This function returns the number of buffers our widget currently contains.
+ *
+ * \return The number of buffers we have.
+ */
 int QomposeBufferWidget::count() const
 {
 	return tabWidget->count();
 }
 
+/*!
+ * This function returns the widget at the given index in our list of widgets.
+ * If the given index is invalid, then this function will return NULL instead.
+ *
+ * \param i The index of the desired buffer.
+ * \return The buffer at the given index.
+ */
 QomposeBuffer *QomposeBufferWidget::bufferAt(int i) const
 {
 	return dynamic_cast<QomposeBuffer *>(tabWidget->widget(i));
 }
 
+/*!
+ * This function returns our current buffer (i.e., the visible one), or NULL
+ * if we don't have any current buffer.
+ *
+ * \return Our widget's current buffer.
+ */
 QomposeBuffer *QomposeBufferWidget::currentBuffer() const
 {
 	return dynamic_cast<QomposeBuffer *>(tabWidget->currentWidget());
 }
 
+/*!
+ * This function sets our widget's visible buffer to the buffer at the given
+ * index. If the given index is out of bounds, then no action is taken.
+ *
+ * \param i The index of the desired buffer.
+ */
 void QomposeBufferWidget::setCurrentBuffer(int i)
 {
 	tabWidget->setCurrentIndex(i);
@@ -124,6 +158,13 @@ bool QomposeBufferWidget::prepareCloseParent()
 	return true;
 }
 
+/*!
+ * This is a utility function which creates a new buffer widget, connects
+ * its signals and slots, adds it to our tab widget, and makes it the
+ * active tab.
+ *
+ * \return The newly-created buffer widget.
+ */
 QomposeBuffer *QomposeBufferWidget::newBuffer()
 {
 	QomposeBuffer *b = new QomposeBuffer(settings, tabWidget);
@@ -141,6 +182,9 @@ QomposeBuffer *QomposeBufferWidget::newBuffer()
 	return b;
 }
 
+/*!
+ * This function removes the current buffer from our tab widget, and deletes it.
+ */
 void QomposeBufferWidget::removeCurrentBuffer()
 {
 	int i = tabWidget->currentIndex();
@@ -152,6 +196,14 @@ void QomposeBufferWidget::removeCurrentBuffer()
 	delete b;
 }
 
+/*!
+ * This function moves the tab at the given index "f" to the given index "t". That is,
+ * its new index after being moved will be exactly "t." If the given from index is
+ * out-of-bounds, then no action is taken.
+ *
+ * \param f The index to move a tab from.
+ * \param t The index to move the tab to.
+ */
 void QomposeBufferWidget::moveBuffer(int f, int t)
 {
 	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(tabWidget->widget(f));
@@ -163,6 +215,9 @@ void QomposeBufferWidget::moveBuffer(int f, int t)
 	tabWidget->insertTab(t, b, b->getTitle());
 }
 
+/*!
+ * This slot executes a new action by creating a new buffer widget.
+ */
 void QomposeBufferWidget::doNew()
 { /* SLOT */
 	
@@ -170,6 +225,11 @@ void QomposeBufferWidget::doNew()
 	
 }
 
+/*!
+ * This slot executes an open action by showing an open dialog and then
+ * opening the selected file. If we only had one "Untitled" tab before, then
+ * it will be replaced by the newly opened file.
+ */
 void QomposeBufferWidget::doOpen()
 { /* SLOT */
 	
@@ -205,6 +265,10 @@ void QomposeBufferWidget::doOpen()
 	
 }
 
+/*!
+ * This slot executes a revert action by instructing our current buffer to
+ * revert its changes.
+ */
 void QomposeBufferWidget::doRevert()
 { /* SLOT */
 	
@@ -217,6 +281,11 @@ void QomposeBufferWidget::doRevert()
 	
 }
 
+/*!
+ * This slot executes a save action by instructing our current buffer to
+ * save its changes, potentially showing a "save as" dialog if it hasn't ever
+ * been saved before.
+ */
 void QomposeBufferWidget::doSave()
 { /* SLOT */
 	
@@ -232,6 +301,10 @@ void QomposeBufferWidget::doSave()
 	
 }
 
+/*!
+ * This slot executes a "save as" action by showing a save file dialog, and then
+ * by instructing our current buffer to save to the selected path.
+ */
 void QomposeBufferWidget::doSaveAs()
 { /* SLOT */
 	
@@ -250,6 +323,10 @@ void QomposeBufferWidget::doSaveAs()
 	
 }
 
+/*!
+ * This slot executes a close action by possibly prompting to save any unsaved
+ * changes, and ultimately by removing the current buffer from our tab widget.
+ */
 void QomposeBufferWidget::doClose()
 { /* SLOT */
 	
@@ -293,6 +370,10 @@ void QomposeBufferWidget::doClose()
 	
 }
 
+/*!
+ * This slot executes an undo action by instructing our current buffer to
+ * undo the most recent edit block.
+ */
 void QomposeBufferWidget::doUndo()
 { /* SLOT */
 	
@@ -305,6 +386,10 @@ void QomposeBufferWidget::doUndo()
 	
 }
 
+/*!
+ * This slot executes a redo action by instructing our current buffer to
+ * redo the most recent edit block.
+ */
 void QomposeBufferWidget::doRedo()
 { /* SLOT */
 	
@@ -317,6 +402,10 @@ void QomposeBufferWidget::doRedo()
 	
 }
 
+/*!
+ * This slot executes a cut action by instructing our current buffer to cut
+ * any selected text.
+ */
 void QomposeBufferWidget::doCut()
 { /* SLOT */
 	
@@ -329,6 +418,10 @@ void QomposeBufferWidget::doCut()
 	
 }
 
+/*!
+ * This slot executes a copy action by instructing our current buffer to copy
+ * any selected text.
+ */
 void QomposeBufferWidget::doCopy()
 { /* SLOT */
 	
@@ -341,6 +434,10 @@ void QomposeBufferWidget::doCopy()
 	
 }
 
+/*!
+ * This slot executes a paste action by instructing our current buffer to paste
+ * any text in the clipboard.
+ */
 void QomposeBufferWidget::doPaste()
 { /* SLOT */
 	
@@ -353,6 +450,10 @@ void QomposeBufferWidget::doPaste()
 	
 }
 
+/*!
+ * This slot executes a "duplicate line" action by instructing our current buffer
+ * to duplicate its current line.
+ */
 void QomposeBufferWidget::doDuplicateLine()
 { /* SLOT */
 	
@@ -365,6 +466,10 @@ void QomposeBufferWidget::doDuplicateLine()
 	
 }
 
+/*!
+ * This slot executes a "select all" action by instructing our current buffer to
+ * select all of its contents.
+ */
 void QomposeBufferWidget::doSelectAll()
 { /* SLOT */
 	
@@ -377,6 +482,10 @@ void QomposeBufferWidget::doSelectAll()
 	
 }
 
+/*!
+ * This slot executes a deslect action by instructing our current buffer to clear
+ * any selection it currently has.
+ */
 void QomposeBufferWidget::doDeselect()
 { /* SLOT */
 	
@@ -389,6 +498,10 @@ void QomposeBufferWidget::doDeselect()
 	
 }
 
+/*!
+ * This slot executes an "increase indent" action by instructing our current buffer
+ * to increase the indent of any selection it might have.
+ */
 void QomposeBufferWidget::doIncreaseIndent()
 { /* SLOT */
 	
@@ -401,6 +514,10 @@ void QomposeBufferWidget::doIncreaseIndent()
 	
 }
 
+/*!
+ * This slot executes a "decrease indent" action by instructing our current buffer
+ * to decrease the indent of any selection it might have.
+ */
 void QomposeBufferWidget::doDecreaseIndent()
 { /* SLOT */
 	
@@ -413,6 +530,13 @@ void QomposeBufferWidget::doDecreaseIndent()
 	
 }
 
+/*!
+ * This slot executes a "find next" action by instructing our current buffer to
+ * execute the given find query.
+ *
+ * \param q The find query to execute.
+ * \return The result of this find action.
+ */
 QomposeEditor::FindResult QomposeBufferWidget::doFindNext(const QomposeFindQuery *q)
 { /* SLOT */
 	
@@ -425,6 +549,13 @@ QomposeEditor::FindResult QomposeBufferWidget::doFindNext(const QomposeFindQuery
 	
 }
 
+/*!
+ * This slot executes a "find previous" action by instructing our current buffer
+ * to execute the given find query.
+ *
+ * \param q The find query to execute.
+ * \return The result of this find action.
+ */
 QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(const QomposeFindQuery *q)
 { /* SLOT */
 	
@@ -437,6 +568,12 @@ QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(const QomposeFindQ
 	
 }
 
+/*!
+ * This slot executes a "go to" action by instructing our current buffer to
+ * move its cursor to the given line.
+ *
+ * \param l The line to move our current cursor to.
+ */
 void QomposeBufferWidget::doGoTo(int l)
 { /* SLOT */
 	
@@ -449,6 +586,11 @@ void QomposeBufferWidget::doGoTo(int l)
 	
 }
 
+/*!
+ * This slot executes a "previous buffer" action by activating the buffer to
+ * the left of our current buffer (or the rightmost buffer, if the leftmost
+ * one is currently selected).
+ */
 void QomposeBufferWidget::doPreviousBuffer()
 { /* SLOT */
 	
@@ -461,6 +603,11 @@ void QomposeBufferWidget::doPreviousBuffer()
 	
 }
 
+/*!
+ * This slot executes a "next buffer" action by activating the buffer to the
+ * right of our current buffer (or the leftmost buffer, if the rightmost one
+ * is currently selected).
+ */
 void QomposeBufferWidget::doNextBuffer()
 { /* SLOT */
 	
@@ -473,6 +620,11 @@ void QomposeBufferWidget::doNextBuffer()
 	
 }
 
+/*!
+ * This slot executes a "move buffer left" action by moving the currently
+ * selected buffer to the left by one position. If the current buffer is
+ * already the leftmost one, then no action is taken.
+ */
 void QomposeBufferWidget::doMoveBufferLeft()
 { /* SLOT */
 	
@@ -487,6 +639,11 @@ void QomposeBufferWidget::doMoveBufferLeft()
 	
 }
 
+/*!
+ * This slot executes a "move buffer right" action by moving the currently
+ * selected buffer to the right by one position. If the current buffer is
+ * already the rightmost one, then no action is taken.
+ */
 void QomposeBufferWidget::doMoveBufferRight()
 { /* SLOT */
 	
@@ -501,6 +658,13 @@ void QomposeBufferWidget::doMoveBufferRight()
 	
 }
 
+/*!
+ * This function handles our current tab being changed by notifying various
+ * listeners that our path has changed, and by focusing that tab's editor
+ * widget.
+ *
+ * \param i The index of the newly-active tab.
+ */
 void QomposeBufferWidget::doTabChanged(int i)
 { /* SLOT */
 	
@@ -528,6 +692,13 @@ void QomposeBufferWidget::doTabCloseRequested(int i)
 	
 }
 
+/*!
+ * This slot handles a buffer's title being changed by updating the text on
+ * its corresponding tab. The buffer whose title changed is determined via the
+ * sender() function.
+ *
+ * \param t The new title for this buffer.
+ */
 void QomposeBufferWidget::doTabTitleChanged(const QString &t)
 { /* SLOT */
 	
@@ -543,6 +714,13 @@ void QomposeBufferWidget::doTabTitleChanged(const QString &t)
 	
 }
 
+/*!
+ * This slot handles a buffer's path being changed by, if it is the current
+ * buffer, notifying our listeners that our path has changed. The buffer
+ * whose path changed is determined via the sender() function.
+ *
+ * \param p The new path for this buffer.
+ */
 void QomposeBufferWidget::doTabPathChanged(const QString &p)
 { /* SLOT */
 	

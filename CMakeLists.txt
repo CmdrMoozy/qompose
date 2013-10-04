@@ -87,7 +87,6 @@ SET(qompose_MOC_HEADERS
 	src/QomposeApplication.h
 	src/QomposeWindow.h
 	
-	src/dialogs/QomposeAboutDialog.h
 	src/dialogs/QomposeEncodingDialog.h
 	src/dialogs/QomposeFindDialog.h
 	src/dialogs/QomposeGoToDialog.h

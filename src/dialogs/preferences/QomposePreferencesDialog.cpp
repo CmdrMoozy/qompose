@@ -28,6 +28,14 @@
 #include "dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h"
 #include "util/QomposeSettings.h"
 
+/*!
+ * This is our default constructor, which creates a new instance of our
+ * preferences dialog.
+ *
+ * \param s The settings instance to use to persist settings.
+ * \param p The parent widget for this dialog.
+ * \param f The window flags for this dialog.
+ */
 QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
 	QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f), settings(s)
@@ -81,20 +89,32 @@ QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
 	
 	QObject::connect( okButton,       SIGNAL( clicked(bool) ), this, SLOT( doOk()       ) );
 	QObject::connect( applyButton,    SIGNAL( clicked(bool) ), this, SLOT( doApply()    ) );
-	QObject::connect( cancelButton,   SIGNAL( clicked(bool) ), this, SLOT( doCancel()   ) );
+	QObject::connect( cancelButton,   SIGNAL( clicked(bool) ), this, SLOT( close()      ) );
 	QObject::connect( defaultsButton, SIGNAL( clicked(bool) ), this, SLOT( doDefaults() ) );
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our dialog.
+ */
 QomposePreferencesDialog::~QomposePreferencesDialog()
 {
 }
 
+/*!
+ * This function discards any changes that have been made to any of our
+ * preferences widgets by instructing each widget in our model to discard
+ * its changes.
+ */
 void QomposePreferencesDialog::discardChanges()
 {
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 		preferencesModel->widgetAt(i)->discardChanges();
 }
 
+/*!
+ * This function initializes our preferences model by creating the model
+ * as well as all of the widgets that will be placed inside of it.
+ */
 void QomposePreferencesDialog::createPreferencesModel()
 {
 	preferencesModel = new QomposePreferencesListModel(preferencesView);
@@ -107,6 +127,13 @@ void QomposePreferencesDialog::createPreferencesModel()
 	preferencesModel->addPreferencesWidget(editorPreferencesWidget);
 }
 
+/*!
+ * This function handles a new widget being activated in our list view of
+ * preferences widgets by displaying the associated widget in our dialog's
+ * display area.
+ *
+ * \param i The model index (i.e., the row) of the widget that was activated.
+ */
 void QomposePreferencesDialog::doWidgetActivated(const QModelIndex &i)
 { /* SLOT */
 	
@@ -115,6 +142,10 @@ void QomposePreferencesDialog::doWidgetActivated(const QModelIndex &i)
 	
 }
 
+/*!
+ * This function handles our OK button being clicked by applying all of our
+ * preferences values, and then closing our dialog.
+ */
 void QomposePreferencesDialog::doOk()
 { /* SLOT */
 	
@@ -124,6 +155,10 @@ void QomposePreferencesDialog::doOk()
 	
 }
 
+/*!
+ * This function handles our apply button being clicked by instructing each of
+ * the preferences widgets in our model to apply their respective settings.
+ */
 void QomposePreferencesDialog::doApply()
 { /* SLOT */
 	
@@ -132,13 +167,12 @@ void QomposePreferencesDialog::doApply()
 	
 }
 
-void QomposePreferencesDialog::doCancel()
-{ /* SLOT */
-	
-	close();
-	
-}
-
+/*!
+ * This function handles our defaults button being clicked by resetting all of
+ * our preferences values back to their defaults, and then instructing each of
+ * the preferences widgets in our model to reload the settings from the settings
+ * instance.
+ */
 void QomposePreferencesDialog::doDefaults()
 { /* SLOT */
 	

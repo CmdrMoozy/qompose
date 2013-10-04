@@ -21,25 +21,44 @@
 #include "QomposeDefines.h"
 #include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
 
+/*!
+ * This is our default constructor, which creates a new, empty preferences
+ * list model.
+ *
+ * \param p The parent object for this new model.
+ */
 QomposePreferencesListModel::QomposePreferencesListModel(QObject *p)
 	: QAbstractListModel(p)
 {
 }
 
+/*!
+ * This is our default destructor, which cleans up and destroys our list.
+ */
 QomposePreferencesListModel::~QomposePreferencesListModel()
 {
-	while(!widgets.empty())
-	{
-		QomposePreferencesWidget *w = widgets.takeFirst();
-		delete w;
-	}
 }
 
+/*!
+ * This function returns the number of rows currently in our model.
+ *
+ * \param p The parent model index - this is ignored.
+ * \return The number of rows currently in our model.
+ */
 int QomposePreferencesListModel::rowCount(const QModelIndex &QUNUSED(p)) const
 {
 	return widgets.count();
 }
 
+/*!
+ * This function returns the data for the given model index and role. We will
+ * return valid data for a display role (the widget title) as well as the
+ * decoration role (the widget icon).
+ *
+ * \param i The model index (i.e., the row - the column is ignored) to get data for.
+ * \param r The role to get data for.
+ * \return The data matching the given row and role.
+ */
 QVariant QomposePreferencesListModel::data(const QModelIndex &i, int r) const
 {
 	int idx = i.row();
@@ -68,12 +87,29 @@ QVariant QomposePreferencesListModel::data(const QModelIndex &i, int r) const
 	return QVariant(QVariant::Invalid);
 }
 
+/*!
+ * This function returns an invalid QVariant, since out model doesn't keep track
+ * of any "header data."
+ *
+ * \param s The section number of the desired data - this is ignored.
+ * \param o The orientation the data will be displayed in - this is ignored.
+ * \param r The role of the desired data - this is ignored.
+ * \return An invalid QVariant, since we do not store any header data.
+ */
 QVariant QomposePreferencesListModel::headerData(int QUNUSED(s),
 	Qt::Orientation QUNUSED(o), int QUNUSED(r)) const
 {
 	return QVariant(QVariant::Invalid);
 }
 
+/*!
+ * This is a utility function which returns the preferences widget on the given
+ * row of our model. If the given row number is out-of-bounds, then this function
+ * will return NULL instead.
+ *
+ * \param i The row of the desired widget.
+ * \return The given preferences widget.
+ */
 QomposePreferencesWidget *QomposePreferencesListModel::widgetAt(int i) const
 {
 	if( (i < 0) || (i >= rowCount()) )
@@ -82,6 +118,11 @@ QomposePreferencesWidget *QomposePreferencesListModel::widgetAt(int i) const
 	return widgets.at(i);
 }
 
+/*!
+ * This function appends the given preferences widget to our model's list of widgets.
+ *
+ * \param w The widget to add to our model.
+ */
 void QomposePreferencesListModel::addPreferencesWidget(QomposePreferencesWidget *w)
 {
 	widgets.append(w);

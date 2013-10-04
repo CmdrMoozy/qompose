@@ -30,6 +30,13 @@
 #include "QomposeDefines.h"
 #include "util/QomposeFindQuery.h"
 
+/*!
+ * This is our default constructor, which creates a new instance of our
+ * find dialog.
+ *
+ * \param p The parent widget to use for this dialog.
+ * \param f The window flags to use for this dialog.
+ */
 QomposeFindDialog::QomposeFindDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f)
 {
@@ -40,15 +47,32 @@ QomposeFindDialog::QomposeFindDialog(QWidget *p, Qt::WindowFlags f)
 	initializeGUI();
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our dialog.
+ */
 QomposeFindDialog::~QomposeFindDialog()
 {
 }
 
+/*!
+ * This function returns a pointer to the find query our dialog currently
+ * has. This pointer is still good even after the dialog has been re-shown.
+ *
+ * \return The find query containing our dialog's selected data.
+ */
 const QomposeFindQuery *QomposeFindDialog::getQuery() const
 {
 	return query;
 }
 
+/*!
+ * This function handles our dialog being shown by resetting its
+ * contents using our currently selected find query, by setting
+ * focus on the expression input box, and by raising our dialog to
+ * the front.
+ *
+ * \param e The event being handled.
+ */
 void QomposeFindDialog::showEvent(QShowEvent *e)
 {
 	// Setup our line text edit.
@@ -81,6 +105,10 @@ void QomposeFindDialog::showEvent(QShowEvent *e)
 	QDialog::showEvent(e);
 }
 
+/*!
+ * This function initializes our GUI by creating the various widgets we contain,
+ * and adding them to our layout.
+ */
 void QomposeFindDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
@@ -121,6 +149,7 @@ void QomposeFindDialog::initializeGUI()
 	buttonsLayout = new QGridLayout(buttonsWidget);
 	
 	findButton = new QPushButton(tr("&Find"), buttonsWidget);
+	findButton->setDefault(true);
 	
 	closeButton = new QPushButton(tr("Clos&e"), buttonsWidget);
 	
@@ -141,10 +170,15 @@ void QomposeFindDialog::initializeGUI()
 	
 	// Connect our button actions.
 	
-	QObject::connect( findButton, SIGNAL( clicked(bool) ), this, SLOT( doFind(bool) ) );
+	QObject::connect( findButton, SIGNAL( clicked(bool) ), this, SLOT( doFind() ) );
 }
 
-void QomposeFindDialog::doFind(bool QUNUSED(c))
+/*!
+ * This function handles our "find" button being clicked by applying our dialog's
+ * contents to our find query object, and by alerting our callers that our dialog
+ * has been accepted.
+ */
+void QomposeFindDialog::doFind()
 { /* SLOT */
 	
 	// Set our query's properties according to our dialog state.

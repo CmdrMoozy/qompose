@@ -338,6 +338,14 @@ void QomposeWindow::initializeDialogs()
 	QObject::connect( goToDialog, SIGNAL( accepted() ), this, SLOT( doGoToAccepted() ) );
 }
 
+/*!
+ * This function handles the result of a find operation by alerting the
+ * user about what happened. This includes things like trying to find using
+ * a bad regular expression, or finding something for which no matches
+ * were found.
+ *
+ * \param r The find result to process.
+ */
 void QomposeWindow::handleFindResult(QomposeEditor::FindResult r) const
 {
 	switch(r)
@@ -394,6 +402,11 @@ void QomposeWindow::doPrintPreview()
 { /* SLOT */
 }
 
+/*!
+ * This function performs a "find next" operation by extracting the current
+ * find query from the find dialog, telling our buffers widget to execute the
+ * query, and then dealing with the result.
+ */
 void QomposeWindow::doFindNext()
 { /* SLOT */
 	
@@ -401,6 +414,11 @@ void QomposeWindow::doFindNext()
 	
 }
 
+/*!
+ * This function performs a "find previous" operation by extracting the current
+ * find query from the find dialog, telling our buffers widget to execute the
+ * query, and then dealing with the result.
+ */
 void QomposeWindow::doFindPrevious()
 { /* SLOT */
 	
@@ -408,6 +426,10 @@ void QomposeWindow::doFindPrevious()
 	
 }
 
+/*!
+ * This function handles our "go to" dialog being accepted by telling our buffers
+ * widget to perform the "go to" operation.
+ */
 void QomposeWindow::doGoToAccepted()
 { /* SLOT */
 	
@@ -415,6 +437,12 @@ void QomposeWindow::doGoToAccepted()
 	
 }
 
+/*!
+ * This function handles a setting changed by applying that change to our window.
+ *
+ * \param k The setting key that was changed.
+ * \param v The new value for the given setting.
+ */
 void QomposeWindow::doSettingChanged(const QString &k, const QVariant &v)
 { /* SLOT */
 	

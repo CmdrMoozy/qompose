@@ -29,17 +29,34 @@
 
 #include <unicode/ucsdet.h>
 
+#include "QomposeDefines.h"
 #include "dialogs/QomposeEncodingDialog.h"
 
+/*!
+ * This is our default constructor, which creates a new file dialog instance.
+ *
+ * \param p The parent widget for our dialog.
+ * \param f The window flags to use for our dialog.
+ */
 QomposeFileDialog::QomposeFileDialog(QWidget *p, Qt::WindowFlags f)
 	: QFileDialog(p, f)
 {
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our dialog.
+ */
 QomposeFileDialog::~QomposeFileDialog()
 {
 }
 
+/*!
+ * This is a factory function, which creates a new "null" file descriptor and
+ * returns it. "Null" file descriptors are those with the value QString() for
+ * both properties.
+ *
+ * \return A newly-created null file descriptor.
+ */
 QomposeFileDescriptor QomposeFileDialog::getNullDescriptor()
 {
 	QomposeFileDescriptor desc;
@@ -50,6 +67,18 @@ QomposeFileDescriptor QomposeFileDialog::getNullDescriptor()
 	return desc;
 }
 
+/*!
+ * This is a static utility function which displays an instance of our dialog
+ * for the purposes of opening a single file.
+ *
+ * \param p The parent widget to use for our dialog.
+ * \param c The caption to use for the dialog prompt.
+ * \param d The default directory to use for the dialog.
+ * \param f The filter to use for the open dialog.
+ * \param sf The selected filter to use for the open dialog.
+ * \param o The set of extra options to use for the open dialog.
+ * \return A valid file descriptor on "accept," or a null descriptor otherwise.
+ */
 QomposeFileDescriptor QomposeFileDialog::getOpenFileName(QWidget *p,
 	const QString &c, const QString &d, const QString &f, QString *sf,
 	QFileDialog::Options o)
@@ -77,6 +106,18 @@ QomposeFileDescriptor QomposeFileDialog::getOpenFileName(QWidget *p,
 	return desc;
 }
 
+/*!
+ * This is a static utility function which displays an instance of our dialog
+ * for the purposes of opening one or more files.
+ *
+ * \param p The parent widget to use for our dialog.
+ * \param c The caption to use for the dialog prompt.
+ * \param d The default directory to use for the dialog.
+ * \param f The filter to use for the open dialog.
+ * \param sf The selected filter to use for the open dialog.
+ * \param o The set of extra options to use for the open dialog.
+ * \return A list of file descriptors on "accept," or an empty list otherwise.
+ */
 QList<QomposeFileDescriptor> QomposeFileDialog::getOpenFileNames(QWidget *p,
 	const QString &c, const QString &d, const QString &f, QString *sf,
 	QFileDialog::Options o)
@@ -109,6 +150,15 @@ QList<QomposeFileDescriptor> QomposeFileDialog::getOpenFileNames(QWidget *p,
 	return ret;
 }
 
+/*!
+ * This function tests whether or not the given file seems "good to go." This
+ * includes whether or not it is a regular file, is readable, and is reasonably
+ * sized (files larger than 5 MiB are considered unusually large).
+ *
+ * \param f The path to the file to inspect.
+ * \param p The parent widget for any prompts we display.
+ * \return True if the file looks good, or false otherwise.
+ */
 bool QomposeFileDialog::fileIsGood(const QString &f, QWidget *p)
 {
 	QFileInfo file(f);
@@ -116,7 +166,7 @@ bool QomposeFileDialog::fileIsGood(const QString &f, QWidget *p)
 	if( (!file.exists()) || (!file.isReadable()) )
 		return false;
 	
-	if(file.size() > 5242880)
+	if(file.size() > (5 * QMEGABYTE))
 	{
 		QString text = QString("The file '%1' is relatively large. Do you really want to open it?")
 			.arg(file.fileName());
@@ -235,6 +285,13 @@ QString QomposeFileDialog::detectTextCodec(const QString &f)
 	}
 }
 
+/*!
+ * This is a utility function which prompts the user to select a character encoding,
+ * in the case where the proper encoding couldn't be autodetected for a file.
+ *
+ * \param f The path to the file to prompt about.
+ * \return The user-selected character encoding for the given file.
+ */
 QString QomposeFileDialog::promptTextCodec(const QString &f)
 {
 	QFileInfo file(f);

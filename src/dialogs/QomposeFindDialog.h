@@ -32,6 +32,9 @@ class QShowEvent;
 
 class QomposeFindQuery;
 
+/*!
+ * \brief This class implements a dialog to configure the options of a find query.
+ */
 class QomposeFindDialog : public QDialog
 {
 	Q_OBJECT
@@ -69,7 +72,7 @@ class QomposeFindDialog : public QDialog
 		void initializeGUI();
 		
 	private slots:
-		void doFind(bool c);
+		void doFind();
 		
 	signals:
 		void accepted();

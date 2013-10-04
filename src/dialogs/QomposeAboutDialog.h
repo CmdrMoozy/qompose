@@ -26,10 +26,11 @@ class QTabWidget;
 class QTextEdit;
 class QPushButton;
 
+/*!
+ * \brief This class implements our "About" dialog, with application and license information.
+ */
 class QomposeAboutDialog : public QDialog
 {
-	Q_OBJECT
-	
 	public:
 		QomposeAboutDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeAboutDialog();
@@ -43,9 +44,6 @@ class QomposeAboutDialog : public QDialog
 		QPushButton *closeButton;
 		
 		void loadLicense();
-		
-	private slots:
-		void doClose();
 };
 
 #endif

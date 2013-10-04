@@ -26,6 +26,13 @@
 #include <QTextStream>
 #include <QFont>
 
+/*!
+ * This is our default constructor, which creates a new about dialog instance
+ * and loads the contents from our resources into its UI.
+ *
+ * \param p This dialog's parent widget.
+ * \param f The window flags to use for this dialog.
+ */
 QomposeAboutDialog::QomposeAboutDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f)
 {
@@ -52,16 +59,23 @@ QomposeAboutDialog::QomposeAboutDialog(QWidget *p, Qt::WindowFlags f)
 	layout->setRowStretch(0, 1);
 	setLayout(layout);
 	
-	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( doClose() ) );
+	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close() ) );
 	
 	setWindowTitle(tr("About Qompose"));
 	resize(500, 500);
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our dialog.
+ */
 QomposeAboutDialog::~QomposeAboutDialog()
 {
 }
 
+/*!
+ * This is a utility function which loads the body of our license file,
+ * and places its contents in our license text edit.
+ */
 void QomposeAboutDialog::loadLicense()
 {
 	licenseTextEdit->clear();
@@ -75,11 +89,4 @@ void QomposeAboutDialog::loadLicense()
 	licenseTextEdit->setText(reader.readAll());
 	
 	f.close();
-}
-
-void QomposeAboutDialog::doClose()
-{ /* SLOT */
-	
-	close();
-	
 }

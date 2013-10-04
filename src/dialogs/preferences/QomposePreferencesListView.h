@@ -26,6 +26,9 @@ class QAbstractItemModel;
 
 class QomposePreferencesListModel;
 
+/*!
+ * \brief This class implements a view for a list of preferences widgets.
+ */
 class QomposePreferencesListView : public QListView
 {
 	public:

@@ -31,6 +31,9 @@ class QomposeSettings;
 class QomposeColorPickerButton;
 class QomposeFontPickerButton;
 
+/*!
+ * \brief This class implements a widget to configure editor-related application settings.
+ */
 class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 {
 	public:

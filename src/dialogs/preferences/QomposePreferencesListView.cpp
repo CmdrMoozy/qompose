@@ -26,6 +26,11 @@
 #include "dialogs/preferences/QomposePreferencesListModel.h"
 #include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
 
+/*!
+ * This is our default constructor, which creates a new preferences list view.
+ *
+ * \param p The parent widget to use for this widget.
+ */
 QomposePreferencesListView::QomposePreferencesListView(QWidget *p)
 	: QListView(p)
 {
@@ -37,10 +42,18 @@ QomposePreferencesListView::QomposePreferencesListView(QWidget *p)
 	setFont(f);
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our object.
+ */
 QomposePreferencesListView::~QomposePreferencesListView()
 {
 }
 
+/*!
+ * This function sets the preferences list model our view should be using.
+ *
+ * \param m The new model for our view to use.
+ */
 void QomposePreferencesListView::setModel(QomposePreferencesListModel *m)
 {
 	QAbstractItemModel *aim = dynamic_cast<QAbstractItemModel *>(m);
@@ -48,6 +61,14 @@ void QomposePreferencesListView::setModel(QomposePreferencesListModel *m)
 	setModel(aim);
 }
 
+/*!
+ * This function computes the size hint for our widget, based upon our
+ * contents. We allocate 50 vertical pixels for each row, as well as width
+ * for the largest widget title, and an extra 75 pixels for the icon and
+ * some padding.
+ *
+ * \return The size hint for our widget, based upon our contents.
+ */
 QSize QomposePreferencesListView::sizeHint() const
 {
 	// Get our view's model (if applicable).
@@ -89,6 +110,12 @@ QSize QomposePreferencesListView::sizeHint() const
 	return s;
 }
 
+/*!
+ * We override our superclass's setModel() function to make it private,
+ * so we can ensure any model we are given is a QomposePreferencesListModel.
+ *
+ * \param m The new model to use.
+ */
 void QomposePreferencesListView::setModel(QAbstractItemModel *m)
 {
 	QListView::setModel(m);

@@ -25,6 +25,9 @@
 
 class QomposeSettings;
 
+/*!
+ * \brief This class provides a general interface common to all preferences widgets.
+ */
 class QomposePreferencesWidget : public QWidget
 {
 	public:
@@ -38,7 +41,18 @@ class QomposePreferencesWidget : public QWidget
 		QString getPreferencesTitle() const;
 		void setPreferencesTitle(const QString &t);
 		
+		/*!
+		 * This function should be implemented by subclasses, and should apply
+		 * all of that widget's settings to the QomposeSettings instance given in
+		 * the constructor.
+		 */
 		virtual void apply() = 0;
+		
+		/*!
+		 * This function should be implemented by subclasses, and should discard
+		 * any settings values in the widget, replacing them with the existing values
+		 * stored in the QomposeSettings instance given in the constructor.
+		 */
 		virtual void discardChanges() = 0;
 		
 	protected:

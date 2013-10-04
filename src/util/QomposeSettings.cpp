@@ -25,6 +25,8 @@
 #include <QFont>
 #include <QColor>
 
+// Load our default settings values into our static defaults list.
+
 const QList< QPair<QString, QVariant> > QomposeSettings::defaults
 	= (QList< QPair<QString, QVariant> >())
 		<< QPair<QString, QVariant>( "show-status-bar",        true                  )

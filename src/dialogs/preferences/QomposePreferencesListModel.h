@@ -27,6 +27,9 @@
 
 class QomposePreferencesWidget;
 
+/*!
+ * \brief This class implements a model to store a list of preferences widgets.
+ */
 class QomposePreferencesListModel : public QAbstractListModel
 {
 	public:

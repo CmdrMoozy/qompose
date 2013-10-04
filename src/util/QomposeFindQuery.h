@@ -24,6 +24,9 @@
 #include <QString>
 #include <QTextDocument>
 
+/*!
+ * \brief This class encapsulates the options and expression of a find query.
+ */
 class QomposeFindQuery : public QObject
 {
 	public:

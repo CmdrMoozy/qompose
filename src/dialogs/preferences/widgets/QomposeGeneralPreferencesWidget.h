@@ -28,6 +28,9 @@ class QSpinBox;
 
 class QomposeSettings;
 
+/*!
+ * \brief This class implements a widget to configure general application options.
+ */
 class QomposeGeneralPreferencesWidget : public QomposePreferencesWidget
 {
 	public:

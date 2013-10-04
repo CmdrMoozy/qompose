@@ -20,36 +20,78 @@
 
 #include "util/QomposeSettings.h"
 
+/*!
+ * This is our default constructor, which creates a new, empty preferences
+ * widget.
+ *
+ * \param s The settings instance to use to persist our settings.
+ * \param p This widget's parent widget.
+ * \param f The window flags to use for this widget.
+ */
 QomposePreferencesWidget::QomposePreferencesWidget(QomposeSettings *s,
 	QWidget *p, Qt::WindowFlags f)
 	: QWidget(p, f), settings(s), icon(QIcon()), title(QString())
 {
 }
 
+/*!
+ * This is our default destructor, which cleans up & destroys our widget.
+ */
 QomposePreferencesWidget::~QomposePreferencesWidget()
 {
 }
 
+/*!
+ * This function returns our widget's current display icon, for use in e.g.
+ * a preferences list view.
+ *
+ * \return Our widget's icon.
+ */
 QIcon QomposePreferencesWidget::getPreferencesIcon() const
 {
 	return icon;
 }
 
+/*!
+ * This function sets the icon our widget should display e.g. when in a
+ * preferences list view.
+ *
+ * \param i The new icon for our widget to use.
+ */
 void QomposePreferencesWidget::setPreferencesIcon(const QIcon &i)
 {
 	icon = i;
 }
 
+/*!
+ * This function returns the title identifying this preferences widget.
+ * This title can be displayed e.g. in a dialog title, or in a preferences
+ * list view.
+ *
+ * \return Our widget's title.
+ */
 QString QomposePreferencesWidget::getPreferencesTitle() const
 {
 	return title;
 }
 
+/*!
+ * This function sets the title used to identify this widget. This title can
+ * be displayed e.g. in a dialog title, or in a preferences list view.
+ *
+ * \param t The new title for our widget to use.
+ */
 void QomposePreferencesWidget::setPreferencesTitle(const QString &t)
 {
 	title = t;
 }
 
+/*!
+ * This function returns the settings instance our widget is using to
+ * persist settings.
+ *
+ * \return Our widget's settings instance.
+ */
 QomposeSettings *QomposePreferencesWidget::getSettings() const
 {
 	return settings;

@@ -28,6 +28,9 @@ class QWidget;
 class QPushButton;
 class QShowEvent;
 
+/*!
+ * \brief This class implements a dialog to pick a line to jump to.
+ */
 class QomposeGoToDialog : public QDialog
 {
 	Q_OBJECT
@@ -57,7 +60,7 @@ class QomposeGoToDialog : public QDialog
 		void initializeGUI();
 		
 	private slots:
-		void doGoTo(bool c);
+		void doGoTo();
 		
 	signals:
 		void accepted();

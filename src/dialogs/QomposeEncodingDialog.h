@@ -27,6 +27,9 @@ class QLabel;
 class QListWidget;
 class QPushButton;
 
+/*!
+ * \brief This class implements a simple text selection encoding dialog.
+ */
 class QomposeEncodingDialog : public QDialog
 {
 	Q_OBJECT
@@ -57,8 +60,8 @@ class QomposeEncodingDialog : public QDialog
 		QPushButton *cancelButton;
 		
 	private slots:
-		void doSelectClicked(bool c);
-		void doCancelClicked(bool c);
+		void doSelectClicked();
+		void doCancelClicked();
 };
 
 #endif
