@@ -197,6 +197,25 @@ QString QomposeBuffer::getPath() const
 }
 
 /*!
+ * This function returns the path to the directory the file this buffer is currently
+ * representing resides in. If we don't have a valid path (e.g., this buffer has never
+ * been saved), then we return QString() instead.
+ *
+ * \return The path to this buffer's current file's parent directory.
+ */
+QString QomposeBuffer::getDirectory() const
+{
+	QString p = getPath();
+	
+	if(p.isNull())
+		return QString();
+	
+	QFileInfo info(p);
+	
+	return info.dir().absolutePath();
+}
+
+/*!
  * This function returns whether or not this buffer has ever been saved, or if it
  * is a brand-new document (possibly with unsaved changes).
  */

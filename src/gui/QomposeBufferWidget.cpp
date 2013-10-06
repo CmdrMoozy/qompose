@@ -247,8 +247,23 @@ void QomposeBufferWidget::doNew()
 void QomposeBufferWidget::doOpen()
 { /* SLOT */
 	
+	// Try to get a default path for our open dialog.
+	
+	QString defaultDir = QDir::homePath();
+	QomposeBuffer *current = currentBuffer();
+	
+	if(current != NULL)
+	{
+		QString d = current->getDirectory();
+		
+		if(!d.isNull())
+			defaultDir = d;
+	}
+	
+	// Open the one or more selected files.
+	
 	QList<QomposeFileDescriptor> files = QomposeFileDialog::getOpenFileNames(
-		this, tr("Open Files"), QDir::homePath());
+		this, tr("Open Files"), defaultDir);
 	
 	if(files.length() > 0)
 	{
