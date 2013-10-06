@@ -44,6 +44,8 @@ QomposeReplaceDialog::QomposeReplaceDialog(QWidget *p, Qt::WindowFlags f)
 	query = new QomposeReplaceQuery(this);
 	
 	initializeGUI();
+	
+	setMinimumWidth(450);
 }
 
 /*!

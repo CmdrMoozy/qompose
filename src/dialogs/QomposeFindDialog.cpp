@@ -45,6 +45,8 @@ QomposeFindDialog::QomposeFindDialog(QWidget *p, Qt::WindowFlags f)
 	query = new QomposeFindQuery(this);
 	
 	initializeGUI();
+	
+	setMinimumWidth(400);
 }
 
 /*!
@@ -170,7 +172,8 @@ void QomposeFindDialog::initializeGUI()
 	
 	// Connect our button actions.
 	
-	QObject::connect( findButton, SIGNAL( clicked(bool) ), this, SLOT( doFind() ) );
+	QObject::connect( findButton,  SIGNAL( clicked(bool) ), this, SLOT( doFind() ) );
+	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close()  ) );
 }
 
 /*!
