@@ -230,6 +230,80 @@ void QomposeBufferWidget::moveBuffer(int f, int t)
 }
 
 /*!
+ * This function tries to compute a default directory for, e.g., open or save
+ * actions, based upon our current buffer list.
+ *
+ * We will use the first valid path of the current buffer's path, the path of
+ * the nearest buffer to the left, the path of the nearest buffer to the right,
+ * or the user's home directory.
+ *
+ * \return A default directory to use for open/save actions.
+ */
+QString QomposeBufferWidget::getDefaultDirectory() const
+{
+	QString defaultDirectory = QDir::homePath();
+	bool found = false;
+	
+	QomposeBuffer *buf = currentBuffer();
+	int ci = tabWidget->indexOf(buf);
+	
+	// See if the current buffer has a valid default path.
+	
+	if(buf != NULL)
+	{
+		if(!buf->getDirectory().isNull())
+		{
+			defaultDirectory = buf->getDirectory();
+			found = true;
+		}
+	}
+	
+	// See if any buffers to the left of this buffer have valid paths.
+	
+	if(!found)
+	{
+		for(int i = (ci - 1); i >= 0; --i)
+		{
+			buf = bufferAt(i);
+			
+			if(buf != NULL)
+			{
+				if(!buf->getDirectory().isNull())
+				{
+					defaultDirectory = buf->getDirectory();
+					found = true;
+					break;
+				}
+			}
+		}
+	}
+	
+	// See if any buffers to the right of this buffer have valid paths.
+	
+	if(!found)
+	{
+		for(int i = (ci + 1); i < tabWidget->count(); ++i)
+		{
+			buf = bufferAt(i);
+			
+			if(buf != NULL)
+			{
+				if(!buf->getDirectory().isNull())
+				{
+					defaultDirectory = buf->getDirectory();
+					found = true;
+					break;
+				}
+			}
+		}
+	}
+	
+	// Done!
+	
+	return defaultDirectory;
+}
+
+/*!
  * This slot executes a new action by creating a new buffer widget.
  */
 void QomposeBufferWidget::doNew()
@@ -247,23 +321,10 @@ void QomposeBufferWidget::doNew()
 void QomposeBufferWidget::doOpen()
 { /* SLOT */
 	
-	// Try to get a default path for our open dialog.
-	
-	QString defaultDir = QDir::homePath();
-	QomposeBuffer *current = currentBuffer();
-	
-	if(current != NULL)
-	{
-		QString d = current->getDirectory();
-		
-		if(!d.isNull())
-			defaultDir = d;
-	}
-	
 	// Open the one or more selected files.
 	
 	QList<QomposeFileDescriptor> files = QomposeFileDialog::getOpenFileNames(
-		this, tr("Open Files"), defaultDir);
+		this, tr("Open Files"), getDefaultDirectory());
 	
 	if(files.length() > 0)
 	{
@@ -337,13 +398,17 @@ void QomposeBufferWidget::doSave()
 void QomposeBufferWidget::doSaveAs()
 { /* SLOT */
 	
+	// Make sure the current buffer is valid.
+	
 	QomposeBuffer *buf = currentBuffer();
 	
 	if(buf == NULL)
 		return;
 	
+	// Open our save as dialog and, on accept, save the buffer.
+	
 	QString p = QFileDialog::getSaveFileName(this, tr("Save File"),
-		QDir::homePath());
+		getDefaultDirectory());
 	
 	if(p.length() <= 0)
 		return;

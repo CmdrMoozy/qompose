@@ -64,6 +64,8 @@ class QomposeBufferWidget : public QWidget
 		void removeCurrentBuffer();
 		void moveBuffer(int f, int t);
 		
+		QString getDefaultDirectory() const;
+		
 	public Q_SLOTS:
 		void doNew();
 		void doOpen();
