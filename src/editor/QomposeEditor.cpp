@@ -499,19 +499,19 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 	
 	bool processed = false;
 	
+	if( (e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter) )
+	{
+		e->accept();
+		doNewline(true);
+		return;
+	}
+	
 	switch(e->modifiers())
 	{
 		case Qt::NoModifier:
 			
 			switch(e->key())
 			{
-				case Qt::Key_Return:
-				case Qt::Key_Enter:
-					e->accept();
-					processed = true;
-					doNewline(true);
-					break;
-				
 				case Qt::Key_Tab:
 					if(textCursor().hasSelection())
 					{
