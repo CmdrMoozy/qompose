@@ -24,6 +24,7 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QTabWidget>
+#include <QPrinter>
 
 #include "dialogs/QomposeFileDialog.h"
 #include "editor/QomposeBuffer.h"
@@ -93,6 +94,18 @@ QomposeBuffer *QomposeBufferWidget::bufferAt(int i) const
 QomposeBuffer *QomposeBufferWidget::currentBuffer() const
 {
 	return dynamic_cast<QomposeBuffer *>(tabWidget->currentWidget());
+}
+
+/*!
+ * This function returns whether or not our buffers widget has a valid current
+ * buffer. It will return false, for example, if all of our buffers have been
+ * closed.
+ *
+ * \return Whether or not this widget has a valid "current buffer."
+ */
+bool QomposeBufferWidget::hasCurrentBuffer() const
+{
+	return (currentBuffer() != NULL);
 }
 
 /*!
@@ -713,6 +726,25 @@ void QomposeBufferWidget::doMoveBufferRight()
 	
 	moveBuffer(f, t);
 	tabWidget->setCurrentIndex(t);
+	
+}
+
+/*!
+ * This slot executes a "print" action by instructing our current buffer
+ * to print its contents to the given printer. If we have no current buffer,
+ * then no action is taken.
+ *
+ * \param p The printer to write the current buffer's contents to.
+ */
+void QomposeBufferWidget::doPrint(QPrinter *p)
+{ /* SLOT */
+	
+	QomposeBuffer *buf = currentBuffer();
+	
+	if(buf == NULL)
+		return;
+	
+	buf->print(p);
 	
 }
 

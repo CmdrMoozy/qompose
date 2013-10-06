@@ -31,6 +31,7 @@ class QomposeBuffer;
 class QomposeSettings;
 class QomposeFindQuery;
 class QomposeReplaceQuery;
+class QPrinter;
 
 /*!
  * \brief This class provides high-level management of a set of buffers.
@@ -46,6 +47,7 @@ class QomposeBufferWidget : public QWidget
 		int count() const;
 		QomposeBuffer *bufferAt(int i) const;
 		QomposeBuffer *currentBuffer() const;
+		bool hasCurrentBuffer() const;
 		void setCurrentBuffer(int i);
 		
 		bool prepareCloseParent();
@@ -89,6 +91,8 @@ class QomposeBufferWidget : public QWidget
 		void doNextBuffer();
 		void doMoveBufferLeft();
 		void doMoveBufferRight();
+		
+		void doPrint(QPrinter *p);
 		
 	private slots:
 		void doTabChanged(int i);

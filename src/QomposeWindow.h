@@ -29,6 +29,7 @@ class QAction;
 class QStatusBar;
 class QLabel;
 class QCloseEvent;
+class QPrinter;
 
 class QomposeAboutDialog;
 class QomposePreferencesDialog;

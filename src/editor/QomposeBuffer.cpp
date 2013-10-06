@@ -27,6 +27,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QVariant>
+#include <QPrinter>
 
 #include "QomposeDefines.h"
 #include "util/QomposeSettings.h"
@@ -225,6 +226,18 @@ void QomposeBuffer::setModified(bool m)
 {
 	document()->setModified(m);
 	emit modificationChanged(m);
+}
+
+/*!
+ * This slot prints our buffer's contents to the given printer object.
+ *
+ * \param p The printer to print our contents to.
+ */
+void QomposeBuffer::print(QPrinter *p)
+{ /* SLOT */
+	
+	document()->print(p);
+	
 }
 
 /*!

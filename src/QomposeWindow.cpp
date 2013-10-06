@@ -27,6 +27,9 @@
 #include <QLabel>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QPrintDialog>
+#include <QPrinter>
+#include <QPrintPreviewDialog>
 
 #include "QomposeDefines.h"
 #include "dialogs/QomposeAboutDialog.h"
@@ -226,6 +229,8 @@ void QomposeWindow::initializeActions()
 	QObject::connect( revertAction,          SIGNAL( triggered(bool) ), buffers,       SLOT( doRevert()                ) );
 	QObject::connect( saveAction,            SIGNAL( triggered(bool) ), buffers,       SLOT( doSave()                  ) );
 	QObject::connect( saveAsAction,          SIGNAL( triggered(bool) ), buffers,       SLOT( doSaveAs()                ) );
+	QObject::connect( printAction,           SIGNAL( triggered(bool) ), this,          SLOT( doPrint()                 ) );
+	QObject::connect( printPreviewAction,    SIGNAL( triggered(bool) ), this,          SLOT( doPrintPreview()          ) );
 	QObject::connect( closeAction,           SIGNAL( triggered(bool) ), buffers,       SLOT( doClose()                 ) );
 	QObject::connect( exitAction,            SIGNAL( triggered(bool) ), this,          SLOT( close()                   ) );
 	QObject::connect( undoAction,            SIGNAL( triggered(bool) ), buffers,       SLOT( doUndo()                  ) );
@@ -250,9 +255,6 @@ void QomposeWindow::initializeActions()
 	QObject::connect( moveBufferRightAction, SIGNAL( triggered(bool) ), buffers,       SLOT( doMoveBufferRight()       ) );
 	QObject::connect( aboutQomposeAction,    SIGNAL( triggered(bool) ), aboutDialog,   SLOT( show()                    ) );
 	QObject::connect( aboutQtAction,         SIGNAL( triggered(bool) ), qApp,          SLOT( aboutQt()                 ) );
-	
-	QObject::connect( printAction,           SIGNAL( triggered(bool) ), this,          SLOT( doPrint()                 ) );
-	QObject::connect( printPreviewAction,    SIGNAL( triggered(bool) ), this,          SLOT( doPrintPreview()          ) );
 }
 
 /*!
@@ -419,12 +421,56 @@ void QomposeWindow::doPreferencesDialog()
 	
 }
 
+/*!
+ * This slot handles our "print" action being triggered by displaying a
+ * standard print dialog and, if it is accepted, printing our current buffer
+ * using the printer object it configures.
+ */
 void QomposeWindow::doPrint()
 { /* SLOT */
+	
+	if(!buffers->hasCurrentBuffer())
+	{
+		QMessageBox::warning(this, tr("Nothing To Print"),
+			tr("No buffers are open; there is nothing to print!"),
+			QMessageBox::Ok, QMessageBox::Ok);
+		
+		return;
+	}
+	
+	QPrinter printer(QPrinter::ScreenResolution);
+	QPrintDialog dialog(&printer, this);
+	
+	if(dialog.exec() == QDialog::Accepted)
+		buffers->doPrint(&printer);
+	
 }
 
+/*!
+ * This slot handles our "print preview" action being triggered by displaying
+ * a standard print preview dialog using our buffers' standard print slot.
+ */
 void QomposeWindow::doPrintPreview()
 { /* SLOT */
+	
+	if(!buffers->hasCurrentBuffer())
+	{
+		QMessageBox::warning(this, tr("Nothing To Preview"),
+			tr("No buffers are open; there is nothing to preview!"),
+			QMessageBox::Ok, QMessageBox::Ok);
+		
+		return;
+	}
+	
+	QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
+	
+	QObject::connect( dialog, SIGNAL( paintRequested(QPrinter *) ),
+		buffers, SLOT( doPrint(QPrinter *) ) );
+	
+	dialog->exec();
+	
+	delete dialog;
+	
 }
 
 /*!

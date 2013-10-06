@@ -23,6 +23,8 @@
 
 #include "dialogs/QomposeFileDialog.h"
 
+class QPrinter;
+
 class QomposeSettings;
 
 /*!
@@ -46,6 +48,9 @@ class QomposeBuffer : public QomposeEditor
 		bool hasBeenSaved() const;
 		bool isModified() const;
 		void setModified(bool m);
+		
+	public slots:
+		void print(QPrinter *p);
 		
 	private:
 		QomposeSettings *settings;
