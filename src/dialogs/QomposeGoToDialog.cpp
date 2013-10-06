@@ -155,7 +155,7 @@ void QomposeGoToDialog::doGoTo()
 	if(ok)
 	{
 		selectedLine = lint;
-		emit accepted();
+		Q_EMIT accepted();
 		close();
 	}
 	else

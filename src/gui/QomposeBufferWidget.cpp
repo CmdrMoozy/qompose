@@ -763,7 +763,7 @@ void QomposeBufferWidget::doTabChanged(int i)
 	if(b != NULL)
 	{
 		b->setFocus(Qt::OtherFocusReason);
-		emit pathChanged(b->getPath());
+		Q_EMIT pathChanged(b->getPath());
 	}
 	
 }
@@ -820,7 +820,7 @@ void QomposeBufferWidget::doTabPathChanged(const QString &p)
 	{
 		if(b == currentBuffer())
 		{
-			emit pathChanged(p);
+			Q_EMIT pathChanged(p);
 		}
 	}
 	

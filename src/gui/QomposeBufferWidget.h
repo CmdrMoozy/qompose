@@ -64,7 +64,7 @@ class QomposeBufferWidget : public QWidget
 		void removeCurrentBuffer();
 		void moveBuffer(int f, int t);
 		
-	public slots:
+	public Q_SLOTS:
 		void doNew();
 		void doOpen();
 		void doRevert();
@@ -94,14 +94,14 @@ class QomposeBufferWidget : public QWidget
 		
 		void doPrint(QPrinter *p);
 		
-	private slots:
+	private Q_SLOTS:
 		void doTabChanged(int i);
 		void doTabCloseRequested(int i);
 		
 		void doTabTitleChanged(const QString &t);
 		void doTabPathChanged(const QString &p);
 		
-	signals:
+	Q_SIGNALS:
 		void pathChanged(const QString &);
 };
 

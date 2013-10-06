@@ -192,7 +192,7 @@ void QomposeFindDialog::doFind()
 	
 	// Done!
 	
-	emit accepted();
+	Q_EMIT accepted();
 	
 	close();
 	

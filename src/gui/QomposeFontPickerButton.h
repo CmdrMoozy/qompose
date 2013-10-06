@@ -54,10 +54,10 @@ class QomposeFontPickerButton : public QPushButton
 	
 		virtual void setFont(const QFont &f);
 		
-	private slots:
+	private Q_SLOTS:
 		void doClicked();
 		
-	signals:
+	Q_SIGNALS:
 		void selectedFontChanged(const QFont &);
 		
 };

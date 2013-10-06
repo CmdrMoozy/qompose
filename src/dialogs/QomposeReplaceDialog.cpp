@@ -215,7 +215,7 @@ void QomposeReplaceDialog::doReplace()
 	
 	applyValues();
 	
-	emit replaceClicked();
+	Q_EMIT replaceClicked();
 	
 }
 
@@ -229,7 +229,7 @@ void QomposeReplaceDialog::doFind()
 	
 	applyValues();
 	
-	emit findClicked();
+	Q_EMIT findClicked();
 	
 }
 
@@ -245,7 +245,7 @@ void QomposeReplaceDialog::doReplaceSelection()
 	
 	close();
 	
-	emit replaceSelectionClicked();
+	Q_EMIT replaceSelectionClicked();
 	
 }
 
@@ -261,6 +261,6 @@ void QomposeReplaceDialog::doReplaceAll()
 	
 	close();
 	
-	emit replaceAllClicked();
+	Q_EMIT replaceAllClicked();
 	
 }

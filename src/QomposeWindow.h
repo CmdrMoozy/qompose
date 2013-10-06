@@ -115,7 +115,7 @@ class QomposeWindow : public QMainWindow
 		
 		void handleFindResult(QomposeEditor::FindResult r);
 		
-	private slots:
+	private Q_SLOTS:
 		void doTabPathChanged(const QString &p);
 		
 		void doPreferencesDialog();

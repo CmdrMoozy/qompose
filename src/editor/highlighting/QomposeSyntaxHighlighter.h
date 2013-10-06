@@ -37,7 +37,7 @@ class QomposeSyntaxHighlighter : public QObject
 	private:
 		QTextDocument *document;
 	
-	private slots:
+	private Q_SLOTS:
 		void doDocumentContentsChange(int p, int r, int a);
 };
 

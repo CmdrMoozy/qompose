@@ -134,6 +134,6 @@ void QomposeFontPickerButton::doClicked()
 	setSelectedFont(QFontDialog::getFont(&ok, getSelectedFont(), this, tr("Select a Font")));
 	
 	if(ok)
-		emit selectedFontChanged(getSelectedFont());
+		Q_EMIT selectedFontChanged(getSelectedFont());
 }
 

@@ -42,7 +42,7 @@ class QomposeApplication : public QApplication
 		QLocalServer *sappServer;
 		QList<QomposeWindow *> windows;
 		
-	private slots:
+	private Q_SLOTS:
 		void doDuplicateInstanceDetected();
 };
 

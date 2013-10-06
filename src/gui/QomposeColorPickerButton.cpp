@@ -182,7 +182,7 @@ void QomposeColorPickerButton::doClicked()
 	{
 		c.setAlpha(255); // Make sure our alpha is normal, as it isn't selectable.
 		setSelectedColor(c);
-		emit selectedColorChanged(getSelectedColor());
+		Q_EMIT selectedColorChanged(getSelectedColor());
 	}
 	
 }

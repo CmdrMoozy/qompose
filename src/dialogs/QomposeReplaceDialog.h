@@ -78,13 +78,13 @@ class QomposeReplaceDialog : public QDialog
 		
 		void applyValues();
 		
-	private slots:
+	private Q_SLOTS:
 		void doReplace();
 		void doFind();
 		void doReplaceSelection();
 		void doReplaceAll();
 		
-	signals:
+	Q_SIGNALS:
 		void replaceClicked();
 		void findClicked();
 		void replaceSelectionClicked();

@@ -71,10 +71,10 @@ class QomposeFindDialog : public QDialog
 		
 		void initializeGUI();
 		
-	private slots:
+	private Q_SLOTS:
 		void doFind();
 		
-	signals:
+	Q_SIGNALS:
 		void accepted();
 };
 

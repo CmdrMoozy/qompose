@@ -97,7 +97,7 @@ void QomposeSettings::resetDefaults()
 void QomposeSettings::setSetting(const QString &k, const QVariant &v)
 {
 	settings->setValue(k, v);
-	emit settingChanged(k, v);
+	Q_EMIT settingChanged(k, v);
 }
 
 /*!

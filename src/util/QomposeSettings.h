@@ -51,7 +51,7 @@ class QomposeSettings : public QObject
 		
 		void initializeDefaults();
 		
-	signals:
+	Q_SIGNALS:
 		void settingChanged(const QString &, const QVariant &);
 };
 

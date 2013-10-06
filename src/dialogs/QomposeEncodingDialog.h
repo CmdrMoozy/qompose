@@ -59,7 +59,7 @@ class QomposeEncodingDialog : public QDialog
 		QPushButton *selectButton;
 		QPushButton *cancelButton;
 		
-	private slots:
+	private Q_SLOTS:
 		void doSelectClicked();
 		void doCancelClicked();
 };

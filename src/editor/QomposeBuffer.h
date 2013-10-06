@@ -49,7 +49,7 @@ class QomposeBuffer : public QomposeEditor
 		bool isModified() const;
 		void setModified(bool m);
 		
-	public slots:
+	public Q_SLOTS:
 		void print(QPrinter *p);
 		
 	private:
@@ -61,11 +61,11 @@ class QomposeBuffer : public QomposeEditor
 		bool read(bool u = false);
 		bool write();
 		
-	private slots:
+	private Q_SLOTS:
 		void doModificationChanged(bool c);
 		void doSettingChanged(const QString &k, const QVariant &v);
 		
-	signals:
+	Q_SIGNALS:
 		void titleChanged(const QString &);
 		void pathChanged(const QString &);
 };

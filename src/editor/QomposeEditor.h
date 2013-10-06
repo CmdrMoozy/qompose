@@ -124,7 +124,7 @@ class QomposeEditor : public QPlainTextEdit
 		FindResult doBatchReplace(const QomposeReplaceQuery *q,
 			int start = -1, int end = -1);
 	
-	public slots:
+	public Q_SLOTS:
 		void duplicateLine();
 		void deselect();
 		void increaseSelectionIndent();
@@ -136,7 +136,7 @@ class QomposeEditor : public QPlainTextEdit
 		FindResult replaceAll(const QomposeReplaceQuery *q);
 		void goToLine(int l);
 		
-	private slots:
+	private Q_SLOTS:
 		void highlightCurrentLine();
 		void updateGutterWidth();
 		void updateGutter(const QRect &r, int dy);

@@ -57,10 +57,10 @@ class QomposeColorPickerButton : public QPushButton
 		virtual void setIcon(const QIcon &i);
 		virtual void setText(const QString &t);
 	
-	private slots:
+	private Q_SLOTS:
 		void doClicked();
 	
-	signals:
+	Q_SIGNALS:
 		void selectedColorChanged(const QColor &);
 };
 

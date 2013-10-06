@@ -69,7 +69,7 @@ class QomposePreferencesDialog : public QDialog
 		
 		void createPreferencesModel();
 		
-	private slots:
+	private Q_SLOTS:
 		void doWidgetActivated(const QModelIndex &i);
 		void doOk();
 		void doApply();

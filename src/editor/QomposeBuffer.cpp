@@ -81,7 +81,7 @@ bool QomposeBuffer::open(const QomposeFileDescriptor &f)
 	path = f.fileName;
 	codec = f.textCodec;
 	
-	emit pathChanged(path);
+	Q_EMIT pathChanged(path);
 	
 	bool r = read();
 	
@@ -152,7 +152,7 @@ bool QomposeBuffer::save(const QString &p)
 			codec = "UTF-8";
 		
 		path = p;
-		emit pathChanged(path);
+		Q_EMIT pathChanged(path);
 		
 		return write();
 	}
@@ -225,7 +225,7 @@ bool QomposeBuffer::isModified() const
 void QomposeBuffer::setModified(bool m)
 {
 	document()->setModified(m);
-	emit modificationChanged(m);
+	Q_EMIT modificationChanged(m);
 }
 
 /*!
@@ -318,7 +318,7 @@ bool QomposeBuffer::write()
 void QomposeBuffer::doModificationChanged(bool QUNUSED(c))
 { /* SLOT */
 	
-	emit titleChanged(getTitle());
+	Q_EMIT titleChanged(getTitle());
 	
 }
 

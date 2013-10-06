@@ -59,10 +59,10 @@ class QomposeGoToDialog : public QDialog
 		
 		void initializeGUI();
 		
-	private slots:
+	private Q_SLOTS:
 		void doGoTo();
 		
-	signals:
+	Q_SIGNALS:
 		void accepted();
 };
 
