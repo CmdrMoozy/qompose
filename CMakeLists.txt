@@ -9,7 +9,7 @@
 #
 ####################################################################################################################
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
 PROJECT(qompose)
 
 SET(CMAKE_COLOR_MAKEFILE ON)
