@@ -71,12 +71,13 @@ SET(qompose_HEADERS
 	src/editor/QomposeBuffer.h
 	src/editor/QomposeEditor.h
 	
-	src/editor/highlighting/QomposeSyntaxHighlighter.h
-	
 	src/gui/QomposeBufferWidget.h
 	src/gui/QomposeColorPickerButton.h
 	src/gui/QomposeFontPickerButton.h
 	src/gui/QomposeGUIUtils.h
+	
+	src/syntax/QomposeLexer.h
+	src/syntax/QomposeSyntaxHighlighter.h
 	
 	src/util/QomposeFindQuery.h
 	src/util/QomposeReplaceQuery.h
@@ -108,12 +109,13 @@ SET(qompose_SOURCES
 	src/editor/QomposeBuffer.cpp
 	src/editor/QomposeEditor.cpp
 	
-	src/editor/highlighting/QomposeSyntaxHighlighter.cpp
-	
 	src/gui/QomposeBufferWidget.cpp
 	src/gui/QomposeColorPickerButton.cpp
 	src/gui/QomposeFontPickerButton.cpp
 	src/gui/QomposeGUIUtils.cpp
+	
+	src/syntax/QomposeLexer.cpp
+	src/syntax/QomposeSyntaxHighlighter.cpp
 	
 	src/util/QomposeFindQuery.cpp
 	src/util/QomposeReplaceQuery.cpp

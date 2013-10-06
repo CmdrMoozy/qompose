@@ -19,26 +19,38 @@
 #ifndef INCLUDE_QOMPOSE_SYNTAX_HIGHLIGHTER_H
 #define INCLUDE_QOMPOSE_SYNTAX_HIGHLIGHTER_H
 
-#include <QObject>
+#include <QSyntaxHighlighter>
 
+#include <QTextCharFormat>
+
+#include "syntax/QomposeLexer.h"
+
+class QObject;
 class QTextDocument;
 
-class QomposeSyntaxHighlighter : public QObject
+class QomposeSettings;
+
+class QomposeSyntaxHighlighter : public QSyntaxHighlighter
 {
-	Q_OBJECT
-	
 	public:
-		QomposeSyntaxHighlighter(QTextDocument *d, QObject *p = NULL);
+		QomposeSyntaxHighlighter(QomposeSettings *s, QObject *p);
+		QomposeSyntaxHighlighter(QomposeSettings *s, QTextDocument *p);
 		virtual ~QomposeSyntaxHighlighter();
 		
-		QTextDocument *getDocument() const;
-		void setDocument(QTextDocument *d);
+		QomposeSettings *getSettings() const;
+		void setSettings(QomposeSettings *s);
+		
+		QomposeLexer *getLexer() const;
+		void setLexer(QomposeLexer *l);
+		
+	protected:
+		virtual void highlightBlock(const QString &t);
 		
 	private:
-		QTextDocument *document;
-	
-	private Q_SLOTS:
-		void doDocumentContentsChange(int p, int r, int a);
+		QomposeSettings *settings;
+		QomposeLexer *lexer;
+		
+		QTextCharFormat getFormatFor(const QomposeLexerToken &t);
 };
 
 #endif
