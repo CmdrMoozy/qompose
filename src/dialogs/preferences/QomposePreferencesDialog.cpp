@@ -83,7 +83,7 @@ QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
 	layout->setColumnStretch(1, 1);
 	setLayout(layout);
 	
-	setWindowTitle(tr("Qompose - Preferences"));
+	setWindowTitle(tr("Preferences"));
 	
 	QObject::connect( preferencesView, SIGNAL( activated(const QModelIndex &) ),
 		this, SLOT( doWidgetActivated(const QModelIndex &) ) );

@@ -30,6 +30,7 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QPrintPreviewDialog>
+#include <QIcon>
 
 #include "QomposeDefines.h"
 #include "dialogs/QomposeAboutDialog.h"
@@ -54,6 +55,12 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	: QMainWindow(p, f)
 {
 	settings = new QomposeSettings(this);
+	
+	// Set some of our window's properties.
+	
+	setWindowIcon(QIcon(":/icons/qompose.png"));
+	
+	setWindowTitle(tr("Qompose"));
 	
 	// Initialize our window.
 	

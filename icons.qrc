@@ -1,6 +1,8 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
 	<qresource>
+		<file>icons/qompose.png</file>
+		
 		<file>icons/accessories-text-editor.png</file>
 		<file>icons/document-new.png</file>
 		<file>icons/document-open.png</file>
