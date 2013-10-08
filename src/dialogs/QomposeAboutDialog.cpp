@@ -25,6 +25,9 @@
 #include <QFile>
 #include <QTextStream>
 #include <QFont>
+#include <QLabel>
+#include <QWidget>
+#include <QPixmap>
 
 /*!
  * This is our default constructor, which creates a new about dialog instance
@@ -36,9 +39,63 @@
 QomposeAboutDialog::QomposeAboutDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f)
 {
+	setWindowTitle(tr("About Qompose"));
+	
+	initializeGUI();
+	
+	resize(500, 500);
+}
+
+/*!
+ * This is our default destructor, which cleans up & destroys our dialog.
+ */
+QomposeAboutDialog::~QomposeAboutDialog()
+{
+}
+
+/*!
+ * This is a utility function which initializes our GUI elements and
+ * adds them to our layout.
+ */
+void QomposeAboutDialog::initializeGUI()
+{
 	layout = new QGridLayout(this);
 	
 	tabs = new QTabWidget(this);
+	
+	// Create our Qompose tab.
+	
+	qomposeTab = new QWidget(tabs);
+	qomposeTabLayout = new QGridLayout(qomposeTab);
+	
+	qomposeIconLabel = new QLabel(qomposeTab);
+	qomposeIconLabel->setPixmap(QPixmap(":/icons/qompose.png"));
+	qomposeIconLabel->setScaledContents(true);
+	qomposeIconLabel->resize(32, 32);
+	
+	qomposeLabel = new QLabel(tr("Qompose"), qomposeTab);
+	
+	QFont largeFont = qomposeLabel->font();
+	largeFont.setPointSize(24);
+	
+	qomposeLabel->setFont(largeFont);
+	
+	qomposeDescriptionLabel = new QLabel(tr("A simple programmer's "
+		"text editor."), qomposeTab);
+	
+	qomposeTextEdit = new QTextEdit(qomposeTab);
+	qomposeTextEdit->setLineWrapMode(QTextEdit::NoWrap);
+	qomposeTextEdit->setReadOnly(true);
+	
+	qomposeTabLayout->addWidget(qomposeIconLabel, 0, 0, 2, 1);
+	qomposeTabLayout->addWidget(qomposeLabel, 0, 1, 1, 1);
+	qomposeTabLayout->addWidget(qomposeDescriptionLabel, 1, 1, 1, 1);
+	qomposeTabLayout->addWidget(qomposeTextEdit, 2, 0, 1, 3);
+	qomposeTabLayout->setColumnStretch(1, 1);
+	qomposeTabLayout->setRowStretch(2, 1);
+	qomposeTab->setLayout(qomposeTabLayout);
+	
+	// Create our license tab.
 	
 	QFont monospace("Monospace");
 	monospace.setPointSize(9);
@@ -50,6 +107,9 @@ QomposeAboutDialog::QomposeAboutDialog(QWidget *p, Qt::WindowFlags f)
 	licenseTextEdit->setCurrentFont(monospace);
 	loadLicense();
 	
+	// Add our tabs and our buttons to our layout.
+	
+	tabs->addTab(qomposeTab, tr("Qompose"));
 	tabs->addTab(licenseTextEdit, tr("License"));
 	
 	closeButton = new QPushButton(tr("Clos&e"), this);
@@ -60,16 +120,6 @@ QomposeAboutDialog::QomposeAboutDialog(QWidget *p, Qt::WindowFlags f)
 	setLayout(layout);
 	
 	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close() ) );
-	
-	setWindowTitle(tr("About Qompose"));
-	resize(500, 500);
-}
-
-/*!
- * This is our default destructor, which cleans up & destroys our dialog.
- */
-QomposeAboutDialog::~QomposeAboutDialog()
-{
 }
 
 /*!

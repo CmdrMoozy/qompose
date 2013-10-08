@@ -25,6 +25,8 @@ class QGridLayout;
 class QTabWidget;
 class QTextEdit;
 class QPushButton;
+class QWidget;
+class QLabel;
 
 /*!
  * \brief This class implements our "About" dialog, with application and license information.
@@ -41,8 +43,16 @@ class QomposeAboutDialog : public QDialog
 		
 		QTextEdit *licenseTextEdit;
 		
+		QWidget *qomposeTab;
+		QGridLayout *qomposeTabLayout;
+		QLabel *qomposeIconLabel;
+		QLabel *qomposeLabel;
+		QLabel *qomposeDescriptionLabel;
+		QTextEdit *qomposeTextEdit;
+		
 		QPushButton *closeButton;
 		
+		void initializeGUI();
 		void loadLicense();
 };
 
