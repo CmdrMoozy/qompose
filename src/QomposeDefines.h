@@ -20,6 +20,13 @@
 #define INCLUDE_QOMPOSE_DEFINES_H
 	
 	/*
+	 * Define our application's version.
+	 */
+	#define QOMPOSE_VERSION_MAJ 1
+	#define QOMPOSE_VERSION_MIN 0
+	#define QOMPOSE_VERSION_BUG 0
+	
+	/*
 	 * Define a GUID to uniquely identify our application.
 	 */
 	#define QOMPOSE_GUID ("32e11710-e79f-4a3a-ba31-2ff06f1f86a0")
@@ -54,5 +61,5 @@
 			#define QUNUSED(x)
 		#endif
 	#endif
-
+	
 #endif

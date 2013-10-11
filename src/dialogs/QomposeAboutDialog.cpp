@@ -29,6 +29,8 @@
 #include <QWidget>
 #include <QPixmap>
 
+#include "QomposeDefines.h"
+
 /*!
  * This is our default constructor, which creates a new about dialog instance
  * and loads the contents from our resources into its UI.
@@ -73,7 +75,9 @@ void QomposeAboutDialog::initializeGUI()
 	qomposeIconLabel->setScaledContents(true);
 	qomposeIconLabel->resize(32, 32);
 	
-	qomposeLabel = new QLabel(tr("Qompose"), qomposeTab);
+	qomposeLabel = new QLabel(QString("Qompose %1.%2.%3")
+		.arg(QOMPOSE_VERSION_MAJ).arg(QOMPOSE_VERSION_MIN)
+		.arg(QOMPOSE_VERSION_BUG), qomposeTab);
 	
 	QFont largeFont = qomposeLabel->font();
 	largeFont.setPointSize(24);

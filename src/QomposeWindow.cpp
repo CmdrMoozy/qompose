@@ -89,6 +89,28 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	
 	QObject::connect( settings, SIGNAL( settingChanged(const QString &, const QVariant &) ),
 		this, SLOT( doSettingChanged(const QString &, const QVariant &) ) );
+	
+	// Restore our window's geometry and state.
+	
+	QByteArray winGeometry = settings->getSetting("window-geometry").toByteArray();
+	
+	if(!winGeometry.isNull())
+	{
+		if(!restoreGeometry(winGeometry))
+		{
+			settings->setSetting("window-geometry", QVariant(QByteArray()));
+		}
+	}
+	
+	QByteArray winState = settings->getSetting("window-state").toByteArray();
+	
+	if(!winState.isNull())
+	{
+		if(!restoreState(winState, QOMPOSE_VERSION_MAJ))
+		{
+			settings->setSetting("window-state", QVariant(QByteArray()));
+		}
+	}
 }
 
 /*!
@@ -108,9 +130,23 @@ QomposeWindow::~QomposeWindow()
 void QomposeWindow::closeEvent(QCloseEvent *e)
 {
 	if(buffers->prepareCloseParent())
+	{
+		// Save our window geometry and state.
+		
+		settings->setSetting("window-geometry", QVariant(
+			saveGeometry()));
+		
+		settings->setSetting("window-state", QVariant(
+			saveState(QOMPOSE_VERSION_MAJ)));
+		
+		// Close the window.
+		
 		e->accept();
+	}
 	else
+	{
 		e->ignore();
+	}
 }
 
 /*!
