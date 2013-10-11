@@ -52,6 +52,8 @@ class QomposeBufferWidget : public QWidget
 		
 		bool prepareCloseParent();
 		
+		int findBufferWithPath(const QString &p);
+		
 	private:
 		QomposeSettings *settings;
 		

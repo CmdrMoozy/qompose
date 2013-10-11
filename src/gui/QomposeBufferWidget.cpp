@@ -25,6 +25,7 @@
 #include <QDir>
 #include <QTabWidget>
 #include <QPrinter>
+#include <QFileInfo>
 
 #include "dialogs/QomposeFileDialog.h"
 #include "editor/QomposeBuffer.h"
@@ -170,6 +171,30 @@ bool QomposeBufferWidget::prepareCloseParent()
 	}
 	
 	return true;
+}
+
+/*!
+ * This function attempts to find a buffer whose path matches the given value.
+ * If no such buffer can be found, then we will return -1 instead of a valid
+ * tab index.
+ *
+ * \param p The path to search for.
+ * \return The index of the (first) buffer which has the given path.
+ */
+int QomposeBufferWidget::findBufferWithPath(const QString &p)
+{
+	QFileInfo file(p);
+	
+	for(int i = 0; i < count(); ++i)
+	{
+		QomposeBuffer *buf = bufferAt(i);
+		QFileInfo bufFile(buf->getPath());
+		
+		if(file == bufFile)
+			return i;
+	}
+	
+	return -1;
 }
 
 /*!
@@ -348,6 +373,14 @@ void QomposeBufferWidget::doOpen()
 		
 		for(int i = 0; i < files.size(); ++i)
 		{
+			int existing = findBufferWithPath(files.at(i).fileName);
+			
+			if(existing != -1)
+			{
+				tabWidget->setCurrentIndex(existing);
+				continue;
+			}
+			
 			QomposeBuffer *b = newBuffer();
 			b->open(files.at(i));
 		}
