@@ -42,6 +42,7 @@ class QomposeFileDialog : public QFileDialog
 		virtual ~QomposeFileDialog();
 		
 		static QomposeFileDescriptor getNullDescriptor();
+		static QomposeFileDescriptor getPathDescriptor(const QString &p);
 		
 		static QomposeFileDescriptor getOpenFileName(QWidget *p = 0,
 			const QString &c = QString(), const QString &d = QString(),

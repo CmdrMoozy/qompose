@@ -40,6 +40,7 @@
 #include "dialogs/preferences/QomposePreferencesDialog.h"
 #include "gui/QomposeBufferWidget.h"
 #include "gui/QomposeGUIUtils.h"
+#include "gui/QomposeRecentMenu.h"
 #include "util/QomposeFindQuery.h"
 #include "util/QomposeReplaceQuery.h"
 #include "util/QomposeSettings.h"
@@ -82,6 +83,8 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	
 	QObject::connect( buffers, SIGNAL( pathChanged(const QString &) ),
 		this, SLOT( doTabPathChanged(const QString &) ) );
+	QObject::connect( buffers, SIGNAL( pathOpened(const QString &) ),
+		this, SLOT( doFileOpened(const QString &) ) );
 	
 	// Load our initial settings, and connect our settings object.
 	
@@ -139,6 +142,10 @@ void QomposeWindow::closeEvent(QCloseEvent *e)
 		settings->setSetting("window-state", QVariant(
 			saveState(QOMPOSE_VERSION_MAJ)));
 		
+		// Instruct our recent menu to save its contents.
+		
+		recentMenu->saveContents();
+		
 		// Close the window.
 		
 		e->accept();
@@ -151,7 +158,7 @@ void QomposeWindow::closeEvent(QCloseEvent *e)
 
 /*!
  * This function initializes our actions, which are used for e.g. menus and
- * toolsbars, and connects them to the appropriate slots.
+ * toolbars, and connects them to the appropriate slots.
  */
 void QomposeWindow::initializeActions()
 {
@@ -162,6 +169,8 @@ void QomposeWindow::initializeActions()
 	openAction = new QAction(tr("&Open..."), this);
 	openAction->setShortcut(Qt::CTRL + Qt::Key_O);
 	openAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-open"));
+	
+	recentMenu = new QomposeRecentMenu(settings, this);
 	
 	revertAction = new QAction(tr("&Revert"), this);
 	revertAction->setShortcut(Qt::CTRL + Qt::Key_R);
@@ -267,6 +276,9 @@ void QomposeWindow::initializeActions()
 	aboutQtAction = new QAction(tr("About &Qt..."), this);
 	aboutQtAction->setIcon(QomposeGUIUtils::getIconFromTheme("help-about"));
 	
+	QObject::connect( recentMenu, SIGNAL( recentClicked(const QString &) ),
+		buffers, SLOT( doOpenPath(const QString &) ) );
+	
 	QObject::connect( newAction,             SIGNAL( triggered(bool) ), buffers,       SLOT( doNew()                   ) );
 	QObject::connect( openAction,            SIGNAL( triggered(bool) ), buffers,       SLOT( doOpen()                  ) );
 	QObject::connect( revertAction,          SIGNAL( triggered(bool) ), buffers,       SLOT( doRevert()                ) );
@@ -311,6 +323,7 @@ void QomposeWindow::initializeMenus()
 	fileMenu->addAction(newAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(openAction);
+	fileMenu->addMenu(recentMenu->getMenu());
 	fileMenu->addAction(revertAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(saveAction);
@@ -444,6 +457,19 @@ void QomposeWindow::doTabPathChanged(const QString &p)
 { /* SLOT */
 	
 	tabPathLabel->setText(p);
+	
+}
+
+/*!
+ * This slot handles a file being opened by updating our recently opened menu
+ * with the newly opened path.
+ *
+ * \param p The path to the file that was opened.
+ */
+void QomposeWindow::doFileOpened(const QString &p)
+{ /* SLOT */
+	
+	recentMenu->addPath(p);
 	
 }
 

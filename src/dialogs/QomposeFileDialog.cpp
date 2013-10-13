@@ -68,6 +68,32 @@ QomposeFileDescriptor QomposeFileDialog::getNullDescriptor()
 }
 
 /*!
+ * This function will create a file descriptor for the file at the given path.
+ * The file's text codec will be detected or, failing that, the user will be
+ * prompted to select the text codec to use.
+ *
+ * \param p The path to the file to create a descriptor for.
+ * \return A file descriptor for the given path.
+ */
+QomposeFileDescriptor QomposeFileDialog::getPathDescriptor(const QString &p)
+{
+	QomposeFileDescriptor desc;
+	
+	desc.fileName = p;
+	desc.textCodec = QomposeFileDialog::detectTextCodec(p);
+	
+	if(desc.textCodec.isNull())
+	{
+		desc.textCodec = QomposeFileDialog::promptTextCodec(p);
+		
+		if(desc.textCodec.isNull())
+			return QomposeFileDialog::getNullDescriptor();
+	}
+	
+	return desc;
+}
+
+/*!
  * This is a static utility function which displays an instance of our dialog
  * for the purposes of opening a single file.
  *
@@ -91,19 +117,7 @@ QomposeFileDescriptor QomposeFileDialog::getOpenFileName(QWidget *p,
 	if(!QomposeFileDialog::fileIsGood(fileName, p))
 		return QomposeFileDialog::getNullDescriptor();
 	
-	QomposeFileDescriptor desc;
-	desc.fileName = fileName;
-	desc.textCodec = QomposeFileDialog::detectTextCodec(fileName);
-	
-	if(desc.textCodec.isNull())
-	{
-		desc.textCodec = QomposeFileDialog::promptTextCodec(fileName);
-		
-		if(desc.textCodec.isNull())
-			return QomposeFileDialog::getNullDescriptor();
-	}
-	
-	return desc;
+	return QomposeFileDialog::getPathDescriptor(fileName);
 }
 
 /*!
@@ -132,17 +146,10 @@ QList<QomposeFileDescriptor> QomposeFileDialog::getOpenFileNames(QWidget *p,
 		if(!QomposeFileDialog::fileIsGood(*it, p))
 			continue;
 		
-		QomposeFileDescriptor desc;
-		desc.fileName = (*it);
-		desc.textCodec = QomposeFileDialog::detectTextCodec(*it);
+		QomposeFileDescriptor desc = QomposeFileDialog::getPathDescriptor(*it);
 		
-		if(desc.textCodec.isNull())
-		{
-			desc.textCodec = QomposeFileDialog::promptTextCodec(*it);
-			
-			if(desc.textCodec.isNull())
-				continue;
-		}
+		if(desc.fileName.isNull())
+			continue;
 		
 		ret.append(desc);
 	}

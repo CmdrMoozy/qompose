@@ -26,12 +26,13 @@
 
 class QGridLayout;
 class QTabWidget;
+class QPrinter;
 
 class QomposeBuffer;
 class QomposeSettings;
 class QomposeFindQuery;
 class QomposeReplaceQuery;
-class QPrinter;
+class QomposeFileDescriptor;
 
 /*!
  * \brief This class provides high-level management of a set of buffers.
@@ -71,6 +72,7 @@ class QomposeBufferWidget : public QWidget
 	public Q_SLOTS:
 		void doNew();
 		void doOpen();
+		void doOpenPath(const QString &p);
 		void doRevert();
 		void doSave();
 		void doSaveAs();
@@ -105,8 +107,11 @@ class QomposeBufferWidget : public QWidget
 		void doTabTitleChanged(const QString &t);
 		void doTabPathChanged(const QString &p);
 		
+		void doOpenDescriptor(const QomposeFileDescriptor &d);
+		
 	Q_SIGNALS:
 		void pathChanged(const QString &);
+		void pathOpened(const QString &);
 };
 
 #endif

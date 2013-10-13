@@ -40,6 +40,7 @@ class QomposeSettings : public QObject
 		int count() const;
 		
 		void resetDefaults();
+		void resetDefault(const QString &k);
 		
 		void setSetting(const QString &k, const QVariant &v);
 		bool containsSetting(const QString &k) const;

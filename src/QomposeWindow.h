@@ -38,6 +38,7 @@ class QomposeSettings;
 class QomposeFindDialog;
 class QomposeReplaceDialog;
 class QomposeGoToDialog;
+class QomposeRecentMenu;
 
 /*!
  * \brief This class implements one of our application's standard windows.
@@ -70,6 +71,7 @@ class QomposeWindow : public QMainWindow
 		
 		QAction *newAction;
 		QAction *openAction;
+		QomposeRecentMenu *recentMenu;
 		QAction *revertAction;
 		QAction *saveAction;
 		QAction *saveAsAction;
@@ -117,6 +119,7 @@ class QomposeWindow : public QMainWindow
 		
 	private Q_SLOTS:
 		void doTabPathChanged(const QString &p);
+		void doFileOpened(const QString &p);
 		
 		void doPreferencesDialog();
 		void doPrint();

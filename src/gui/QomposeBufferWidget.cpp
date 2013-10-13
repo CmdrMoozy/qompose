@@ -351,40 +351,28 @@ void QomposeBufferWidget::doOpen()
 	QList<QomposeFileDescriptor> files = QomposeFileDialog::getOpenFileNames(
 		this, tr("Open Files"), getDefaultDirectory());
 	
-	if(files.length() > 0)
+	for(int i = 0; i < files.size(); ++i)
 	{
-		// If we only have one "Untitled" buffer, we'll replace it.
-		
-		if(tabs.count() == 1)
-		{
-			QSet<QomposeBuffer *>::iterator i = tabs.begin();
-			QomposeBuffer *b = *i;
-			int idx = tabWidget->indexOf(b);
-			
-			if( (!b->hasBeenSaved()) && (!b->isModified()) )
-			{
-				tabWidget->removeTab(idx);
-				delete b;
-				tabs.empty();
-			}
-		}
-		
-		// Open each of the files.
-		
-		for(int i = 0; i < files.size(); ++i)
-		{
-			int existing = findBufferWithPath(files.at(i).fileName);
-			
-			if(existing != -1)
-			{
-				tabWidget->setCurrentIndex(existing);
-				continue;
-			}
-			
-			QomposeBuffer *b = newBuffer();
-			b->open(files.at(i));
-		}
+		doOpenDescriptor(files.at(i));
 	}
+	
+}
+
+/*!
+ * This is a utility function which will open the file denoted by the given
+ * path directly, without displaying an "open file" dialog.
+ *
+ * \param p The path to open.
+ */
+void QomposeBufferWidget::doOpenPath(const QString &p)
+{ /* SLOT */
+	
+	QomposeFileDescriptor desc = QomposeFileDialog::getPathDescriptor(p);
+	
+	if(desc.fileName.isNull())
+		return;
+	
+	doOpenDescriptor(desc);
 	
 }
 
@@ -936,5 +924,47 @@ void QomposeBufferWidget::doTabPathChanged(const QString &p)
 			Q_EMIT pathChanged(p);
 		}
 	}
+	
+}
+
+/*!
+ * This is a utility function which will create a new buffer containing the
+ * contents of the file denoted by the given file descriptor.
+ *
+ * \param d The file descriptor to open.
+ */
+void QomposeBufferWidget::doOpenDescriptor(const QomposeFileDescriptor &d)
+{ /* SLOT */
+	
+	// If we only have one "Untitled" buffer, we'll replace it.
+	
+	if(tabs.count() == 1)
+	{
+		QSet<QomposeBuffer *>::iterator i = tabs.begin();
+		QomposeBuffer *b = *i;
+		int idx = tabWidget->indexOf(b);
+		
+		if( (!b->hasBeenSaved()) && (!b->isModified()) )
+		{
+			tabWidget->removeTab(idx);
+			delete b;
+			tabs.empty();
+		}
+	}
+	
+	// Open each of the files.
+	
+	int existing = findBufferWithPath(d.fileName);
+	
+	if(existing != -1)
+	{
+		tabWidget->setCurrentIndex(existing);
+		return;
+	}
+	
+	QomposeBuffer *b = newBuffer();
+	b->open(d);
+	
+	Q_EMIT pathOpened(d.fileName);
 	
 }

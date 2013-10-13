@@ -31,7 +31,7 @@ const QList< QPair<QString, QVariant> > QomposeSettings::defaults
 	= (QList< QPair<QString, QVariant> >())
 		<< QPair<QString, QVariant>( "show-status-bar",        true                  )
 		<< QPair<QString, QVariant>( "recent-list-size",       static_cast<int>(10)  )
-		<< QPair<QString, QVariant>( "recent-list",            QList<QVariant>()     )
+		<< QPair<QString, QVariant>( "recent-list",            QStringList()         )
 		<< QPair<QString, QVariant>( "window-save-attributes", true                  )
 		<< QPair<QString, QVariant>( "show-gutter",            true                  )
 		<< QPair<QString, QVariant>( "editor-font",            QFont("Courier", 11)  )
@@ -86,6 +86,24 @@ void QomposeSettings::resetDefaults()
 {
 	for(int i = 0; i < defaults.count(); ++i)
 		setSetting(defaults.at(i).first, defaults.at(i).second);
+}
+
+/*!
+ * This function resets one particular setting to its default value. Any
+ * existing data will be overwritten.
+ *
+ * \param k The key of the setting to reset.
+ */
+void QomposeSettings::resetDefault(const QString &k)
+{
+	for(int i = 0; i < defaults.count(); ++i)
+	{
+		if(defaults.at(i).first == k)
+		{
+			setSetting(k, defaults.at(i).second);
+			break;
+		}
+	}
 }
 
 /*!
