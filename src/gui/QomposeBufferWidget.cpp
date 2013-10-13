@@ -866,6 +866,10 @@ void QomposeBufferWidget::doTabChanged(int i)
 		b->setFocus(Qt::OtherFocusReason);
 		Q_EMIT pathChanged(b->getPath());
 	}
+	else
+	{
+		Q_EMIT pathChanged("");
+	}
 	
 }
 
