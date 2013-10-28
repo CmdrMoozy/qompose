@@ -428,8 +428,17 @@ void QomposeBufferWidget::doSaveAs()
 	
 	// Open our save as dialog and, on accept, save the buffer.
 	
-	QString p = QFileDialog::getSaveFileName(this, tr("Save File"),
-		getDefaultDirectory());
+	QString path = getDefaultDirectory();
+	
+	if(buf->hasBeenSaved())
+	{
+		if(!path.endsWith(QDir::separator()))
+			path.append(QDir::separator());
+		
+		path.append(buf->getFile());
+	}
+	
+	QString p = QFileDialog::getSaveFileName(this, tr("Save File"), path);
 	
 	if(p.length() <= 0)
 		return;

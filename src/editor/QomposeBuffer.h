@@ -45,6 +45,7 @@ class QomposeBuffer : public QomposeEditor
 		QString getTitle() const;
 		QString getPath() const;
 		QString getDirectory() const;
+		QString getFile() const;
 		
 		bool hasBeenSaved() const;
 		bool isModified() const;
