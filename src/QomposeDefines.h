@@ -29,7 +29,11 @@
 	/*
 	 * Define a GUID to uniquely identify our application.
 	 */
-	#define QOMPOSE_GUID ("32e11710-e79f-4a3a-ba31-2ff06f1f86a0")
+	#ifdef QOMPOSE_DEBUG
+		#define QOMPOSE_GUID ("cc0c9103-5fc0-45d3-ab0e-694d566f3e8d")
+	#else
+		#define QOMPOSE_GUID ("32e11710-e79f-4a3a-ba31-2ff06f1f86a0")
+	#endif
 	
 	/*
 	 * Define a megabyte in bytes, for code readability.

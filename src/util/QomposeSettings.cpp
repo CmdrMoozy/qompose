@@ -54,8 +54,13 @@ const QList< QPair<QString, QVariant> > QomposeSettings::defaults
 QomposeSettings::QomposeSettings(QObject *p)
 	: QObject(p)
 {
-	settings = new QSettings(QSettings::UserScope,
-		"Qompose", "Qompose", this);
+	#ifdef QOMPOSE_DEBUG
+		settings = new QSettings(QSettings::UserScope,
+			"Qompose", "QomposeDebug", this);
+	#else
+		settings = new QSettings(QSettings::UserScope,
+			"Qompose", "Qompose", this);
+	#endif
 	
 	initializeDefaults();
 }

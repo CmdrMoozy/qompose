@@ -61,7 +61,11 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	
 	setWindowIcon(QIcon(":/icons/qompose.png"));
 	
-	setWindowTitle(tr("Qompose"));
+	#ifdef QOMPOSE_DEBUG
+		setWindowTitle(tr("Qompose [DEBUG]"));
+	#else
+		setWindowTitle(tr("Qompose"));
+	#endif
 	
 	// Initialize our window.
 	
