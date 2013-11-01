@@ -1061,9 +1061,9 @@ void QomposeEditor::increaseSelectionIndent()
 	
 	if(spos > epos)
 	{
-		spos = spos ^ epos;
-		epos = spos ^ epos;
-		spos = spos ^ epos;
+		int hold = spos;
+		spos = epos;
+		epos = hold;
 	}
 	
 	curs.setPosition(spos, QTextCursor::MoveAnchor);
@@ -1396,17 +1396,15 @@ void QomposeEditor::highlightCurrentLine()
 { /* SLOT */
 	
 	QList<QTextEdit::ExtraSelection> es;
-	
-	// Highlight our current line (only if we are not read only and we have focus).
-	
 	QTextEdit::ExtraSelection selection;
 	
 	selection.format.setBackground(currentLineHighlight);
 	selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+	
 	selection.cursor = textCursor();
 	selection.cursor.clearSelection();
-	es.append(selection);
 	
+	es.append(selection);
 	setExtraSelections(es);
 	
 }
