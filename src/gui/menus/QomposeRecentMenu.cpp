@@ -140,9 +140,9 @@ void QomposeRecentMenu::addPath(const QString &p)
 	
 	updateActionsListSize();
 	
-	// (Re-)render our list contents.
+	// Save our new list, which will also re-render it.
 	
-	renderListContents();
+	saveContents();
 }
 
 /*!

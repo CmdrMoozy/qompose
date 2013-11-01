@@ -24,8 +24,6 @@
 
 #include "editor/QomposeEditor.h"
 
-class QMenu;
-class QAction;
 class QStatusBar;
 class QLabel;
 class QCloseEvent;
@@ -38,7 +36,7 @@ class QomposeSettings;
 class QomposeFindDialog;
 class QomposeReplaceDialog;
 class QomposeGoToDialog;
-class QomposeRecentMenu;
+class QomposeMainMenu;
 
 /*!
  * \brief This class implements one of our application's standard windows.
@@ -63,63 +61,20 @@ class QomposeWindow : public QMainWindow
 		QomposeGoToDialog *goToDialog;
 		QomposeAboutDialog *aboutDialog;
 		
-		QMenu *fileMenu;
-		QMenu *editMenu;
-		QMenu *searchMenu;
-		QMenu *buffersMenu;
-		QMenu *helpMenu;
-		
-		QAction *newAction;
-		QAction *openAction;
-		QomposeRecentMenu *recentMenu;
-		QAction *revertAction;
-		QAction *saveAction;
-		QAction *saveAsAction;
-		QAction *printAction;
-		QAction *printPreviewAction;
-		QAction *closeAction;
-		QAction *exitAction;
-		
-		QAction *undoAction;
-		QAction *redoAction;
-		QAction *cutAction;
-		QAction *copyAction;
-		QAction *pasteAction;
-		QAction *duplicateLineAction;
-		QAction *selectAllAction;
-		QAction *deselectAction;
-		QAction *increaseIndentAction;
-		QAction *decreaseIndentAction;
-		QAction *preferencesAction;
-		
-		QAction *findAction;
-		QAction *findNextAction;
-		QAction *findPreviousAction;
-		QAction *replaceAction;
-		QAction *goToAction;
-		
-		QAction *previousBufferAction;
-		QAction *nextBufferAction;
-		QAction *moveBufferLeftAction;
-		QAction *moveBufferRightAction;
-		
-		QAction *aboutQomposeAction;
-		QAction *aboutQtAction;
+		QomposeMainMenu *mainMenu;
 		
 		QomposeBufferWidget *buffers;
 		
 		QStatusBar *statusBar;
 		QLabel *tabPathLabel;
 		
-		void initializeActions();
-		void initializeMenus();
 		void initializeDialogs();
+		void initializeMenus();
 		
 		void handleFindResult(QomposeEditor::FindResult r);
 		
 	private Q_SLOTS:
 		void doTabPathChanged(const QString &p);
-		void doFileOpened(const QString &p);
 		
 		void doPreferencesDialog();
 		void doPrint();
