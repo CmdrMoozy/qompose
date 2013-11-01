@@ -78,34 +78,9 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	QObject::connect( buffers, SIGNAL( pathChanged(const QString &) ),
 		this, SLOT( doTabPathChanged(const QString &) ) );
 	
-	// Load our initial settings, and connect our settings object.
+	// Apply any existing settings values to our UI.
 	
-	statusBar->setVisible(settings->getSetting("show-status-bar").toBool());
-	
-	QObject::connect( settings, SIGNAL( settingChanged(const QString &, const QVariant &) ),
-		this, SLOT( doSettingChanged(const QString &, const QVariant &) ) );
-	
-	// Restore our window's geometry and state.
-	
-	QByteArray winGeometry = settings->getSetting("window-geometry").toByteArray();
-	
-	if(!winGeometry.isNull())
-	{
-		if(!restoreGeometry(winGeometry))
-		{
-			settings->setSetting("window-geometry", QVariant(QByteArray()));
-		}
-	}
-	
-	QByteArray winState = settings->getSetting("window-state").toByteArray();
-	
-	if(!winState.isNull())
-	{
-		if(!restoreState(winState, QOMPOSE_VERSION_MAJ))
-		{
-			settings->setSetting("window-state", QVariant(QByteArray()));
-		}
-	}
+	applyExistingSettings();
 }
 
 /*!
@@ -199,6 +174,43 @@ void QomposeWindow::initializeMenus()
 	QObject::connect( mainMenu, SIGNAL( goToTriggered(bool)         ), goToDialog,  SLOT( show()                ) );
 	QObject::connect( mainMenu, SIGNAL( aboutQomposeTriggered(bool) ), aboutDialog, SLOT( show()                ) );
 	QObject::connect( mainMenu, SIGNAL( aboutQtTriggered(bool)      ), qApp,        SLOT( aboutQt()             ) );
+}
+
+/*!
+ * This function reads various settings properties from our settings object,
+ * and applies their values to our UI. Additionally, we connect the settings
+ * object to our slots, so we can listen for settings changes.
+ */
+void QomposeWindow::applyExistingSettings()
+{
+	// Load our initial settings, and connect our settings object.
+	
+	statusBar->setVisible(settings->getSetting("show-status-bar").toBool());
+	
+	QObject::connect( settings, SIGNAL( settingChanged(const QString &, const QVariant &) ),
+		this, SLOT( doSettingChanged(const QString &, const QVariant &) ) );
+	
+	// Restore our window's geometry and state.
+	
+	QByteArray winGeometry = settings->getSetting("window-geometry").toByteArray();
+	
+	if(!winGeometry.isNull())
+	{
+		if(!restoreGeometry(winGeometry))
+		{
+			settings->setSetting("window-geometry", QVariant(QByteArray()));
+		}
+	}
+	
+	QByteArray winState = settings->getSetting("window-state").toByteArray();
+	
+	if(!winState.isNull())
+	{
+		if(!restoreState(winState, QOMPOSE_VERSION_MAJ))
+		{
+			settings->setSetting("window-state", QVariant(QByteArray()));
+		}
+	}
 }
 
 /*!

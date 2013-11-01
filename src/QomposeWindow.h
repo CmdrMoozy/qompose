@@ -68,6 +68,7 @@ class QomposeWindow : public QMainWindow
 		
 		void initializeDialogs();
 		void initializeMenus();
+		void applyExistingSettings();
 		
 		void handleFindResult(QomposeEditor::FindResult r);
 		
