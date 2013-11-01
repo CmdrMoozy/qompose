@@ -75,6 +75,7 @@ SET(qompose_HEADERS
 	src/gui/QomposeColorPickerButton.h
 	src/gui/QomposeFontPickerButton.h
 	src/gui/QomposeGUIUtils.h
+	src/gui/QomposeStatusBar.h
 	
 	src/gui/menus/QomposeMainMenu.h
 	src/gui/menus/QomposeRecentMenu.h
@@ -116,6 +117,7 @@ SET(qompose_SOURCES
 	src/gui/QomposeColorPickerButton.cpp
 	src/gui/QomposeFontPickerButton.cpp
 	src/gui/QomposeGUIUtils.cpp
+	src/gui/QomposeStatusBar.cpp
 	
 	src/gui/menus/QomposeMainMenu.cpp
 	src/gui/menus/QomposeRecentMenu.cpp

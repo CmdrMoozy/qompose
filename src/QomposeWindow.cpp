@@ -19,9 +19,7 @@
 #include "QomposeWindow.h"
 
 #include <QApplication>
-#include <QStatusBar>
 #include <QFile>
-#include <QLabel>
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QPrintDialog>
@@ -37,6 +35,7 @@
 #include "dialogs/preferences/QomposePreferencesDialog.h"
 #include "gui/QomposeBufferWidget.h"
 #include "gui/QomposeGUIUtils.h"
+#include "gui/QomposeStatusBar.h"
 #include "gui/menus/QomposeMainMenu.h"
 #include "util/QomposeFindQuery.h"
 #include "util/QomposeReplaceQuery.h"
@@ -70,12 +69,7 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	buffers->doNew();
 	setCentralWidget(buffers);
 	
-	statusBar = new QStatusBar(this);
-	
-	tabPathLabel = new QLabel(statusBar);
-	tabPathLabel->setAlignment(Qt::AlignRight);
-	
-	statusBar->addWidget(tabPathLabel, 1);
+	statusBar = new QomposeStatusBar(this);
 	setStatusBar(statusBar);
 	
 	initializeDialogs();
@@ -260,7 +254,7 @@ void QomposeWindow::handleFindResult(QomposeEditor::FindResult r)
 void QomposeWindow::doTabPathChanged(const QString &p)
 { /* SLOT */
 	
-	tabPathLabel->setText(p);
+	statusBar->setCurrentTabPath(p);
 	
 }
 

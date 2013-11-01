@@ -24,8 +24,6 @@
 
 #include "editor/QomposeEditor.h"
 
-class QStatusBar;
-class QLabel;
 class QCloseEvent;
 class QPrinter;
 
@@ -37,6 +35,7 @@ class QomposeFindDialog;
 class QomposeReplaceDialog;
 class QomposeGoToDialog;
 class QomposeMainMenu;
+class QomposeStatusBar;
 
 /*!
  * \brief This class implements one of our application's standard windows.
@@ -65,8 +64,7 @@ class QomposeWindow : public QMainWindow
 		
 		QomposeBufferWidget *buffers;
 		
-		QStatusBar *statusBar;
-		QLabel *tabPathLabel;
+		QomposeStatusBar *statusBar;
 		
 		void initializeDialogs();
 		void initializeMenus();
