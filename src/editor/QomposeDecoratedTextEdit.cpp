@@ -1,0 +1,535 @@
+/*
+ * Qompose - A simple programmer's text editor.
+ * Copyright (C) 2013 Axel Rasmussen
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "QomposeDecoratedTextEdit.h"
+
+#include "editor/QomposeGutter.h"
+
+#include <QPainter>
+#include <QTextBlock>
+
+/*!
+ * This is our default constructor, which creates a new decorated text exit.
+ *
+ * \param p Our parent widget.
+ */
+QomposeDecoratedTextEdit::QomposeDecoratedTextEdit(QWidget *p)
+	: QPlainTextEdit(p), currentFont(QFont("Courier", 10)),
+		originalFontSize(10.0), currentFontZoom(1)
+{
+	// Set some default colors.
+	
+	currentLineHighlight = QColor(127, 127, 127);
+	gutterForeground = QColor(255, 255, 255);
+	gutterBackground = QColor(0, 0, 0);
+	
+	setFont(QFont("Courier", 10));
+	
+	// Initialize our widget.
+	
+	gutter = new QomposeGutter(this);
+	
+	QObject::connect( this, SIGNAL( blockCountChanged(int)            ), this, SLOT( updateGutterWidth()              ) );
+	QObject::connect( this, SIGNAL( updateRequest(const QRect &, int) ), this, SLOT( updateGutter(const QRect &, int) ) );
+	QObject::connect( this, SIGNAL( cursorPositionChanged()           ), this, SLOT( highlightCurrentLine()           ) );
+	
+	setTabWidthSpaces(8);
+	
+	setLineWrapMode(QPlainTextEdit::NoWrap);
+	setFocusPolicy(Qt::ClickFocus);
+	
+	setGutterVisible(true);
+	
+	highlightCurrentLine();
+	
+	setFont(QFont("Courier", 11));
+	setFontZoom(0);
+}
+
+/*!
+ * This is our default destructor, which cleans up & destroys our object.
+ */
+QomposeDecoratedTextEdit::~QomposeDecoratedTextEdit()
+{
+}
+
+
+/*!
+ * This function sets whether or not our gutter is visible.
+ *
+ * \param v Whether or not our gutter should be visible.
+ */
+void QomposeDecoratedTextEdit::setGutterVisible(bool v)
+{
+	gutterVisible = v;
+	gutter->setVisible(v);
+	updateGutterWidth();
+}
+
+/*!
+ * This function returns whether or not our gutter is currently visible.
+ *
+ * \return Whether or not our gutter is visible.
+ */
+bool QomposeDecoratedTextEdit::isGutterVisible()
+{
+	return gutterVisible;
+}
+
+/*!
+ * This function returns our current font. Note that the size in the returned font object
+ * does NOT include any changes due to our current zoom factor. Our zoomed size can be determined
+ * from fontZoomSize().
+ *
+ * \return Our current font.
+ */
+QFont QomposeDecoratedTextEdit::font() const
+{
+	// Return a font identical to ours, except with a size not including scaling.
+	
+	QFont f = currentFont;
+	f.setPointSizeF(originalFontSize);
+	
+	return f;
+}
+
+/*!
+ * This function sets our widget's font to the given value. Note that fonts which are
+ * assigned a PIXEL SIZE are not allowed - these will be resized to 10 points.
+ *
+ * \param f The new font to use.
+ */
+void QomposeDecoratedTextEdit::setFont(const QFont &f)
+{
+	// Make a note of our current tab width (in spaces).
+	
+	int oldWidth = tabWidthSpaces();
+	
+	// Make sure we aren't given a pixel-sized font.
+	
+	currentFont = f;
+	
+	if(currentFont.pointSize() == -1)
+		currentFont.setPointSize(10);
+	
+	originalFontSize = currentFont.pointSizeF();
+	originalFontSize = qMax(originalFontSize, 1.0);
+	
+	// Set our font!
+	
+	QPlainTextEdit::setFont(currentFont);
+	
+	// Make sure our tab width is still the same (in spaces).
+	
+	setTabWidthSpaces(oldWidth);
+}
+
+/*!
+ * This function returns our widget's current font zoom factor. The value returned is
+ * relative to zero; e.g., a value of 100 means doubling the original font size, whereas
+ * a value of -100 means the original size reduced to 0.
+ *
+ * The minimum value this can return is -100, and there is no maximum value.
+ *
+ * \return Our current font zooming factor.
+ */
+int QomposeDecoratedTextEdit::fontZoom() const
+{
+	return currentFontZoom;
+}
+
+/*!
+ * This function returns the current font size, including any zooming currently in place.
+ *
+ * \return Our current font size, including zooming.
+ */
+qreal QomposeDecoratedTextEdit::fontZoomSize() const
+{
+	qreal scale = static_cast<qreal>(fontZoom()) / 100.0;
+	qreal fsize = originalFontSize + (scale * originalFontSize);
+	
+	return fsize;
+}
+
+/*!
+ * This function sets our widget's font zoom. The value given is relative to the current
+ * size; e.g., passing 100 means doubling the size, whereas passing -100 means a size of 0.
+ *
+ * The minimum value that can be set is -100; this results in a size of 0. There is no
+ * maximum value, however.
+ *
+ * \param z The new zoom factor for our font size.
+ */
+void QomposeDecoratedTextEdit::setFontZoom(int z)
+{
+	z = qMax(-100, z);
+	currentFontZoom = z;
+	
+	qreal scale = static_cast<qreal>(currentFontZoom) / 100.0;
+	qreal fsize = originalFontSize + (scale * originalFontSize);
+	
+	fsize = qMax(fsize, 1.0);
+	
+	currentFont.setPointSizeF(fsize);
+	QPlainTextEdit::setFont(currentFont);
+}
+
+/*!
+ * This function returns the width of a tab stop, in spaces (based upon the current
+ * font) - NOT in pixels.
+ *
+ * \return The editor's tab width.
+ */
+int QomposeDecoratedTextEdit::tabWidthSpaces() const
+{
+	double w = static_cast<double>(tabStopWidth());
+	
+	QFontMetrics m(font());
+	
+	w /= static_cast<double>(m.width(' '));
+	qRound(w);
+	
+	return static_cast<int>(w);
+}
+
+/*!
+ * This function sets the width of our editor's tab stops, in spaces (based upon the
+ * current font) - NOT in pixels.
+ *
+ * \param w The new tab width to use.
+ */
+void QomposeDecoratedTextEdit::setTabWidthSpaces(int w)
+{
+	w = qAbs(w);
+	
+	QFontMetrics m(font());
+	
+	setTabStopWidth(w * m.width(' '));
+}
+
+/*!
+ * This function returns our editor's foreground (text) color.
+ *
+ * \return Our editor's foreground color.
+ */
+QColor QomposeDecoratedTextEdit::getEditorForeground() const
+{
+	return palette().color(QPalette::Text);
+}
+
+/*!
+ * This function sets our editor's foreground (text) color.
+ *
+ * \param c The new foreground color to use.
+ */
+void QomposeDecoratedTextEdit::setEditorForeground(const QColor &c)
+{
+	QPalette p = palette();
+	
+	p.setColor(QPalette::Active, QPalette::Window, c);
+	p.setColor(QPalette::Active, QPalette::WindowText, c);
+	p.setColor(QPalette::Active, QPalette::Text, c);
+	
+	p.setColor(QPalette::Inactive, QPalette::Window, c);
+	p.setColor(QPalette::Inactive, QPalette::WindowText, c);
+	p.setColor(QPalette::Inactive, QPalette::Text, c);
+	
+	setPalette(p);
+}
+
+/*!
+ * This function returns our editor's background color.
+ *
+ * \return Our editor's background color.
+ */
+QColor QomposeDecoratedTextEdit::getEditorBackground() const
+{
+	return palette().color(QPalette::Active, QPalette::Base);
+}
+
+/*!
+ * This function sets our editor's background color.
+ *
+ * \param c The new background color to use.
+ */
+void QomposeDecoratedTextEdit::setEditorBackground(const QColor &c)
+{
+	QPalette p = palette();
+	
+	p.setColor(QPalette::Active, QPalette::Base, c);
+	p.setColor(QPalette::Inactive, QPalette::Base, c);
+	
+	setPalette(p);
+}
+
+/*!
+ * This function returns our editor's current line highlight color.
+ *
+ * \return Our editor's current line color.
+ */
+QColor QomposeDecoratedTextEdit::getCurrentLineColor() const
+{
+	return currentLineHighlight;
+}
+
+/*!
+ * This function sets our editor's current line highlight color.
+ *
+ * \param c The new current line color to use.
+ */
+void QomposeDecoratedTextEdit::setCurrentLineColor(const QColor &c)
+{
+	currentLineHighlight = c;
+	
+	highlightCurrentLine();
+}
+
+/*!
+ * This function returns our editor's gutter's foreground (text) color.
+ *
+ * \return Our gutter's foreground color.
+ */
+QColor QomposeDecoratedTextEdit::getGutterForeground() const
+{
+	return gutterForeground;
+}
+
+/*!
+ * This function sets our editor's gutter's foreground (text) color. This
+ * automatically repaints our gutter, so this change takes effect immediately.
+ *
+ * \param c The new gutter foreground color to use.
+ */
+void QomposeDecoratedTextEdit::setGutterForeground(const QColor &c)
+{
+	gutterForeground = c;
+	
+	gutter->update();
+}
+
+/*!
+ * This function returns our editor's gutter's background color.
+ *
+ * \return Our gutter's background color.
+ */
+QColor QomposeDecoratedTextEdit::getGutterBackground() const
+{
+	return gutterBackground;
+}
+
+/*!
+ * This function sets our editor's gutter's background color. This automatically
+ * repaints our gutter, so this change takes effect immediately.
+ *
+ * \param c The new gutter background color to use.
+ */
+void QomposeDecoratedTextEdit::setGutterBackground(const QColor &c)
+{
+	gutterBackground = c;
+	
+	gutter->update();
+}
+
+/*!
+ * We override our parent's focus-in event to update our UI when that event occurs.
+ *
+ * \param e The event being handled.
+ */
+void QomposeDecoratedTextEdit::focusInEvent(QFocusEvent *e)
+{
+	highlightCurrentLine();
+	QPlainTextEdit::focusInEvent(e);
+}
+
+/*!
+ * We override our parent's focus-out event to update our UI when that event occurs.
+ *
+ * \param e The event being handled.
+ */
+void QomposeDecoratedTextEdit::focusOutEvent(QFocusEvent *e)
+{
+	highlightCurrentLine();
+	QPlainTextEdit::focusOutEvent(e);
+}
+
+/*!
+ * This function handles the resetting of our gutter's geometry when we get resized.
+ *
+ * \param event The resize event we are handling.
+ */
+void QomposeDecoratedTextEdit::resizeEvent(QResizeEvent *e)
+{
+	QPlainTextEdit::resizeEvent(e);
+	
+	QRect cr = contentsRect();
+	gutter->setGeometry(QRect(cr.left(), cr.top(), gutterWidth(), cr.height()));
+}
+
+/*!
+ * We handle mouse wheel events to implement text zooming.
+ *
+ * \param e The event being handled.
+ */
+void QomposeDecoratedTextEdit::wheelEvent(QWheelEvent *e)
+{
+	if(e->modifiers() == Qt::ControlModifier)
+	{
+		// If the user does Ctrl+Wheel, zoom in/out on our text.
+		
+		qreal scale = static_cast<qreal>(e->delta()) / 8.0;	// Delta is degrees turned * 8.
+		scale *= 0.8333; 					// Scale by 100% for each 120 degrees.
+		
+		setFontZoom(currentFontZoom + qRound(scale));
+	}
+	else
+	{
+		// Otherwise, just perform our parent class's default action.
+		
+		QPlainTextEdit::wheelEvent(e);
+	}
+
+}
+
+/*!
+ * This function handles any "mouse release" events on our editor by re-highlighting
+ * the current line. Ths is necessary to avoid a bug where rapidly clicking/arrow-key-ing
+ * can result in the wrong line being highlighted - cursorPositionChanged is somewhat
+ * unreliable.
+ *
+ * \param e The event being handled.
+ */
+void QomposeDecoratedTextEdit::mouseReleaseEvent(QMouseEvent *e)
+{
+	highlightCurrentLine();
+	
+	// Do our superclass's normal mouse action.
+	
+	QPlainTextEdit::mouseReleaseEvent(e);
+}
+
+/*!
+ * This function handles a paint event passed up to us by our gutter by rendering the gutter
+ * according to our editor's current state.
+ *
+ * \param e The paint event being handled.
+ */
+void QomposeDecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
+{
+	QPainter painter(gutter);
+	
+	// Paint our background.
+	painter.fillRect(e->rect(), gutterBackground);
+	
+	// Paint our line numbers.
+	
+	QTextBlock block = firstVisibleBlock();
+	int blockNumber = block.blockNumber();
+	int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
+	int bottom = top + (int) blockBoundingRect(block).height();
+	
+	while(block.isValid() && top <= e->rect().bottom())
+	{
+		if(block.isVisible() && bottom >= e->rect().top())
+		{
+			QString number = QString::number(blockNumber + 1);
+			painter.setPen(gutterForeground);
+			painter.drawText(0, top, gutter->width(), fontMetrics().height(), Qt::AlignCenter, number);
+		}
+		
+		block = block.next();
+		top = bottom;
+		bottom = top + (int) blockBoundingRect(block).height();
+		blockNumber++;
+	}
+}
+
+/*!
+ * This function computes the width our gutter should have, based upon the number of lines
+ * in our document. We ensure that we have enough space to render our line numbers inside
+ * the gutter.
+ *
+ * \return The width of our gutter.
+ */
+int QomposeDecoratedTextEdit::gutterWidth()
+{
+	if(!isGutterVisible())
+		return 0;
+	
+	int digits = 1;
+	int max = qMax(1, blockCount());
+	
+	while(max >= 10)
+	{
+		max /= 10;
+		digits++;
+	}
+	
+	int space = 20 + (fontMetrics().width(QLatin1Char('9')) * digits);
+	
+	return space;
+}
+
+/*!
+ * This function handles highlighting the current line in our editor.
+ */
+void QomposeDecoratedTextEdit::highlightCurrentLine()
+{ /* SLOT */
+	
+	QList<QTextEdit::ExtraSelection> es;
+	QTextEdit::ExtraSelection selection;
+	
+	selection.format.setBackground(currentLineHighlight);
+	selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+	
+	selection.cursor = textCursor();
+	selection.cursor.clearSelection();
+	
+	es.append(selection);
+	setExtraSelections(es);
+	
+}
+
+/*!
+ * This function updates our gutter's width, e.g. when the number of lines in our document changes.
+ */
+void QomposeDecoratedTextEdit::updateGutterWidth()
+{ /* SLOT */
+	
+	setViewportMargins(gutterWidth(), 0, 0, 0);
+	
+}
+
+/*!
+ * This function updates our gutter, e.g. when our editor widget's state is updated, by resetting the
+ * gutter's scroll and width.
+ *
+ * \param r The viewport rect being updated.
+ * \param dy The editor's current y scroll offset.
+ */
+void QomposeDecoratedTextEdit::updateGutter(const QRect &r, int dy)
+{ /* SLOT */
+	
+	if(dy)
+		gutter->scroll(0, dy);
+	else
+		gutter->update(0, r.y(), gutter->width(), r.height());
+	
+	if(r.contains(viewport()->rect()))
+		updateGutterWidth();
+	
+}

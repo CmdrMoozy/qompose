@@ -19,7 +19,8 @@
 #ifndef INCLUDE_QOMPOSE_EDITOR_H
 #define INCLUDE_QOMPOSE_EDITOR_H
 
-#include <QPlainTextEdit>
+#include "editor/QomposeDecoratedTextEdit.h"
+
 #include <QSize>
 
 class QFocusEvent;
@@ -32,9 +33,13 @@ class QomposeFindQuery;
 class QomposeReplaceQuery;
 
 /*!
- * \brief This class implements a text editor widget.
+ * \brief This class implements our main text editor widget.
+ *
+ * We depend on our decorated text edit for the various editor decorations we
+ * support, while we add advanced editor functionality like improved line indentation
+ * semantics, find and replace, and etc.
  */
-class QomposeEditor : public QPlainTextEdit
+class QomposeEditor : public QomposeDecoratedTextEdit
 {
 	Q_OBJECT
 	
@@ -53,70 +58,10 @@ class QomposeEditor : public QPlainTextEdit
 		QomposeEditor(QWidget *p = NULL);
 		virtual ~QomposeEditor();
 		
-		void setGutterVisible(bool v);
-		bool isGutterVisible();
-		
-		virtual QFont font() const;
-		virtual void setFont(const QFont &f);
-		int fontZoom() const;
-		qreal fontZoomSize() const;
-		void setFontZoom(int z);
-		
-		int tabWidthSpaces() const;
-		void setTabWidthSpaces(int w);
-		
-		QColor getEditorForeground() const;
-		void setEditorForeground(const QColor &c);
-		QColor getEditorBackground() const;
-		void setEditorBackground(const QColor &c);
-		QColor getCurrentLineColor() const;
-		void setCurrentLineColor(const QColor &c);
-		QColor getGutterForeground() const;
-		void setGutterForeground(const QColor &c);
-		QColor getGutterBackground() const;
-		void setGutterBackground(const QColor &c);
-		
 	protected:
-		virtual void focusInEvent(QFocusEvent *e);
-		virtual void focusOutEvent(QFocusEvent *e);
-		
-		virtual void resizeEvent(QResizeEvent *e);
 		virtual void keyPressEvent(QKeyEvent *e);
-		virtual void wheelEvent(QWheelEvent *e);
-		virtual void mouseReleaseEvent(QMouseEvent *e);
 		
 	private:
-		class QomposeGutter : public QWidget
-		{
-			public:
-				QomposeGutter(QomposeEditor *e);
-				virtual ~QomposeGutter();
-				
-				QSize sizeHint() const;
-				
-			protected:
-				virtual void paintEvent(QPaintEvent *e);
-				
-			private:
-				QomposeEditor *editor;
-		};
-		
-		QomposeGutter *gutter;
-		bool gutterVisible;
-		
-		QFont currentFont;
-		qreal originalFontSize;
-		int currentFontZoom;
-		
-		int tabWidth;
-		
-		QColor currentLineHighlight;
-		QColor gutterForeground;
-		QColor gutterBackground;
-		
-		void gutterPaintEvent(QPaintEvent *e);
-		int gutterWidth();
-		
 		void doNewline(bool preserveIndent = false);
 		void doMoveHome(bool moveAnchor = true);
 		
@@ -134,13 +79,7 @@ class QomposeEditor : public QPlainTextEdit
 		FindResult replace(const QomposeReplaceQuery *q);
 		FindResult replaceSelection(const QomposeReplaceQuery *q);
 		FindResult replaceAll(const QomposeReplaceQuery *q);
-		void goToLine(int l);
-		
-	private Q_SLOTS:
-		void highlightCurrentLine();
-		void updateGutterWidth();
-		void updateGutter(const QRect &r, int dy);
-		
+		void goToLine(int l);	
 };
 
 #endif

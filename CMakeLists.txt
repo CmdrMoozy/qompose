@@ -69,7 +69,9 @@ SET(qompose_HEADERS
 	src/dialogs/preferences/widgets/QomposePreferencesWidget.h
 	
 	src/editor/QomposeBuffer.h
+	src/editor/QomposeDecoratedTextEdit.h
 	src/editor/QomposeEditor.h
+	src/editor/QomposeGutter.h
 	
 	src/gui/QomposeBufferWidget.h
 	src/gui/QomposeColorPickerButton.h
@@ -111,7 +113,9 @@ SET(qompose_SOURCES
 	src/dialogs/preferences/widgets/QomposePreferencesWidget.cpp
 	
 	src/editor/QomposeBuffer.cpp
+	src/editor/QomposeDecoratedTextEdit.cpp
 	src/editor/QomposeEditor.cpp
+	src/editor/QomposeGutter.cpp
 	
 	src/gui/QomposeBufferWidget.cpp
 	src/gui/QomposeColorPickerButton.cpp
