@@ -27,7 +27,7 @@ QomposeStatusBar::QomposeStatusBar(QWidget *p)
 	statusWidget = new QWidget(this);
 	
 	statusLayout = new QGridLayout(statusWidget);
-	statusLayout->setContentsMargins(0, 0, 0, 0);
+	statusLayout->setContentsMargins(5, 0, 5, 0);
 	statusLayout->setSpacing(5);
 	
 	tabPathLabel = new QLabel(statusWidget);
