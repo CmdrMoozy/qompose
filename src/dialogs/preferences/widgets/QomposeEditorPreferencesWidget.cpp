@@ -75,6 +75,21 @@ void QomposeEditorPreferencesWidget::apply()
 	getSettings()->setSetting("editor-tab-width", QVariant(
 		tabWidthSpinBox->value()));
 	
+	// Wrap Guide Visible
+	
+	getSettings()->setSetting("editor-wrap-guide-visible", QVariant(
+		lineWrapGuideCheckBox->checkState() == Qt::Checked));
+	
+	// Wrap Guide Width
+	
+	getSettings()->setSetting("editor-wrap-guide-width", QVariant(
+		lineWrapGuideWidthSpinBox->value()));
+	
+	// Wrap Guide Color
+	
+	getSettings()->setSetting("editor-wrap-guide-color", QVariant(
+		lineWrapGuideColorButton->getSelectedColor()));
+	
 	// Editor Foreground
 	
 	getSettings()->setSetting("editor-foreground", QVariant(
@@ -126,6 +141,24 @@ void QomposeEditorPreferencesWidget::discardChanges()
 	tabWidthSpinBox->setValue(getSettings()->getSetting(
 		"editor-tab-width").toInt());
 	
+	// Wrap Guide Visible
+	
+	bool showLineWrapGuide = getSettings()->getSetting(
+		"editor-wrap-guide-visible").toBool();
+	
+	lineWrapGuideCheckBox->setCheckState(showLineWrapGuide ?
+		Qt::Checked : Qt::Unchecked);
+	
+	// Wrap Guide Width
+	
+	lineWrapGuideWidthSpinBox->setValue(getSettings()->getSetting(
+		"editor-wrap-guide-width").toInt());
+	
+	// Wrap Guide Color
+	
+	lineWrapGuideColorButton->setSelectedColor(getSettings()->getSetting(
+		"editor-wrap-guide-color").value<QColor>());
+	
 	// Editor Foreground
 	
 	editorFGButton->setSelectedColor(getSettings()->getSetting(
@@ -160,6 +193,8 @@ void QomposeEditorPreferencesWidget::initializeGUI()
 {
 	layout = new QGridLayout(this);
 	
+	// Initialize our general group box.
+	
 	generalGroupBox = new QGroupBox(tr("General"), this);
 	generalLayout = new QGridLayout(generalGroupBox);
 	
@@ -185,6 +220,35 @@ void QomposeEditorPreferencesWidget::initializeGUI()
 	generalLayout->setColumnStretch(0, 1);
 	
 	generalGroupBox->setLayout(generalLayout);
+	
+	// Initialize our line wrap guide group box.
+	
+	lineWrapGuideGroupBox = new QGroupBox(tr("Line Wrap Guide"), this);
+	lineWrapGuideLayout = new QGridLayout(lineWrapGuideGroupBox);
+	
+	lineWrapGuideCheckBox = new QCheckBox(tr("Show Guide"), lineWrapGuideGroupBox);
+	
+	lineWrapGuideWidthLabel = new QLabel(tr("Character Width"), lineWrapGuideGroupBox);
+	
+	lineWrapGuideWidthSpinBox = new QSpinBox(lineWrapGuideGroupBox);
+	lineWrapGuideWidthSpinBox->setMinimum(10);
+	
+	lineWrapGuideColorLabel = new QLabel(tr("Color"), lineWrapGuideGroupBox);
+	
+	lineWrapGuideColorButton = new QomposeColorPickerButton(lineWrapGuideGroupBox);
+	
+	lineWrapGuideLayout->addWidget( lineWrapGuideCheckBox,     0, 0, 1, 1);
+	lineWrapGuideLayout->addWidget( lineWrapGuideWidthLabel,   1, 0, 1, 1);
+	lineWrapGuideLayout->addWidget( lineWrapGuideWidthSpinBox, 1, 1, 1, 1);
+	lineWrapGuideLayout->addWidget( lineWrapGuideColorLabel,   2, 0, 1, 1);
+	lineWrapGuideLayout->addWidget( lineWrapGuideColorButton,  2, 1, 1, 1);
+	
+	lineWrapGuideLayout->setRowStretch(3, 1);
+	lineWrapGuideLayout->setColumnStretch(0, 1);
+	
+	lineWrapGuideGroupBox->setLayout(lineWrapGuideLayout);
+	
+	// Initialize our colors group box.
 	
 	colorsGroupBox = new QGroupBox(tr("Colors"), this);
 	colorsLayout = new QGridLayout(colorsGroupBox);
@@ -220,10 +284,13 @@ void QomposeEditorPreferencesWidget::initializeGUI()
 	
 	colorsGroupBox->setLayout(colorsLayout);
 	
-	layout->addWidget(generalGroupBox, 1, 0, 1, 1);
-	layout->addWidget(colorsGroupBox, 2, 0, 1, 1);
+	// Add these group boxes to our layout.
 	
-	layout->setRowStretch(3, 1);
+	layout->addWidget(generalGroupBox, 1, 0, 1, 1);
+	layout->addWidget(lineWrapGuideGroupBox, 2, 0, 1, 1);
+	layout->addWidget(colorsGroupBox, 3, 0, 1, 1);
+	
+	layout->setRowStretch(4, 1);
 	
 	setLayout(layout);
 }

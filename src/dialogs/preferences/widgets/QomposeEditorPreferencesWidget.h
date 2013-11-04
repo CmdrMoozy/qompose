@@ -55,6 +55,14 @@ class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 		QLabel *tabWidthLabel;
 		QSpinBox *tabWidthSpinBox;
 		
+		QGroupBox *lineWrapGuideGroupBox;
+		QGridLayout *lineWrapGuideLayout;
+		QCheckBox *lineWrapGuideCheckBox;
+		QLabel *lineWrapGuideWidthLabel;
+		QSpinBox *lineWrapGuideWidthSpinBox;
+		QLabel *lineWrapGuideColorLabel;
+		QomposeColorPickerButton *lineWrapGuideColorButton;
+		
 		QGroupBox *colorsGroupBox;
 		QGridLayout *colorsLayout;
 		QLabel *editorFGLabel;

@@ -54,6 +54,13 @@ class QomposeDecoratedTextEdit : public QPlainTextEdit
 		int tabWidthSpaces() const;
 		void setTabWidthSpaces(int w);
 		
+		bool isWrapGuideVisible() const;
+		void setWrapGuideVisible(bool v);
+		int getWrapGuideColumnWidth() const;
+		void setWrapGuideColumnWidth(int w);
+		QColor getWrapGuideColor() const;
+		void setWrapGuideColor(const QColor &c);
+		
 		QColor getEditorForeground() const;
 		void setEditorForeground(const QColor &c);
 		QColor getEditorBackground() const;
@@ -66,6 +73,8 @@ class QomposeDecoratedTextEdit : public QPlainTextEdit
 		void setGutterBackground(const QColor &c);
 	
 	protected:
+		virtual void paintEvent(QPaintEvent *e);
+		
 		virtual void focusInEvent(QFocusEvent *e);
 		virtual void focusOutEvent(QFocusEvent *e);
 		virtual void resizeEvent(QResizeEvent *e);
@@ -82,12 +91,20 @@ class QomposeDecoratedTextEdit : public QPlainTextEdit
 		
 		int tabWidth;
 		
+		bool wrapGuideVisible;
+		int wrapGuideWidth;
+		QColor wrapGuideColor;
+		
 		QColor currentLineHighlight;
 		QColor gutterForeground;
 		QColor gutterBackground;
 		
 		void gutterPaintEvent(QPaintEvent *e);
 		int gutterWidth();
+	
+	public Q_SLOTS:
+		void fullUpdate();
+		void fullRepaint();
 	
 	private Q_SLOTS:
 		void highlightCurrentLine();

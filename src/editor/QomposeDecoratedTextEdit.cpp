@@ -29,26 +29,33 @@
  * \param p Our parent widget.
  */
 QomposeDecoratedTextEdit::QomposeDecoratedTextEdit(QWidget *p)
-	: QPlainTextEdit(p), currentFont(QFont("Courier", 10)),
-		originalFontSize(10.0), currentFontZoom(1)
+	: QPlainTextEdit(p), currentFontZoom(1)
 {
-	// Set some default colors.
+	// Set our editor's default font.
 	
-	currentLineHighlight = QColor(127, 127, 127);
-	gutterForeground = QColor(255, 255, 255);
-	gutterBackground = QColor(0, 0, 0);
+	setFont(QFont("Courier", 11));
+	setFontZoom(0);
 	
-	setFont(QFont("Courier", 10));
-	
-	// Initialize our widget.
+	// Initialize our gutter.
 	
 	gutter = new QomposeGutter(this);
+	
+	setGutterForeground(QColor(255, 255, 255));
+	setGutterBackground(QColor(0, 0, 0));
 	
 	QObject::connect( this, SIGNAL( blockCountChanged(int)            ), this, SLOT( updateGutterWidth()              ) );
 	QObject::connect( this, SIGNAL( updateRequest(const QRect &, int) ), this, SLOT( updateGutter(const QRect &, int) ) );
 	QObject::connect( this, SIGNAL( cursorPositionChanged()           ), this, SLOT( highlightCurrentLine()           ) );
 	
+	// Set some of our widget's default properties.
+	
+	setCurrentLineColor(QColor(70, 72, 61));
+	
 	setTabWidthSpaces(8);
+	
+	setWrapGuideVisible(true);
+	setWrapGuideColumnWidth(100);
+	setWrapGuideColor(QColor(127, 127, 127));
 	
 	setLineWrapMode(QPlainTextEdit::NoWrap);
 	setFocusPolicy(Qt::ClickFocus);
@@ -56,9 +63,6 @@ QomposeDecoratedTextEdit::QomposeDecoratedTextEdit(QWidget *p)
 	setGutterVisible(true);
 	
 	highlightCurrentLine();
-	
-	setFont(QFont("Courier", 11));
-	setFontZoom(0);
 }
 
 /*!
@@ -137,6 +141,10 @@ void QomposeDecoratedTextEdit::setFont(const QFont &f)
 	// Make sure our tab width is still the same (in spaces).
 	
 	setTabWidthSpaces(oldWidth);
+	
+	// Update our line wrap guide, since it depends on our font.
+	
+	fullRepaint();
 }
 
 /*!
@@ -220,6 +228,88 @@ void QomposeDecoratedTextEdit::setTabWidthSpaces(int w)
 	QFontMetrics m(font());
 	
 	setTabStopWidth(w * m.width(' '));
+}
+
+/*!
+ * This function returns whether or not our line wrap guide is currently
+ * visible.
+ *
+ * \return True if the line wrap guide is visible, or false otherwise.
+ */
+bool QomposeDecoratedTextEdit::isWrapGuideVisible() const
+{
+	return wrapGuideVisible;
+}
+
+/*!
+ * This function sets whether or not our line wrap guide should be visible.
+ * Note that this function will result in a call to repaint(), so this new
+ * visibility value will take effect.
+ *
+ * \param v Whether or not the line wrap guide should now be visible.
+ */
+void QomposeDecoratedTextEdit::setWrapGuideVisible(bool v)
+{
+	wrapGuideVisible = v;
+	
+	fullRepaint();
+}
+
+/*!
+ * This function returns the current width of our line wrap guide, in
+ * character columns (that is, the guide will be rendered this many
+ * characters away from the left edge of the document).
+ *
+ * Note that this value is only very approximate for non-monospace
+ * fonts.
+ *
+ * \return The current width of our line wrap guide, in character columns.
+ */
+int QomposeDecoratedTextEdit::getWrapGuideColumnWidth() const
+{
+	return wrapGuideWidth;
+}
+
+/*!
+ * This function sets the width of our line wrap guide, in character
+ * columns (that is, the guide will be rendered this many characters
+ * away from the left edge of the document).
+ *
+ * Note that this value is only very approximate for non-monospace
+ * fonts, and that this function will result in a call to repaint(),
+ * so this new width value will take effect.
+ *
+ * \param w The new width for the line wrap guide.
+ */
+void QomposeDecoratedTextEdit::setWrapGuideColumnWidth(int w)
+{
+	wrapGuideWidth = qAbs(w);
+	
+	fullRepaint();
+}
+
+/*!
+ * This function returns the current color of the line wrap guide.
+ *
+ * \return The color of the line wrap guide.
+ */
+QColor QomposeDecoratedTextEdit::getWrapGuideColor() const
+{
+	return wrapGuideColor;
+}
+
+/*!
+ * This function sets the color the line wrap guide should be rendered
+ * in. Note that this function will result in a call to repaint(), so
+ * the new color value will take effect.
+ *
+ * \param c The new color for the line wrap guide.
+ */
+void QomposeDecoratedTextEdit::setWrapGuideColor(const QColor &c)
+{
+	wrapGuideColor = c;
+	
+	fullRepaint();
 }
 
 /*!
@@ -343,6 +433,39 @@ void QomposeDecoratedTextEdit::setGutterBackground(const QColor &c)
 	gutterBackground = c;
 	
 	gutter->update();
+}
+
+/*!
+ * We override our superclass's paint event to draw some additional decorations on
+ * our text edit's viewport.
+ *
+ * \param e The paint event being handled.
+ */
+void QomposeDecoratedTextEdit::paintEvent(QPaintEvent *e)
+{
+	// Let our superclass do its normal painting.
+	
+	QPlainTextEdit::paintEvent(e);
+	
+	// Draw our line wrap guide, if it is enabled.
+	
+	if(isWrapGuideVisible())
+	{
+		QRect r = e->rect();
+		
+		QFont f = font();
+		f.setPointSizeF(fontZoomSize());
+		
+		int offset = round(QFontMetricsF(f).averageCharWidth() *
+			static_cast<double>(getWrapGuideColumnWidth())) +
+			contentOffset().x() + document()->documentMargin();
+		
+		QPainter p(viewport());
+		
+		p.setPen(QPen(getWrapGuideColor()));
+		
+		p.drawLine(offset, r.top(), offset, r.bottom());
+	}
 }
 
 /*!
@@ -482,6 +605,30 @@ int QomposeDecoratedTextEdit::gutterWidth()
 	int space = 20 + (fontMetrics().width(QLatin1Char('9')) * digits);
 	
 	return space;
+}
+
+/*!
+ * This is a utility function which calls update() on both this widget, as well as our
+ * viewport widget, to make sure we are really updated.
+ */
+void QomposeDecoratedTextEdit::fullUpdate()
+{ /* SLOT */
+	
+	update();
+	viewport()->update();
+	
+}
+
+/*!
+ * This is a utility function which calls repaint() on both this widget, as well as our
+ * viewport widget, to make sure our paintEvent() function is called.
+ */
+void QomposeDecoratedTextEdit::fullRepaint()
+{ /* SLOT */
+	
+	repaint();
+	viewport()->repaint();
+	
 }
 
 /*!

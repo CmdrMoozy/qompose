@@ -47,6 +47,9 @@ QomposeBuffer::QomposeBuffer(QomposeSettings *s, QWidget *p)
 	setGutterVisible(settings->getSetting("show-gutter").toBool());
 	setFont(settings->getSetting("editor-font").value<QFont>());
 	setTabWidthSpaces(settings->getSetting("editor-tab-width").toInt());
+	setWrapGuideVisible(settings->getSetting("editor-wrap-guide-visible").toBool());
+	setWrapGuideColumnWidth(settings->getSetting("editor-wrap-guide-width").toInt());
+	setWrapGuideColor(settings->getSetting("editor-wrap-guide-color").value<QColor>());
 	setEditorForeground(settings->getSetting("editor-foreground").value<QColor>());
 	setEditorBackground(settings->getSetting("editor-background").value<QColor>());
 	setCurrentLineColor(settings->getSetting("editor-current-line").value<QColor>());
@@ -376,6 +379,12 @@ void QomposeBuffer::doSettingChanged(const QString &k, const QVariant &v)
 		setFont(v.value<QFont>());
 	else if(k == "editor-tab-width")
 		setTabWidthSpaces(v.toInt());
+	else if(k == "editor-wrap-guide-visible")
+		setWrapGuideVisible(v.toBool());
+	else if(k == "editor-wrap-guide-width")
+		setWrapGuideColumnWidth(v.toInt());
+	else if(k == "editor-wrap-guide-color")
+		setWrapGuideColor(v.value<QColor>());
 	else if(k == "editor-foreground")
 		setEditorForeground(v.value<QColor>());
 	else if(k == "editor-background")
