@@ -207,6 +207,18 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 					processed = true;
 					setFontZoom(0);
 					break;
+				
+				case Qt::Key_Z:
+					e->accept();
+					processed = true;
+					undo();
+					break;
+					
+				case Qt::Key_Y:
+					e->accept();
+					processed = true;
+					redo();
+					break;
 			};
 			
 			break;
@@ -239,7 +251,9 @@ void QomposeEditor::doNewline(bool preserveIndent)
 
 		QString line = l.selectedText();
 		
-		line.replace(QRegExp("^([ \\t]*)\\S.*$", Qt::CaseSensitive, QRegExp::RegExp2), "\\1");
+		line.replace(QRegExp("^([ \\t]*)\\S.*$", Qt::CaseSensitive,
+			QRegExp::RegExp2), "\\1");
+		
 		insert.append(line);
 	}
 	
@@ -281,7 +295,9 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 	// Move the cursor to its appropriate location.
 	
 	trimmed = line;
-	trimmed.replace(QRegExp("^([ \\t]*)\\S.*$", Qt::CaseSensitive, QRegExp::RegExp2), "\\1");
+	
+	trimmed.replace(QRegExp("^([ \\t]*)\\S.*$", Qt::CaseSensitive,
+		QRegExp::RegExp2), "\\1");
 	
 	if(trimmed == line)
 	{
@@ -290,23 +306,35 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 		QTextCursor curs = textCursor();
 		
 		if(moveAnchor)
-			curs.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+		{
+			curs.movePosition(QTextCursor::StartOfLine,
+				QTextCursor::MoveAnchor);
+		}
 		else
-			curs.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+		{
+			curs.movePosition(QTextCursor::StartOfLine,
+				QTextCursor::KeepAnchor);
+		}
 		
 		setTextCursor(curs);
 	}
 	else
 	{
-		// There is non-whitespace in front of us - move to the end of the whitespace.
+		// There is non-whitespace in front - move to the end of the whitespace.
 		
 		QTextCursor curs = textCursor();
 		int places = line.length() - trimmed.length();
 		
 		if(moveAnchor)
-			curs.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, places);
+		{
+			curs.movePosition(QTextCursor::Left,
+				QTextCursor::MoveAnchor, places);
+		}
 		else
-			curs.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, places);
+		{
+			curs.movePosition(QTextCursor::Left,
+				QTextCursor::KeepAnchor, places);
+		}
 		
 		setTextCursor(curs);
 	}
@@ -485,6 +513,20 @@ QomposeEditor::FindResult QomposeEditor::doBatchReplace(
 		return QomposeEditor::Found;
 	else
 		return r;
+}
+
+void QomposeEditor::undo()
+{ /* SLOT */
+	
+	QomposeDecoratedTextEdit::undo();
+	
+}
+
+void QomposeEditor::redo()
+{ /* SLOT */
+	
+	QomposeDecoratedTextEdit::redo();
+	
 }
 
 /*!
@@ -696,7 +738,8 @@ void QomposeEditor::decreaseSelectionIndent()
 		
 		for(int i = 0; i <= (eblock - sblock); ++i)
 		{
-			curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+			curs.movePosition(QTextCursor::StartOfBlock,
+				QTextCursor::MoveAnchor);
 			
 			for(int j = 0; j < tabWidthSpaces(); ++j)
 			{
@@ -808,12 +851,13 @@ QomposeEditor::FindResult QomposeEditor::replace(const QomposeReplaceQuery *q)
 			curs.beginEditBlock();
 			
 			int anchor = qMin(curs.anchor(), curs.position());
+			int length = qMax(q->getReplaceValue().length(), 0);
 			
 			curs.insertText(q->getReplaceValue());
 			
 			curs.setPosition(anchor, QTextCursor::MoveAnchor);
-			curs.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
-				qMax(q->getReplaceValue().length(), 0));
+			curs.movePosition(QTextCursor::NextCharacter,
+				QTextCursor::KeepAnchor, length);
 			
 			curs.endEditBlock();
 			

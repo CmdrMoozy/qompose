@@ -144,7 +144,7 @@ void QomposeDecoratedTextEdit::setFont(const QFont &f)
 	
 	// Update our line wrap guide, since it depends on our font.
 	
-	fullRepaint();
+	fullUpdate();
 }
 
 /*!
@@ -252,7 +252,7 @@ void QomposeDecoratedTextEdit::setWrapGuideVisible(bool v)
 {
 	wrapGuideVisible = v;
 	
-	fullRepaint();
+	fullUpdate();
 }
 
 /*!
@@ -285,7 +285,7 @@ void QomposeDecoratedTextEdit::setWrapGuideColumnWidth(int w)
 {
 	wrapGuideWidth = qAbs(w);
 	
-	fullRepaint();
+	fullUpdate();
 }
 
 /*!
@@ -309,7 +309,7 @@ void QomposeDecoratedTextEdit::setWrapGuideColor(const QColor &c)
 {
 	wrapGuideColor = c;
 	
-	fullRepaint();
+	fullUpdate();
 }
 
 /*!
@@ -617,6 +617,8 @@ void QomposeDecoratedTextEdit::fullUpdate()
 	update();
 	viewport()->update();
 	
+	highlightCurrentLine();
+	
 }
 
 /*!
@@ -628,6 +630,8 @@ void QomposeDecoratedTextEdit::fullRepaint()
 	
 	repaint();
 	viewport()->repaint();
+	
+	highlightCurrentLine();
 	
 }
 

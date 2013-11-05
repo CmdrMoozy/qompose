@@ -70,6 +70,8 @@ class QomposeEditor : public QomposeDecoratedTextEdit
 			int start = -1, int end = -1);
 	
 	public Q_SLOTS:
+		virtual void undo();
+		virtual void redo();
 		void duplicateLine();
 		void deselect();
 		void increaseSelectionIndent();

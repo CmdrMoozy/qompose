@@ -232,6 +232,7 @@ void QomposeEditorPreferencesWidget::initializeGUI()
 	
 	lineWrapGuideWidthSpinBox = new QSpinBox(lineWrapGuideGroupBox);
 	lineWrapGuideWidthSpinBox->setMinimum(10);
+	lineWrapGuideWidthSpinBox->setMaximum(500);
 	
 	lineWrapGuideColorLabel = new QLabel(tr("Color"), lineWrapGuideGroupBox);
 	
