@@ -16,29 +16,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_PREFERENCES_LIST_VIEW_H
-#define INCLUDE_QOMPOSE_PREFERENCES_LIST_VIEW_H
+#ifndef INCLUDE_QOMPOSE_PREFERENCES_SCROLL_AREA_H
+#define INCLUDE_QOMPOSE_PREFERENCES_SCROLL_AREA_H
 
-#include <QListView>
-#include <QSize>
+#include <QScrollArea>
 
-class QAbstractItemModel;
-
-class QomposePreferencesListModel;
+class QShowEvent;
+class QEvent;
 
 /*!
- * \brief This class implements a view for a list of preferences widgets.
+ * \brief This class implements a scroll area for a preferences widget.
  */
-class QomposePreferencesListView : public QListView
+class QomposePreferencesScrollArea : public QScrollArea
 {
 	public:
-		QomposePreferencesListView(QWidget *p = 0);
-		virtual ~QomposePreferencesListView();
+		QomposePreferencesScrollArea(QWidget *p = 0);
+		virtual ~QomposePreferencesScrollArea();
 		
-		void setModel(QomposePreferencesListModel *m);
+		virtual void setWidget(QWidget *w);
+		
+	protected:
+		virtual bool eventFilter(QObject *o, QEvent *e);
+		virtual void showEvent(QShowEvent *e);
 		
 	private:
-		virtual void setModel(QAbstractItemModel *m);
+		void resizeFixedHorizontal();
 };
 
 #endif

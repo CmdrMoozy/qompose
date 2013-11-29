@@ -18,10 +18,7 @@
 
 #include "QomposePreferencesListView.h"
 
-#include <QFont>
-#include <QAbstractItemModel>
-#include <QString>
-#include <QFontMetrics>
+
 
 #include "dialogs/preferences/QomposePreferencesListModel.h"
 #include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
@@ -59,55 +56,6 @@ void QomposePreferencesListView::setModel(QomposePreferencesListModel *m)
 	QAbstractItemModel *aim = dynamic_cast<QAbstractItemModel *>(m);
 	
 	setModel(aim);
-}
-
-/*!
- * This function computes the size hint for our widget, based upon our
- * contents. We allocate 50 vertical pixels for each row, as well as width
- * for the largest widget title, and an extra 75 pixels for the icon and
- * some padding.
- *
- * \return The size hint for our widget, based upon our contents.
- */
-QSize QomposePreferencesListView::sizeHint() const
-{
-	// Get our view's model (if applicable).
-	
-	QSize s;
-	QomposePreferencesListModel *m = dynamic_cast<QomposePreferencesListModel *>(model());
-	
-	if(m == NULL)
-		return QListView::sizeHint();
-	
-	// Compute the height and width we need to display all of our items.
-	
-	s.setHeight(50 * m->rowCount());
-	
-	QFontMetrics fm(font());
-	int maxWidth = 0;
-	
-	for(int i = 0; i < m->rowCount(); ++i)
-	{
-		const QomposePreferencesWidget *w = m->widgetAt(i);
-		
-		if(w == NULL)
-			continue;
-		
-		QString text = w->getPreferencesTitle();
-		
-		maxWidth = qMax(maxWidth, fm.width(text));
-	}
-	
-	s.setWidth( maxWidth + 75 );
-	
-	// Use some default minimums.
-	
-	s.setWidth( qMax(s.width(), 100) );
-	s.setHeight( qMax(s.height(), 200) );
-	
-	// Done!
-	
-	return s;
 }
 
 /*!

@@ -29,7 +29,7 @@
  * \param p Our parent widget.
  */
 QomposeDecoratedTextEdit::QomposeDecoratedTextEdit(QWidget *p)
-	: QPlainTextEdit(p), currentFontZoom(1)
+	: QPlainTextEdit(p), originalFontSize(11.0), currentFontZoom(1)
 {
 	// Set our editor's default font.
 	

@@ -27,6 +27,7 @@
 #include "dialogs/preferences/QomposePreferencesListView.h"
 #include "dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h"
 #include "dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h"
+#include "dialogs/preferences/widgets/QomposePreferencesScrollArea.h"
 #include "util/QomposeSettings.h"
 
 /*!
@@ -52,7 +53,7 @@ QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 	{
 		preferencesDisplayWidget->insertWidget(i,
-			preferencesModel->widgetAt(i));
+			preferencesModel->scrollWidgetAt(i));
 	}
 	
 	preferencesView->setCurrentIndex(preferencesModel->index(0));
@@ -139,7 +140,7 @@ void QomposePreferencesDialog::doWidgetActivated(const QModelIndex &i)
 { /* SLOT */
 	
 	preferencesDisplayWidget->setCurrentWidget(
-		preferencesModel->widgetAt(i.row()));
+		preferencesModel->scrollWidgetAt(i.row()));
 	
 }
 

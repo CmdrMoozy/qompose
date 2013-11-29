@@ -19,6 +19,7 @@
 #include "QomposePreferencesListModel.h"
 
 #include "QomposeDefines.h"
+#include "dialogs/preferences/widgets/QomposePreferencesScrollArea.h"
 #include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
 
 /*!
@@ -37,6 +38,12 @@ QomposePreferencesListModel::QomposePreferencesListModel(QObject *p)
  */
 QomposePreferencesListModel::~QomposePreferencesListModel()
 {
+	while(!scrollWidgets.isEmpty())
+	{
+		QomposePreferencesScrollArea *w = scrollWidgets.takeLast();
+		
+		delete w;
+	}
 }
 
 /*!
@@ -108,7 +115,7 @@ QVariant QomposePreferencesListModel::headerData(int QUNUSED(s),
  * will return NULL instead.
  *
  * \param i The row of the desired widget.
- * \return The given preferences widget.
+ * \return The desired preferences widget.
  */
 QomposePreferencesWidget *QomposePreferencesListModel::widgetAt(int i) const
 {
@@ -119,11 +126,37 @@ QomposePreferencesWidget *QomposePreferencesListModel::widgetAt(int i) const
 }
 
 /*!
+ * This is a utility function which returns the preferences widget on the given row
+ * of our model, encapsulated in a scroll area. If the given row number is out-of-bounds,
+ * then this function will return NULL instead.
+ *
+ * \param i The row of the desired widget.
+ * \return The desired preferences widget, encapsulated in a scroll area.
+ */
+QomposePreferencesScrollArea *QomposePreferencesListModel::scrollWidgetAt(int i) const
+{
+	if( (i < 0) || (i >= rowCount()) )
+		return NULL;
+	
+	return scrollWidgets.at(i);
+}
+
+/*!
  * This function appends the given preferences widget to our model's list of widgets.
  *
  * \param w The widget to add to our model.
  */
 void QomposePreferencesListModel::addPreferencesWidget(QomposePreferencesWidget *w)
 {
+	// Add the widget to our list.
+	
 	widgets.append(w);
+	
+	// Add a scroll area containing this widget to our list.
+	
+	QomposePreferencesScrollArea *sw = new QomposePreferencesScrollArea();
+	
+	sw->setWidget(w);
+	
+	scrollWidgets.append(sw);
 }

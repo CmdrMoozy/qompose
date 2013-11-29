@@ -26,6 +26,7 @@
 #include <QList>
 
 class QomposePreferencesWidget;
+class QomposePreferencesScrollArea;
 
 /*!
  * \brief This class implements a model to store a list of preferences widgets.
@@ -41,11 +42,13 @@ class QomposePreferencesListModel : public QAbstractListModel
 		virtual QVariant headerData(int s, Qt::Orientation o, int r = Qt::DisplayRole) const;
 		
 		QomposePreferencesWidget *widgetAt(int i) const;
+		QomposePreferencesScrollArea *scrollWidgetAt(int i) const;
 		
 		void addPreferencesWidget(QomposePreferencesWidget *w);
 		
 	private:
 		QList<QomposePreferencesWidget *> widgets;
+		QList<QomposePreferencesScrollArea *> scrollWidgets;
 };
 
 #endif

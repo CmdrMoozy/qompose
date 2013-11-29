@@ -291,6 +291,7 @@ void QomposeEditorPreferencesWidget::initializeGUI()
 	layout->addWidget(lineWrapGuideGroupBox, 2, 0, 1, 1);
 	layout->addWidget(colorsGroupBox, 3, 0, 1, 1);
 	
+	layout->setColumnStretch(0, 1);
 	layout->setRowStretch(4, 1);
 	
 	setLayout(layout);
