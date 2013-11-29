@@ -171,7 +171,7 @@ qreal QomposeDecoratedTextEdit::fontZoomSize() const
 	qreal scale = static_cast<qreal>(fontZoom()) / 100.0;
 	qreal fsize = originalFontSize + (scale * originalFontSize);
 	
-	return fsize;
+	return qMax(fsize, 0.0);
 }
 
 /*!
@@ -185,15 +185,18 @@ qreal QomposeDecoratedTextEdit::fontZoomSize() const
  */
 void QomposeDecoratedTextEdit::setFontZoom(int z)
 {
+	// Update the current font zoom factor.
+	
 	z = qMax(-100, z);
 	currentFontZoom = z;
 	
-	qreal scale = static_cast<qreal>(currentFontZoom) / 100.0;
-	qreal fsize = originalFontSize + (scale * originalFontSize);
+	// Update our editor's actual font size.
 	
-	fsize = qMax(fsize, 1.0);
+	qreal sizef = fontZoomSize();
 	
-	currentFont.setPointSizeF(fsize);
+	if(sizef > 0.0)
+		currentFont.setPointSizeF(sizef);
+	
 	QPlainTextEdit::setFont(currentFont);
 }
 
@@ -452,17 +455,11 @@ void QomposeDecoratedTextEdit::paintEvent(QPaintEvent *e)
 	if(isWrapGuideVisible())
 	{
 		QRect r = e->rect();
-		
-		QFont f = font();
-		f.setPointSizeF(fontZoomSize());
-		
-		int offset = round(QFontMetricsF(f).averageCharWidth() *
-			static_cast<double>(getWrapGuideColumnWidth())) +
-			contentOffset().x() + document()->documentMargin();
-		
 		QPainter p(viewport());
 		
 		p.setPen(QPen(getWrapGuideColor()));
+		
+		int offset = wrapGuideOffset();
 		
 		p.drawLine(offset, r.top(), offset, r.bottom());
 	}
@@ -605,6 +602,25 @@ int QomposeDecoratedTextEdit::gutterWidth()
 	int space = 20 + (fontMetrics().width(QLatin1Char('9')) * digits);
 	
 	return space;
+}
+
+/*!
+ * This function computes and returns the offset from the left-hand side of our text editor widget
+ * the line wrap guide should be painted. This value is rounded to the nearest pixel.
+ *
+ * \return The offset of the line wrap guide.
+ */
+int QomposeDecoratedTextEdit::wrapGuideOffset()
+{
+	// The character width is rounded, since it is rounded by the widget when the text
+	// is actually rendered. Without doing this, the offset will sometimes be incorrect.
+	qreal charWidth = qRound(QFontMetricsF(currentFont).averageCharWidth());
+	
+	qreal chars = static_cast<qreal>(getWrapGuideColumnWidth());
+	qreal contentOff = static_cast<qreal>(contentOffset().x());
+	qreal margin = static_cast<qreal>(document()->documentMargin());
+	
+	return static_cast<int>(round( (charWidth * chars) + contentOff + margin ));
 }
 
 /*!

@@ -101,6 +101,7 @@ class QomposeDecoratedTextEdit : public QPlainTextEdit
 		
 		void gutterPaintEvent(QPaintEvent *e);
 		int gutterWidth();
+		int wrapGuideOffset();
 	
 	public Q_SLOTS:
 		void fullUpdate();
