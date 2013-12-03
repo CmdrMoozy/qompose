@@ -174,6 +174,11 @@ void QomposeWindow::initializeMenus()
 	QObject::connect( mainMenu, SIGNAL( goToTriggered(bool)         ), goToDialog,  SLOT( show()                ) );
 	QObject::connect( mainMenu, SIGNAL( aboutQomposeTriggered(bool) ), aboutDialog, SLOT( show()                ) );
 	QObject::connect( mainMenu, SIGNAL( aboutQtTriggered(bool)      ), qApp,        SLOT( aboutQt()             ) );
+	
+	#ifdef QOMPOSE_DEBUG
+		QObject::connect(mainMenu, SIGNAL(debugTriggered(bool)),
+			this, SLOT(doDebug()));
+	#endif
 }
 
 /*!
@@ -453,6 +458,18 @@ void QomposeWindow::doGoToAccepted()
 	buffers->doGoTo(goToDialog->getSelectedLine());
 	
 }
+
+#ifdef QOMPOSE_DEBUG
+	/*!
+	 * This function performs some action to help with debugging.
+	 */
+	void QomposeWindow::doDebug()
+	{ /* SLOT */
+		
+		
+		
+	}
+#endif
 
 /*!
  * This function handles a setting changed by applying that change to our window.

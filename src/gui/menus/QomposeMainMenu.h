@@ -96,6 +96,10 @@ class QomposeMainMenu : public QMenuBar
 		QAction *aboutQomposeAction;
 		QAction *aboutQtAction;
 		
+		#ifdef QOMPOSE_DEBUG
+			QAction *debugAction;
+		#endif
+		
 	private Q_SLOTS:
 		void doFileOpened(const QString &p);
 		
@@ -111,6 +115,10 @@ class QomposeMainMenu : public QMenuBar
 		void goToTriggered(bool);
 		void aboutQomposeTriggered(bool);
 		void aboutQtTriggered(bool);
+		
+		#ifdef QOMPOSE_DEBUG
+			void debugTriggered(bool);
+		#endif
 };
 
 #endif

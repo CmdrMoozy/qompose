@@ -145,6 +145,10 @@ QomposeMainMenu::QomposeMainMenu(QomposeSettings *s, QWidget *p)
 	aboutQtAction = new QAction(tr("About &Qt..."), this);
 	aboutQtAction->setIcon(QomposeGUIUtils::getIconFromTheme("help-about"));
 	
+	#ifdef QOMPOSE_DEBUG
+		debugAction = new QAction(tr("Debugging..."), this);
+	#endif
+	
 	// Add these actions to our menu bar.
 	
 	fileMenu = new QMenu(tr("&File"), this);
@@ -197,6 +201,11 @@ QomposeMainMenu::QomposeMainMenu(QomposeSettings *s, QWidget *p)
 	helpMenu->addAction(aboutQomposeAction);
 	helpMenu->addAction(aboutQtAction);
 	
+	#ifdef QOMPOSE_DEBUG
+		helpMenu->addSeparator();
+		helpMenu->addAction(debugAction);
+	#endif
+	
 	addMenu(fileMenu);
 	addMenu(editMenu);
 	addMenu(searchMenu);
@@ -216,6 +225,11 @@ QomposeMainMenu::QomposeMainMenu(QomposeSettings *s, QWidget *p)
 	QObject::connect( goToAction,         SIGNAL( triggered(bool) ), this, SIGNAL( goToTriggered(bool)         ) );
 	QObject::connect( aboutQomposeAction, SIGNAL( triggered(bool) ), this, SIGNAL( aboutQomposeTriggered(bool) ) );
 	QObject::connect( aboutQtAction,      SIGNAL( triggered(bool) ), this, SIGNAL( aboutQtTriggered(bool)      ) );
+	
+	#ifdef QOMPOSE_DEBUG
+		QObject::connect(debugAction, SIGNAL(triggered(bool)),
+			this, SIGNAL(debugTriggered(bool)));
+	#endif
 }
 
 QomposeMainMenu::~QomposeMainMenu()

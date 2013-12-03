@@ -88,6 +88,10 @@ class QomposeWindow : public QMainWindow
 		void doReplaceAll();
 		void doGoToAccepted();
 		
+		#ifdef QOMPOSE_DEBUG
+			void doDebug();
+		#endif
+		
 		void doSettingChanged(const QString &k, const QVariant &v);
 };
 
