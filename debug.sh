@@ -2,6 +2,9 @@
 #
 # Script to clean up & rebuild Qompose.
 # This will build our application in DEBUG mode.
+#
+# NOTE: Any arguments passed to this script will be propgated along to cmake. This can be
+# used, e.g., to set various cmake defines or etc. for a custom build type.
 
 # Clean up our previous build, if any.
 
@@ -23,9 +26,7 @@ then
 	exit 1
 fi
 
-# Build the project.
-
 cd build
-cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake -DCMAKE_BUILD_TYPE=Debug "$@" ..
 make
 cd ..

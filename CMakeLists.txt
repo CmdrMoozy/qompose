@@ -17,6 +17,14 @@ SET(CMAKE_VERBOSE_MAKEFILE OFF)
 
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
+# Set the Qt prefix we're going to use, if a custom one was requested.
+
+IF(CUSTOM_QT_DIR)
+	SET(CMAKE_PREFIX_PATH ${CUSTOM_QT_DIR} ${CMAKE_PREFIX_PATH})
+	SET(QT_ROOT_DIR ${CUSTOM_QT_DIR})
+	SET(QT_QMAKE_EXECUTABLE ${QT_ROOT_DIR}/bin/qmake)
+ENDIF()
+
 # Define what Qt dependencies we have.
 
 SET(CMAKE_AUTOMOC ON)
