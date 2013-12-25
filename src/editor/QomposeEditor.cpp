@@ -292,12 +292,24 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 		line = l.selectedText();
 	}
 	
+	// Get the leading whitespace from the line.
+	
+	{
+		int idx = 0;
+		
+		for(int i = 0; i < line.length(); ++i)
+		{
+			if(!line.at(i).isSpace())
+			{
+				idx = i;
+				break;
+			}
+		}
+		
+		trimmed = line.left(idx);
+	}
+	
 	// Move the cursor to its appropriate location.
-	
-	trimmed = line;
-	
-	trimmed.replace(QRegExp("^([ \\t]*)\\S.*$", Qt::CaseSensitive,
-		QRegExp::RegExp2), "\\1");
 	
 	if(trimmed == line)
 	{
@@ -323,17 +335,24 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 		// There is non-whitespace in front - move to the end of the whitespace.
 		
 		QTextCursor curs = textCursor();
-		int places = line.length() - trimmed.length();
+		
+		int eos = qMax(curs.selectionStart(), curs.selectionEnd());
+		
+		curs.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+		
+		int sol = curs.position();
 		
 		if(moveAnchor)
 		{
-			curs.movePosition(QTextCursor::Left,
-				QTextCursor::MoveAnchor, places);
+			curs.setPosition(sol + trimmed.length(),
+				QTextCursor::MoveAnchor);
 		}
 		else
 		{
-			curs.movePosition(QTextCursor::Left,
-				QTextCursor::KeepAnchor, places);
+			curs.setPosition(eos, QTextCursor::MoveAnchor);
+			
+			curs.setPosition(sol + trimmed.length(),
+				QTextCursor::KeepAnchor);
 		}
 		
 		setTextCursor(curs);
