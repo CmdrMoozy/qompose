@@ -32,30 +32,30 @@ class QomposeFindQuery : public QObject
 	public:
 		QomposeFindQuery(QObject *p = 0);
 		virtual ~QomposeFindQuery();
-		
+
 		QString getExpression() const;
 		void setExpression(const QString &e);
-		
+
 		bool isWrapping() const;
 		void setWrapping(bool w);
-		
+
 		bool isWholeWords() const;
 		void setWholeWords(bool w);
-		
+
 		bool isCaseSensitive() const;
 		void setCaseSensitive(bool c);
-		
+
 		bool isReversed() const;
 		void setReversed(bool r);
-		
+
 		bool isRegularExpression() const;
 		void setRegularExpression(bool r);
-		
+
 		QTextDocument::FindFlags getFindFlags(bool r = false) const;
-		
+
 	private:
 		QString expression;
-		
+
 		bool wrap;
 		bool wholeWords;
 		bool caseSensitive;

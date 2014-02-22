@@ -25,17 +25,17 @@ QomposeStatusBar::QomposeStatusBar(QWidget *p)
 	: QStatusBar(p)
 {
 	statusWidget = new QWidget(this);
-	
+
 	statusLayout = new QGridLayout(statusWidget);
 	statusLayout->setContentsMargins(5, 0, 5, 0);
 	statusLayout->setSpacing(5);
-	
+
 	tabPathLabel = new QLabel(statusWidget);
-	
+
 	statusLayout->addWidget(tabPathLabel, 0, 1, 1, 1);
 	statusLayout->setColumnStretch(0, 1);
 	statusWidget->setLayout(statusLayout);
-	
+
 	addPermanentWidget(statusWidget, 1);
 }
 

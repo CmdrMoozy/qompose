@@ -39,7 +39,7 @@ QomposeColorPickerButton::QomposeColorPickerButton(QWidget *p, const QColor &iC)
 {
 	setSelectedColor(iC);
 	setMinimumSize(75, minimumHeight());
-	
+
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
 }
 
@@ -57,7 +57,7 @@ QomposeColorPickerButton::QomposeColorPickerButton(const QString &QUNUSED(t),
 {
 	setSelectedColor(iC);
 	setMinimumSize(75, minimumHeight());
-	
+
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
 }
 
@@ -76,7 +76,7 @@ QomposeColorPickerButton::QomposeColorPickerButton(const QIcon &QUNUSED(i),
 {
 	setSelectedColor(iC);
 	setMinimumSize(75, minimumHeight());
-	
+
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
 }
 
@@ -123,14 +123,14 @@ void QomposeColorPickerButton::paintEvent(QPaintEvent *e)
 {
 	// Call our superclass' paint event so we still look like a button.
 	QPushButton::paintEvent(e);
-	
+
 	// Create a new painter for us.
 	QPainter painter(this);
-	
+
 	// Figure out where we are going to paint - leave a margin for our buttony parts.
 
 	QRect r = rect();
-	
+
 	#ifdef _WIN32
 		r.adjust(5, 5, -5, -7);
 	#elifdef __APPLE__
@@ -174,16 +174,16 @@ void QomposeColorPickerButton::setText(const QString &t)
  */
 void QomposeColorPickerButton::doClicked()
 { /* SLOT */
-	
+
 	QColor c = QColorDialog::getColor(getSelectedColor(), this,
 		tr("Select a Color"), QColorDialog::DontUseNativeDialog);
-	
+
 	if(c.isValid())
 	{
 		c.setAlpha(255); // Make sure our alpha is normal, as it isn't selectable.
 		setSelectedColor(c);
 		Q_EMIT selectedColorChanged(getSelectedColor());
 	}
-	
+
 }
 

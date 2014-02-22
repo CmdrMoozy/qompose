@@ -36,17 +36,17 @@ class QomposeOpenSavePreferencesWidget : public QomposePreferencesWidget
 		QomposeOpenSavePreferencesWidget(QomposeSettings *s,
 			QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeOpenSavePreferencesWidget();
-		
+
 		virtual void apply();
 		virtual void discardChanges();
-		
+
 	private:
 		QGridLayout *layout;
-		
+
 		QGroupBox *generalGroupBox;
 		QGridLayout *generalLayout;
 		QCheckBox *stripTrailingSpacesCheckBox;
-		
+
 		void initializeGUI();
 };
 

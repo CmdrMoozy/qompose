@@ -186,15 +186,15 @@ void QomposeFindQuery::setRegularExpression(bool r)
 QTextDocument::FindFlags QomposeFindQuery::getFindFlags(bool r) const
 {
 	QTextDocument::FindFlags f;
-	
+
 	if(r && isReversed())
 		f |= QTextDocument::FindBackward;
-	
+
 	if(isCaseSensitive())
 		f |= QTextDocument::FindCaseSensitively;
-	
+
 	if(isWholeWords())
 		f |= QTextDocument::FindWholeWords;
-	
+
 	return f;
 }

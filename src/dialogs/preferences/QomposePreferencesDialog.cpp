@@ -44,52 +44,52 @@ QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
 	: QDialog(p, f), settings(s)
 {
 	layout = new QGridLayout(this);
-	
+
 	preferencesView = new QomposePreferencesListView(this);
 	createPreferencesModel();
 	preferencesView->setModel(preferencesModel);
-	
+
 	preferencesDisplayWidget = new QStackedWidget(this);
-	
+
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 	{
 		preferencesDisplayWidget->insertWidget(i,
 			preferencesModel->scrollWidgetAt(i));
 	}
-	
+
 	preferencesView->setCurrentIndex(preferencesModel->index(0));
 	preferencesDisplayWidget->setCurrentIndex(0);
-	
+
 	buttonsWidget = new QWidget(this);
 	buttonsLayout = new QGridLayout(buttonsWidget);
-	
+
 	okButton = new QPushButton(tr("&Ok"), buttonsWidget);
-	
+
 	applyButton = new QPushButton(tr("&Apply"), buttonsWidget);
-	
+
 	cancelButton = new QPushButton(tr("&Cancel"), buttonsWidget);
-	
+
 	defaultsButton = new QPushButton(tr("Restore &Defaults"), buttonsWidget);
-	
+
 	buttonsLayout->addWidget(okButton, 0, 1, 1, 1);
 	buttonsLayout->addWidget(applyButton, 0, 2, 1, 1);
 	buttonsLayout->addWidget(cancelButton, 0, 3, 1, 1);
 	buttonsLayout->addWidget(defaultsButton, 0, 4, 1, 1);
 	buttonsLayout->setColumnStretch(0, 1);
 	buttonsWidget->setLayout(buttonsLayout);
-	
+
 	layout->addWidget(preferencesView, 0, 0, 1, 1);
 	layout->addWidget(preferencesDisplayWidget, 0, 1, 1, 1);
 	layout->addWidget(buttonsWidget, 1, 0, 1, 2);
 	layout->setRowStretch(0, 1);
 	layout->setColumnStretch(1, 1);
 	setLayout(layout);
-	
+
 	setWindowTitle(tr("Preferences"));
-	
+
 	QObject::connect( preferencesView, SIGNAL( activated(const QModelIndex &) ),
 		this, SLOT( doWidgetActivated(const QModelIndex &) ) );
-	
+
 	QObject::connect( okButton,       SIGNAL( clicked(bool) ), this, SLOT( doOk()       ) );
 	QObject::connect( applyButton,    SIGNAL( clicked(bool) ), this, SLOT( doApply()    ) );
 	QObject::connect( cancelButton,   SIGNAL( clicked(bool) ), this, SLOT( close()      ) );
@@ -121,13 +121,13 @@ void QomposePreferencesDialog::discardChanges()
 void QomposePreferencesDialog::createPreferencesModel()
 {
 	preferencesModel = new QomposePreferencesListModel(preferencesView);
-	
+
 	generalPreferencesWidget = new QomposeGeneralPreferencesWidget(settings, this);
-	
+
 	editorPreferencesWidget = new QomposeEditorPreferencesWidget(settings, this);
-	
+
 	openSavePreferencesWidget = new QomposeOpenSavePreferencesWidget(settings, this);
-	
+
 	preferencesModel->addPreferencesWidget(generalPreferencesWidget);
 	preferencesModel->addPreferencesWidget(editorPreferencesWidget);
 	preferencesModel->addPreferencesWidget(openSavePreferencesWidget);
@@ -142,10 +142,10 @@ void QomposePreferencesDialog::createPreferencesModel()
  */
 void QomposePreferencesDialog::doWidgetActivated(const QModelIndex &i)
 { /* SLOT */
-	
+
 	preferencesDisplayWidget->setCurrentWidget(
 		preferencesModel->scrollWidgetAt(i.row()));
-	
+
 }
 
 /*!
@@ -154,11 +154,11 @@ void QomposePreferencesDialog::doWidgetActivated(const QModelIndex &i)
  */
 void QomposePreferencesDialog::doOk()
 { /* SLOT */
-	
+
 	doApply();
-	
+
 	close();
-	
+
 }
 
 /*!
@@ -167,10 +167,10 @@ void QomposePreferencesDialog::doOk()
  */
 void QomposePreferencesDialog::doApply()
 { /* SLOT */
-	
+
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 		preferencesModel->widgetAt(i)->apply();
-	
+
 }
 
 /*!
@@ -181,18 +181,18 @@ void QomposePreferencesDialog::doApply()
  */
 void QomposePreferencesDialog::doDefaults()
 { /* SLOT */
-	
+
 	QMessageBox::StandardButton ret = QMessageBox::question(this,
 		tr("Confirm Resetting Defaults"),
 		tr("Are you sure you want to reset all settings to their default values?"),
 		QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-	
+
 	if(ret != QMessageBox::Yes)
 		return;
-	
+
 	settings->resetDefaults();
-	
+
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 		preferencesModel->widgetAt(i)->discardChanges();
-	
+
 }

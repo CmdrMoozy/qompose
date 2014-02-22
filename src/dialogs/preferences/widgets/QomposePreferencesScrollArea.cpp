@@ -32,7 +32,7 @@ QomposePreferencesScrollArea::QomposePreferencesScrollArea(QWidget *p)
 	: QScrollArea(p)
 {
 	setWidgetResizable(true);
-	
+
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
@@ -52,7 +52,7 @@ QomposePreferencesScrollArea::~QomposePreferencesScrollArea()
 void QomposePreferencesScrollArea::setWidget(QWidget *w)
 {
 	QScrollArea::setWidget(w);
-	
+
 	if(isVisible())
 		resizeFixedHorizontal();
 }
@@ -88,7 +88,7 @@ bool QomposePreferencesScrollArea::eventFilter(QObject *o, QEvent *e)
 void QomposePreferencesScrollArea::showEvent(QShowEvent *e)
 {
 	QScrollArea::showEvent(e);
-	
+
 	resizeFixedHorizontal();
 }
 
@@ -102,21 +102,21 @@ void QomposePreferencesScrollArea::showEvent(QShowEvent *e)
 void QomposePreferencesScrollArea::resizeFixedHorizontal()
 {
 	// Get our widget's size.
-	
+
 	QWidget *w = widget();
-	
+
 	if(w == 0)
 		return;
-	
+
 	int ww = w->minimumSizeHint().width();
-	
+
 	// Get our scroll bar's size.
-	
+
 	QScrollBar *vs = verticalScrollBar();
-	
+
 	int sw = vs->width();
-	
+
 	// Set our fixed width.
-	
+
 	setMinimumWidth(ww + sw);
 }

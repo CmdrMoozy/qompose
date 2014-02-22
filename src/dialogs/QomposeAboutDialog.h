@@ -36,22 +36,22 @@ class QomposeAboutDialog : public QDialog
 	public:
 		QomposeAboutDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeAboutDialog();
-		
+
 	private:
 		QGridLayout *layout;
 		QTabWidget *tabs;
-		
+
 		QTextEdit *licenseTextEdit;
-		
+
 		QWidget *qomposeTab;
 		QGridLayout *qomposeTabLayout;
 		QLabel *qomposeIconLabel;
 		QLabel *qomposeLabel;
 		QLabel *qomposeDescriptionLabel;
 		QTextEdit *qomposeTextEdit;
-		
+
 		QPushButton *closeButton;
-		
+
 		void initializeGUI();
 		void loadLicense();
 };

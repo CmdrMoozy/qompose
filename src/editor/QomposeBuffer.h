@@ -33,42 +33,42 @@ class QomposeSettings;
 class QomposeBuffer : public QomposeEditor
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeBuffer(QomposeSettings *s, QWidget *p = NULL);
 		virtual ~QomposeBuffer();
-		
+
 		bool open(const QomposeFileDescriptor &f);
 		bool revert();
 		bool save(const QString &p = QString());
-		
+
 		QString getTitle() const;
 		QString getPath() const;
 		QString getDirectory() const;
 		QString getFile() const;
-		
+
 		bool hasBeenSaved() const;
 		bool isModified() const;
 		void setModified(bool m);
-		
+
 	public Q_SLOTS:
 		void print(QPrinter *p);
-		
+
 	private:
 		QomposeSettings *settings;
-		
+
 		QString path;
 		QString codec;
-		
+
 		void stripTrailingSpaces();
-		
+
 		bool read(bool u = false);
 		bool write();
-		
+
 	private Q_SLOTS:
 		void doModificationChanged(bool c);
 		void doSettingChanged(const QString &k, const QVariant &v);
-		
+
 	Q_SIGNALS:
 		void titleChanged(const QString &);
 		void pathChanged(const QString &);

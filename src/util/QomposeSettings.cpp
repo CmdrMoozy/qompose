@@ -65,7 +65,7 @@ QomposeSettings::QomposeSettings(QObject *p)
 		settings = new QSettings(QSettings::UserScope,
 			"Qompose", "Qompose", this);
 	#endif
-	
+
 	initializeDefaults();
 }
 

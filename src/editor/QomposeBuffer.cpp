@@ -43,7 +43,7 @@ QomposeBuffer::QomposeBuffer(QomposeSettings *s, QWidget *p)
 	: QomposeEditor(p), settings(s), path(QString())
 {
 	// Load our initial settings, and connect our settings object.
-	
+
 	setGutterVisible(settings->getSetting("show-gutter").toBool());
 	setFont(settings->getSetting("editor-font").value<QFont>());
 	setTabWidthSpaces(settings->getSetting("editor-tab-width").toInt());
@@ -55,12 +55,12 @@ QomposeBuffer::QomposeBuffer(QomposeSettings *s, QWidget *p)
 	setCurrentLineColor(settings->getSetting("editor-current-line").value<QColor>());
 	setGutterForeground(settings->getSetting("gutter-foreground").value<QColor>());
 	setGutterBackground(settings->getSetting("gutter-background").value<QColor>());
-	
+
 	QObject::connect( settings, SIGNAL( settingChanged(const QString &, const QVariant &) ),
 		this, SLOT( doSettingChanged(const QString &, const QVariant &) ) );
-	
+
 	// Connect other various signals.
-	
+
 	QObject::connect( this, SIGNAL( modificationChanged(bool) ),
 		this, SLOT( doModificationChanged(bool) ) );
 }
@@ -83,18 +83,18 @@ bool QomposeBuffer::open(const QomposeFileDescriptor &f)
 {
 	path = f.fileName;
 	codec = f.textCodec;
-	
+
 	Q_EMIT pathChanged(path);
-	
+
 	bool r = read();
-	
+
 	if(r)
 	{
 		QTextCursor curs = textCursor();
 		curs.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
 		setTextCursor(curs);
 	}
-	
+
 	return r;
 }
 
@@ -108,27 +108,27 @@ bool QomposeBuffer::revert()
 {
 	if(!hasBeenSaved())
 		return false;
-	
+
 	QTextCursor curs = textCursor();
 	int cursPos = curs.position();
-	
+
 	bool r = read(true);
-	
+
 	if(r)
 	{
 		QTextCursor endCurs = textCursor();
 		endCurs.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-		
+
 		int endPos = endCurs.position();
-		
+
 		if(cursPos <= endPos)
 			curs.setPosition(cursPos, QTextCursor::MoveAnchor);
 		else
 			curs.setPosition(QTextCursor::End, QTextCursor::MoveAnchor);
-		
+
 		setTextCursor(curs);
 	}
-	
+
 	return r;
 }
 
@@ -146,17 +146,17 @@ bool QomposeBuffer::save(const QString &p)
 	{
 		if(!hasBeenSaved())
 			return false;
-		
+
 		return write();
 	}
 	else
 	{
 		if(path.isNull())
 			codec = "UTF-8";
-		
+
 		path = p;
 		Q_EMIT pathChanged(path);
-		
+
 		return write();
 	}
 }
@@ -171,7 +171,7 @@ bool QomposeBuffer::save(const QString &p)
 QString QomposeBuffer::getTitle() const
 {
 	QString title;
-	
+
 	if(hasBeenSaved())
 	{
 		QFileInfo fi(getPath());
@@ -181,10 +181,10 @@ QString QomposeBuffer::getTitle() const
 	{
 		title = tr("Untitled");
 	}
-	
+
 	if(isModified())
 		title.append(" *");
-	
+
 	return title;
 }
 
@@ -209,12 +209,12 @@ QString QomposeBuffer::getPath() const
 QString QomposeBuffer::getDirectory() const
 {
 	QString p = getPath();
-	
+
 	if(p.isNull())
 		return QString();
-	
+
 	QFileInfo info(p);
-	
+
 	return info.dir().absolutePath();
 }
 
@@ -228,12 +228,12 @@ QString QomposeBuffer::getDirectory() const
 QString QomposeBuffer::getFile() const
 {
 	QString p = getPath();
-	
+
 	if(p.isNull())
 		return QString();
-	
+
 	QFileInfo info(p);
-	
+
 	return info.fileName();
 }
 
@@ -276,9 +276,9 @@ void QomposeBuffer::setModified(bool m)
  */
 void QomposeBuffer::print(QPrinter *p)
 { /* SLOT */
-	
+
 	document()->print(p);
-	
+
 }
 
 /*!
@@ -289,44 +289,44 @@ void QomposeBuffer::print(QPrinter *p)
 void QomposeBuffer::stripTrailingSpaces()
 {
 	QTextCursor curs = textCursor();
-	
+
 	curs.beginEditBlock();
-	
+
 	// Get our ending line number.
-	
+
 	curs.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
 	int lastBlock = curs.blockNumber();
-	
+
 	// Move to the beginning, and start processing.
-	
+
 	curs.setPosition(0, QTextCursor::MoveAnchor);
-	
+
 	do
 	{
 		// Select this line.
-		
+
 		curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 		QString block = curs.selectedText();
-		
+
 		// Find the first non-space character from the left, and trim the string.
-		
+
 		int n = block.size() - 1;
 		while( (n >= 0) && block.at(n).isSpace() )
 			--n;
-		
+
 		block = block.left(n + 1);
-		
+
 		// Replace this line, and move on.
-		
+
 		curs.insertText(block);
-		
+
 		curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
 	} while(curs.blockNumber() < lastBlock);
-	
+
 	// Done!
-	
+
 	curs.endEditBlock();
-	
+
 	setModified(true);
 }
 
@@ -340,18 +340,18 @@ void QomposeBuffer::stripTrailingSpaces()
 bool QomposeBuffer::read(bool u)
 {
 	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
-	
+
 	if(c == 0)
 		return false;
-	
+
 	QFile file(path);
-	
+
 	if(!file.open(QIODevice::ReadOnly))
 		return false;
-	
+
 	QTextStream reader(&file);
 	reader.setCodec(c);
-	
+
 	if(u)
 	{
 		selectAll();
@@ -361,9 +361,9 @@ bool QomposeBuffer::read(bool u)
 	{
 		setPlainText(reader.readAll());
 	}
-	
+
 	setModified(false);
-	
+
 	return true;
 }
 
@@ -376,37 +376,37 @@ bool QomposeBuffer::read(bool u)
 bool QomposeBuffer::write()
 {
 	// Get the right text codec for our encoding.
-	
+
 	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
-	
+
 	if(c == 0)
 		return false;
-	
+
 	// Try opening the file we're going to write.
-	
+
 	QFile file(path);
-	
+
 	if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
 		return false;
-	
+
 	// If "strip trailing spaces" is enabled, do that before writing.
-	
+
 	if(settings->getSetting("save-strip-trailing-spaces").toBool())
 		stripTrailingSpaces();
-	
+
 	// Try writing our document.
-	
+
 	QByteArray format("plaintext");
 	QTextDocumentWriter writer(&file, format);
-	
+
 	writer.setCodec(c);
 	bool r = writer.write(document());
-	
+
 	file.close();
-	
+
 	if(r)
 		setModified(false);
-	
+
 	return r;
 }
 
@@ -418,9 +418,9 @@ bool QomposeBuffer::write()
  */
 void QomposeBuffer::doModificationChanged(bool QUNUSED(c))
 { /* SLOT */
-	
+
 	Q_EMIT titleChanged(getTitle());
-	
+
 }
 
 /*!
@@ -432,7 +432,7 @@ void QomposeBuffer::doModificationChanged(bool QUNUSED(c))
  */
 void QomposeBuffer::doSettingChanged(const QString &k, const QVariant &v)
 { /* SLOT */
-	
+
 	if(k == "show-gutter")
 		setGutterVisible(v.toBool());
 	else if(k == "editor-font")
@@ -455,5 +455,5 @@ void QomposeBuffer::doSettingChanged(const QString &k, const QVariant &v)
 		setGutterForeground(v.value<QColor>());
 	else if(k == "gutter-background")
 		setGutterBackground(v.value<QColor>());
-	
+
 }

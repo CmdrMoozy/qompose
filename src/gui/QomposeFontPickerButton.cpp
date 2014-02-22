@@ -100,12 +100,12 @@ const QFont &QomposeFontPickerButton::getSelectedFont() const
 void QomposeFontPickerButton::setSelectedFont(const QFont &f)
 {
 	QFont display = selectedFont = f;
-	
+
 	if(display.pointSize() > -1)
 		display.setPointSize(qMin(display.pointSize(), 24));
 	else
 		display.setPixelSize(qMin(display.pixelSize(), 50));
-	
+
 	setFont(display);
 }
 
@@ -132,7 +132,7 @@ void QomposeFontPickerButton::doClicked()
 { /* SLOT */
 	bool ok;
 	setSelectedFont(QFontDialog::getFont(&ok, getSelectedFont(), this, tr("Select a Font")));
-	
+
 	if(ok)
 		Q_EMIT selectedFontChanged(getSelectedFont());
 }

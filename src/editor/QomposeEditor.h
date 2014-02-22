@@ -42,7 +42,7 @@ class QomposeReplaceQuery;
 class QomposeEditor : public QomposeDecoratedTextEdit
 {
 	Q_OBJECT
-	
+
 	public:
 		/*!
 		 * \brief This enum denotes the possible results of a find operation.
@@ -54,21 +54,21 @@ class QomposeEditor : public QomposeDecoratedTextEdit
 			NoMatches,
 			Found
 		};
-		
+
 		QomposeEditor(QWidget *p = NULL);
 		virtual ~QomposeEditor();
-		
+
 	protected:
 		virtual void keyPressEvent(QKeyEvent *e);
-		
+
 	private:
 		void doNewline(bool preserveIndent = false);
 		void doMoveHome(bool moveAnchor = true);
-		
+
 		FindResult doFind(bool forward, const QomposeFindQuery *q);
 		FindResult doBatchReplace(const QomposeReplaceQuery *q,
 			int start = -1, int end = -1);
-	
+
 	public Q_SLOTS:
 		virtual void undo();
 		virtual void redo();
@@ -81,7 +81,7 @@ class QomposeEditor : public QomposeDecoratedTextEdit
 		FindResult replace(const QomposeReplaceQuery *q);
 		FindResult replaceSelection(const QomposeReplaceQuery *q);
 		FindResult replaceAll(const QomposeReplaceQuery *q);
-		void goToLine(int l);	
+		void goToLine(int l);
 };
 
 #endif

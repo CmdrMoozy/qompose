@@ -32,26 +32,26 @@ class QString;
 class QomposeSettings : public QObject
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeSettings(QObject *p = 0);
 		virtual ~QomposeSettings();
-		
+
 		int count() const;
-		
+
 		void resetDefaults();
 		void resetDefault(const QString &k);
-		
+
 		void setSetting(const QString &k, const QVariant &v);
 		bool containsSetting(const QString &k) const;
 		QVariant getSetting(const QString &k) const;
-		
+
 	private:
 		static const QList< QPair<QString, QVariant> > defaults;
 		QSettings *settings;
-		
+
 		void initializeDefaults();
-		
+
 	Q_SIGNALS:
 		void settingChanged(const QString &, const QVariant &);
 };

@@ -36,20 +36,20 @@ class QomposeSyntaxHighlighter : public QSyntaxHighlighter
 		QomposeSyntaxHighlighter(QomposeSettings *s, QObject *p);
 		QomposeSyntaxHighlighter(QomposeSettings *s, QTextDocument *p);
 		virtual ~QomposeSyntaxHighlighter();
-		
+
 		QomposeSettings *getSettings() const;
 		void setSettings(QomposeSettings *s);
-		
+
 		QomposeLexer *getLexer() const;
 		void setLexer(QomposeLexer *l);
-		
+
 	protected:
 		virtual void highlightBlock(const QString &t);
-		
+
 	private:
 		QomposeSettings *settings;
 		QomposeLexer *lexer;
-		
+
 		QTextCharFormat getFormatFor(const QomposeLexerToken &t);
 };
 

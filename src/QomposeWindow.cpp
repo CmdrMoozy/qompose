@@ -52,34 +52,34 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 	: QMainWindow(p, f)
 {
 	settings = new QomposeSettings(this);
-	
+
 	// Set some of our window's properties.
-	
+
 	setWindowIcon(QIcon(":/icons/qompose.png"));
-	
+
 	#ifdef QOMPOSE_DEBUG
 		setWindowTitle(tr("Qompose [DEBUG]"));
 	#else
 		setWindowTitle(tr("Qompose"));
 	#endif
-	
+
 	// Initialize our window.
-	
+
 	buffers = new QomposeBufferWidget(settings, this);
 	buffers->doNew();
 	setCentralWidget(buffers);
-	
+
 	statusBar = new QomposeStatusBar(this);
 	setStatusBar(statusBar);
-	
+
 	initializeDialogs();
 	initializeMenus();
-	
+
 	QObject::connect( buffers, SIGNAL( pathChanged(const QString &) ),
 		this, SLOT( doTabPathChanged(const QString &) ) );
-	
+
 	// Apply any existing settings values to our UI.
-	
+
 	applyExistingSettings();
 }
 
@@ -102,15 +102,15 @@ void QomposeWindow::closeEvent(QCloseEvent *e)
 	if(buffers->prepareCloseParent())
 	{
 		// Save our window geometry and state.
-		
+
 		settings->setSetting("window-geometry", QVariant(
 			saveGeometry()));
-		
+
 		settings->setSetting("window-state", QVariant(
 			saveState(QOMPOSE_VERSION_MAJ)));
-		
+
 		// Close the window.
-		
+
 		e->accept();
 	}
 	else
@@ -125,19 +125,19 @@ void QomposeWindow::closeEvent(QCloseEvent *e)
 void QomposeWindow::initializeDialogs()
 {
 	// Create our dialog objects.
-	
+
 	preferencesDialog = new QomposePreferencesDialog(settings, this);
-	
+
 	findDialog = new QomposeFindDialog(this);
-	
+
 	replaceDialog = new QomposeReplaceDialog(this);
-	
+
 	goToDialog = new QomposeGoToDialog(this);
-	
+
 	aboutDialog = new QomposeAboutDialog(this);
-	
+
 	// Connect our dialog actions.
-	
+
 	QObject::connect( findDialog,    SIGNAL( accepted()                ), this, SLOT( doFindNext()         ) );
 	QObject::connect( replaceDialog, SIGNAL( replaceClicked()          ), this, SLOT( doReplace()          ) );
 	QObject::connect( replaceDialog, SIGNAL( findClicked()             ), this, SLOT( doReplaceFind()      ) );
@@ -154,15 +154,15 @@ void QomposeWindow::initializeDialogs()
 void QomposeWindow::initializeMenus()
 {
 	// Create our main menu.
-	
+
 	mainMenu = new QomposeMainMenu(settings, this);
-	
+
 	setMenuBar(mainMenu);
-	
+
 	// Connect our main menu's actions to our UI.
-	
+
 	mainMenu->connectBufferWidget(buffers);
-	
+
 	QObject::connect( mainMenu, SIGNAL( printTriggered(bool)        ), this,        SLOT( doPrint()             ) );
 	QObject::connect( mainMenu, SIGNAL( printPreviewTriggered(bool) ), this,        SLOT( doPrintPreview()      ) );
 	QObject::connect( mainMenu, SIGNAL( exitTriggered(bool)         ), this,        SLOT( close()               ) );
@@ -174,7 +174,7 @@ void QomposeWindow::initializeMenus()
 	QObject::connect( mainMenu, SIGNAL( goToTriggered(bool)         ), goToDialog,  SLOT( show()                ) );
 	QObject::connect( mainMenu, SIGNAL( aboutQomposeTriggered(bool) ), aboutDialog, SLOT( show()                ) );
 	QObject::connect( mainMenu, SIGNAL( aboutQtTriggered(bool)      ), qApp,        SLOT( aboutQt()             ) );
-	
+
 	#ifdef QOMPOSE_DEBUG
 		QObject::connect(mainMenu, SIGNAL(debugTriggered(bool)),
 			this, SLOT(doDebug()));
@@ -189,16 +189,16 @@ void QomposeWindow::initializeMenus()
 void QomposeWindow::applyExistingSettings()
 {
 	// Load our initial settings, and connect our settings object.
-	
+
 	statusBar->setVisible(settings->getSetting("show-status-bar").toBool());
-	
+
 	QObject::connect( settings, SIGNAL( settingChanged(const QString &, const QVariant &) ),
 		this, SLOT( doSettingChanged(const QString &, const QVariant &) ) );
-	
+
 	// Restore our window's geometry and state.
-	
+
 	QByteArray winGeometry = settings->getSetting("window-geometry").toByteArray();
-	
+
 	if(!winGeometry.isNull())
 	{
 		if(!restoreGeometry(winGeometry))
@@ -206,9 +206,9 @@ void QomposeWindow::applyExistingSettings()
 			settings->setSetting("window-geometry", QVariant(QByteArray()));
 		}
 	}
-	
+
 	QByteArray winState = settings->getSetting("window-state").toByteArray();
-	
+
 	if(!winState.isNull())
 	{
 		if(!restoreState(winState, QOMPOSE_VERSION_MAJ))
@@ -229,7 +229,7 @@ void QomposeWindow::applyExistingSettings()
 void QomposeWindow::handleFindResult(QomposeEditor::FindResult r)
 {
 	// Deal with the find result.
-	
+
 	switch(r)
 	{
 		case QomposeEditor::BadRegularExpression:
@@ -237,24 +237,24 @@ void QomposeWindow::handleFindResult(QomposeEditor::FindResult r)
 				tr("The regular expression you were trying to find was invalid."),
 				QMessageBox::Ok, QMessageBox::Ok);
 			break;
-			
+
 		case QomposeEditor::NoMatches:
 			QMessageBox::information(this, tr("No Matches Found"),
 				tr("No more matches could be found."),
 				QMessageBox::Ok, QMessageBox::Ok);
 			break;
-		
+
 		default: break;
 	};
-	
+
 	// Re-focus the dialog that generated this result, if any.
-	
+
 	if(findDialog->isVisible())
 	{
 		findDialog->setFocus();
 		findDialog->raise();
 	}
-	
+
 	if(replaceDialog->isVisible())
 	{
 		replaceDialog->setFocus();
@@ -270,9 +270,9 @@ void QomposeWindow::handleFindResult(QomposeEditor::FindResult r)
  */
 void QomposeWindow::doTabPathChanged(const QString &p)
 { /* SLOT */
-	
+
 	statusBar->setCurrentTabPath(p);
-	
+
 }
 
 /*!
@@ -283,13 +283,13 @@ void QomposeWindow::doTabPathChanged(const QString &p)
  */
 void QomposeWindow::doPreferencesDialog()
 { /* SLOT */
-	
+
 	if(!preferencesDialog->isVisible())
 	{
 		preferencesDialog->discardChanges();
 		preferencesDialog->show();
 	}
-	
+
 }
 
 /*!
@@ -299,22 +299,22 @@ void QomposeWindow::doPreferencesDialog()
  */
 void QomposeWindow::doPrint()
 { /* SLOT */
-	
+
 	if(!buffers->hasCurrentBuffer())
 	{
 		QMessageBox::warning(this, tr("Nothing To Print"),
 			tr("No buffers are open; there is nothing to print!"),
 			QMessageBox::Ok, QMessageBox::Ok);
-		
+
 		return;
 	}
-	
+
 	QPrinter printer(QPrinter::ScreenResolution);
 	QPrintDialog dialog(&printer, this);
-	
+
 	if(dialog.exec() == QDialog::Accepted)
 		buffers->doPrint(&printer);
-	
+
 }
 
 /*!
@@ -323,25 +323,25 @@ void QomposeWindow::doPrint()
  */
 void QomposeWindow::doPrintPreview()
 { /* SLOT */
-	
+
 	if(!buffers->hasCurrentBuffer())
 	{
 		QMessageBox::warning(this, tr("Nothing To Preview"),
 			tr("No buffers are open; there is nothing to preview!"),
 			QMessageBox::Ok, QMessageBox::Ok);
-		
+
 		return;
 	}
-	
+
 	QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
-	
+
 	QObject::connect( dialog, SIGNAL( paintRequested(QPrinter *) ),
 		buffers, SLOT( doPrint(QPrinter *) ) );
-	
+
 	dialog->exec();
-	
+
 	delete dialog;
-	
+
 }
 
 /*!
@@ -350,12 +350,12 @@ void QomposeWindow::doPrintPreview()
  */
 void QomposeWindow::doFindDialog()
 { /* SLOT */
-	
+
 	if(!replaceDialog->isVisible())
 	{
 		findDialog->show();
 	}
-	
+
 }
 
 /*!
@@ -365,9 +365,9 @@ void QomposeWindow::doFindDialog()
  */
 void QomposeWindow::doFindNext()
 { /* SLOT */
-	
+
 	handleFindResult(buffers->doFindNext(findDialog->getQuery()));
-	
+
 }
 
 /*!
@@ -377,9 +377,9 @@ void QomposeWindow::doFindNext()
  */
 void QomposeWindow::doFindPrevious()
 { /* SLOT */
-	
+
 	handleFindResult(buffers->doFindPrevious(findDialog->getQuery()));
-	
+
 }
 
 /*!
@@ -389,12 +389,12 @@ void QomposeWindow::doFindPrevious()
  */
 void QomposeWindow::doReplaceDialog()
 { /* SLOT */
-	
+
 	if(!findDialog->isVisible())
 	{
 		replaceDialog->show();
 	}
-	
+
 }
 
 /*!
@@ -404,9 +404,9 @@ void QomposeWindow::doReplaceDialog()
  */
 void QomposeWindow::doReplace()
 { /* SLOT */
-	
+
 	handleFindResult(buffers->doReplace(replaceDialog->getQuery()));
-	
+
 }
 
 /*!
@@ -419,9 +419,9 @@ void QomposeWindow::doReplace()
  */
 void QomposeWindow::doReplaceFind()
 { /* SLOT */
-	
+
 	handleFindResult(buffers->doFindNext(replaceDialog->getQuery()));
-	
+
 }
 
 /*!
@@ -431,9 +431,9 @@ void QomposeWindow::doReplaceFind()
  */
 void QomposeWindow::doReplaceSelection()
 { /* SLOT */
-	
+
 	handleFindResult(buffers->doReplaceSelection(replaceDialog->getQuery()));
-	
+
 }
 
 /*!
@@ -443,9 +443,9 @@ void QomposeWindow::doReplaceSelection()
  */
 void QomposeWindow::doReplaceAll()
 { /* SLOT */
-	
+
 	handleFindResult(buffers->doReplaceAll(replaceDialog->getQuery()));
-	
+
 }
 
 /*!
@@ -454,9 +454,9 @@ void QomposeWindow::doReplaceAll()
  */
 void QomposeWindow::doGoToAccepted()
 { /* SLOT */
-	
+
 	buffers->doGoTo(goToDialog->getSelectedLine());
-	
+
 }
 
 #ifdef QOMPOSE_DEBUG
@@ -465,9 +465,9 @@ void QomposeWindow::doGoToAccepted()
 	 */
 	void QomposeWindow::doDebug()
 	{ /* SLOT */
-		
-		
-		
+
+
+
 	}
 #endif
 
@@ -479,8 +479,8 @@ void QomposeWindow::doGoToAccepted()
  */
 void QomposeWindow::doSettingChanged(const QString &k, const QVariant &v)
 { /* SLOT */
-	
+
 	if(k == "show-status-bar")
 		statusBar->setVisible(v.toBool());
-	
+
 }

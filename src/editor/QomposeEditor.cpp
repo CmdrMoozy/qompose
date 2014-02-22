@@ -43,7 +43,7 @@
 /*!
  * This function initializes a new editor widget, using the given parent widget.
  *
- * \param p Our parent widget. 
+ * \param p Our parent widget.
  */
 QomposeEditor::QomposeEditor(QWidget *p)
 	: QomposeDecoratedTextEdit(p)
@@ -72,7 +72,7 @@ QomposeEditor::~QomposeEditor()
  *      Shift+Return     The same as Return.
  *      Shift+Ender      The same as Enter.
  *      Ctrl+(Zero)      Reset text zoom to default level.
- * 
+ *
  * Inherited (implemented by QPlainTextEdit):
  * 	Backspace        Deletes the character to the left of the cursor.
  * 	Delete           Deletes the character to the right of the cursor.
@@ -93,7 +93,7 @@ QomposeEditor::~QomposeEditor()
  * 	End              Moves the cursor to the end of the line.
  * 	Ctrl+End         Moves the cursor to the end of the document.
  * 	Alt+Wheel        Scrolls the page horizontally.
- * 
+ *
  * Inherited but ignored (implemented by QPlainTextEdit, but ignored by QomposeTextEdit):
  *      Ctrl+Shift+Left  Select to beginning of line.
  *      Ctrl+Shift+Right Select to end of line.
@@ -107,20 +107,20 @@ QomposeEditor::~QomposeEditor()
 void QomposeEditor::keyPressEvent(QKeyEvent *e)
 {
 	// Process the key event normally.
-	
+
 	bool processed = false;
-	
+
 	if( (e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter) )
 	{
 		e->accept();
 		doNewline(true);
 		return;
 	}
-	
+
 	switch(e->modifiers())
 	{
 		case Qt::NoModifier:
-			
+
 			switch(e->key())
 			{
 				case Qt::Key_Tab:
@@ -128,22 +128,22 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 					{
 						e->accept();
 						processed = true;
-						
+
 						increaseSelectionIndent();
 					}
 					break;
-				
+
 				case Qt::Key_Home:
 					e->accept();
 					processed = true;
 					doMoveHome();
 					break;
 			};
-			
+
 			break;
-		
+
 		case Qt::ShiftModifier:
-			
+
 			switch(e->key())
 			{
 				// Ignore our superclass's Shift+Insert hotkey.
@@ -151,30 +151,30 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 					e->ignore();
 					processed = true;
 					break;
-				
+
 				// Ignore our superclass's Shift+Delete hotkey.
 				case Qt::Key_Delete:
 					e->ignore();
 					processed = true;
 					break;
-				
+
 				case Qt::Key_Backtab:
 				case Qt::Key_Tab:
 					if(textCursor().hasSelection())
 					{
 						e->accept();
 						processed = true;
-						
+
 						decreaseSelectionIndent();
 					}
 					break;
-				
+
 				case Qt::Key_Home:
 					e->accept();
 					processed = true;
 					doMoveHome(false);
 					break;
-				
+
 				case Qt::Key_Return:
 				case Qt::Key_Enter:
 					e->accept();
@@ -182,11 +182,11 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 					doNewline();
 					break;
 			};
-			
+
 			break;
-		
+
 		case Qt::ControlModifier:
-			
+
 			switch(e->key())
 			{
 				// Ignore our superclass's Control+Insert hotkey.
@@ -194,36 +194,36 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 					e->ignore();
 					processed = true;
 					break;
-				
+
 				// Ignore our superclass's Control+K hotkey.
 				case Qt::Key_K:
 					e->ignore();
 					processed = true;
 					break;
-				
+
 				// CTRL+(Zero) resets our text zoom to 100%.
 				case Qt::Key_0:
 					e->accept();
 					processed = true;
 					setFontZoom(0);
 					break;
-				
+
 				case Qt::Key_Z:
 					e->accept();
 					processed = true;
 					undo();
 					break;
-					
+
 				case Qt::Key_Y:
 					e->accept();
 					processed = true;
 					redo();
 					break;
 			};
-			
+
 			break;
 	};
-	
+
 	if(!processed)
 		QomposeDecoratedTextEdit::keyPressEvent(e);
 }
@@ -237,28 +237,28 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 void QomposeEditor::doNewline(bool preserveIndent)
 {
 	// Compute the text to insert, optionally preserving indent.
-	
+
 	QString insert = "\n";
-	
+
 	if(preserveIndent)
 	{
 		QTextCursor l = textCursor();
-		
+
 		if(l.hasSelection())
 			l.setPosition(l.selectionStart(), QTextCursor::MoveAnchor);
-		
+
 		l.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
 
 		QString line = l.selectedText();
-		
+
 		line.replace(QRegExp("^([ \\t]*)\\S.*$", Qt::CaseSensitive,
 			QRegExp::RegExp2), "\\1");
-		
+
 		insert.append(line);
 	}
-	
+
 	// Insert that text, and set our text cursor.
-	
+
 	QTextCursor curs = textCursor();
 	curs.insertText(insert);
 	setTextCursor(curs);
@@ -278,25 +278,25 @@ void QomposeEditor::doNewline(bool preserveIndent)
 void QomposeEditor::doMoveHome(bool moveAnchor)
 {
 	// Get the characters between the current cursor and the start-of-line.
-	
+
 	QString line, trimmed;
-	
+
 	{
 		QTextCursor l = textCursor();
-		
+
 		if(l.hasSelection())
 			l.setPosition(l.selectionStart(), QTextCursor::MoveAnchor);
-		
+
 		l.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-		
+
 		line = l.selectedText();
 	}
-	
+
 	// Get the leading whitespace from the line.
-	
+
 	{
 		int idx = 0;
-		
+
 		for(int i = 0; i < line.length(); ++i)
 		{
 			if(!line.at(i).isSpace())
@@ -305,18 +305,18 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 				break;
 			}
 		}
-		
+
 		trimmed = line.left(idx);
 	}
-	
+
 	// Move the cursor to its appropriate location.
-	
+
 	if(trimmed == line)
 	{
 		// There is only whitespace in front of us - move to the start-of-line.
-		
+
 		QTextCursor curs = textCursor();
-		
+
 		if(moveAnchor)
 		{
 			curs.movePosition(QTextCursor::StartOfLine,
@@ -327,21 +327,21 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 			curs.movePosition(QTextCursor::StartOfLine,
 				QTextCursor::KeepAnchor);
 		}
-		
+
 		setTextCursor(curs);
 	}
 	else
 	{
 		// There is non-whitespace in front - move to the end of the whitespace.
-		
+
 		QTextCursor curs = textCursor();
-		
+
 		int eos = qMax(curs.selectionStart(), curs.selectionEnd());
-		
+
 		curs.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-		
+
 		int sol = curs.position();
-		
+
 		if(moveAnchor)
 		{
 			curs.setPosition(sol + trimmed.length(),
@@ -350,11 +350,11 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 		else
 		{
 			curs.setPosition(eos, QTextCursor::MoveAnchor);
-			
+
 			curs.setPosition(sol + trimmed.length(),
 				QTextCursor::KeepAnchor);
 		}
-		
+
 		setTextCursor(curs);
 	}
 }
@@ -372,34 +372,34 @@ void QomposeEditor::doMoveHome(bool moveAnchor)
 QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *q)
 {
 	// Prepare our find flags.
-	
+
 	QTextDocument::FindFlags flags = q->getFindFlags();
-	
+
 	if(!f)
 		flags |= QTextDocument::FindBackward;
-	
+
 	// Prepare our cursors.
-	
+
 	QTextCursor current = textCursor();
-	
+
 	QTextCursor restart = textCursor();
-	
+
 	if(f)
 		restart.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
 	else
 		restart.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-	
+
 	// Execute the find query, based on type.
-	
+
 	if(q->isRegularExpression())
 	{
 		QRegExp regex(q->getExpression(), Qt::CaseSensitive, QRegExp::RegExp2);
-		
+
 		if(!regex.isValid())
 			return BadRegularExpression;
-		
+
 		QTextCursor found = document()->find(regex, current, flags);
-		
+
 		if(found.isNull())
 		{
 			if(q->isWrapping())
@@ -407,7 +407,7 @@ QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *
 				found = document()->find(regex, restart, flags);
 			}
 		}
-		
+
 		if(!found.isNull())
 		{
 			setTextCursor(found);
@@ -417,9 +417,9 @@ QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *
 	else
 	{
 		QString expression = q->getExpression();
-		
+
 		QTextCursor found = document()->find(expression, current, flags);
-		
+
 		if(found.isNull())
 		{
 			if(q->isWrapping())
@@ -427,14 +427,14 @@ QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *
 				found = document()->find(expression, restart, flags);
 			}
 		}
-		
+
 		if(!found.isNull())
 		{
 			setTextCursor(found);
 			return Found;
 		}
 	}
-	
+
 	return NoMatches;
 }
 
@@ -457,17 +457,17 @@ QomposeEditor::FindResult QomposeEditor::doBatchReplace(
 	const QomposeReplaceQuery *q, int start, int end)
 {
 	// If we weren't given a start position, use the current cursor.
-	
+
 	if(start < 0)
 	{
 		QTextCursor curs = textCursor();
 		start = qMin(curs.anchor(), curs.position());
 	}
-	
+
 	// Create a new query with "replace in selection"-compatible properties.
-	
+
 	QomposeReplaceQuery query;
-	
+
 	query.setExpression(q->getExpression());
 	query.setReplaceValue(q->getReplaceValue());
 	query.setWrapping(false);
@@ -475,59 +475,59 @@ QomposeEditor::FindResult QomposeEditor::doBatchReplace(
 	query.setCaseSensitive(q->isCaseSensitive());
 	query.setReversed(false);
 	query.setRegularExpression(q->isRegularExpression());
-	
+
 	q = NULL;
-	
+
 	// Move our cursor to our start position.
-	
+
 	QTextCursor curs = textCursor();
 	curs.setPosition(start, QTextCursor::MoveAnchor);
 	setTextCursor(curs);
-	
+
 	// Replace each match we find after our start position.
-	
+
 	curs = textCursor();
 	QomposeEditor::FindResult r = findNext(&query);
 	bool found = false;
-	
+
 	curs.beginEditBlock();
-	
+
 	while(r == QomposeEditor::Found)
 	{
 		// Make sure this match is good to go.
-		
+
 		int finda = textCursor().anchor(), findp = textCursor().position();
-		
+
 		if(end >= 0)
 			if(qMax(finda, findp) > end)
 				break;
-		
+
 		curs.setPosition(finda, QTextCursor::MoveAnchor);
 		curs.setPosition(findp, QTextCursor::KeepAnchor);
-		
+
 		found = true;
-		
+
 		// Replace this match.
-		
+
 		int anchor = qMin(curs.anchor(), curs.position());
-		
+
 		curs.insertText(query.getReplaceValue());
-		
+
 		curs.setPosition(anchor, QTextCursor::MoveAnchor);
 		curs.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
 			query.getReplaceValue().length());
-		
+
 		// Find the next match!
-		
+
 		r = findNext(&query);
 	}
-	
+
 	curs.endEditBlock();
-	
+
 	setTextCursor(curs);
-	
+
 	// Return an appropriate find result.
-	
+
 	if(found)
 		return QomposeEditor::Found;
 	else
@@ -536,16 +536,16 @@ QomposeEditor::FindResult QomposeEditor::doBatchReplace(
 
 void QomposeEditor::undo()
 { /* SLOT */
-	
+
 	QomposeDecoratedTextEdit::undo();
-	
+
 }
 
 void QomposeEditor::redo()
 { /* SLOT */
-	
+
 	QomposeDecoratedTextEdit::redo();
-	
+
 }
 
 /*!
@@ -555,37 +555,37 @@ void QomposeEditor::redo()
  */
 void QomposeEditor::duplicateLine()
 { /* SLOT */
-	
+
 	// Save our cursor's initial state.
-	
+
 	QTextCursor curs = textCursor();
-	
+
 	int cpos = curs.position();
 	int apos = curs.anchor();
-	
+
 	curs.beginEditBlock();
-	
+
 	// Get into position, and copy this block (line).
-	
+
 	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
 	QString line = curs.block().text();
-	
+
 	// Duplicate the line.
-	
+
 	curs.insertText("\n");
 	curs.insertText(line);
-	
+
 	// End our edit block, and reset our cursor position.
-	
+
 	curs.endEditBlock();
-	
+
 	curs.setPosition(apos, QTextCursor::MoveAnchor);
 	curs.setPosition(cpos, QTextCursor::KeepAnchor);
-	
+
 	// Done.
-	
+
 	setTextCursor(curs);
-	
+
 }
 
 /*!
@@ -595,11 +595,11 @@ void QomposeEditor::duplicateLine()
  */
 void QomposeEditor::deselect()
 { /* SLOT */
-	
+
 	QTextCursor curs = textCursor();
 	curs.setPosition(curs.position(), QTextCursor::MoveAnchor);
 	setTextCursor(curs);
-	
+
 }
 
 /*!
@@ -615,64 +615,64 @@ void QomposeEditor::deselect()
  */
 void QomposeEditor::increaseSelectionIndent()
 { /* SLOT */
-	
+
 	QTextCursor curs = textCursor();
-	
+
 	// Do nothing if we don't have a selection.
-	
+
 	if(!curs.hasSelection())
 		return;
-	
+
 	// Get the first and count of lines to indent.
-	
+
 	int spos = curs.anchor(), epos = curs.position();
-	
+
 	if(spos > epos)
 	{
 		int hold = spos;
 		spos = epos;
 		epos = hold;
 	}
-	
+
 	curs.setPosition(spos, QTextCursor::MoveAnchor);
 	int sblock = curs.block().blockNumber();
-	
+
 	curs.setPosition(epos, QTextCursor::MoveAnchor);
 	int eblock = curs.block().blockNumber();
-	
+
 	// Do the indent.
-	
+
 	curs.setPosition(spos, QTextCursor::MoveAnchor);
-	
+
 	curs.beginEditBlock();
-	
+
 	for(int i = 0; i <= (eblock - sblock); ++i)
 	{
 		curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-		
+
 		curs.insertText("\t");
-		
+
 		curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
 	}
-	
+
 	curs.endEditBlock();
-	
+
 	// Set our cursor's selection to span all of the involved lines.
-	
+
 	curs.setPosition(spos, QTextCursor::MoveAnchor);
 	curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-	
+
 	while(curs.block().blockNumber() < eblock)
 	{
 		curs.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
 	}
-	
+
 	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-	
+
 	// Done!
-	
+
 	setTextCursor(curs);
-	
+
 }
 
 /*!
@@ -692,46 +692,46 @@ void QomposeEditor::increaseSelectionIndent()
  */
 void QomposeEditor::decreaseSelectionIndent()
 { /* SLOT */
-	
+
 	QTextCursor curs = textCursor();
-	
+
 	// Do nothing if we don't have a selection.
-	
+
 	if(!curs.hasSelection())
 		return;
-	
+
 	// Get the first and count of lines to de-indent.
-	
+
 	int spos = curs.anchor(), epos = curs.position();
-	
+
 	if(spos > epos)
 	{
 		spos = spos ^ epos;
 		epos = spos ^ epos;
 		spos = spos ^ epos;
 	}
-	
+
 	curs.setPosition(spos, QTextCursor::MoveAnchor);
 	int sblock = curs.block().blockNumber();
 	int sblockpos = curs.block().position();
-	
+
 	curs.setPosition(epos, QTextCursor::MoveAnchor);
 	int eblock = curs.block().blockNumber();
-	
+
 	// Do the de-indent.
-	
+
 	curs.setPosition(spos, QTextCursor::MoveAnchor);
-	
+
 	curs.beginEditBlock();
-	
+
 	bool foundIndent = false;
-	
+
 	for(int i = 0; i <= (eblock - sblock); ++i)
 	{
 		curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-		
+
 		QString text = curs.block().text();
-		
+
 		if(text.startsWith("\t"))
 		{
 			curs.deleteChar();
@@ -745,55 +745,55 @@ void QomposeEditor::decreaseSelectionIndent()
 				foundIndent = true;
 			}
 		}
-		
+
 		curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
 	}
-	
+
 	if(!foundIndent)
 	{
 		// If no lines were indented, try to remove any leading whitespace at all.
-		
+
 		curs.setPosition(spos, QTextCursor::MoveAnchor);
-		
+
 		for(int i = 0; i <= (eblock - sblock); ++i)
 		{
 			curs.movePosition(QTextCursor::StartOfBlock,
 				QTextCursor::MoveAnchor);
-			
+
 			for(int j = 0; j < tabWidthSpaces(); ++j)
 			{
 				QChar c = curs.block().text().at(0);
-				
+
 				if(!c.isSpace())
 					break;
-				
+
 				if( (j > 0) && (c == '\t') )
 					break;
-				
+
 				curs.deleteChar();
 			}
-			
+
 			curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
 		}
 	}
-	
+
 	curs.endEditBlock();
-	
+
 	// Set our cursor's selection to span all of the involved lines.
-	
+
 	curs.setPosition(sblockpos, QTextCursor::MoveAnchor);
-	
+
 	while(curs.block().blockNumber() < eblock)
 	{
 		curs.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
 	}
-	
+
 	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-	
+
 	// Done!
-	
+
 	setTextCursor(curs);
-	
+
 }
 
 /*!
@@ -805,14 +805,14 @@ void QomposeEditor::decreaseSelectionIndent()
  */
 QomposeEditor::FindResult QomposeEditor::findNext(const QomposeFindQuery *q)
 { /* SLOT */
-	
+
 	bool forward = true;
-	
+
 	if(q->isReversed())
 		forward = false;
-	
+
 	return doFind(forward, q);
-	
+
 }
 
 /*!
@@ -824,14 +824,14 @@ QomposeEditor::FindResult QomposeEditor::findNext(const QomposeFindQuery *q)
  */
 QomposeEditor::FindResult QomposeEditor::findPrevious(const QomposeFindQuery *q)
 { /* SLOT */
-	
+
 	bool forward = false;
-	
+
 	if(q->isReversed())
 		forward = true;
-	
+
 	return doFind(forward, q);
-	
+
 }
 
 /*!
@@ -845,49 +845,49 @@ QomposeEditor::FindResult QomposeEditor::findPrevious(const QomposeFindQuery *q)
  */
 QomposeEditor::FindResult QomposeEditor::replace(const QomposeReplaceQuery *q)
 { /* SLOT */
-	
+
 	// Reset our cursor's position.
-	
+
 	QTextCursor curs = textCursor();
-	
+
 	curs.setPosition(qMin(curs.anchor(), curs.position()),
 		QTextCursor::MoveAnchor);
-	
+
 	setTextCursor(curs);
-	
+
 	// Try to find the next match.
-	
+
 	QomposeEditor::FindResult r = findNext(q);
-	
+
 	// If we got a match, replace it with our replace value.
-	
+
 	if(r == QomposeEditor::Found)
 	{
 		curs = textCursor();
-		
+
 		if(curs.hasSelection())
 		{
 			curs.beginEditBlock();
-			
+
 			int anchor = qMin(curs.anchor(), curs.position());
 			int length = qMax(q->getReplaceValue().length(), 0);
-			
+
 			curs.insertText(q->getReplaceValue());
-			
+
 			curs.setPosition(anchor, QTextCursor::MoveAnchor);
 			curs.movePosition(QTextCursor::NextCharacter,
 				QTextCursor::KeepAnchor, length);
-			
+
 			curs.endEditBlock();
-			
+
 			setTextCursor(curs);
 		}
 	}
-	
+
 	// Done!
-	
+
 	return r;
-	
+
 }
 
 /*!
@@ -903,17 +903,17 @@ QomposeEditor::FindResult QomposeEditor::replace(const QomposeReplaceQuery *q)
  */
 QomposeEditor::FindResult QomposeEditor::replaceSelection(const QomposeReplaceQuery *q)
 { /* SLOT */
-	
+
 	QTextCursor curs = textCursor();
-	
+
 	if(!curs.hasSelection())
 		return QomposeEditor::NoMatches;
-	
+
 	int start = qMin(curs.anchor(), curs.position());
 	int end = qMax(curs.anchor(), curs.position());
-	
+
 	return doBatchReplace(q, start, end);
-	
+
 }
 
 /*!
@@ -928,9 +928,9 @@ QomposeEditor::FindResult QomposeEditor::replaceSelection(const QomposeReplaceQu
  */
 QomposeEditor::FindResult QomposeEditor::replaceAll(const QomposeReplaceQuery *q)
 { /* SLOT */
-	
+
 	return doBatchReplace(q, 0);
-	
+
 }
 
 /*!
@@ -947,14 +947,14 @@ QomposeEditor::FindResult QomposeEditor::replaceAll(const QomposeReplaceQuery *q
  */
 void QomposeEditor::goToLine(int l)
 { /* SLOT */
-	
+
 	l = qMax(l, 1);
-	
+
 	QTextCursor curs = textCursor();
-	
+
 	curs.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
 	curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, qMax(l - 1, 0));
-	
+
 	setTextCursor(curs);
-	
+
 }

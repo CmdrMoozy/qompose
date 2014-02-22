@@ -36,7 +36,7 @@ class QPaintEvent;
 class QomposeColorPickerButton : public QPushButton
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeColorPickerButton(QWidget *p = 0, const QColor &iC = Qt::black);
 		QomposeColorPickerButton(const QString &t, QWidget *p = 0,
@@ -44,22 +44,22 @@ class QomposeColorPickerButton : public QPushButton
 		QomposeColorPickerButton(const QIcon &i, const QString &t,
 			QWidget *p = 0, const QColor &iC = Qt::black);
 		virtual ~QomposeColorPickerButton();
-	
+
 		const QColor &getSelectedColor() const;
 		void setSelectedColor(const QColor &c);
-	
+
 	protected:
 		virtual void paintEvent(QPaintEvent *e);
-	
+
 	private:
 		QColor selectedColor;
-	
+
 		virtual void setIcon(const QIcon &i);
 		virtual void setText(const QString &t);
-	
+
 	private Q_SLOTS:
 		void doClicked();
-	
+
 	Q_SIGNALS:
 		void selectedColorChanged(const QColor &);
 };

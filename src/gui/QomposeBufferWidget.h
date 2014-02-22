@@ -40,35 +40,35 @@ class QomposeFileDescriptor;
 class QomposeBufferWidget : public QWidget
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeBufferWidget(QomposeSettings *s, QWidget *p = 0);
 		virtual ~QomposeBufferWidget();
-		
+
 		int count() const;
 		QomposeBuffer *bufferAt(int i) const;
 		QomposeBuffer *currentBuffer() const;
 		bool hasCurrentBuffer() const;
 		void setCurrentBuffer(int i);
-		
+
 		bool prepareCloseParent();
-		
+
 		int findBufferWithPath(const QString &p);
-		
+
 	private:
 		QomposeSettings *settings;
-		
+
 		QGridLayout *layout;
 		QTabWidget *tabWidget;
-		
+
 		QSet<QomposeBuffer *> tabs;
-		
+
 		QomposeBuffer *newBuffer();
 		void removeCurrentBuffer();
 		void moveBuffer(int f, int t);
-		
+
 		QString getDefaultDirectory() const;
-		
+
 	public Q_SLOTS:
 		void doNew();
 		void doOpen();
@@ -97,18 +97,18 @@ class QomposeBufferWidget : public QWidget
 		void doNextBuffer();
 		void doMoveBufferLeft();
 		void doMoveBufferRight();
-		
+
 		void doPrint(QPrinter *p);
-		
+
 	private Q_SLOTS:
 		void doTabChanged(int i);
 		void doTabCloseRequested(int i);
-		
+
 		void doTabTitleChanged(const QString &t);
 		void doTabPathChanged(const QString &p);
-		
+
 		void doOpenDescriptor(const QomposeFileDescriptor &d);
-		
+
 	Q_SIGNALS:
 		void pathChanged(const QString &);
 		void pathOpened(const QString &);

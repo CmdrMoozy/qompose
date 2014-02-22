@@ -31,17 +31,17 @@ class QomposeWindow;
 class QomposeApplication : public QApplication
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeApplication(int &ac, char **av);
 		virtual ~QomposeApplication();
-		
+
 		void initializeLocalServer();
-		
+
 	private:
 		QLocalServer *sappServer;
 		QList<QomposeWindow *> windows;
-		
+
 	private Q_SLOTS:
 		void doDuplicateInstanceDetected();
 };

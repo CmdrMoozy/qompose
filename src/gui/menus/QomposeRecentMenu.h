@@ -36,36 +36,36 @@ class QomposeSettings;
 class QomposeRecentMenu : public QObject
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeRecentMenu(QomposeSettings *s, QObject *p = 0);
 		virtual ~QomposeRecentMenu();
-		
+
 		int getCapacity() const;
 		QMenu *getMenu() const;
-		
+
 		void addPath(const QString &p);
-		
+
 		void saveContents();
-		
+
 	private:
 		QomposeSettings *settings;
 		int capacity;
-		
+
 		QMenu *menu;
 		QList<QAction *> menuActions;
-		
+
 		QQueue<QString> recentList;
-		
+
 		void updateActionsListSize();
 		void setCapacity(int c);
 		void renderListContents();
 		void setListContents(const QStringList &l);
-		
+
 	private Q_SLOTS:
 		void doActionClicked();
 		void doSettingChanged(const QString &k, const QVariant &v);
-		
+
 	Q_SIGNALS:
 		void recentClicked(const QString &);
 };

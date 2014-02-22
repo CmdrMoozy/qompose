@@ -40,7 +40,7 @@ QomposeOpenSavePreferencesWidget::QomposeOpenSavePreferencesWidget(QomposeSettin
 {
 	setPreferencesIcon(QomposeGUIUtils::getIconFromTheme("document-save"));
 	setPreferencesTitle(tr("Open/Save"));
-	
+
 	initializeGUI();
 }
 
@@ -58,7 +58,7 @@ QomposeOpenSavePreferencesWidget::~QomposeOpenSavePreferencesWidget()
 void QomposeOpenSavePreferencesWidget::apply()
 {
 	// Strip Trailing Spaces
-	
+
 	getSettings()->setSetting("save-strip-trailing-spaces", QVariant(
 		stripTrailingSpacesCheckBox->checkState() == Qt::Checked));
 }
@@ -71,10 +71,10 @@ void QomposeOpenSavePreferencesWidget::apply()
 void QomposeOpenSavePreferencesWidget::discardChanges()
 {
 	// Strip Trailing Spaces
-	
+
 	bool stripSpaces = getSettings()->getSetting(
 		"save-strip-trailing-spaces").toBool();
-	
+
 	stripTrailingSpacesCheckBox->setCheckState(stripSpaces ?
 		Qt::Checked : Qt::Unchecked);
 }
@@ -86,28 +86,28 @@ void QomposeOpenSavePreferencesWidget::discardChanges()
 void QomposeOpenSavePreferencesWidget::initializeGUI()
 {
 	layout = new QGridLayout(this);
-	
+
 	// Initialize our general group box.
-	
+
 	generalGroupBox = new QGroupBox(tr("General"), this);
 	generalLayout = new QGridLayout(generalGroupBox);
-	
+
 	stripTrailingSpacesCheckBox = new QCheckBox(tr("Strip Trailing Spaces"),
 		generalGroupBox);
-	
+
 	generalLayout->addWidget( stripTrailingSpacesCheckBox, 0, 0, 1, 1 );
-	
+
 	generalLayout->setRowStretch(1, 1);
 	generalLayout->setColumnStretch(0, 1);
-	
+
 	generalGroupBox->setLayout(generalLayout);
-	
+
 	// Add these group boxes to our layout.
-	
+
 	layout->addWidget(generalGroupBox, 0, 0, 1, 1);
-	
+
 	layout->setRowStretch(1, 1);
 	layout->setColumnStretch(0, 1);
-	
+
 	setLayout(layout);
 }

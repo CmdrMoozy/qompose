@@ -32,36 +32,36 @@ QomposeDecoratedTextEdit::QomposeDecoratedTextEdit(QWidget *p)
 	: QPlainTextEdit(p), originalFontSize(11.0), currentFontZoom(1)
 {
 	// Set our editor's default font.
-	
+
 	setFont(QFont("Courier", 11));
 	setFontZoom(0);
-	
+
 	// Initialize our gutter.
-	
+
 	gutter = new QomposeGutter(this);
-	
+
 	setGutterForeground(QColor(255, 255, 255));
 	setGutterBackground(QColor(0, 0, 0));
-	
+
 	QObject::connect( this, SIGNAL( blockCountChanged(int)            ), this, SLOT( updateGutterWidth()              ) );
 	QObject::connect( this, SIGNAL( updateRequest(const QRect &, int) ), this, SLOT( updateGutter(const QRect &, int) ) );
 	QObject::connect( this, SIGNAL( cursorPositionChanged()           ), this, SLOT( highlightCurrentLine()           ) );
-	
+
 	// Set some of our widget's default properties.
-	
+
 	setCurrentLineColor(QColor(70, 72, 61));
-	
+
 	setTabWidthSpaces(8);
-	
+
 	setWrapGuideVisible(true);
 	setWrapGuideColumnWidth(100);
 	setWrapGuideColor(QColor(127, 127, 127));
-	
+
 	setLineWrapMode(QPlainTextEdit::NoWrap);
 	setFocusPolicy(Qt::ClickFocus);
-	
+
 	setGutterVisible(true);
-	
+
 	highlightCurrentLine();
 }
 
@@ -105,10 +105,10 @@ bool QomposeDecoratedTextEdit::isGutterVisible()
 QFont QomposeDecoratedTextEdit::font() const
 {
 	// Return a font identical to ours, except with a size not including scaling.
-	
+
 	QFont f = currentFont;
 	f.setPointSizeF(originalFontSize);
-	
+
 	return f;
 }
 
@@ -121,29 +121,29 @@ QFont QomposeDecoratedTextEdit::font() const
 void QomposeDecoratedTextEdit::setFont(const QFont &f)
 {
 	// Make a note of our current tab width (in spaces).
-	
+
 	int oldWidth = tabWidthSpaces();
-	
+
 	// Make sure we aren't given a pixel-sized font.
-	
+
 	currentFont = f;
-	
+
 	if(currentFont.pointSize() == -1)
 		currentFont.setPointSize(10);
-	
+
 	originalFontSize = currentFont.pointSizeF();
 	originalFontSize = qMax(originalFontSize, 1.0);
-	
+
 	// Set our font!
-	
+
 	QPlainTextEdit::setFont(currentFont);
-	
+
 	// Make sure our tab width is still the same (in spaces).
-	
+
 	setTabWidthSpaces(oldWidth);
-	
+
 	// Update our line wrap guide, since it depends on our font.
-	
+
 	fullUpdate();
 }
 
@@ -170,7 +170,7 @@ qreal QomposeDecoratedTextEdit::fontZoomSize() const
 {
 	qreal scale = static_cast<qreal>(fontZoom()) / 100.0;
 	qreal fsize = originalFontSize + (scale * originalFontSize);
-	
+
 	return qMax(fsize, 0.0);
 }
 
@@ -186,17 +186,17 @@ qreal QomposeDecoratedTextEdit::fontZoomSize() const
 void QomposeDecoratedTextEdit::setFontZoom(int z)
 {
 	// Update the current font zoom factor.
-	
+
 	z = qMax(-100, z);
 	currentFontZoom = z;
-	
+
 	// Update our editor's actual font size.
-	
+
 	qreal sizef = fontZoomSize();
-	
+
 	if(sizef > 0.0)
 		currentFont.setPointSizeF(sizef);
-	
+
 	QPlainTextEdit::setFont(currentFont);
 }
 
@@ -209,12 +209,12 @@ void QomposeDecoratedTextEdit::setFontZoom(int z)
 int QomposeDecoratedTextEdit::tabWidthSpaces() const
 {
 	double w = static_cast<double>(tabStopWidth());
-	
+
 	QFontMetrics m(font());
-	
+
 	w /= static_cast<double>(m.width(' '));
 	qRound(w);
-	
+
 	return static_cast<int>(w);
 }
 
@@ -227,9 +227,9 @@ int QomposeDecoratedTextEdit::tabWidthSpaces() const
 void QomposeDecoratedTextEdit::setTabWidthSpaces(int w)
 {
 	w = qAbs(w);
-	
+
 	QFontMetrics m(font());
-	
+
 	setTabStopWidth(w * m.width(' '));
 }
 
@@ -254,7 +254,7 @@ bool QomposeDecoratedTextEdit::isWrapGuideVisible() const
 void QomposeDecoratedTextEdit::setWrapGuideVisible(bool v)
 {
 	wrapGuideVisible = v;
-	
+
 	fullUpdate();
 }
 
@@ -287,7 +287,7 @@ int QomposeDecoratedTextEdit::getWrapGuideColumnWidth() const
 void QomposeDecoratedTextEdit::setWrapGuideColumnWidth(int w)
 {
 	wrapGuideWidth = qAbs(w);
-	
+
 	fullUpdate();
 }
 
@@ -311,7 +311,7 @@ QColor QomposeDecoratedTextEdit::getWrapGuideColor() const
 void QomposeDecoratedTextEdit::setWrapGuideColor(const QColor &c)
 {
 	wrapGuideColor = c;
-	
+
 	fullUpdate();
 }
 
@@ -333,15 +333,15 @@ QColor QomposeDecoratedTextEdit::getEditorForeground() const
 void QomposeDecoratedTextEdit::setEditorForeground(const QColor &c)
 {
 	QPalette p = palette();
-	
+
 	p.setColor(QPalette::Active, QPalette::Window, c);
 	p.setColor(QPalette::Active, QPalette::WindowText, c);
 	p.setColor(QPalette::Active, QPalette::Text, c);
-	
+
 	p.setColor(QPalette::Inactive, QPalette::Window, c);
 	p.setColor(QPalette::Inactive, QPalette::WindowText, c);
 	p.setColor(QPalette::Inactive, QPalette::Text, c);
-	
+
 	setPalette(p);
 }
 
@@ -363,10 +363,10 @@ QColor QomposeDecoratedTextEdit::getEditorBackground() const
 void QomposeDecoratedTextEdit::setEditorBackground(const QColor &c)
 {
 	QPalette p = palette();
-	
+
 	p.setColor(QPalette::Active, QPalette::Base, c);
 	p.setColor(QPalette::Inactive, QPalette::Base, c);
-	
+
 	setPalette(p);
 }
 
@@ -388,7 +388,7 @@ QColor QomposeDecoratedTextEdit::getCurrentLineColor() const
 void QomposeDecoratedTextEdit::setCurrentLineColor(const QColor &c)
 {
 	currentLineHighlight = c;
-	
+
 	highlightCurrentLine();
 }
 
@@ -411,7 +411,7 @@ QColor QomposeDecoratedTextEdit::getGutterForeground() const
 void QomposeDecoratedTextEdit::setGutterForeground(const QColor &c)
 {
 	gutterForeground = c;
-	
+
 	gutter->update();
 }
 
@@ -434,7 +434,7 @@ QColor QomposeDecoratedTextEdit::getGutterBackground() const
 void QomposeDecoratedTextEdit::setGutterBackground(const QColor &c)
 {
 	gutterBackground = c;
-	
+
 	gutter->update();
 }
 
@@ -447,20 +447,20 @@ void QomposeDecoratedTextEdit::setGutterBackground(const QColor &c)
 void QomposeDecoratedTextEdit::paintEvent(QPaintEvent *e)
 {
 	// Let our superclass do its normal painting.
-	
+
 	QPlainTextEdit::paintEvent(e);
-	
+
 	// Draw our line wrap guide, if it is enabled.
-	
+
 	if(isWrapGuideVisible())
 	{
 		QRect r = e->rect();
 		QPainter p(viewport());
-		
+
 		p.setPen(QPen(getWrapGuideColor()));
-		
+
 		int offset = wrapGuideOffset();
-		
+
 		p.drawLine(offset, r.top(), offset, r.bottom());
 	}
 }
@@ -495,7 +495,7 @@ void QomposeDecoratedTextEdit::focusOutEvent(QFocusEvent *e)
 void QomposeDecoratedTextEdit::resizeEvent(QResizeEvent *e)
 {
 	QPlainTextEdit::resizeEvent(e);
-	
+
 	QRect cr = contentsRect();
 	gutter->setGeometry(QRect(cr.left(), cr.top(), gutterWidth(), cr.height()));
 }
@@ -510,16 +510,16 @@ void QomposeDecoratedTextEdit::wheelEvent(QWheelEvent *e)
 	if(e->modifiers() == Qt::ControlModifier)
 	{
 		// If the user does Ctrl+Wheel, zoom in/out on our text.
-		
+
 		qreal scale = static_cast<qreal>(e->delta()) / 8.0;	// Delta is degrees turned * 8.
 		scale *= 0.8333; 					// Scale by 100% for each 120 degrees.
-		
+
 		setFontZoom(currentFontZoom + qRound(scale));
 	}
 	else
 	{
 		// Otherwise, just perform our parent class's default action.
-		
+
 		QPlainTextEdit::wheelEvent(e);
 	}
 
@@ -536,9 +536,9 @@ void QomposeDecoratedTextEdit::wheelEvent(QWheelEvent *e)
 void QomposeDecoratedTextEdit::mouseReleaseEvent(QMouseEvent *e)
 {
 	highlightCurrentLine();
-	
+
 	// Do our superclass's normal mouse action.
-	
+
 	QPlainTextEdit::mouseReleaseEvent(e);
 }
 
@@ -551,17 +551,17 @@ void QomposeDecoratedTextEdit::mouseReleaseEvent(QMouseEvent *e)
 void QomposeDecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 {
 	QPainter painter(gutter);
-	
+
 	// Paint our background.
 	painter.fillRect(e->rect(), gutterBackground);
-	
+
 	// Paint our line numbers.
-	
+
 	QTextBlock block = firstVisibleBlock();
 	int blockNumber = block.blockNumber();
 	int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
 	int bottom = top + (int) blockBoundingRect(block).height();
-	
+
 	while(block.isValid() && top <= e->rect().bottom())
 	{
 		if(block.isVisible() && bottom >= e->rect().top())
@@ -570,7 +570,7 @@ void QomposeDecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 			painter.setPen(gutterForeground);
 			painter.drawText(0, top, gutter->width(), fontMetrics().height(), Qt::AlignCenter, number);
 		}
-		
+
 		block = block.next();
 		top = bottom;
 		bottom = top + (int) blockBoundingRect(block).height();
@@ -589,18 +589,18 @@ int QomposeDecoratedTextEdit::gutterWidth()
 {
 	if(!isGutterVisible())
 		return 0;
-	
+
 	int digits = 1;
 	int max = qMax(1, blockCount());
-	
+
 	while(max >= 10)
 	{
 		max /= 10;
 		digits++;
 	}
-	
+
 	int space = 20 + (fontMetrics().width(QLatin1Char('9')) * digits);
-	
+
 	return space;
 }
 
@@ -615,11 +615,11 @@ int QomposeDecoratedTextEdit::wrapGuideOffset()
 	// The character width is rounded, since it is rounded by the widget when the text
 	// is actually rendered. Without doing this, the offset will sometimes be incorrect.
 	qreal charWidth = qRound(QFontMetricsF(currentFont).averageCharWidth());
-	
+
 	qreal chars = static_cast<qreal>(getWrapGuideColumnWidth());
 	qreal contentOff = static_cast<qreal>(contentOffset().x());
 	qreal margin = static_cast<qreal>(document()->documentMargin());
-	
+
 	return static_cast<int>(round( (charWidth * chars) + contentOff + margin ));
 }
 
@@ -629,12 +629,12 @@ int QomposeDecoratedTextEdit::wrapGuideOffset()
  */
 void QomposeDecoratedTextEdit::fullUpdate()
 { /* SLOT */
-	
+
 	update();
 	viewport()->update();
-	
+
 	highlightCurrentLine();
-	
+
 }
 
 /*!
@@ -643,12 +643,12 @@ void QomposeDecoratedTextEdit::fullUpdate()
  */
 void QomposeDecoratedTextEdit::fullRepaint()
 { /* SLOT */
-	
+
 	repaint();
 	viewport()->repaint();
-	
+
 	highlightCurrentLine();
-	
+
 }
 
 /*!
@@ -656,19 +656,19 @@ void QomposeDecoratedTextEdit::fullRepaint()
  */
 void QomposeDecoratedTextEdit::highlightCurrentLine()
 { /* SLOT */
-	
+
 	QList<QTextEdit::ExtraSelection> es;
 	QTextEdit::ExtraSelection selection;
-	
+
 	selection.format.setBackground(currentLineHighlight);
 	selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-	
+
 	selection.cursor = textCursor();
 	selection.cursor.clearSelection();
-	
+
 	es.append(selection);
 	setExtraSelections(es);
-	
+
 }
 
 /*!
@@ -676,9 +676,9 @@ void QomposeDecoratedTextEdit::highlightCurrentLine()
  */
 void QomposeDecoratedTextEdit::updateGutterWidth()
 { /* SLOT */
-	
+
 	setViewportMargins(gutterWidth(), 0, 0, 0);
-	
+
 }
 
 /*!
@@ -690,13 +690,13 @@ void QomposeDecoratedTextEdit::updateGutterWidth()
  */
 void QomposeDecoratedTextEdit::updateGutter(const QRect &r, int dy)
 { /* SLOT */
-	
+
 	if(dy)
 		gutter->scroll(0, dy);
 	else
 		gutter->update(0, r.y(), gutter->width(), r.height());
-	
+
 	if(r.contains(viewport()->rect()))
 		updateGutterWidth();
-	
+
 }

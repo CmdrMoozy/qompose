@@ -18,14 +18,14 @@
 
 #ifndef INCLUDE_QOMPOSE_DEFINES_H
 #define INCLUDE_QOMPOSE_DEFINES_H
-	
+
 	/*
 	 * Define our application's version.
 	 */
 	#define QOMPOSE_VERSION_MAJ 1
 	#define QOMPOSE_VERSION_MIN 0
 	#define QOMPOSE_VERSION_BUG 0
-	
+
 	/*
 	 * Define a GUID to uniquely identify our application.
 	 */
@@ -34,12 +34,12 @@
 	#else
 		#define QOMPOSE_GUID ("32e11710-e79f-4a3a-ba31-2ff06f1f86a0")
 	#endif
-	
+
 	/*
 	 * Define a megabyte in bytes, for code readability.
 	 */
 	#define QMEGABYTE (1048576)
-	
+
 	/*
 	 * Define our QLUNUSED macro, which is used on win32 to suppress the "unreferenced local
 	 * variable" warning (4101) in cases where we are very intentionally NOT referencing said
@@ -52,7 +52,7 @@
 			#define QLUNUSED(x)
 		#endif
 	#endif
-	
+
 	/*
 	 * Define our QUNUSED macro, which is used to suppress unused variable warnings
 	 * by indicating that the variable is intended to be unused. Note that this only
@@ -65,5 +65,5 @@
 			#define QUNUSED(x)
 		#endif
 	#endif
-	
+
 #endif

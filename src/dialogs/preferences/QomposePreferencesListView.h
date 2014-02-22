@@ -34,9 +34,9 @@ class QomposePreferencesListView : public QListView
 	public:
 		QomposePreferencesListView(QWidget *p = 0);
 		virtual ~QomposePreferencesListView();
-		
+
 		void setModel(QomposePreferencesListModel *m);
-		
+
 	private:
 		virtual void setModel(QAbstractItemModel *m);
 };

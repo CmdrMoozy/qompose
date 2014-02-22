@@ -40,13 +40,13 @@ class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 		QomposeEditorPreferencesWidget(QomposeSettings *s,
 			QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeEditorPreferencesWidget();
-		
+
 		virtual void apply();
 		virtual void discardChanges();
-		
+
 	private:
 		QGridLayout *layout;
-		
+
 		QGroupBox *generalGroupBox;
 		QGridLayout *generalLayout;
 		QCheckBox *showGutterCheckBox;
@@ -54,7 +54,7 @@ class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 		QomposeFontPickerButton *editorFontButton;
 		QLabel *tabWidthLabel;
 		QSpinBox *tabWidthSpinBox;
-		
+
 		QGroupBox *lineWrapGuideGroupBox;
 		QGridLayout *lineWrapGuideLayout;
 		QCheckBox *lineWrapGuideCheckBox;
@@ -62,7 +62,7 @@ class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 		QSpinBox *lineWrapGuideWidthSpinBox;
 		QLabel *lineWrapGuideColorLabel;
 		QomposeColorPickerButton *lineWrapGuideColorButton;
-		
+
 		QGroupBox *colorsGroupBox;
 		QGridLayout *colorsLayout;
 		QLabel *editorFGLabel;
@@ -75,7 +75,7 @@ class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 		QomposeColorPickerButton *gutterFGButton;
 		QLabel *gutterBGLabel;
 		QomposeColorPickerButton *gutterBGButton;
-		
+
 		void initializeGUI();
 };
 

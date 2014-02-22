@@ -33,32 +33,32 @@ class QPushButton;
 class QomposeEncodingDialog : public QDialog
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeEncodingDialog(QWidget *p = 0, Qt::WindowFlags f = 0,
 			const QString &d = "UTF-8",
 			const QString &m = tr("Which character encoding should be used?"),
 			const QString &t = tr("Select Character Encoding"));
 		virtual ~QomposeEncodingDialog();
-		
+
 		static QString promptEncoding(QWidget *p = 0, const QString &d = "UTF-8",
 			const QString &m = tr("Which character encoding should be used?"),
 			const QString &t = tr("Select Character Encoding"));
-		
+
 		QString getSelectedEncoding() const;
-		
+
 	private:
 		QString encoding;
-		
+
 		QGridLayout *layout;
 		QLabel *messageLabel;
 		QListWidget *encodingList;
-		
+
 		QWidget *buttonsWidget;
 		QGridLayout *buttonsLayout;
 		QPushButton *selectButton;
 		QPushButton *cancelButton;
-		
+
 	private Q_SLOTS:
 		void doSelectClicked();
 		void doCancelClicked();

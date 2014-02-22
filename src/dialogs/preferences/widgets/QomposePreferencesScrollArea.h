@@ -32,13 +32,13 @@ class QomposePreferencesScrollArea : public QScrollArea
 	public:
 		QomposePreferencesScrollArea(QWidget *p = 0);
 		virtual ~QomposePreferencesScrollArea();
-		
+
 		virtual void setWidget(QWidget *w);
-		
+
 	protected:
 		virtual bool eventFilter(QObject *o, QEvent *e);
 		virtual void showEvent(QShowEvent *e);
-		
+
 	private:
 		void resizeFixedHorizontal();
 };

@@ -44,41 +44,41 @@ QomposeEncodingDialog::QomposeEncodingDialog(QWidget *p, Qt::WindowFlags f,
 	: QDialog(p, f), encoding(QString())
 {
 	layout = new QGridLayout(this);
-	
+
 	messageLabel = new QLabel(m, this);
-	
+
 	encodingList = new QListWidget(this);
-	
+
 	QList<QByteArray> codecs = QTextCodec::availableCodecs();
-	
+
 	for(int i = 0; i < codecs.size(); ++i)
 		encodingList->addItem(QString(codecs.at(i)));
-	
+
 	QList<QListWidgetItem *> defaultEncoding = encodingList->findItems(d, Qt::MatchExactly);
-	
+
 	if(defaultEncoding.size() == 1)
 		encodingList->setCurrentItem(defaultEncoding.first());
-	
+
 	buttonsWidget = new QWidget(this);
 	buttonsLayout = new QGridLayout(buttonsWidget);
-	
+
 	selectButton = new QPushButton(tr("&Select"), buttonsWidget);
-	
+
 	cancelButton = new QPushButton(tr("&Cancel"), buttonsWidget);
-	
+
 	buttonsLayout->addWidget(selectButton, 0, 1, 1, 1);
 	buttonsLayout->addWidget(cancelButton, 0, 2, 1, 1);
 	buttonsLayout->setColumnStretch(0, 1);
 	buttonsWidget->setLayout(buttonsLayout);
-	
+
 	layout->addWidget(messageLabel, 0, 0, 1, 1);
 	layout->addWidget(encodingList, 1, 0, 1, 1);
 	layout->addWidget(buttonsWidget, 2, 0, 1, 1);
 	setLayout(layout);
-	
+
 	QObject::connect( selectButton, SIGNAL( clicked(bool) ), this, SLOT( doSelectClicked() ) );
 	QObject::connect( cancelButton, SIGNAL( clicked(bool) ), this, SLOT( doCancelClicked() ) );
-	
+
 	setModal(true);
 	setWindowTitle(t);
 }
@@ -111,11 +111,11 @@ QomposeEncodingDialog::~QomposeEncodingDialog()
 QString QomposeEncodingDialog::promptEncoding(QWidget *p, const QString &d,
 	const QString &m, const QString &t)
 {
-	
+
 	QomposeEncodingDialog dialog(p, 0, d, m, t);
 	dialog.exec();
 	return dialog.getSelectedEncoding();
-	
+
 }
 
 /*!
@@ -136,16 +136,16 @@ QString QomposeEncodingDialog::getSelectedEncoding() const
  */
 void QomposeEncodingDialog::doSelectClicked()
 { /* SLOT */
-	
+
 	QList<QListWidgetItem *> selected = encodingList->selectedItems();
-	
+
 	if(selected.size() == 1)
 		encoding = selected.first()->text();
 	else
 		encoding = QString();
-	
+
 	done(0);
-	
+
 }
 
 /*!
@@ -154,8 +154,8 @@ void QomposeEncodingDialog::doSelectClicked()
  */
 void QomposeEncodingDialog::doCancelClicked()
 { /* SLOT */
-	
+
 	encoding = QString();
 	done(0);
-	
+
 }

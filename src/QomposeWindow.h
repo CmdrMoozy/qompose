@@ -43,38 +43,38 @@ class QomposeStatusBar;
 class QomposeWindow : public QMainWindow
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeWindow(QWidget *p = NULL, Qt::WindowFlags f = 0);
 		virtual ~QomposeWindow();
-		
+
 	protected:
 		void closeEvent(QCloseEvent *e);
-		
+
 	private:
 		QomposeSettings *settings;
-		
+
 		QomposePreferencesDialog *preferencesDialog;
 		QomposeFindDialog *findDialog;
 		QomposeReplaceDialog *replaceDialog;
 		QomposeGoToDialog *goToDialog;
 		QomposeAboutDialog *aboutDialog;
-		
+
 		QomposeMainMenu *mainMenu;
-		
+
 		QomposeBufferWidget *buffers;
-		
+
 		QomposeStatusBar *statusBar;
-		
+
 		void initializeDialogs();
 		void initializeMenus();
 		void applyExistingSettings();
-		
+
 		void handleFindResult(QomposeEditor::FindResult r);
-		
+
 	private Q_SLOTS:
 		void doTabPathChanged(const QString &p);
-		
+
 		void doPreferencesDialog();
 		void doPrint();
 		void doPrintPreview();
@@ -87,11 +87,11 @@ class QomposeWindow : public QMainWindow
 		void doReplaceSelection();
 		void doReplaceAll();
 		void doGoToAccepted();
-		
+
 		#ifdef QOMPOSE_DEBUG
 			void doDebug();
 		#endif
-		
+
 		void doSettingChanged(const QString &k, const QVariant &v);
 };
 

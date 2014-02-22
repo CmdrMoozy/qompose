@@ -38,24 +38,24 @@ class QomposeFindQuery;
 class QomposeFindDialog : public QDialog
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeFindDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeFindDialog();
-		
+
 		const QomposeFindQuery *getQuery() const;
-		
+
 	protected:
 		virtual void showEvent(QShowEvent *e);
-		
+
 	private:
 		QomposeFindQuery *query;
-		
+
 		QGridLayout *layout;
-		
+
 		QLabel *findLabel;
 		QLineEdit *findTextEdit;
-		
+
 		QGroupBox *optionsGroupBox;
 		QGridLayout *optionsLayout;
 		QCheckBox *wrapCheckBox;
@@ -63,17 +63,17 @@ class QomposeFindDialog : public QDialog
 		QCheckBox *caseSensitiveCheckBox;
 		QCheckBox *reverseCheckBox;
 		QCheckBox *regexCheckBox;
-		
+
 		QWidget *buttonsWidget;
 		QGridLayout *buttonsLayout;
 		QPushButton *findButton;
 		QPushButton *closeButton;
-		
+
 		void initializeGUI();
-		
+
 	private Q_SLOTS:
 		void doFind();
-		
+
 	Q_SIGNALS:
 		void accepted();
 };

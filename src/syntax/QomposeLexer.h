@@ -44,7 +44,7 @@ class QomposeLexer : public QObject
 			CommentState = 4,
 			StringState = 8
 		};
-		
+
 		/*!
 		 * \brief This enum defines the different types of tokens our lexer looks for.
 		 */
@@ -57,12 +57,12 @@ class QomposeLexer : public QObject
 			OperatorToken = 4,
 			NumberToken = 5
 		};
-		
+
 		static QString getSettingKey(Token t);
-		
+
 		QomposeLexer(QObject *p = 0);
 		virtual ~QomposeLexer();
-		
+
 		virtual QList<QomposeLexerToken> lexBlock(int *s, const QString &t, int p) = 0;
 };
 

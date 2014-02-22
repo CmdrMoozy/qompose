@@ -34,14 +34,14 @@ class QomposeGutter : public QWidget
 	public:
 		QomposeGutter(QomposeDecoratedTextEdit *e);
 		virtual ~QomposeGutter();
-		
+
 		void setEditor(QomposeDecoratedTextEdit *e);
-		
+
 		QSize sizeHint() const;
-		
+
 	protected:
 		virtual void paintEvent(QPaintEvent *e);
-		
+
 	private:
 		QomposeDecoratedTextEdit *editor;
 };

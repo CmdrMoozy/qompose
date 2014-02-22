@@ -43,22 +43,22 @@ class QomposeBufferWidget;
 class QomposeMainMenu : public QMenuBar
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeMainMenu(QomposeSettings *s, QWidget *p = 0);
 		virtual ~QomposeMainMenu();
-		
+
 		void connectBufferWidget(const QomposeBufferWidget *b);
-		
+
 	private:
 		QomposeSettings *settings;
-		
+
 		QMenu *fileMenu;
 		QMenu *editMenu;
 		QMenu *searchMenu;
 		QMenu *buffersMenu;
 		QMenu *helpMenu;
-		
+
 		QAction *newAction;
 		QAction *openAction;
 		QomposeRecentMenu *recentMenu;
@@ -69,7 +69,7 @@ class QomposeMainMenu : public QMenuBar
 		QAction *printPreviewAction;
 		QAction *closeAction;
 		QAction *exitAction;
-		
+
 		QAction *undoAction;
 		QAction *redoAction;
 		QAction *cutAction;
@@ -81,28 +81,28 @@ class QomposeMainMenu : public QMenuBar
 		QAction *increaseIndentAction;
 		QAction *decreaseIndentAction;
 		QAction *preferencesAction;
-		
+
 		QAction *findAction;
 		QAction *findNextAction;
 		QAction *findPreviousAction;
 		QAction *replaceAction;
 		QAction *goToAction;
-		
+
 		QAction *previousBufferAction;
 		QAction *nextBufferAction;
 		QAction *moveBufferLeftAction;
 		QAction *moveBufferRightAction;
-		
+
 		QAction *aboutQomposeAction;
 		QAction *aboutQtAction;
-		
+
 		#ifdef QOMPOSE_DEBUG
 			QAction *debugAction;
 		#endif
-		
+
 	private Q_SLOTS:
 		void doFileOpened(const QString &p);
-		
+
 	Q_SIGNALS:
 		void printTriggered(bool);
 		void printPreviewTriggered(bool);
@@ -115,7 +115,7 @@ class QomposeMainMenu : public QMenuBar
 		void goToTriggered(bool);
 		void aboutQomposeTriggered(bool);
 		void aboutQtTriggered(bool);
-		
+
 		#ifdef QOMPOSE_DEBUG
 			void debugTriggered(bool);
 		#endif

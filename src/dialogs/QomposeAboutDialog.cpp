@@ -42,9 +42,9 @@ QomposeAboutDialog::QomposeAboutDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f)
 {
 	setWindowTitle(tr("About Qompose"));
-	
+
 	initializeGUI();
-	
+
 	resize(500, 500);
 }
 
@@ -62,35 +62,35 @@ QomposeAboutDialog::~QomposeAboutDialog()
 void QomposeAboutDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
-	
+
 	tabs = new QTabWidget(this);
-	
+
 	// Create our Qompose tab.
-	
+
 	qomposeTab = new QWidget(tabs);
 	qomposeTabLayout = new QGridLayout(qomposeTab);
-	
+
 	qomposeIconLabel = new QLabel(qomposeTab);
 	qomposeIconLabel->setPixmap(QPixmap(":/icons/qompose.png"));
 	qomposeIconLabel->setScaledContents(true);
 	qomposeIconLabel->resize(32, 32);
-	
+
 	qomposeLabel = new QLabel(QString("Qompose %1.%2.%3")
 		.arg(QOMPOSE_VERSION_MAJ).arg(QOMPOSE_VERSION_MIN)
 		.arg(QOMPOSE_VERSION_BUG), qomposeTab);
-	
+
 	QFont largeFont = qomposeLabel->font();
 	largeFont.setPointSize(24);
-	
+
 	qomposeLabel->setFont(largeFont);
-	
+
 	qomposeDescriptionLabel = new QLabel(tr("A simple programmer's "
 		"text editor."), qomposeTab);
-	
+
 	qomposeTextEdit = new QTextEdit(qomposeTab);
 	qomposeTextEdit->setLineWrapMode(QTextEdit::NoWrap);
 	qomposeTextEdit->setReadOnly(true);
-	
+
 	qomposeTabLayout->addWidget(qomposeIconLabel, 0, 0, 2, 1);
 	qomposeTabLayout->addWidget(qomposeLabel, 0, 1, 1, 1);
 	qomposeTabLayout->addWidget(qomposeDescriptionLabel, 1, 1, 1, 1);
@@ -98,31 +98,31 @@ void QomposeAboutDialog::initializeGUI()
 	qomposeTabLayout->setColumnStretch(1, 1);
 	qomposeTabLayout->setRowStretch(2, 1);
 	qomposeTab->setLayout(qomposeTabLayout);
-	
+
 	// Create our license tab.
-	
+
 	QFont monospace("Monospace");
 	monospace.setPointSize(9);
 	monospace.setStyleHint(QFont::TypeWriter);
-	
+
 	licenseTextEdit = new QTextEdit(tabs);
 	licenseTextEdit->setLineWrapMode(QTextEdit::NoWrap);
 	licenseTextEdit->setReadOnly(true);
 	licenseTextEdit->setCurrentFont(monospace);
 	loadLicense();
-	
+
 	// Add our tabs and our buttons to our layout.
-	
+
 	tabs->addTab(qomposeTab, tr("Qompose"));
 	tabs->addTab(licenseTextEdit, tr("License"));
-	
+
 	closeButton = new QPushButton(tr("Clos&e"), this);
-	
+
 	layout->addWidget(tabs, 0, 0, 1, 1);
 	layout->addWidget(closeButton, 1, 0, 1, 1);
 	layout->setRowStretch(0, 1);
 	setLayout(layout);
-	
+
 	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close() ) );
 }
 
@@ -133,14 +133,14 @@ void QomposeAboutDialog::initializeGUI()
 void QomposeAboutDialog::loadLicense()
 {
 	licenseTextEdit->clear();
-	
+
 	QFile f(":/data/gpl.txt");
-	
+
 	if(!f.open(QIODevice::ReadOnly))
 		return;
-	
+
 	QTextStream reader(&f);
 	licenseTextEdit->setText(reader.readAll());
-	
+
 	f.close();
 }

@@ -40,37 +40,37 @@ class QomposeSettings;
 class QomposePreferencesDialog : public QDialog
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposePreferencesDialog(QomposeSettings *s, QWidget *p = 0,
 			Qt::WindowFlags f = 0);
 		virtual ~QomposePreferencesDialog();
-		
+
 		void discardChanges();
-		
+
 	private:
 		QomposeSettings *settings;
-		
+
 		QGridLayout *layout;
-		
+
 		QomposeGeneralPreferencesWidget *generalPreferencesWidget;
 		QomposeEditorPreferencesWidget *editorPreferencesWidget;
 		QomposeOpenSavePreferencesWidget *openSavePreferencesWidget;
-		
+
 		QomposePreferencesListView *preferencesView;
 		QomposePreferencesListModel *preferencesModel;
-		
+
 		QStackedWidget *preferencesDisplayWidget;
-		
+
 		QWidget *buttonsWidget;
 		QGridLayout *buttonsLayout;
 		QPushButton *okButton;
 		QPushButton *applyButton;
 		QPushButton *cancelButton;
 		QPushButton *defaultsButton;
-		
+
 		void createPreferencesModel();
-		
+
 	private Q_SLOTS:
 		void doWidgetActivated(const QModelIndex &i);
 		void doOk();

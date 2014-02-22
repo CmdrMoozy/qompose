@@ -19,15 +19,15 @@ RDEPEND=">=dev-util/cmake-2.8.9
 DEPEND="${RDEPEND}"
 
 src_compile() {
-	
+
 	${S}/release.sh || die
-	
+
 }
 
 src_install() {
-	
+
 	exeinto /usr/bin
-	
+
 	doexe build/Qompose
-	
+
 }

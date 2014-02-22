@@ -41,7 +41,7 @@ QomposePreferencesListModel::~QomposePreferencesListModel()
 	while(!scrollWidgets.isEmpty())
 	{
 		QomposePreferencesScrollArea *w = scrollWidgets.takeLast();
-		
+
 		delete w;
 	}
 }
@@ -69,28 +69,28 @@ int QomposePreferencesListModel::rowCount(const QModelIndex &QUNUSED(p)) const
 QVariant QomposePreferencesListModel::data(const QModelIndex &i, int r) const
 {
 	int idx = i.row();
-	
+
 	if( (idx < 0) || (idx >= widgets.count()) )
 		return QVariant(QVariant::Invalid);
-	
+
 	QomposePreferencesWidget *widget = widgets.at(idx);
-	
+
 	switch(r)
 	{
 		case Qt::DisplayRole:
 			return widget->getPreferencesTitle();
 			break;
-		
+
 		case Qt::DecorationRole:
 			return widget->getPreferencesIcon();
 			break;
-		
+
 		default:
 			return QVariant(QVariant::Invalid);
 			break;
 	};
-	
-	
+
+
 	return QVariant(QVariant::Invalid);
 }
 
@@ -121,7 +121,7 @@ QomposePreferencesWidget *QomposePreferencesListModel::widgetAt(int i) const
 {
 	if( (i < 0) || (i >= rowCount()) )
 		return NULL;
-	
+
 	return widgets.at(i);
 }
 
@@ -137,7 +137,7 @@ QomposePreferencesScrollArea *QomposePreferencesListModel::scrollWidgetAt(int i)
 {
 	if( (i < 0) || (i >= rowCount()) )
 		return NULL;
-	
+
 	return scrollWidgets.at(i);
 }
 
@@ -149,14 +149,14 @@ QomposePreferencesScrollArea *QomposePreferencesListModel::scrollWidgetAt(int i)
 void QomposePreferencesListModel::addPreferencesWidget(QomposePreferencesWidget *w)
 {
 	// Add the widget to our list.
-	
+
 	widgets.append(w);
-	
+
 	// Add a scroll area containing this widget to our list.
-	
+
 	QomposePreferencesScrollArea *sw = new QomposePreferencesScrollArea();
-	
+
 	sw->setWidget(w);
-	
+
 	scrollWidgets.append(sw);
 }

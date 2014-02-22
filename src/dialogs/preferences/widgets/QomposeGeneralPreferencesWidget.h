@@ -37,17 +37,17 @@ class QomposeGeneralPreferencesWidget : public QomposePreferencesWidget
 		QomposeGeneralPreferencesWidget(QomposeSettings *s,
 			QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeGeneralPreferencesWidget();
-		
+
 		virtual void apply();
 		virtual void discardChanges();
-		
+
 	private:
 		QGridLayout *layout;
 		QCheckBox *statusBarCheckBox;
 		QLabel *recentListSizeLabel;
 		QSpinBox *recentListSizeSpinBox;
 		QCheckBox *saveWindowAttribsCheckBox;
-		
+
 		void initializeGUI();
 };
 

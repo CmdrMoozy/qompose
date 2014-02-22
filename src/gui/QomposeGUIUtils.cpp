@@ -38,15 +38,15 @@
 QIcon QomposeGUIUtils::getIconFromTheme(const QString &n)
 {
 	QIcon defaultIcon;
-	
+
 	QString defaultPath = n;
 	defaultPath.prepend(":/icons/");
 	defaultPath.append(".png");
-	
+
 	if(QFile::exists(defaultPath))
 		defaultIcon = QIcon(defaultPath);
 	else
 		qDebug("Couldn't find icon: %s", qPrintable(n));
-	
+
 	return QIcon::fromTheme(n, defaultIcon);
 }

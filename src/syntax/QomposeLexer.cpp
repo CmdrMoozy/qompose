@@ -31,23 +31,23 @@ QString QomposeLexer::getSettingKey(Token t)
 	{
 		case PreprocessorToken:
 			return "token-preprocessor";
-		
+
 		case CommentToken:
 			return "token-comment";
-		
+
 		case StringToken:
 			return "token-string";
-		
+
 		case KeywordToken:
 			return "token-keyword";
-		
+
 		case OperatorToken:
 			return "token-operator";
-		
+
 		case NumberToken:
 			return "token-number";
 	};
-	
+
 	return QString();
 }
 

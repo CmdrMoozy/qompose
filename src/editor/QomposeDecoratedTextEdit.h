@@ -35,32 +35,32 @@ class QomposeGutter;
 class QomposeDecoratedTextEdit : public QPlainTextEdit
 {
 	friend class QomposeGutter;
-	
+
 	Q_OBJECT
-	
+
 	public:
 		QomposeDecoratedTextEdit(QWidget *p = 0);
 		virtual ~QomposeDecoratedTextEdit();
-		
+
 		void setGutterVisible(bool v);
 		bool isGutterVisible();
-		
+
 		virtual QFont font() const;
 		virtual void setFont(const QFont &f);
 		int fontZoom() const;
 		qreal fontZoomSize() const;
 		void setFontZoom(int z);
-		
+
 		int tabWidthSpaces() const;
 		void setTabWidthSpaces(int w);
-		
+
 		bool isWrapGuideVisible() const;
 		void setWrapGuideVisible(bool v);
 		int getWrapGuideColumnWidth() const;
 		void setWrapGuideColumnWidth(int w);
 		QColor getWrapGuideColor() const;
 		void setWrapGuideColor(const QColor &c);
-		
+
 		QColor getEditorForeground() const;
 		void setEditorForeground(const QColor &c);
 		QColor getEditorBackground() const;
@@ -71,42 +71,42 @@ class QomposeDecoratedTextEdit : public QPlainTextEdit
 		void setGutterForeground(const QColor &c);
 		QColor getGutterBackground() const;
 		void setGutterBackground(const QColor &c);
-	
+
 	protected:
 		virtual void paintEvent(QPaintEvent *e);
-		
+
 		virtual void focusInEvent(QFocusEvent *e);
 		virtual void focusOutEvent(QFocusEvent *e);
 		virtual void resizeEvent(QResizeEvent *e);
 		virtual void wheelEvent(QWheelEvent *e);
 		virtual void mouseReleaseEvent(QMouseEvent *e);
-	
+
 	private:
 		QomposeGutter *gutter;
 		bool gutterVisible;
-		
+
 		QFont currentFont;
 		qreal originalFontSize;
 		int currentFontZoom;
-		
+
 		int tabWidth;
-		
+
 		bool wrapGuideVisible;
 		int wrapGuideWidth;
 		QColor wrapGuideColor;
-		
+
 		QColor currentLineHighlight;
 		QColor gutterForeground;
 		QColor gutterBackground;
-		
+
 		void gutterPaintEvent(QPaintEvent *e);
 		int gutterWidth();
 		int wrapGuideOffset();
-	
+
 	public Q_SLOTS:
 		void fullUpdate();
 		void fullRepaint();
-	
+
 	private Q_SLOTS:
 		void highlightCurrentLine();
 		void updateGutterWidth();

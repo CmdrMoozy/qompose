@@ -38,26 +38,26 @@ class QomposeReplaceQuery;
 class QomposeReplaceDialog : public QDialog
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeReplaceDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeReplaceDialog();
-		
+
 		const QomposeReplaceQuery *getQuery() const;
-		
+
 	protected:
 		virtual void showEvent(QShowEvent *e);
-		
+
 	private:
 		QomposeReplaceQuery *query;
-		
+
 		QGridLayout *layout;
-		
+
 		QLabel *findLabel;
 		QLineEdit *findTextEdit;
 		QLabel *replaceLabel;
 		QLineEdit *replaceTextEdit;
-		
+
 		QGroupBox *optionsGroupBox;
 		QGridLayout *optionsLayout;
 		QCheckBox *wrapCheckBox;
@@ -65,7 +65,7 @@ class QomposeReplaceDialog : public QDialog
 		QCheckBox *caseSensitiveCheckBox;
 		QCheckBox *reverseCheckBox;
 		QCheckBox *regexCheckBox;
-		
+
 		QWidget *buttonsWidget;
 		QGridLayout *buttonsLayout;
 		QPushButton *replaceButton;
@@ -73,17 +73,17 @@ class QomposeReplaceDialog : public QDialog
 		QPushButton *replaceSelButton;
 		QPushButton *replaceAllButton;
 		QPushButton *closeButton;
-		
+
 		void initializeGUI();
-		
+
 		void applyValues();
-		
+
 	private Q_SLOTS:
 		void doReplace();
 		void doFind();
 		void doReplaceSelection();
 		void doReplaceAll();
-		
+
 	Q_SIGNALS:
 		void replaceClicked();
 		void findClicked();

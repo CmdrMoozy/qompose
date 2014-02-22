@@ -44,15 +44,15 @@ QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
 	: QWidget(p), settings(s)
 {
 	layout = new QGridLayout(this);
-	
+
 	tabWidget = new QTabWidget(this);
 	tabWidget->setMovable(true);
 	tabWidget->setTabsClosable(true);
 	tabWidget->setUsesScrollButtons(true);
-	
+
 	layout->addWidget(tabWidget, 0, 0, 1, 1);
 	setLayout(layout);
-	
+
 	QObject::connect( tabWidget, SIGNAL( currentChanged(int)    ), this, SLOT( doTabChanged(int)        ) );
 	QObject::connect( tabWidget, SIGNAL( tabCloseRequested(int) ), this, SLOT( doTabCloseRequested(int) ) );
 }
@@ -136,12 +136,12 @@ bool QomposeBufferWidget::prepareCloseParent()
 	for(int i = 0; i < count(); ++i)
 	{
 		QomposeBuffer *buf = bufferAt(i);
-		
+
 		if(buf == NULL)
 			continue;
-		
+
 		setCurrentBuffer(i);
-		
+
 		if(buf->isModified())
 		{
 			QMessageBox::StandardButton b = QMessageBox::question(
@@ -149,27 +149,27 @@ bool QomposeBufferWidget::prepareCloseParent()
 				tr("Save changes to this buffer before closing?"),
 				QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
 				QMessageBox::Yes);
-			
+
 			switch(b)
 			{
 				case QMessageBox::Yes:
 					doSave();
-					
+
 					if(buf->isModified())
 						return false;
-					
+
 					break;
-				
+
 				case QMessageBox::No:
 					continue;
-				
+
 				case QMessageBox::Cancel:
 				default:
 					return false;
 			};
 		}
 	}
-	
+
 	return true;
 }
 
@@ -184,16 +184,16 @@ bool QomposeBufferWidget::prepareCloseParent()
 int QomposeBufferWidget::findBufferWithPath(const QString &p)
 {
 	QFileInfo file(p);
-	
+
 	for(int i = 0; i < count(); ++i)
 	{
 		QomposeBuffer *buf = bufferAt(i);
 		QFileInfo bufFile(buf->getPath());
-		
+
 		if(file == bufFile)
 			return i;
 	}
-	
+
 	return -1;
 }
 
@@ -207,17 +207,17 @@ int QomposeBufferWidget::findBufferWithPath(const QString &p)
 QomposeBuffer *QomposeBufferWidget::newBuffer()
 {
 	QomposeBuffer *b = new QomposeBuffer(settings, tabWidget);
-	
+
 	QObject::connect(b, SIGNAL(titleChanged(const QString &)),
 		this, SLOT(doTabTitleChanged(const QString &)));
 	QObject::connect(b, SIGNAL(pathChanged(const QString &)),
 		this, SLOT(doTabPathChanged(const QString &)));
-	
+
 	int i = tabWidget->addTab(b, b->getTitle());
 	tabWidget->setCurrentIndex(i);
-	
+
 	tabs.insert(b);
-	
+
 	return b;
 }
 
@@ -228,9 +228,9 @@ void QomposeBufferWidget::removeCurrentBuffer()
 {
 	int i = tabWidget->currentIndex();
 	QomposeBuffer *b = currentBuffer();
-	
+
 	tabWidget->removeTab(i);
-	
+
 	tabs.remove(b);
 	delete b;
 }
@@ -246,10 +246,10 @@ void QomposeBufferWidget::removeCurrentBuffer()
 void QomposeBufferWidget::moveBuffer(int f, int t)
 {
 	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(tabWidget->widget(f));
-	
+
 	if(b == NULL)
 		return;
-	
+
 	tabWidget->removeTab(f);
 	tabWidget->insertTab(t, b, b->getTitle());
 }
@@ -268,12 +268,12 @@ QString QomposeBufferWidget::getDefaultDirectory() const
 {
 	QString defaultDirectory = QDir::homePath();
 	bool found = false;
-	
+
 	QomposeBuffer *buf = currentBuffer();
 	int ci = tabWidget->indexOf(buf);
-	
+
 	// See if the current buffer has a valid default path.
-	
+
 	if(buf != NULL)
 	{
 		if(!buf->getDirectory().isNull())
@@ -282,15 +282,15 @@ QString QomposeBufferWidget::getDefaultDirectory() const
 			found = true;
 		}
 	}
-	
+
 	// See if any buffers to the left of this buffer have valid paths.
-	
+
 	if(!found)
 	{
 		for(int i = (ci - 1); i >= 0; --i)
 		{
 			buf = bufferAt(i);
-			
+
 			if(buf != NULL)
 			{
 				if(!buf->getDirectory().isNull())
@@ -302,15 +302,15 @@ QString QomposeBufferWidget::getDefaultDirectory() const
 			}
 		}
 	}
-	
+
 	// See if any buffers to the right of this buffer have valid paths.
-	
+
 	if(!found)
 	{
 		for(int i = (ci + 1); i < tabWidget->count(); ++i)
 		{
 			buf = bufferAt(i);
-			
+
 			if(buf != NULL)
 			{
 				if(!buf->getDirectory().isNull())
@@ -322,9 +322,9 @@ QString QomposeBufferWidget::getDefaultDirectory() const
 			}
 		}
 	}
-	
+
 	// Done!
-	
+
 	return defaultDirectory;
 }
 
@@ -333,9 +333,9 @@ QString QomposeBufferWidget::getDefaultDirectory() const
  */
 void QomposeBufferWidget::doNew()
 { /* SLOT */
-	
+
 	newBuffer();
-	
+
 }
 
 /*!
@@ -345,17 +345,17 @@ void QomposeBufferWidget::doNew()
  */
 void QomposeBufferWidget::doOpen()
 { /* SLOT */
-	
+
 	// Open the one or more selected files.
-	
+
 	QList<QomposeFileDescriptor> files = QomposeFileDialog::getOpenFileNames(
 		this, tr("Open Files"), getDefaultDirectory());
-	
+
 	for(int i = 0; i < files.size(); ++i)
 	{
 		doOpenDescriptor(files.at(i));
 	}
-	
+
 }
 
 /*!
@@ -366,14 +366,14 @@ void QomposeBufferWidget::doOpen()
  */
 void QomposeBufferWidget::doOpenPath(const QString &p)
 { /* SLOT */
-	
+
 	QomposeFileDescriptor desc = QomposeFileDialog::getPathDescriptor(p);
-	
+
 	if(desc.fileName.isNull())
 		return;
-	
+
 	doOpenDescriptor(desc);
-	
+
 }
 
 /*!
@@ -382,14 +382,14 @@ void QomposeBufferWidget::doOpenPath(const QString &p)
  */
 void QomposeBufferWidget::doRevert()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->revert();
-	
+
 }
 
 /*!
@@ -399,17 +399,17 @@ void QomposeBufferWidget::doRevert()
  */
 void QomposeBufferWidget::doSave()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	if(buf->hasBeenSaved())
 		buf->save();
 	else
 		doSaveAs();
-	
+
 }
 
 /*!
@@ -418,33 +418,33 @@ void QomposeBufferWidget::doSave()
  */
 void QomposeBufferWidget::doSaveAs()
 { /* SLOT */
-	
+
 	// Make sure the current buffer is valid.
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	// Open our save as dialog and, on accept, save the buffer.
-	
+
 	QString path = getDefaultDirectory();
-	
+
 	if(buf->hasBeenSaved())
 	{
 		if(!path.endsWith(QDir::separator()))
 			path.append(QDir::separator());
-		
+
 		path.append(buf->getFile());
 	}
-	
+
 	QString p = QFileDialog::getSaveFileName(this, tr("Save File"), path);
-	
+
 	if(p.length() <= 0)
 		return;
-	
+
 	buf->save(p);
-	
+
 }
 
 /*!
@@ -453,12 +453,12 @@ void QomposeBufferWidget::doSaveAs()
  */
 void QomposeBufferWidget::doClose()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	if(buf->isModified())
 	{
 		QMessageBox::StandardButton b = QMessageBox::question(
@@ -466,21 +466,21 @@ void QomposeBufferWidget::doClose()
 			tr("Save changes to this buffer before closing?"),
 			QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
 			QMessageBox::Yes);
-		
+
 		switch(b)
 		{
 			case QMessageBox::Yes:
 				doSave();
-				
+
 				if(!buf->isModified())
 					removeCurrentBuffer();
-				
+
 				break;
-				
+
 			case QMessageBox::No:
 				removeCurrentBuffer();
 				break;
-				
+
 			case QMessageBox::Cancel:
 			default:
 				return;
@@ -491,7 +491,7 @@ void QomposeBufferWidget::doClose()
 	{
 		removeCurrentBuffer();
 	}
-	
+
 }
 
 /*!
@@ -500,14 +500,14 @@ void QomposeBufferWidget::doClose()
  */
 void QomposeBufferWidget::doUndo()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->undo();
-	
+
 }
 
 /*!
@@ -516,14 +516,14 @@ void QomposeBufferWidget::doUndo()
  */
 void QomposeBufferWidget::doRedo()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->redo();
-	
+
 }
 
 /*!
@@ -532,14 +532,14 @@ void QomposeBufferWidget::doRedo()
  */
 void QomposeBufferWidget::doCut()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->cut();
-	
+
 }
 
 /*!
@@ -548,14 +548,14 @@ void QomposeBufferWidget::doCut()
  */
 void QomposeBufferWidget::doCopy()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->copy();
-	
+
 }
 
 /*!
@@ -564,14 +564,14 @@ void QomposeBufferWidget::doCopy()
  */
 void QomposeBufferWidget::doPaste()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->paste();
-	
+
 }
 
 /*!
@@ -580,14 +580,14 @@ void QomposeBufferWidget::doPaste()
  */
 void QomposeBufferWidget::doDuplicateLine()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->duplicateLine();
-	
+
 }
 
 /*!
@@ -596,14 +596,14 @@ void QomposeBufferWidget::doDuplicateLine()
  */
 void QomposeBufferWidget::doSelectAll()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->selectAll();
-	
+
 }
 
 /*!
@@ -612,14 +612,14 @@ void QomposeBufferWidget::doSelectAll()
  */
 void QomposeBufferWidget::doDeselect()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->deselect();
-	
+
 }
 
 /*!
@@ -628,14 +628,14 @@ void QomposeBufferWidget::doDeselect()
  */
 void QomposeBufferWidget::doIncreaseIndent()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->increaseSelectionIndent();
-	
+
 }
 
 /*!
@@ -644,14 +644,14 @@ void QomposeBufferWidget::doIncreaseIndent()
  */
 void QomposeBufferWidget::doDecreaseIndent()
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->decreaseSelectionIndent();
-	
+
 }
 
 /*!
@@ -663,14 +663,14 @@ void QomposeBufferWidget::doDecreaseIndent()
  */
 QomposeEditor::FindResult QomposeBufferWidget::doFindNext(const QomposeFindQuery *q)
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return QomposeEditor::NoDocument;
-	
+
 	return buf->findNext(q);
-	
+
 }
 
 /*!
@@ -682,14 +682,14 @@ QomposeEditor::FindResult QomposeBufferWidget::doFindNext(const QomposeFindQuery
  */
 QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(const QomposeFindQuery *q)
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return QomposeEditor::NoDocument;
-	
+
 	return buf->findPrevious(q);
-	
+
 }
 
 /*!
@@ -701,14 +701,14 @@ QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(const QomposeFindQ
  */
 QomposeEditor::FindResult QomposeBufferWidget::doReplace(const QomposeReplaceQuery *q)
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return QomposeEditor::NoDocument;
-	
+
 	return buf->replace(q);
-	
+
 }
 
 /*!
@@ -720,14 +720,14 @@ QomposeEditor::FindResult QomposeBufferWidget::doReplace(const QomposeReplaceQue
  */
 QomposeEditor::FindResult QomposeBufferWidget::doReplaceSelection(const QomposeReplaceQuery *q)
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return QomposeEditor::NoDocument;
-	
+
 	return buf->replaceSelection(q);
-	
+
 }
 
 /*!
@@ -739,14 +739,14 @@ QomposeEditor::FindResult QomposeBufferWidget::doReplaceSelection(const QomposeR
  */
 QomposeEditor::FindResult QomposeBufferWidget::doReplaceAll(const QomposeReplaceQuery *q)
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return QomposeEditor::NoDocument;
-	
+
 	return buf->replaceAll(q);
-	
+
 }
 
 /*!
@@ -757,14 +757,14 @@ QomposeEditor::FindResult QomposeBufferWidget::doReplaceAll(const QomposeReplace
  */
 void QomposeBufferWidget::doGoTo(int l)
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->goToLine(l);
-	
+
 }
 
 /*!
@@ -774,14 +774,14 @@ void QomposeBufferWidget::doGoTo(int l)
  */
 void QomposeBufferWidget::doPreviousBuffer()
 { /* SLOT */
-	
+
 	int i = tabWidget->currentIndex() - 1;
-	
+
 	if(i < 0)
 		i = tabWidget->count() - 1;
-	
+
 	tabWidget->setCurrentIndex(i);
-	
+
 }
 
 /*!
@@ -791,14 +791,14 @@ void QomposeBufferWidget::doPreviousBuffer()
  */
 void QomposeBufferWidget::doNextBuffer()
 { /* SLOT */
-	
+
 	int i = tabWidget->currentIndex() + 1;
-	
+
 	if(i >= tabWidget->count())
 		i = 0;
-	
+
 	tabWidget->setCurrentIndex(i);
-	
+
 }
 
 /*!
@@ -808,16 +808,16 @@ void QomposeBufferWidget::doNextBuffer()
  */
 void QomposeBufferWidget::doMoveBufferLeft()
 { /* SLOT */
-	
+
 	int f = tabWidget->currentIndex();
 	int t = f - 1;
-	
+
 	if(t < 0)
 		return;
-	
+
 	moveBuffer(f, t);
 	tabWidget->setCurrentIndex(t);
-	
+
 }
 
 /*!
@@ -827,16 +827,16 @@ void QomposeBufferWidget::doMoveBufferLeft()
  */
 void QomposeBufferWidget::doMoveBufferRight()
 { /* SLOT */
-	
+
 	int f = tabWidget->currentIndex();
 	int t = f + 1;
-	
+
 	if(t >= tabWidget->count())
 		return;
-	
+
 	moveBuffer(f, t);
 	tabWidget->setCurrentIndex(t);
-	
+
 }
 
 /*!
@@ -848,14 +848,14 @@ void QomposeBufferWidget::doMoveBufferRight()
  */
 void QomposeBufferWidget::doPrint(QPrinter *p)
 { /* SLOT */
-	
+
 	QomposeBuffer *buf = currentBuffer();
-	
+
 	if(buf == NULL)
 		return;
-	
+
 	buf->print(p);
-	
+
 }
 
 /*!
@@ -867,9 +867,9 @@ void QomposeBufferWidget::doPrint(QPrinter *p)
  */
 void QomposeBufferWidget::doTabChanged(int i)
 { /* SLOT */
-	
+
 	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(tabWidget->widget(i));
-	
+
 	if(b != NULL)
 	{
 		b->setFocus(Qt::OtherFocusReason);
@@ -879,7 +879,7 @@ void QomposeBufferWidget::doTabChanged(int i)
 	{
 		Q_EMIT pathChanged("");
 	}
-	
+
 }
 
 /*!
@@ -890,10 +890,10 @@ void QomposeBufferWidget::doTabChanged(int i)
  */
 void QomposeBufferWidget::doTabCloseRequested(int i)
 { /* SLOT */
-	
+
 	tabWidget->setCurrentIndex(i);
 	doClose();
-	
+
 }
 
 /*!
@@ -905,17 +905,17 @@ void QomposeBufferWidget::doTabCloseRequested(int i)
  */
 void QomposeBufferWidget::doTabTitleChanged(const QString &t)
 { /* SLOT */
-	
+
 	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(sender());
-	
+
 	if(b != NULL)
 	{
 		int i = tabWidget->indexOf(b);
-		
+
 		if(i != -1)
 			tabWidget->setTabText(i, t);
 	}
-	
+
 }
 
 /*!
@@ -927,9 +927,9 @@ void QomposeBufferWidget::doTabTitleChanged(const QString &t)
  */
 void QomposeBufferWidget::doTabPathChanged(const QString &p)
 { /* SLOT */
-	
+
 	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(sender());
-	
+
 	if(b != NULL)
 	{
 		if(b == currentBuffer())
@@ -937,7 +937,7 @@ void QomposeBufferWidget::doTabPathChanged(const QString &p)
 			Q_EMIT pathChanged(p);
 		}
 	}
-	
+
 }
 
 /*!
@@ -948,15 +948,15 @@ void QomposeBufferWidget::doTabPathChanged(const QString &p)
  */
 void QomposeBufferWidget::doOpenDescriptor(const QomposeFileDescriptor &d)
 { /* SLOT */
-	
+
 	// If we only have one "Untitled" buffer, we'll replace it.
-	
+
 	if(tabs.count() == 1)
 	{
 		QSet<QomposeBuffer *>::iterator i = tabs.begin();
 		QomposeBuffer *b = *i;
 		int idx = tabWidget->indexOf(b);
-		
+
 		if( (!b->hasBeenSaved()) && (!b->isModified()) )
 		{
 			tabWidget->removeTab(idx);
@@ -964,20 +964,20 @@ void QomposeBufferWidget::doOpenDescriptor(const QomposeFileDescriptor &d)
 			tabs.empty();
 		}
 	}
-	
+
 	// Open each of the files.
-	
+
 	int existing = findBufferWithPath(d.fileName);
-	
+
 	if(existing != -1)
 	{
 		tabWidget->setCurrentIndex(existing);
 		return;
 	}
-	
+
 	QomposeBuffer *b = newBuffer();
 	b->open(d);
-	
+
 	Q_EMIT pathOpened(d.fileName);
-	
+
 }

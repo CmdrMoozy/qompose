@@ -35,9 +35,9 @@ class QIcon;
  */
 class QomposeFontPickerButton : public QPushButton
 {
-	
+
 	Q_OBJECT
-	
+
 	public:
 		QomposeFontPickerButton(QWidget *p = 0, const QFont &iF = QFont());
 		QomposeFontPickerButton(const QString &t, QWidget *p = 0,
@@ -45,21 +45,21 @@ class QomposeFontPickerButton : public QPushButton
 		QomposeFontPickerButton(const QIcon &i, const QString &t,
 			QWidget *p = 0, const QFont &iF = QFont());
 		virtual ~QomposeFontPickerButton();
-	
+
 		const QFont &getSelectedFont() const;
 		void setSelectedFont(const QFont &f);
-		
+
 	private:
 		QFont selectedFont;
-	
+
 		virtual void setFont(const QFont &f);
-		
+
 	private Q_SLOTS:
 		void doClicked();
-		
+
 	Q_SIGNALS:
 		void selectedFontChanged(const QFont &);
-		
+
 };
 
 #endif

@@ -39,33 +39,33 @@ QomposeRecentMenu::QomposeRecentMenu(QomposeSettings *s, QObject *p)
 	: QObject(p), settings(s), capacity(0)
 {
 	// Initialize our menu.
-	
+
 	menu = new QMenu(tr("Open Recent"));
 	menu->setIcon(QomposeGUIUtils::getIconFromTheme("document-open"));
-	
+
 	// Load our list's size from our settings instance.
-	
+
 	bool ok;
 	QVariant vcap = settings->getSetting("recent-list-size");
-	
+
 	int cap = vcap.toInt(&ok);
-	
+
 	if(!ok)
 	{
 		settings->resetDefault("recent-list-size");
 		vcap = settings->getSetting("recent-list-size");
 		cap = vcap.toInt(&ok);
-		
+
 		if(!ok)
 			cap = 10;
 	}
-	
+
 	setCapacity(cap);
-	
+
 	// Load our list's contents from our settings instance.
-	
+
 	QVariant vcontents = settings->getSetting("recent-list");
-	
+
 	if(vcontents.canConvert(QMetaType::QStringList))
 		setListContents(vcontents.toStringList());
 }
@@ -116,7 +116,7 @@ QMenu *QomposeRecentMenu::getMenu() const
 void QomposeRecentMenu::addPath(const QString &p)
 {
 	// If we already have this path, remove it first (move to the top).
-	
+
 	for(int i = 0; i < recentList.count(); ++i)
 	{
 		if(recentList.at(i) == p)
@@ -125,23 +125,23 @@ void QomposeRecentMenu::addPath(const QString &p)
 			break;
 		}
 	}
-	
+
 	// Add the item to our list.
-	
+
 	recentList.enqueue(p);
-	
+
 	while(recentList.count() > getCapacity())
 	{
 		if(recentList.isEmpty())
 			break;
-		
+
 		recentList.dequeue();
 	}
-	
+
 	updateActionsListSize();
-	
+
 	// Save our new list, which will also re-render it.
-	
+
 	saveContents();
 }
 
@@ -152,10 +152,10 @@ void QomposeRecentMenu::addPath(const QString &p)
 void QomposeRecentMenu::saveContents()
 {
 	QStringList l;
-	
+
 	for(int i = 0; i < recentList.count(); ++i)
 		l.append(recentList.at(i));
-	
+
 	settings->setSetting("recent-list", QVariant(l));
 }
 
@@ -173,25 +173,25 @@ void QomposeRecentMenu::saveContents()
 void QomposeRecentMenu::updateActionsListSize()
 {
 	// Make sure our items list isn't too long.
-	
+
 	while(menuActions.count() > recentList.count())
 	{
 		QAction *a = menuActions.takeLast();
 		menu->removeAction(a);
 		delete a;
 	}
-	
+
 	// Make sure our items list isn't too short.
-	
+
 	while(menuActions.count() < recentList.count())
 	{
 		QAction *a = new QAction(menu);
-		
+
 		menu->addAction(a);
-		
+
 		QObject::connect(a, SIGNAL( triggered(bool) ),
 			this, SLOT( doActionClicked() ) );
-		
+
 		menuActions.append(a);
 	}
 }
@@ -209,23 +209,23 @@ void QomposeRecentMenu::updateActionsListSize()
 void QomposeRecentMenu::setCapacity(int c)
 {
 	capacity = c;
-	
+
 	// Make sure our list of paths isn't too long.
-	
+
 	while(recentList.count() > capacity)
 	{
 		if(recentList.isEmpty())
 			break;
-		
+
 		recentList.dequeue();
 	}
-	
+
 	// Update the size of our list of actions.
-	
+
 	updateActionsListSize();
-	
+
 	// (Re-)render the list of paths.
-	
+
 	renderListContents();
 }
 
@@ -239,7 +239,7 @@ void QomposeRecentMenu::renderListContents()
 	{
 		int j = recentList.count() - 1 - i;
 		QFileInfo f(recentList.at(i));
-		
+
 		menuActions.at(j)->setText(QString("%1. %2")
 			.arg(j).arg(f.fileName()));
 	}
@@ -259,26 +259,26 @@ void QomposeRecentMenu::renderListContents()
 void QomposeRecentMenu::setListContents(const QStringList &l)
 {
 	// Set our recent list's contents to the given list.
-	
+
 	recentList.clear();
-	
+
 	for(int i = 0; i < l.count(); ++i)
 		recentList.enqueue(l.at(i));
-	
+
 	while(recentList.count() > capacity)
 	{
 		if(recentList.isEmpty())
 			break;
-		
+
 		recentList.dequeue();
 	}
-	
+
 	// Update our menu actions list size.
-	
+
 	updateActionsListSize();
-	
+
 	// set our contents to the items in the list.
-	
+
 	renderListContents();
 }
 
@@ -289,28 +289,28 @@ void QomposeRecentMenu::setListContents(const QStringList &l)
  */
 void QomposeRecentMenu::doActionClicked()
 { /* SLOT */
-	
+
 	// Get the action that was clicked.
-	
+
 	QObject *s = sender();
 	QAction *action = dynamic_cast<QAction *>(s);
-	
+
 	if(action == NULL)
 		return;
-	
+
 	// Find the index of the action in our actions list.
-	
+
 	int j = menuActions.indexOf(action);
-	
+
 	if(j == -1)
 		return;
-	
+
 	// Emit the recentClicked signal with the item's path.
-	
+
 	int i = recentList.count() - 1 - j;
-	
+
 	Q_EMIT recentClicked(recentList.at(i));
-	
+
 }
 
 /*!
@@ -323,12 +323,12 @@ void QomposeRecentMenu::doActionClicked()
  */
 void QomposeRecentMenu::doSettingChanged(const QString &k, const QVariant &v)
 { /* SLOT */
-	
+
 	if(k == "recent-list-size")
 	{
 		bool ok;
 		int cap = v.toInt(&ok);
-		
+
 		if(ok)
 			setCapacity(cap);
 	}
@@ -337,5 +337,5 @@ void QomposeRecentMenu::doSettingChanged(const QString &k, const QVariant &v)
 		if(v.canConvert(QMetaType::QStringList))
 			setListContents(v.toStringList());
 	}
-	
+
 }

@@ -34,33 +34,33 @@ class QomposePreferencesWidget : public QWidget
 		QomposePreferencesWidget(QomposeSettings *s, QWidget *p = 0,
 			Qt::WindowFlags f = 0);
 		virtual ~QomposePreferencesWidget();
-		
+
 		QIcon getPreferencesIcon() const;
 		void setPreferencesIcon(const QIcon &i);
-		
+
 		QString getPreferencesTitle() const;
 		void setPreferencesTitle(const QString &t);
-		
+
 		/*!
 		 * This function should be implemented by subclasses, and should apply
 		 * all of that widget's settings to the QomposeSettings instance given in
 		 * the constructor.
 		 */
 		virtual void apply() = 0;
-		
+
 		/*!
 		 * This function should be implemented by subclasses, and should discard
 		 * any settings values in the widget, replacing them with the existing values
 		 * stored in the QomposeSettings instance given in the constructor.
 		 */
 		virtual void discardChanges() = 0;
-		
+
 	protected:
 		QomposeSettings *getSettings() const;
-		
+
 	private:
 		QomposeSettings *settings;
-		
+
 		QIcon icon;
 		QString title;
 };

@@ -27,17 +27,17 @@ class QLabel;
 class QomposeStatusBar : public QStatusBar
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeStatusBar(QWidget *p = 0);
 		virtual ~QomposeStatusBar();
-		
+
 		void setCurrentTabPath(const QString &p);
-		
+
 	private:
 		QWidget *statusWidget;
 		QGridLayout *statusLayout;
-		
+
 		QLabel *tabPathLabel;
 };
 

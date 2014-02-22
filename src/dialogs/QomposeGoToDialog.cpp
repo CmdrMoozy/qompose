@@ -39,7 +39,7 @@ QomposeGoToDialog::QomposeGoToDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f), selectedLine(0)
 {
 	setWindowTitle(tr("Go To Line"));
-	
+
 	initializeGUI();
 }
 
@@ -71,24 +71,24 @@ int QomposeGoToDialog::getSelectedLine() const
 void QomposeGoToDialog::showEvent(QShowEvent *e)
 {
 	// Setup our line text edit.
-	
+
 	lineTextEdit->setFocus();
-	
+
 	int l = getSelectedLine();
-	
+
 	if(l > 0)
 		lineTextEdit->setText(QString("%1").arg(getSelectedLine()));
 	else
 		lineTextEdit->setText(QString(""));
-	
+
 	lineTextEdit->selectAll();
-	
+
 	// Bring our dialog to the front.
-	
+
 	raise();
-	
+
 	// Let our parent class do its thing.
-	
+
 	QDialog::showEvent(e);
 }
 
@@ -99,39 +99,39 @@ void QomposeGoToDialog::showEvent(QShowEvent *e)
 void QomposeGoToDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
-	
+
 	// Create our line inputs.
-	
+
 	lineLabel = new QLabel(tr("Destination line number:"), this);
-	
+
 	lineTextEdit = new QLineEdit(this);
-	
+
 	// Create our buttons widget.
-	
+
 	buttonsWidget = new QWidget(this);
 	buttonsLayout = new QGridLayout(buttonsWidget);
-	
+
 	closeButton = new QPushButton(tr("Clos&e"), buttonsWidget);
-	
+
 	goToButton = new QPushButton(tr("&Go To"), buttonsWidget);
 	goToButton->setDefault(true);
-	
+
 	buttonsLayout->addWidget(closeButton, 0, 1, 1, 1);
 	buttonsLayout->addWidget(goToButton, 0, 2, 1, 1);
 	buttonsLayout->setColumnStretch(0, 1);
 	buttonsWidget->setLayout(buttonsLayout);
-	
+
 	// Add our widgets to our dialog.
-	
+
 	layout->addWidget(lineLabel, 0, 0, 1, 1);
 	layout->addWidget(lineTextEdit, 0, 1, 1, 1);
 	layout->addWidget(buttonsWidget, 2, 0, 1, 2);
 	layout->setColumnStretch(1, 1);
 	layout->setRowStretch(1, 1);
 	setLayout(layout);
-	
+
 	// Connect our actions.
-	
+
 	QObject::connect( goToButton,  SIGNAL( clicked(bool) ), this, SLOT( doGoTo() ) );
 	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close()  ) );
 }
@@ -146,12 +146,12 @@ void QomposeGoToDialog::initializeGUI()
  */
 void QomposeGoToDialog::doGoTo()
 { /* SLOT */
-	
+
 	QString l  = lineTextEdit->text();
-	
+
 	bool ok = false;
 	int lint = l.trimmed().toInt(&ok, 10);
-	
+
 	if(ok)
 	{
 		selectedLine = lint;
@@ -163,9 +163,9 @@ void QomposeGoToDialog::doGoTo()
 		QMessageBox::critical(this, tr("Invalid Line Number"),
 			tr("The line number you entered was invalid."),
 			QMessageBox::Ok, QMessageBox::Ok);
-		
+
 		lineTextEdit->setFocus();
 		lineTextEdit->selectAll();
 	}
-	
+
 }

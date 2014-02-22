@@ -44,7 +44,7 @@ QomposeApplication::~QomposeApplication()
 {
 	if(sappServer != NULL)
 		delete sappServer;
-	
+
 	while(windows.length() > 0)
 	{
 		QomposeWindow *w = windows.takeFirst();
@@ -61,7 +61,7 @@ QomposeApplication::~QomposeApplication()
 void QomposeApplication::initializeLocalServer()
 {
 	sappServer = new QLocalServer();
-	
+
 	if(!sappServer->listen(QOMPOSE_GUID))
 	{
 		/*
@@ -69,13 +69,13 @@ void QomposeApplication::initializeLocalServer()
 		 * from the person that created our socket, but it is still present
 		 * for some reason. Try removing it; if that doesn't work, crash.
 		 */
-		
+
 		QLocalServer::removeServer(QOMPOSE_GUID);
-		
+
 		if(!sappServer->listen(QOMPOSE_GUID))
 			qApp->quit();
 	}
-	
+
 	QObject::connect(sappServer, SIGNAL(newConnection()),
 		this, SLOT(doDuplicateInstanceDetected()));
 }
@@ -86,9 +86,9 @@ void QomposeApplication::initializeLocalServer()
  */
 void QomposeApplication::doDuplicateInstanceDetected()
 { /* SLOT */
-	
+
 	QomposeWindow *w = new QomposeWindow();
 	windows.append(w);
 	w->show();
-	
+
 }

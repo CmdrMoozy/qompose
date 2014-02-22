@@ -34,34 +34,34 @@ class QShowEvent;
 class QomposeGoToDialog : public QDialog
 {
 	Q_OBJECT
-	
+
 	public:
 		QomposeGoToDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
 		virtual ~QomposeGoToDialog();
-		
+
 		int getSelectedLine() const;
-		
+
 	protected:
 		virtual void showEvent(QShowEvent *e);
-		
+
 	private:
 		int selectedLine;
-		
+
 		QGridLayout *layout;
-		
+
 		QLabel *lineLabel;
 		QLineEdit *lineTextEdit;
-		
+
 		QWidget *buttonsWidget;
 		QGridLayout *buttonsLayout;
 		QPushButton *closeButton;
 		QPushButton *goToButton;
-		
+
 		void initializeGUI();
-		
+
 	private Q_SLOTS:
 		void doGoTo();
-		
+
 	Q_SIGNALS:
 		void accepted();
 };

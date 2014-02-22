@@ -33,7 +33,7 @@ QomposePreferencesListView::QomposePreferencesListView(QWidget *p)
 {
 	setIconSize(QSize(30, 30));
 	setSpacing(5);
-	
+
 	QFont f = font();
 	f.setPointSize(10);
 	setFont(f);
@@ -54,7 +54,7 @@ QomposePreferencesListView::~QomposePreferencesListView()
 void QomposePreferencesListView::setModel(QomposePreferencesListModel *m)
 {
 	QAbstractItemModel *aim = dynamic_cast<QAbstractItemModel *>(m);
-	
+
 	setModel(aim);
 }
 

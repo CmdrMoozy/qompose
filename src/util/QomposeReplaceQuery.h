@@ -31,10 +31,10 @@ class QomposeReplaceQuery : public QomposeFindQuery
 	public:
 		QomposeReplaceQuery(QObject *p = 0);
 		virtual ~QomposeReplaceQuery();
-		
+
 		QString getReplaceValue() const;
 		void setReplaceValue(const QString &v);
-		
+
 	private:
 		QString replaceValue;
 };
