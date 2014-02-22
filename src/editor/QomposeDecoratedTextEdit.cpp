@@ -120,10 +120,6 @@ QFont QomposeDecoratedTextEdit::font() const
  */
 void QomposeDecoratedTextEdit::setFont(const QFont &f)
 {
-	// Make a note of our current tab width (in spaces).
-
-	int oldWidth = tabWidthSpaces();
-
 	// Make sure we aren't given a pixel-sized font.
 
 	currentFont = f;
@@ -140,7 +136,7 @@ void QomposeDecoratedTextEdit::setFont(const QFont &f)
 
 	// Make sure our tab width is still the same (in spaces).
 
-	setTabWidthSpaces(oldWidth);
+	setTabWidthSpaces(tabWidth);
 
 	// Update our line wrap guide, since it depends on our font.
 
@@ -198,6 +194,10 @@ void QomposeDecoratedTextEdit::setFontZoom(int z)
 		currentFont.setPointSizeF(sizef);
 
 	QPlainTextEdit::setFont(currentFont);
+
+	// Reset our tab width.
+
+	setTabWidthSpaces(tabWidth);
 }
 
 /*!
@@ -208,14 +208,7 @@ void QomposeDecoratedTextEdit::setFontZoom(int z)
  */
 int QomposeDecoratedTextEdit::tabWidthSpaces() const
 {
-	double w = static_cast<double>(tabStopWidth());
-
-	QFontMetrics m(font());
-
-	w /= static_cast<double>(m.width(' '));
-	qRound(w);
-
-	return static_cast<int>(w);
+	return tabWidth;
 }
 
 /*!
@@ -226,11 +219,11 @@ int QomposeDecoratedTextEdit::tabWidthSpaces() const
  */
 void QomposeDecoratedTextEdit::setTabWidthSpaces(int w)
 {
-	w = qAbs(w);
+	tabWidth = qAbs(w);
 
-	QFontMetrics m(font());
+	QFontMetrics m(QPlainTextEdit::font());
 
-	setTabStopWidth(w * m.width(' '));
+	setTabStopWidth(tabWidth * m.width(' '));
 }
 
 /*!
