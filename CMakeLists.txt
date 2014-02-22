@@ -79,6 +79,7 @@ SET(qompose_HEADERS
 	
 	src/dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h
 	src/dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h
+	src/dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.h
 	src/dialogs/preferences/widgets/QomposePreferencesScrollArea.h
 	src/dialogs/preferences/widgets/QomposePreferencesWidget.h
 	
@@ -124,6 +125,7 @@ SET(qompose_SOURCES
 	
 	src/dialogs/preferences/widgets/QomposeEditorPreferencesWidget.cpp
 	src/dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.cpp
+	src/dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.cpp
 	src/dialogs/preferences/widgets/QomposePreferencesScrollArea.cpp
 	src/dialogs/preferences/widgets/QomposePreferencesWidget.cpp
 	

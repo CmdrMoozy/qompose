@@ -282,6 +282,55 @@ void QomposeBuffer::print(QPrinter *p)
 }
 
 /*!
+ * This function strips all trailing spaces from all of the lines in our document. Note
+ * that this action WILL set the document's modify flag, and will show up in the undo()
+ * list.
+ */
+void QomposeBuffer::stripTrailingSpaces()
+{
+	QTextCursor curs = textCursor();
+	
+	curs.beginEditBlock();
+	
+	// Get our ending line number.
+	
+	curs.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+	int lastBlock = curs.blockNumber();
+	
+	// Move to the beginning, and start processing.
+	
+	curs.setPosition(0, QTextCursor::MoveAnchor);
+	
+	do
+	{
+		// Select this line.
+		
+		curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+		QString block = curs.selectedText();
+		
+		// Find the first non-space character from the left, and trim the string.
+		
+		int n = block.size() - 1;
+		while( (n >= 0) && block.at(n).isSpace() )
+			--n;
+		
+		block = block.left(n + 1);
+		
+		// Replace this line, and move on.
+		
+		curs.insertText(block);
+		
+		curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+	} while(curs.blockNumber() < lastBlock);
+	
+	// Done!
+	
+	curs.endEditBlock();
+	
+	setModified(true);
+}
+
+/*!
  * This function (re-)reads our buffer's contents from the disk, using our object's
  * current path and text codec attributes.
  *
@@ -326,15 +375,26 @@ bool QomposeBuffer::read(bool u)
  */
 bool QomposeBuffer::write()
 {
+	// Get the right text codec for our encoding.
+	
 	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
 	
 	if(c == 0)
 		return false;
 	
+	// Try opening the file we're going to write.
+	
 	QFile file(path);
 	
 	if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
 		return false;
+	
+	// If "strip trailing spaces" is enabled, do that before writing.
+	
+	if(settings->getSetting("save-strip-trailing-spaces").toBool())
+		stripTrailingSpaces();
+	
+	// Try writing our document.
 	
 	QByteArray format("plaintext");
 	QTextDocumentWriter writer(&file, format);

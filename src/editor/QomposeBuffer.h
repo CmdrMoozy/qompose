@@ -60,6 +60,8 @@ class QomposeBuffer : public QomposeEditor
 		QString path;
 		QString codec;
 		
+		void stripTrailingSpaces();
+		
 		bool read(bool u = false);
 		bool write();
 		

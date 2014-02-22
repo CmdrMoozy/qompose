@@ -29,6 +29,7 @@ class QPushButton;
 
 class QomposeGeneralPreferencesWidget;
 class QomposeEditorPreferencesWidget;
+class QomposeOpenSavePreferencesWidget;
 class QomposePreferencesListView;
 class QomposePreferencesListModel;
 class QomposeSettings;
@@ -54,6 +55,7 @@ class QomposePreferencesDialog : public QDialog
 		
 		QomposeGeneralPreferencesWidget *generalPreferencesWidget;
 		QomposeEditorPreferencesWidget *editorPreferencesWidget;
+		QomposeOpenSavePreferencesWidget *openSavePreferencesWidget;
 		
 		QomposePreferencesListView *preferencesView;
 		QomposePreferencesListModel *preferencesModel;

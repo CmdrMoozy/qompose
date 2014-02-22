@@ -27,6 +27,7 @@
 #include "dialogs/preferences/QomposePreferencesListView.h"
 #include "dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h"
 #include "dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h"
+#include "dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.h"
 #include "dialogs/preferences/widgets/QomposePreferencesScrollArea.h"
 #include "util/QomposeSettings.h"
 
@@ -125,8 +126,11 @@ void QomposePreferencesDialog::createPreferencesModel()
 	
 	editorPreferencesWidget = new QomposeEditorPreferencesWidget(settings, this);
 	
+	openSavePreferencesWidget = new QomposeOpenSavePreferencesWidget(settings, this);
+	
 	preferencesModel->addPreferencesWidget(generalPreferencesWidget);
 	preferencesModel->addPreferencesWidget(editorPreferencesWidget);
+	preferencesModel->addPreferencesWidget(openSavePreferencesWidget);
 }
 
 /*!

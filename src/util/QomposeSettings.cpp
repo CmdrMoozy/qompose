@@ -29,23 +29,24 @@
 
 const QList< QPair<QString, QVariant> > QomposeSettings::defaults
 	= (QList< QPair<QString, QVariant> >())
-		<< QPair<QString, QVariant>( "show-status-bar",           true                  )
-		<< QPair<QString, QVariant>( "recent-list-size",          static_cast<int>(10)  )
-		<< QPair<QString, QVariant>( "recent-list",               QStringList()         )
-		<< QPair<QString, QVariant>( "window-save-attributes",    true                  )
-		<< QPair<QString, QVariant>( "show-gutter",               true                  )
-		<< QPair<QString, QVariant>( "editor-font",               QFont("Courier", 11)  )
-		<< QPair<QString, QVariant>( "editor-tab-width",          static_cast<int>(8)   )
-		<< QPair<QString, QVariant>( "editor-wrap-guide-visible", true                  )
-		<< QPair<QString, QVariant>( "editor-wrap-guide-width",   90                    )
-		<< QPair<QString, QVariant>( "editor-wrap-guide-color",   QColor(127, 127, 127) )
-		<< QPair<QString, QVariant>( "editor-foreground",         QColor(255, 255, 255) )
-		<< QPair<QString, QVariant>( "editor-background",         QColor(39, 40, 34)    )
-		<< QPair<QString, QVariant>( "editor-current-line",       QColor(70, 72, 61)    )
-		<< QPair<QString, QVariant>( "gutter-foreground",         QColor(Qt::white)     )
-		<< QPair<QString, QVariant>( "gutter-background",         QColor(Qt::black)     )
-		<< QPair<QString, QVariant>( "window-geometry",           QByteArray()          )
-		<< QPair<QString, QVariant>( "window-state",              QByteArray()          );
+		<< QPair<QString, QVariant>( "show-status-bar",            true                  )
+		<< QPair<QString, QVariant>( "recent-list-size",           static_cast<int>(10)  )
+		<< QPair<QString, QVariant>( "recent-list",                QStringList()         )
+		<< QPair<QString, QVariant>( "window-save-attributes",     true                  )
+		<< QPair<QString, QVariant>( "show-gutter",                true                  )
+		<< QPair<QString, QVariant>( "save-strip-trailing-spaces", true                  )
+		<< QPair<QString, QVariant>( "editor-font",                QFont("Courier", 11)  )
+		<< QPair<QString, QVariant>( "editor-tab-width",           static_cast<int>(8)   )
+		<< QPair<QString, QVariant>( "editor-wrap-guide-visible",  true                  )
+		<< QPair<QString, QVariant>( "editor-wrap-guide-width",    90                    )
+		<< QPair<QString, QVariant>( "editor-wrap-guide-color",    QColor(127, 127, 127) )
+		<< QPair<QString, QVariant>( "editor-foreground",          QColor(255, 255, 255) )
+		<< QPair<QString, QVariant>( "editor-background",          QColor(39, 40, 34)    )
+		<< QPair<QString, QVariant>( "editor-current-line",        QColor(70, 72, 61)    )
+		<< QPair<QString, QVariant>( "gutter-foreground",          QColor(Qt::white)     )
+		<< QPair<QString, QVariant>( "gutter-background",          QColor(Qt::black)     )
+		<< QPair<QString, QVariant>( "window-geometry",            QByteArray()          )
+		<< QPair<QString, QVariant>( "window-state",               QByteArray()          );
 
 /*!
  * This function initializes a new settings instance, with the given parent.
