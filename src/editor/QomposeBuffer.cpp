@@ -28,6 +28,7 @@
 #include <QString>
 #include <QVariant>
 #include <QPrinter>
+#include <QTextBlock>
 
 #include "QomposeDefines.h"
 #include "util/QomposeSettings.h"
@@ -289,6 +290,8 @@ void QomposeBuffer::print(QPrinter *p)
 void QomposeBuffer::stripTrailingSpaces()
 {
 	QTextCursor curs = textCursor();
+	int currentBlock = curs.blockNumber();
+	int currentPosition = curs.positionInBlock();
 
 	curs.beginEditBlock();
 
@@ -323,9 +326,18 @@ void QomposeBuffer::stripTrailingSpaces()
 		curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
 	} while(curs.blockNumber() < lastBlock);
 
+	// Move the cursor back to the same position it started in.
+
+	curs.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+	curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, currentBlock);
+
+	curs.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor,
+		qMin(currentPosition, qMax(curs.block().length() - 1, 0)));
+
 	// Done!
 
 	curs.endEditBlock();
+	setTextCursor(curs);
 
 	setModified(true);
 }
