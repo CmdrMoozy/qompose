@@ -23,7 +23,6 @@
 #include <QTextStream>
 #include <QTextCursor>
 #include <QFileInfo>
-#include <QTextDocumentWriter>
 #include <QByteArray>
 #include <QString>
 #include <QVariant>
@@ -31,6 +30,7 @@
 #include <QTextBlock>
 
 #include "QomposeDefines.h"
+#include "util/QomposeDocumentWriter.h"
 #include "util/QomposeSettings.h"
 
 /*!
@@ -283,66 +283,6 @@ void QomposeBuffer::print(QPrinter *p)
 }
 
 /*!
- * This function strips all trailing spaces from all of the lines in our document. Note
- * that this action WILL set the document's modify flag, and will show up in the undo()
- * list.
- */
-void QomposeBuffer::stripTrailingSpaces()
-{
-	QTextCursor curs = textCursor();
-	int currentBlock = curs.blockNumber();
-	int currentPosition = curs.positionInBlock();
-
-	curs.beginEditBlock();
-
-	// Get our ending line number.
-
-	curs.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-	int lastBlock = curs.blockNumber();
-
-	// Move to the beginning, and start processing.
-
-	curs.setPosition(0, QTextCursor::MoveAnchor);
-
-	do
-	{
-		// Select this line.
-
-		curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-		QString block = curs.selectedText();
-
-		// Find the first non-space character from the left, and trim the string.
-
-		int n = block.size() - 1;
-		while( (n >= 0) && block.at(n).isSpace() )
-			--n;
-
-		block = block.left(n + 1);
-
-		// Replace this line, and move on.
-
-		curs.insertText(block);
-
-		curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
-	} while(curs.blockNumber() < lastBlock);
-
-	// Move the cursor back to the same position it started in.
-
-	curs.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-	curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, currentBlock);
-
-	curs.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor,
-		qMin(currentPosition, qMax(curs.block().length() - 1, 0)));
-
-	// Done!
-
-	curs.endEditBlock();
-	setTextCursor(curs);
-
-	setModified(true);
-}
-
-/*!
  * This function (re-)reads our buffer's contents from the disk, using our object's
  * current path and text codec attributes.
  *
@@ -401,17 +341,14 @@ bool QomposeBuffer::write()
 	if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
 		return false;
 
-	// If "strip trailing spaces" is enabled, do that before writing.
+	// Setup our document writer.
 
-	if(settings->getSetting("save-strip-trailing-spaces").toBool())
-		stripTrailingSpaces();
-
-	// Try writing our document.
-
-	QByteArray format("plaintext");
-	QTextDocumentWriter writer(&file, format);
+	QomposeDocumentWriter writer(&file);
 
 	writer.setCodec(c);
+	writer.setWhitespaceTrimmed(settings->getSetting(
+		"save-strip-trailing-spaces").toBool());
+
 	bool r = writer.write(document());
 
 	file.close();

@@ -100,6 +100,7 @@ SET(qompose_HEADERS
 	src/syntax/QomposeLexer.h
 	src/syntax/QomposeSyntaxHighlighter.h
 
+	src/util/QomposeDocumentWriter.h
 	src/util/QomposeFindQuery.h
 	src/util/QomposeReplaceQuery.h
 	src/util/QomposeSettings.h
@@ -146,6 +147,7 @@ SET(qompose_SOURCES
 	src/syntax/QomposeLexer.cpp
 	src/syntax/QomposeSyntaxHighlighter.cpp
 
+	src/util/QomposeDocumentWriter.cpp
 	src/util/QomposeFindQuery.cpp
 	src/util/QomposeReplaceQuery.cpp
 	src/util/QomposeSettings.cpp
