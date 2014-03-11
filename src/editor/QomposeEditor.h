@@ -20,6 +20,7 @@
 #define INCLUDE_QOMPOSE_EDITOR_H
 
 #include "editor/QomposeDecoratedTextEdit.h"
+#include "util/QomposeHotkeyMap.h"
 
 #include <QSize>
 
@@ -62,6 +63,11 @@ class QomposeEditor : public QomposeDecoratedTextEdit
 		virtual void keyPressEvent(QKeyEvent *e);
 
 	private:
+		typedef void (QomposeEditor::*HotkeyFunction)();
+		QomposeHotkeyMap<HotkeyFunction> hotkeys;
+
+		void initializeHotkeys();
+
 		void doNewline(bool preserveIndent = false);
 		void doMoveHome(bool moveAnchor = true);
 

@@ -494,7 +494,13 @@ void QomposeDecoratedTextEdit::resizeEvent(QResizeEvent *e)
 }
 
 /*!
- * We handle mouse wheel events to implement text zooming.
+ * We handle mouse wheel events to implement text zooming. We implement two
+ * wheel actions:
+ *
+ *     Ctrl + Wheel Forward - Increase font zoom.
+ *     Ctrl + Wheel Backward - Decrease font zoom.
+ *
+ * All other wheel events are handled normally by our superclass.
  *
  * \param e The event being handled.
  */

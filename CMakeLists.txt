@@ -102,6 +102,8 @@ SET(qompose_HEADERS
 
 	src/util/QomposeDocumentWriter.h
 	src/util/QomposeFindQuery.h
+	src/util/QomposeHotkey.h
+	src/util/QomposeHotkeyMap.h
 	src/util/QomposeReplaceQuery.h
 	src/util/QomposeSettings.h
 
@@ -149,6 +151,7 @@ SET(qompose_SOURCES
 
 	src/util/QomposeDocumentWriter.cpp
 	src/util/QomposeFindQuery.cpp
+	src/util/QomposeHotkey.cpp
 	src/util/QomposeReplaceQuery.cpp
 	src/util/QomposeSettings.cpp
 

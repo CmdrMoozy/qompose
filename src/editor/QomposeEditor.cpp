@@ -38,7 +38,10 @@
 #include <QRegExp>
 
 #include "util/QomposeFindQuery.h"
+#include "util/QomposeHotkey.h"
 #include "util/QomposeReplaceQuery.h"
+
+#define CALL_HOTKEY_FUNCTION(obj,fn) ((obj).*(fn))
 
 /*!
  * This function initializes a new editor widget, using the given parent widget.
@@ -48,6 +51,7 @@
 QomposeEditor::QomposeEditor(QWidget *p)
 	: QomposeDecoratedTextEdit(p)
 {
+	initializeHotkeys();
 }
 
 /*!
@@ -226,6 +230,14 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 
 	if(!processed)
 		QomposeDecoratedTextEdit::keyPressEvent(e);
+}
+
+/*!
+ * This function initializes our hotkeys map, which is used by our keyPressEvent
+ * handler to decide what action to take when a given hotkey is pressed.
+ */
+void QomposeEditor::initializeHotkeys()
+{
 }
 
 /*!
