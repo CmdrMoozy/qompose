@@ -68,8 +68,12 @@ class QomposeEditor : public QomposeDecoratedTextEdit
 
 		void initializeHotkeys();
 
-		void doNewline(bool preserveIndent = false);
-		void doMoveHome(bool moveAnchor = true);
+		void doNoop();
+
+		void doNewline();
+		void doTab();
+		void doMoveHome();
+		void doSelectHome();
 
 		FindResult doFind(bool forward, const QomposeFindQuery *q);
 		FindResult doBatchReplace(const QomposeReplaceQuery *q,
@@ -82,6 +86,7 @@ class QomposeEditor : public QomposeDecoratedTextEdit
 		void deselect();
 		void increaseSelectionIndent();
 		void decreaseSelectionIndent();
+		void doHome(bool moveAnchor);
 		FindResult findNext(const QomposeFindQuery *q);
 		FindResult findPrevious(const QomposeFindQuery *q);
 		FindResult replace(const QomposeReplaceQuery *q);

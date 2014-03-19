@@ -64,20 +64,21 @@ QomposeEditor::~QomposeEditor()
 /*!
  * We implement the following hotkeys:
  *
- * Custom (implemented by QomposeTextEdit):
+ * Custom hotkeys implemented by QomposeTextEdit:
  * 	Return           Move to a new line, maintaining indent.
  * 	Enter            Move to a new line, maintaining indent.
  * 	Tab              Increase indent on selection.
  * 	Shift+Backtab    Decrease indent on selection.
  *      Shift+Tab        Decrease indent on selection.
  * 	Home             Move to start of non-indent, then to start of line.
+ *      Shift+Home       Select to start of non-indent, then to start of line.
  * 	Ctrl+Wheel       Zoom text in and out.
  *      Ctrl+D           Duplicate the current line.
  *      Shift+Return     The same as Return.
  *      Shift+Ender      The same as Enter.
  *      Ctrl+(Zero)      Reset text zoom to default level.
  *
- * Inherited (implemented by QPlainTextEdit):
+ * Inherited from QPlainTextEdit:
  * 	Backspace        Deletes the character to the left of the cursor.
  * 	Delete           Deletes the character to the right of the cursor.
  * 	Ctrl+C           Copy selected text to clipboard.
@@ -98,7 +99,7 @@ QomposeEditor::~QomposeEditor()
  * 	Ctrl+End         Moves the cursor to the end of the document.
  * 	Alt+Wheel        Scrolls the page horizontally.
  *
- * Inherited but ignored (implemented by QPlainTextEdit, but ignored by QomposeTextEdit):
+ * Inherited, but ignored by QomposeTextEdit:
  *      Ctrl+Shift+Left  Select to beginning of line.
  *      Ctrl+Shift+Right Select to end of line.
  * 	Ctrl+Insert      Copy selected text to clipboard.
@@ -117,7 +118,7 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 	if( (e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter) )
 	{
 		e->accept();
-		doNewline(true);
+		doNewline();
 		return;
 	}
 
@@ -140,7 +141,7 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 				case Qt::Key_Home:
 					e->accept();
 					processed = true;
-					doMoveHome();
+					doHome(true);
 					break;
 			};
 
@@ -176,7 +177,7 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
 				case Qt::Key_Home:
 					e->accept();
 					processed = true;
-					doMoveHome(false);
+					doHome(false);
 					break;
 
 				case Qt::Key_Return:
@@ -238,36 +239,109 @@ void QomposeEditor::keyPressEvent(QKeyEvent *e)
  */
 void QomposeEditor::initializeHotkeys()
 {
+	// Enter
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Return, 0,
+		~Qt::KeyboardModifiers(0)), &QomposeEditor::doNewline);
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Enter, 0,
+		~Qt::KeyboardModifiers(0)), &QomposeEditor::doNewline);
+
+	// Tab
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Tab), &QomposeEditor::doTab);
+
+	// Shift + Tab
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Tab, Qt::ShiftModifier),
+		&QomposeEditor::decreaseSelectionIndent);
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Backtab, Qt::ShiftModifier),
+		&QomposeEditor::decreaseSelectionIndent);
+
+	// Home
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Home),
+		&QomposeEditor::doMoveHome);
+
+	// Shift + Home
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Home, Qt::ShiftModifier),
+		&QomposeEditor::doSelectHome);
+
+	// Ctrl+D
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_D, Qt::ControlModifier),
+		&QomposeEditor::duplicateLine);
+
+	// Ctrl+(Zero)
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_0, Qt::ControlModifier),
+		&QomposeEditor::resetFontZoom);
+
+	// Ctrl+Shift+Left
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Left, Qt::ControlModifier |
+		Qt::ShiftModifier), &QomposeEditor::doNoop);
+
+	// Ctrl+Shift+Right
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Right, Qt::ControlModifier |
+		Qt::ShiftModifier), &QomposeEditor::doNoop);
+
+	// Ctrl+Insert
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Insert, Qt::ControlModifier),
+		&QomposeEditor::doNoop);
+
+	// Ctrl+K
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_K, Qt::ControlModifier),
+		&QomposeEditor::doNoop);
+
+	// Shift+Insert
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Insert, Qt::ShiftModifier),
+		&QomposeEditor::doNoop);
+
+	// Shift+Delete
+
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Delete, Qt::ShiftModifier),
+		&QomposeEditor::doNoop);
 }
 
 /*!
- * This function inserts a new line at the current text cursor position, optionally
- * preserving the current line's leading whitespace (i.e., indent).
- *
- * \param preserveIndent Whether or not the current line's indent should be preserved.
+ * This function is a "no-op". It is used for hotkeys we recognize, but which we
+ * do not take any action for (e.g., if we are capturing one of our superclass's
+ * hotkeys in order to intentionally ignore it).
  */
-void QomposeEditor::doNewline(bool preserveIndent)
+void QomposeEditor::doNoop()
 {
-	// Compute the text to insert, optionally preserving indent.
+}
+
+/*!
+ * This function inserts a new line at the current text cursor position,
+ * optionally preserving the current line's leading whitespace (i.e., indent).
+ */
+void QomposeEditor::doNewline()
+{
+	// Compute the text to insert to preserve the previous line's indent.
 
 	QString insert = "\n";
 
-	if(preserveIndent)
-	{
-		QTextCursor l = textCursor();
+	QTextCursor l = textCursor();
 
-		if(l.hasSelection())
-			l.setPosition(l.selectionStart(), QTextCursor::MoveAnchor);
+	if(l.hasSelection())
+		l.setPosition(l.selectionStart(), QTextCursor::MoveAnchor);
 
-		l.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+	l.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
 
-		QString line = l.selectedText();
+	QString line = l.selectedText();
 
-		line.replace(QRegExp("^([ \\t]*)\\S.*$", Qt::CaseSensitive,
-			QRegExp::RegExp2), "\\1");
+	line.replace(QRegExp("^([ \\t]*)\\S.*$", Qt::CaseSensitive,
+		QRegExp::RegExp2), "\\1");
 
-		insert.append(line);
-	}
+	insert.append(line);
 
 	// Insert that text, and set our text cursor.
 
@@ -277,98 +351,42 @@ void QomposeEditor::doNewline(bool preserveIndent)
 }
 
 /*!
- * This function moves the current cursor as if the "Home" key was pressed. If the text
- * between the current position and the start-of-line contains non-whitespace characters,
- * then we just move to the beginning of the leading whitespace. Otherwise, we move to the
- * start-of-line.
- *
- * When we do this, we will optionally keep the anchor (selecting the characters we move
- * past).
- *
- * \param moveAnchor Whether or not the anchor should be moved (i.e., selection discarded).
+ * This function performs a "tab" action, by either increasing the indentation
+ * of the current selection (if applicable), or by simply inserting a single
+ * tab character otherwise.
  */
-void QomposeEditor::doMoveHome(bool moveAnchor)
+void QomposeEditor::doTab()
 {
-	// Get the characters between the current cursor and the start-of-line.
+	QTextCursor curs = textCursor();
 
-	QString line, trimmed;
-
+	if(!curs.hasSelection())
 	{
-		QTextCursor l = textCursor();
-
-		if(l.hasSelection())
-			l.setPosition(l.selectionStart(), QTextCursor::MoveAnchor);
-
-		l.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-
-		line = l.selectedText();
-	}
-
-	// Get the leading whitespace from the line.
-
-	{
-		int idx = 0;
-
-		for(int i = 0; i < line.length(); ++i)
-		{
-			if(!line.at(i).isSpace())
-			{
-				idx = i;
-				break;
-			}
-		}
-
-		trimmed = line.left(idx);
-	}
-
-	// Move the cursor to its appropriate location.
-
-	if(trimmed == line)
-	{
-		// There is only whitespace in front of us - move to the start-of-line.
-
-		QTextCursor curs = textCursor();
-
-		if(moveAnchor)
-		{
-			curs.movePosition(QTextCursor::StartOfLine,
-				QTextCursor::MoveAnchor);
-		}
-		else
-		{
-			curs.movePosition(QTextCursor::StartOfLine,
-				QTextCursor::KeepAnchor);
-		}
-
+		curs.insertText("\t");
 		setTextCursor(curs);
 	}
 	else
 	{
-		// There is non-whitespace in front - move to the end of the whitespace.
-
-		QTextCursor curs = textCursor();
-
-		int eos = qMax(curs.selectionStart(), curs.selectionEnd());
-
-		curs.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-
-		int sol = curs.position();
-
-		if(moveAnchor)
-		{
-			curs.setPosition(sol + trimmed.length(),
-				QTextCursor::MoveAnchor);
-		}
-		else
-		{
-			curs.setPosition(eos, QTextCursor::MoveAnchor);
-
-			curs.setPosition(sol + trimmed.length(),
-				QTextCursor::KeepAnchor);
-		}
-
-		setTextCursor(curs);
+		increaseSelectionIndent();
 	}
+}
+
+/*!
+ * This is a simple utility function which moves the cursor to the beginning of
+ * the current line. This is equivalent to calling doHome(true).
+ */
+void QomposeEditor::doMoveHome()
+{
+	doHome(true);
+}
+
+/*!
+ * This is a simple utility function which moves the cursor to the beginning of
+ * the current line, without moving the anchor - i.e., selecting. This is
+ * equivalent to calling doHome(false).
+ */
+void QomposeEditor::doSelectHome()
+{
+	doHome(false);
 }
 
 /*!
@@ -806,6 +824,108 @@ void QomposeEditor::decreaseSelectionIndent()
 
 	setTextCursor(curs);
 
+}
+
+/*!
+ * This function moves the cursor to the beginning of the current line,
+ * following some special rules:
+ *
+ *     - By default, the cursor is simply moved to the beginning of the line's
+ *       indentation - that is, just before the first non-whitespace character
+ *       on the line.
+ *
+ *     - If there is only whitespace before the position the cursor already
+ *       occupies, then the cursor is moved to the very beginning of the line
+ *       instead - that is, just before the first character on the line.
+ *
+ * Additionally, moving the cursor's anchor is optional. This means that this
+ * function will either move the cursor, or select using the cursor, following
+ * these rules.
+ *
+ * \param moveAnchor Whether or not the cursor's anchor should be moved.
+ */
+void QomposeEditor::doHome(bool moveAnchor)
+{
+	// Get the characters between the current cursor and the start-of-line.
+
+	QString line, trimmed;
+
+	{
+		QTextCursor l = textCursor();
+
+		if(l.hasSelection())
+			l.setPosition(l.selectionStart(), QTextCursor::MoveAnchor);
+
+		l.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+
+		line = l.selectedText();
+	}
+
+	// Get the leading whitespace from the line.
+
+	{
+		int idx = 0;
+
+		for(int i = 0; i < line.length(); ++i)
+		{
+			if(!line.at(i).isSpace())
+			{
+				idx = i;
+				break;
+			}
+		}
+
+		trimmed = line.left(idx);
+	}
+
+	// Move the cursor to its appropriate location.
+
+	if(trimmed == line)
+	{
+		// There is only whitespace in front of us - move to the start-of-line.
+
+		QTextCursor curs = textCursor();
+
+		if(moveAnchor)
+		{
+			curs.movePosition(QTextCursor::StartOfLine,
+				QTextCursor::MoveAnchor);
+		}
+		else
+		{
+			curs.movePosition(QTextCursor::StartOfLine,
+				QTextCursor::KeepAnchor);
+		}
+
+		setTextCursor(curs);
+	}
+	else
+	{
+		// There is non-whitespace in front - move to the end of the whitespace.
+
+		QTextCursor curs = textCursor();
+
+		int eos = qMax(curs.selectionStart(), curs.selectionEnd());
+
+		curs.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+
+		int sol = curs.position();
+
+		if(moveAnchor)
+		{
+			curs.setPosition(sol + trimmed.length(),
+				QTextCursor::MoveAnchor);
+		}
+		else
+		{
+			curs.setPosition(eos, QTextCursor::MoveAnchor);
+
+			curs.setPosition(sol + trimmed.length(),
+				QTextCursor::KeepAnchor);
+		}
+
+		setTextCursor(curs);
+	}
 }
 
 /*!

@@ -201,6 +201,17 @@ void QomposeDecoratedTextEdit::setFontZoom(int z)
 }
 
 /*!
+ * This is a simple convenience function, which resets our editor's text zoom
+ * to the default level (i.e., normally sized text).
+ *
+ * This is equivalent to calling setFontZoom(0).
+ */
+void QomposeDecoratedTextEdit::resetFontZoom()
+{
+	setFontZoom(0);
+}
+
+/*!
  * This function returns the width of a tab stop, in spaces (based upon the current
  * font) - NOT in pixels.
  *

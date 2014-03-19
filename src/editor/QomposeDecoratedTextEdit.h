@@ -50,6 +50,7 @@ class QomposeDecoratedTextEdit : public QPlainTextEdit
 		int fontZoom() const;
 		qreal fontZoomSize() const;
 		void setFontZoom(int z);
+		void resetFontZoom();
 
 		int tabWidthSpaces() const;
 		void setTabWidthSpaces(int w);
