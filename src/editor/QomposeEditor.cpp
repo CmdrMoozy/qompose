@@ -72,7 +72,6 @@ QomposeEditor::~QomposeEditor()
  *      Shift+Tab        Decrease indent on selection.
  * 	Home             Move to start of non-indent, then to start of line.
  *      Shift+Home       Select to start of non-indent, then to start of line.
- * 	Ctrl+Wheel       Zoom text in and out.
  *      Ctrl+D           Duplicate the current line.
  *      Shift+Return     The same as Return.
  *      Shift+Ender      The same as Enter.
@@ -111,125 +110,11 @@ QomposeEditor::~QomposeEditor()
  */
 void QomposeEditor::keyPressEvent(QKeyEvent *e)
 {
-	// Process the key event normally.
+	HotkeyFunction *handler = hotkeys.getHotkeyHandler(e);
 
-	bool processed = false;
-
-	if( (e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter) )
-	{
-		e->accept();
-		doNewline();
-		return;
-	}
-
-	switch(e->modifiers())
-	{
-		case Qt::NoModifier:
-
-			switch(e->key())
-			{
-				case Qt::Key_Tab:
-					if(textCursor().hasSelection())
-					{
-						e->accept();
-						processed = true;
-
-						increaseSelectionIndent();
-					}
-					break;
-
-				case Qt::Key_Home:
-					e->accept();
-					processed = true;
-					doHome(true);
-					break;
-			};
-
-			break;
-
-		case Qt::ShiftModifier:
-
-			switch(e->key())
-			{
-				// Ignore our superclass's Shift+Insert hotkey.
-				case Qt::Key_Insert:
-					e->ignore();
-					processed = true;
-					break;
-
-				// Ignore our superclass's Shift+Delete hotkey.
-				case Qt::Key_Delete:
-					e->ignore();
-					processed = true;
-					break;
-
-				case Qt::Key_Backtab:
-				case Qt::Key_Tab:
-					if(textCursor().hasSelection())
-					{
-						e->accept();
-						processed = true;
-
-						decreaseSelectionIndent();
-					}
-					break;
-
-				case Qt::Key_Home:
-					e->accept();
-					processed = true;
-					doHome(false);
-					break;
-
-				case Qt::Key_Return:
-				case Qt::Key_Enter:
-					e->accept();
-					processed = true;
-					doNewline();
-					break;
-			};
-
-			break;
-
-		case Qt::ControlModifier:
-
-			switch(e->key())
-			{
-				// Ignore our superclass's Control+Insert hotkey.
-				case Qt::Key_Insert:
-					e->ignore();
-					processed = true;
-					break;
-
-				// Ignore our superclass's Control+K hotkey.
-				case Qt::Key_K:
-					e->ignore();
-					processed = true;
-					break;
-
-				// CTRL+(Zero) resets our text zoom to 100%.
-				case Qt::Key_0:
-					e->accept();
-					processed = true;
-					setFontZoom(0);
-					break;
-
-				case Qt::Key_Z:
-					e->accept();
-					processed = true;
-					undo();
-					break;
-
-				case Qt::Key_Y:
-					e->accept();
-					processed = true;
-					redo();
-					break;
-			};
-
-			break;
-	};
-
-	if(!processed)
+	if(handler)
+		CALL_HOTKEY_FUNCTION(*this, *handler)();
+	else
 		QomposeDecoratedTextEdit::keyPressEvent(e);
 }
 
