@@ -29,7 +29,8 @@
  * \param p Our parent widget.
  */
 QomposeDecoratedTextEdit::QomposeDecoratedTextEdit(QWidget *p)
-	: QPlainTextEdit(p), originalFontSize(11.0), currentFontZoom(1)
+	: QPlainTextEdit(p), originalFontSize(11.0), currentFontZoom(1),
+		tabWidth(8)
 {
 	// Set our editor's default font.
 
@@ -50,8 +51,6 @@ QomposeDecoratedTextEdit::QomposeDecoratedTextEdit(QWidget *p)
 	// Set some of our widget's default properties.
 
 	setCurrentLineColor(QColor(70, 72, 61));
-
-	setTabWidthSpaces(8);
 
 	setWrapGuideVisible(true);
 	setWrapGuideColumnWidth(100);
