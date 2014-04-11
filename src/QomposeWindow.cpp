@@ -42,8 +42,8 @@
 #include "util/QomposeSettings.h"
 
 /*!
- * This is our default constructor, which creates a new Qompose window, and initializes
- * its contents.
+ * This is our default constructor, which creates a new Qompose window, and
+ * initializes its contents.
  *
  * \param p Our parent widget, if any.
  * \param f The Qt window flags to use for this window.
@@ -91,9 +91,9 @@ QomposeWindow::~QomposeWindow()
 }
 
 /*!
- * This function handles our window being closed by notifying our buffers of the
- * imminent close event, and then proceeding according to what it reports back to
- * us.
+ * This function handles our window being closed by notifying our buffers of
+ * the imminent close event, and then proceeding according to what it reports
+ * back to us.
  *
  * \param e The event being handled.
  */
@@ -138,17 +138,23 @@ void QomposeWindow::initializeDialogs()
 
 	// Connect our dialog actions.
 
-	QObject::connect( findDialog,    SIGNAL( accepted()                ), this, SLOT( doFindNext()         ) );
-	QObject::connect( replaceDialog, SIGNAL( replaceClicked()          ), this, SLOT( doReplace()          ) );
-	QObject::connect( replaceDialog, SIGNAL( findClicked()             ), this, SLOT( doReplaceFind()      ) );
-	QObject::connect( replaceDialog, SIGNAL( replaceSelectionClicked() ), this, SLOT( doReplaceSelection() ) );
-	QObject::connect( replaceDialog, SIGNAL( replaceAllClicked()       ), this, SLOT( doReplaceAll()       ) );
-	QObject::connect( goToDialog,    SIGNAL( accepted()                ), this, SLOT( doGoToAccepted()     ) );
+	QObject::connect(findDialog, SIGNAL(accepted()),
+		this, SLOT(doFindNext()));
+	QObject::connect(replaceDialog, SIGNAL(replaceClicked()),
+		this, SLOT(doReplace()));
+	QObject::connect(replaceDialog, SIGNAL(findClicked()),
+		this, SLOT(doReplaceFind()));
+	QObject::connect(replaceDialog, SIGNAL(replaceSelectionClicked()),
+		this, SLOT(doReplaceSelection()));
+	QObject::connect(replaceDialog, SIGNAL(replaceAllClicked()),
+		this, SLOT(doReplaceAll()));
+	QObject::connect(goToDialog, SIGNAL(accepted()),
+		this, SLOT(doGoToAccepted()));
 }
 
 /*!
- * This function initializes our main menu bar. Note that this function must
- * be called AFTER initializeActions, as we need actions to be initialized before
+ * This function initializes our main menu bar. Note that this function must be
+ * called AFTER initializeActions, as we need actions to be initialized before
  * we can add them to menus.
  */
 void QomposeWindow::initializeMenus()
@@ -192,30 +198,27 @@ void QomposeWindow::applyExistingSettings()
 
 	statusBar->setVisible(settings->getSetting("show-status-bar").toBool());
 
-	QObject::connect( settings, SIGNAL( settingChanged(const QString &, const QVariant &) ),
-		this, SLOT( doSettingChanged(const QString &, const QVariant &) ) );
+	QObject::connect(settings, SIGNAL(settingChanged(
+		const QString &, const QVariant &)), this,
+		SLOT(doSettingChanged(const QString &, const QVariant &)));
 
 	// Restore our window's geometry and state.
 
-	QByteArray winGeometry = settings->getSetting("window-geometry").toByteArray();
+	QByteArray winGeometry = settings->getSetting("window-geometry")
+		.toByteArray();
 
 	if(!winGeometry.isNull())
-	{
 		if(!restoreGeometry(winGeometry))
-		{
-			settings->setSetting("window-geometry", QVariant(QByteArray()));
-		}
-	}
+			settings->setSetting("window-geometry",
+				QVariant(QByteArray()));
 
-	QByteArray winState = settings->getSetting("window-state").toByteArray();
+	QByteArray winState = settings->getSetting("window-state")
+		.toByteArray();
 
 	if(!winState.isNull())
-	{
 		if(!restoreState(winState, QOMPOSE_VERSION_MAJ))
-		{
-			settings->setSetting("window-state", QVariant(QByteArray()));
-		}
-	}
+			settings->setSetting("window-state",
+				QVariant(QByteArray()));
 }
 
 /*!
@@ -346,7 +349,8 @@ void QomposeWindow::doPrintPreview()
 
 /*!
  * This function handles our "find" action being triggered by showing our find
- * dialog, if our replace dialog isn't already open (they are mutually exclusive).
+ * dialog, if our replace dialog isn't already open (they are mutually
+ * exclusive).
  */
 void QomposeWindow::doFindDialog()
 { /* SLOT */
@@ -432,7 +436,8 @@ void QomposeWindow::doReplaceFind()
 void QomposeWindow::doReplaceSelection()
 { /* SLOT */
 
-	handleFindResult(buffers->doReplaceSelection(replaceDialog->getQuery()));
+	handleFindResult(buffers->doReplaceSelection(
+		replaceDialog->getQuery()));
 
 }
 
@@ -449,8 +454,8 @@ void QomposeWindow::doReplaceAll()
 }
 
 /*!
- * This function handles our "go to" dialog being accepted by telling our buffers
- * widget to perform the "go to" operation.
+ * This function handles our "go to" dialog being accepted by telling our
+ * buffers widget to perform the "go to" operation.
  */
 void QomposeWindow::doGoToAccepted()
 { /* SLOT */
@@ -472,7 +477,8 @@ void QomposeWindow::doGoToAccepted()
 #endif
 
 /*!
- * This function handles a setting changed by applying that change to our window.
+ * This function handles a setting changed by applying that change to our
+ * window.
  *
  * \param k The setting key that was changed.
  * \param v The new value for the given setting.
