@@ -42,7 +42,7 @@ IF(NOT CMAKE_BUILD_TYPE)
 	SET(CMAKE_BUILD_TYPE "Release")
 ENDIF()
 
-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual -std=c++0x -O0 -DQT_NO_KEYWORDS")
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -rdynamic -Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual -std=c++0x -O0 -DQT_NO_KEYWORDS")
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual -std=c++0x -fomit-frame-pointer -DQT_NO_KEYWORDS")
 
 STRING(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
@@ -52,7 +52,7 @@ ENDIF()
 
 INCLUDE_DIRECTORIES("src")
 
-# Define our project's source files.
+# Define Qompose's source files.
 
 SET(qompose_RESOURCES
 
@@ -157,11 +157,42 @@ SET(qompose_SOURCES
 
 )
 
+# Define our test suite's sources.
+
+SET(qompose_test_HEADERS
+
+	src/test/QomposeAssertionException.h
+	src/test/QomposeTest.h
+
+	src/test/util/QomposeHotkeyMapTest.h
+
+	src/util/QomposeHotkey.h
+	src/util/QomposeHotkeyMap.h
+
+)
+
+SET(qompose_test_SOURCES
+
+	src/test/QomposeAssertionException.cpp
+	src/test/QomposeTest.cpp
+	src/test/QomposeTestSuite.cpp
+
+	src/test/util/QomposeHotkeyMapTest.cpp
+
+	src/util/QomposeHotkey.cpp
+
+)
+
 # Build our project!
 
 QT5_ADD_RESOURCES(qompose_RESOURCES_RCC ${qompose_RESOURCES})
 
 ADD_EXECUTABLE(Qompose ${qompose_RESOURCES_RCC} ${qompose_SOURCES})
 TARGET_LINK_LIBRARIES(Qompose icuuc icui18n ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+
+IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
+	ADD_EXECUTABLE(QomposeTest ${qompose_test_SOURCES})
+	TARGET_LINK_LIBRARIES(QomposeTest icuuc icui18n ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+ENDIF()
 
 QT5_USE_MODULES(Qompose Widgets Network PrintSupport)
