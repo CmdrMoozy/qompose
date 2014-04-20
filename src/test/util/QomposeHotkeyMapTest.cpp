@@ -46,14 +46,14 @@ void QomposeHotkeyMapTest::test()
 {
 	QomposeHotkeyMap<int *> hotkeys;
 
-	int doNewline;
-	int doTab;
-	int decreaseSelectionIndent;
-	int doMoveHome;
-	int doSelectHome;
-	int duplicateLine;
-	int resetFontZoom;
-	int doNoop;
+	int doNewline = 0;
+	int doTab = 0;
+	int decreaseSelectionIndent = 0;
+	int doMoveHome = 0;
+	int doSelectHome = 0;
+	int duplicateLine = 0;
+	int resetFontZoom = 0;
+	int doNoop = 0;
 
 	// Enter
 
@@ -179,10 +179,10 @@ void QomposeHotkeyMapTest::test()
 	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
 		&shiftDeleteEvent), &doNoop);
 
-	QomposeTest::assertEquals<int **>(hotkeys.getHotkeyHandler(
+	QomposeTest::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
 		&ctrlShiftTabEvent), nullptr);
-	QomposeTest::assertEquals<int **>(hotkeys.getHotkeyHandler(
+	QomposeTest::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
 		&ctrlShiftHomeEvent), nullptr);
-	QomposeTest::assertEquals<int **>(hotkeys.getHotkeyHandler(
+	QomposeTest::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
 		&ctrlAEvent), nullptr);
 }

@@ -110,9 +110,9 @@ QomposeEditor::~QomposeEditor()
  */
 void QomposeEditor::keyPressEvent(QKeyEvent *e)
 {
-	HotkeyFunction *handler = hotkeys.getHotkeyHandler(e);
+	const HotkeyFunction *handler = hotkeys.getHotkeyHandler(e);
 
-	if(handler)
+	if(handler != nullptr)
 		CALL_HOTKEY_FUNCTION(*this, *handler)();
 	else
 		QomposeDecoratedTextEdit::keyPressEvent(e);

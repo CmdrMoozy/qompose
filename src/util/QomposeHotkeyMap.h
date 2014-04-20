@@ -19,10 +19,11 @@
 #ifndef INCLUDE_QOMPOSE_HOTKEY_MAP_H
 #define INCLUDE_QOMPOSE_HOTKEY_MAP_H
 
+#include <exception>
+
 #include <QPair>
 #include <QMultiHash>
 #include <QList>
-#include <QSharedPointer>
 
 #include "util/QomposeHotkey.h"
 
@@ -89,15 +90,14 @@ class QomposeHotkeyMap
 
 			// Handle being given a duplicate QomposeHotkey.
 
-			QList<HotkeyPair> values = hotkeys.values(
-				h.getKeyInteger());
+			typename HotkeyHash::iterator it;
 
-			for(int i = 0; i < values.count(); ++i)
+			for(it = hotkeys.begin(); it != hotkeys.end(); ++it)
 			{
-				if(*(values[i].first) == h)
+				if(it.value().first == h)
 				{
 					insert = false;
-					values[i].second = f;
+					it.value().second = f;
 					break;
 				}
 			}
@@ -105,13 +105,8 @@ class QomposeHotkeyMap
 			// Insert this hotkey into the hash.
 
 			if(insert)
-			{
-				QSharedPointer<QomposeHotkey> hp(
-					new QomposeHotkey(h));
-
 				hotkeys.insertMulti(h.getKeyInteger(),
-					HotkeyPair(hp, f));
-			}
+					HotkeyPair(h, f));
 
 			// Done! Return whether or not a new item was inserted.
 
@@ -121,27 +116,25 @@ class QomposeHotkeyMap
 		/*!
 		 * This function returns the hotkey handler associated with the
 		 * hotkey which is the best match for the given KeyEvent. If no
-		 * hotkey in the map matches the given key event, then we'll
-		 * return nullptr instead.
+		 * hotkey in the map matches the given key event, then an
+		 * instance of std::exception is thrown instead.
 		 *
 		 * \param e The event to find a matching hotkey for.
 		 * \return The handler associated with the best-matching hotkey.
 		 */
-		F *getHotkeyHandler(const QKeyEvent *e) const
+		const F *getHotkeyHandler(const QKeyEvent *e) const
 		{
-			F *handler = nullptr;
+			const F *handler = nullptr;
 			int matchQuality = -1;
 
-			// Get the list of all hotkeys for this key.
+			// Search all the values for a best match.
 
-			QList<HotkeyPair> values = hotkeys.values(
-				static_cast<quint64>(e->key()));
+			typename HotkeyHash::const_iterator it;
 
-			// Search for the best-matching hotkey.
-
-			for(int i = 0; i < values.count(); ++i)
+			for(it = hotkeys.constBegin();
+				it != hotkeys.constEnd(); ++it)
 			{
-				int match = values[i].first->matches(e);
+				int match = it.value().first.matches(e);
 
 				if(match == -1)
 					continue;
@@ -149,7 +142,7 @@ class QomposeHotkeyMap
 				if( (match < matchQuality) ||
 					(matchQuality == -1) )
 				{
-					handler = &values[i].second;
+					handler = &it.value().second;
 					matchQuality = match;
 				}
 			}
@@ -160,7 +153,7 @@ class QomposeHotkeyMap
 		}
 
 	private:
-		typedef QPair<QSharedPointer<QomposeHotkey>, F> HotkeyPair;
+		typedef QPair<QomposeHotkey, F> HotkeyPair;
 		typedef QMultiHash<quint64, HotkeyPair> HotkeyHash;
 
 		HotkeyHash hotkeys;
