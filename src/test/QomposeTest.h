@@ -21,6 +21,8 @@
 
 #include <string>
 
+#include "test/QomposeAssertionException.h"
+
 /*!
  * \brief This class implements a generic unit testing superclass.
  */
@@ -31,6 +33,44 @@ class QomposeTest
 		static std::string getStackTrace();
 
 		static void assertTrue(bool expr);
+
+		/*!
+		 * This function asserts that the two given items are equal,
+		 * using the given comparator. The comparator should implement
+		 * an operator(), which returns true if the two items are equal,
+		 * or false otherwise.
+		 *
+		 * \param a The first item to compare.
+		 * \param b The second item to compare.
+		 * \param comp The comparator to use to compare the items.
+		 */
+		template <typename T, class Compare>
+		static void assertEquals(const T &a, const T &b, Compare comp)
+		{
+			if(!comp(a, b))
+				throw QomposeAssertionException(
+					"Expected equality, got inequality");
+		}
+
+		/*!
+		 * This function asserts that the two given items are equal,
+		 * using their operator==.
+		 *
+		 * \param a The first item to compare.
+		 * \param b The second item to compare.
+		 */
+		template <typename T>
+		static void assertEquals(const T &a, const T &b)
+		{
+			struct comparator {
+				bool operator()(const T &a, const T &b)
+				{
+					return a == b;
+				}
+			} comp;
+
+			QomposeTest::assertEquals(a, b, comp);
+		}
 
 		virtual ~QomposeTest();
 
