@@ -196,17 +196,22 @@ int QomposeHotkey::matches(const QKeyEvent *e) const
 	if(e->key() != key)
 		return -1;
 
-	// If the modifiers don't match the required modifiers, bail out now.
+	// If any required modifiers are missing, then no match.
 
-	if((e->modifiers() & rModifiers) != e->modifiers())
+	if((e->modifiers() & rModifiers) != rModifiers)
 		return -1;
 
-	// We match! Return exactly how WELL we match.
+	// If the event has modifiers which aren't whitelisted, no match.
 
-	quint64 em = static_cast<quint64>(
-		wlModifiers ^ e->modifiers());
+	if((e->modifiers() & ~wlModifiers) != 0)
+		return -1;
 
-	return QomposeHotkey::opop(em);
+	// We match - figure out how well we match!
+
+	Qt::KeyboardModifiers em = wlModifiers & ~rModifiers;
+	quint64 extra = static_cast<quint64>(e->modifiers() & em);
+
+	return QomposeHotkey::opop(extra);
 }
 
 /*!
