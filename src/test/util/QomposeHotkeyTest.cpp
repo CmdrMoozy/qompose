@@ -18,6 +18,8 @@
 
 #include "QomposeHotkeyTest.h"
 
+#include <QKeyEvent>
+
 #include "util/QomposeHotkey.h"
 
 /*!
@@ -101,7 +103,36 @@ void QomposeHotkeyTest::testHotkeyCopying()
 	QomposeTest::assertTrue(a == c);
 }
 
+/*!
+ * This function tests that QomposeHotkey's matching function works properly.
+ */
 void QomposeHotkeyTest::testHotkeyMatching()
 {
+	QomposeHotkey a(Qt::Key_Enter, 0, ~Qt::KeyboardModifiers(0));
 
+	QKeyEvent aeA(QKeyEvent::KeyPress, Qt::Key_Enter, 0);
+	QKeyEvent aeB(QKeyEvent::KeyPress, Qt::Key_Enter,
+		Qt::KeyboardModifiers(Qt::ShiftModifier));
+	QKeyEvent aeC(QKeyEvent::KeyPress, Qt::Key_Enter,
+		~Qt::KeyboardModifiers(0));
+	QKeyEvent aeD(QKeyEvent::KeyPress, Qt::Key_A, 0);
+
+	QomposeTest::assertEquals(a.matches(&aeA), 0);
+	QomposeTest::assertEquals(a.matches(&aeB), 1);
+	QomposeTest::assertEquals(a.matches(&aeC), 32);
+	QomposeTest::assertEquals(a.matches(&aeD), -1);
+
+	QomposeHotkey b(Qt::Key_Home);
+
+	QKeyEvent beA(QKeyEvent::KeyPress, Qt::Key_Home, 0);
+	QKeyEvent beB(QKeyEvent::KeyPress, Qt::Key_Home,
+		Qt::KeyboardModifiers(Qt::ShiftModifier));
+	QKeyEvent beC(QKeyEvent::KeyPress, Qt::Key_Home,
+		~Qt::KeyboardModifiers(0));
+	QKeyEvent beD(QKeyEvent::KeyPress, Qt::Key_A, 0);
+
+	QomposeTest::assertEquals(b.matches(&beA), 0);
+	QomposeTest::assertEquals(b.matches(&beB), -1);
+	QomposeTest::assertEquals(b.matches(&beC), -1);
+	QomposeTest::assertEquals(b.matches(&beD), -1);
 }
