@@ -83,9 +83,22 @@ void QomposeHotkeyTest::testHotkeyConstruction()
 		Qt::ControlModifier | Qt::ShiftModifier);
 }
 
+/*!
+ * This function tests that the assignment operator, copy constructor, and
+ * equivalence operator from the QomposeHotkey class work properly.
+ */
 void QomposeHotkeyTest::testHotkeyCopying()
 {
+	QomposeHotkey a(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
+	QomposeHotkey b(Qt::Key_B);
 
+	QomposeTest::assertTrue(!(a == b));
+
+	QomposeHotkey c(a);
+	b = a;
+
+	QomposeTest::assertTrue(a == b);
+	QomposeTest::assertTrue(a == c);
 }
 
 void QomposeHotkeyTest::testHotkeyMatching()
