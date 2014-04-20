@@ -21,6 +21,9 @@
 
 #include "test/QomposeTest.h"
 
+/*!
+ * \brief This class implements tests for our hotkey map class.
+ */
 class QomposeHotkeyMapTest : public QomposeTest
 {
 	public:
