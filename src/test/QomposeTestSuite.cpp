@@ -28,6 +28,7 @@
 
 #include "test/QomposeAssertionException.h"
 #include "test/QomposeTest.h"
+#include "test/util/QomposeHotkeyTest.h"
 #include "test/util/QomposeHotkeyMapTest.h"
 
 int main(void)
@@ -36,6 +37,7 @@ int main(void)
 
 	std::vector<QomposeTest *> tests;
 
+	tests.push_back(new QomposeHotkeyTest());
 	tests.push_back(new QomposeHotkeyMapTest());
 
 	// Execute each test.

@@ -164,6 +164,7 @@ SET(qompose_test_HEADERS
 	src/test/QomposeAssertionException.h
 	src/test/QomposeTest.h
 
+	src/test/util/QomposeHotkeyTest.h
 	src/test/util/QomposeHotkeyMapTest.h
 
 	src/util/QomposeHotkey.h
@@ -177,6 +178,7 @@ SET(qompose_test_SOURCES
 	src/test/QomposeTest.cpp
 	src/test/QomposeTestSuite.cpp
 
+	src/test/util/QomposeHotkeyTest.cpp
 	src/test/util/QomposeHotkeyMapTest.cpp
 
 	src/util/QomposeHotkey.cpp
