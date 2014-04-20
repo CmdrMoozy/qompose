@@ -18,6 +18,14 @@
 
 #include "QomposeHotkeyMapTest.h"
 
+QomposeHotkeyMapTest::QomposeHotkeyMapTest()
+{
+}
+
+QomposeHotkeyMapTest::~QomposeHotkeyMapTest()
+{
+}
+
 void QomposeHotkeyMapTest::test()
 {
 

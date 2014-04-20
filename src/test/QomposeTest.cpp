@@ -112,3 +112,10 @@ void QomposeTest::assertTrue(bool expr)
 	if(!expr)
 		throw QomposeAssertionException("Expected true, got false");
 }
+
+/*!
+ * This is our default destructor, which cleans up and destroys this object.
+ */
+QomposeTest::~QomposeTest()
+{
+}

@@ -32,6 +32,8 @@ class QomposeTest
 
 		static void assertTrue(bool expr);
 
+		virtual ~QomposeTest();
+
 		virtual void test() = 0;
 };
 

@@ -74,4 +74,14 @@ int main(void)
 			std::cout << e.getStackTrace();
 		}
 	}
+
+	// Clean up the tests.
+
+	while(!tests.empty())
+	{
+		QomposeTest *t = tests.back();
+		tests.pop_back();
+
+		delete t;
+	}
 }

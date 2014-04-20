@@ -24,6 +24,9 @@
 class QomposeHotkeyMapTest : public QomposeTest
 {
 	public:
+		QomposeHotkeyMapTest();
+		virtual ~QomposeHotkeyMapTest();
+
 		virtual void test();
 };
 
