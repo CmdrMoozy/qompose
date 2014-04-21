@@ -45,6 +45,10 @@ QomposeMainMenu::QomposeMainMenu(QomposeSettings *s, QWidget *p)
 	revertAction->setShortcut(Qt::CTRL + Qt::Key_R);
 	revertAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-revert"));
 
+	revertAllAction = new QAction(tr("Revert All"), this);
+	revertAllAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R);
+	revertAllAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-revert"));
+
 	saveAction = new QAction(tr("&Save"), this);
 	saveAction->setShortcut(Qt::CTRL + Qt::Key_S);
 	saveAction->setIcon(QomposeGUIUtils::getIconFromTheme("document-save"));
@@ -157,6 +161,7 @@ QomposeMainMenu::QomposeMainMenu(QomposeSettings *s, QWidget *p)
 	fileMenu->addAction(openAction);
 	fileMenu->addMenu(recentMenu->getMenu());
 	fileMenu->addAction(revertAction);
+	fileMenu->addAction(revertAllAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(saveAction);
 	fileMenu->addAction(saveAsAction);
@@ -251,6 +256,7 @@ void QomposeMainMenu::connectBufferWidget(const QomposeBufferWidget *b)
 	QObject::connect( newAction,             SIGNAL( triggered(bool) ), b, SLOT( doNew()             ) );
 	QObject::connect( openAction,            SIGNAL( triggered(bool) ), b, SLOT( doOpen()            ) );
 	QObject::connect( revertAction,          SIGNAL( triggered(bool) ), b, SLOT( doRevert()          ) );
+	QObject::connect( revertAllAction,       SIGNAL( triggered(bool) ), b, SLOT( doRevertAll()       ) );
 	QObject::connect( saveAction,            SIGNAL( triggered(bool) ), b, SLOT( doSave()            ) );
 	QObject::connect( saveAsAction,          SIGNAL( triggered(bool) ), b, SLOT( doSaveAs()          ) );
 	QObject::connect( closeAction,           SIGNAL( triggered(bool) ), b, SLOT( doClose()           ) );

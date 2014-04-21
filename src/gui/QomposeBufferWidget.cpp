@@ -393,6 +393,26 @@ void QomposeBufferWidget::doRevert()
 }
 
 /*!
+ * This slot executes a revert action on all of the buffers in our widget, by
+ * instructing each buffer to revert its changes. Note that this has no effect
+ * on buffers which have never been saved.
+ */
+void QomposeBufferWidget::doRevertAll()
+{ /* SLOT */
+
+	QomposeBuffer *buf;
+
+	for(int i = 0; i < tabWidget->count(); ++i)
+	{
+		buf = bufferAt(i);
+
+		if(buf != NULL)
+			buf->revert();
+	}
+
+}
+
+/*!
  * This slot executes a save action by instructing our current buffer to
  * save its changes, potentially showing a "save as" dialog if it hasn't ever
  * been saved before.

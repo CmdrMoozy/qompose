@@ -74,6 +74,7 @@ class QomposeBufferWidget : public QWidget
 		void doOpen();
 		void doOpenPath(const QString &p);
 		void doRevert();
+		void doRevertAll();
 		void doSave();
 		void doSaveAs();
 		void doClose();
