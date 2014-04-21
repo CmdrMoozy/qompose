@@ -241,7 +241,7 @@ void QomposeRecentMenu::renderListContents()
 		QFileInfo f(recentList.at(i));
 
 		menuActions.at(j)->setText(QString("%1. %2")
-			.arg(j).arg(f.fileName()));
+			.arg(j + 1).arg(f.fileName()));
 	}
 }
 
