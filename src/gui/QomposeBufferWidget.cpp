@@ -377,6 +377,19 @@ void QomposeBufferWidget::doOpenPath(const QString &p)
 }
 
 /*!
+ * This slot executes a "reopen" action by opening the most recently closed
+ * tab in a new tab. If the list of recently closed tabs is empty, then no
+ * action is taken.
+ */
+void QomposeBufferWidget::doReopen()
+{ /* SLOT */
+
+	if(!closedTabs.empty())
+		doOpenDescriptor(closedTabs.pop());
+
+}
+
+/*!
  * This slot executes a revert action by instructing our current buffer to
  * revert its changes.
  */
@@ -474,6 +487,7 @@ void QomposeBufferWidget::doSaveAs()
 void QomposeBufferWidget::doClose()
 { /* SLOT */
 
+	bool remove = false;
 	QomposeBuffer *buf = currentBuffer();
 
 	if(buf == NULL)
@@ -493,12 +507,12 @@ void QomposeBufferWidget::doClose()
 				doSave();
 
 				if(!buf->isModified())
-					removeCurrentBuffer();
+					remove = true;
 
 				break;
 
 			case QMessageBox::No:
-				removeCurrentBuffer();
+				remove = true;
 				break;
 
 			case QMessageBox::Cancel:
@@ -509,6 +523,13 @@ void QomposeBufferWidget::doClose()
 	}
 	else
 	{
+		remove = true;
+	}
+
+	if(remove)
+	{
+		doTabClosing(tabWidget->indexOf(buf));
+
 		removeCurrentBuffer();
 	}
 
@@ -913,6 +934,31 @@ void QomposeBufferWidget::doTabCloseRequested(int i)
 
 	tabWidget->setCurrentIndex(i);
 	doClose();
+
+}
+
+/*!
+ * This function handles a tab closing event. More specifically, this function
+ * is called just BEFORE any tab is removed from this widget.
+ *
+ * \param i The index of the tab which is about to be closed.
+ */
+void QomposeBufferWidget::doTabClosing(int i)
+{ /* SLOT */
+
+	QWidget *t = tabWidget->widget(i);
+	QomposeBuffer *buf = dynamic_cast<QomposeBuffer *>(t);
+
+	if(buf == NULL)
+		return;
+
+	if(buf->hasBeenSaved())
+	{
+		closedTabs.push(buf->getFileDescriptor());
+
+		while(closedTabs.count() > 20)
+			closedTabs.pop();
+	}
 
 }
 

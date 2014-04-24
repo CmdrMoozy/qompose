@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <QSet>
+#include <QStack>
 
 #include "editor/QomposeEditor.h"
 
@@ -62,6 +63,7 @@ class QomposeBufferWidget : public QWidget
 		QTabWidget *tabWidget;
 
 		QSet<QomposeBuffer *> tabs;
+		QStack<QomposeFileDescriptor> closedTabs;
 
 		QomposeBuffer *newBuffer();
 		void removeCurrentBuffer();
@@ -73,6 +75,7 @@ class QomposeBufferWidget : public QWidget
 		void doNew();
 		void doOpen();
 		void doOpenPath(const QString &p);
+		void doReopen();
 		void doRevert();
 		void doRevertAll();
 		void doSave();
@@ -104,6 +107,7 @@ class QomposeBufferWidget : public QWidget
 	private Q_SLOTS:
 		void doTabChanged(int i);
 		void doTabCloseRequested(int i);
+		void doTabClosing(int i);
 
 		void doTabTitleChanged(const QString &t);
 		void doTabPathChanged(const QString &p);

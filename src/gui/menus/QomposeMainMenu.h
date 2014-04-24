@@ -62,6 +62,7 @@ class QomposeMainMenu : public QMenuBar
 		QAction *newAction;
 		QAction *openAction;
 		QomposeRecentMenu *recentMenu;
+		QAction *reopenAction;
 		QAction *revertAction;
 		QAction *revertAllAction;
 		QAction *saveAction;

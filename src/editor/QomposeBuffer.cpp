@@ -239,6 +239,22 @@ QString QomposeBuffer::getFile() const
 }
 
 /*!
+ * This function returns this buffer's current file, along with the file's
+ * encoding, using a standard QomposeFileDescriptor.
+ *
+ * \return The buffer's current file, as a QomposeFileDescriptor.
+ */
+QomposeFileDescriptor QomposeBuffer::getFileDescriptor() const
+{
+	QomposeFileDescriptor d;
+
+	d.fileName = path;
+	d.textCodec = codec;
+
+	return d;
+}
+
+/*!
  * This function returns whether or not this buffer has ever been saved, or if it
  * is a brand-new document (possibly with unsaved changes).
  */
