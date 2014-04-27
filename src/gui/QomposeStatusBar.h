@@ -24,6 +24,9 @@
 class QGridLayout;
 class QLabel;
 
+/*!
+ * \brief This class implements a status bar widget for our application.
+ */
 class QomposeStatusBar : public QStatusBar
 {
 	Q_OBJECT
@@ -32,13 +35,21 @@ class QomposeStatusBar : public QStatusBar
 		QomposeStatusBar(QWidget *p = 0);
 		virtual ~QomposeStatusBar();
 
+		void displayNotification(const QString &n);
+
 		void setCurrentTabPath(const QString &p);
+
+		void setLine(int l);
+		void setColumn(int c);
 
 	private:
 		QWidget *statusWidget;
 		QGridLayout *statusLayout;
 
+		QLabel *notificationLabel;
 		QLabel *tabPathLabel;
+		QLabel *lineLabel;
+		QLabel *columnLabel;
 };
 
 #endif

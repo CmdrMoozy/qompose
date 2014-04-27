@@ -20,7 +20,14 @@
 
 #include <QGridLayout>
 #include <QLabel>
+#include <QFrame>
 
+/*!
+ * This is our default constructor, which creates a new instance of our status
+ * bar widget.
+ *
+ * \param p Our status bar's parent widget.
+ */
 QomposeStatusBar::QomposeStatusBar(QWidget *p)
 	: QStatusBar(p)
 {
@@ -30,20 +37,91 @@ QomposeStatusBar::QomposeStatusBar(QWidget *p)
 	statusLayout->setContentsMargins(5, 0, 5, 0);
 	statusLayout->setSpacing(5);
 
+	notificationLabel = new QLabel(statusWidget);
+
 	tabPathLabel = new QLabel(statusWidget);
 
-	statusLayout->addWidget(tabPathLabel, 0, 1, 1, 1);
-	statusLayout->setColumnStretch(0, 1);
+	lineLabel = new QLabel(statusWidget);
+	lineLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+	setLine(1);
+
+	columnLabel = new QLabel(statusWidget);
+	columnLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+	setColumn(1);
+
+	statusLayout->addWidget(notificationLabel, 0, 0, 1, 1);
+	statusLayout->addWidget(tabPathLabel, 0, 2, 1, 1);
+	statusLayout->addWidget(lineLabel, 0, 3, 1, 1);
+	statusLayout->addWidget(columnLabel, 0, 4, 1, 1);
+	statusLayout->setColumnStretch(1, 1);
 	statusWidget->setLayout(statusLayout);
 
 	addPermanentWidget(statusWidget, 1);
 }
 
+/*!
+ * This is our default destructor, which cleans up and destroys our this status
+ * bar widget instance.
+ */
 QomposeStatusBar::~QomposeStatusBar()
 {
 }
 
+/*!
+ * This function displays a notification in this status bar widget.
+ *
+ * \param n The notification to display.
+ */
+void QomposeStatusBar::displayNotification(const QString &n)
+{
+	int l = n.trimmed().length();
+
+	if(l > 0)
+		notificationLabel->setFrameStyle(QFrame::StyledPanel |
+			QFrame::Plain);
+	else
+		notificationLabel->setFrameStyle(QFrame::NoFrame |
+			QFrame::Plain);
+
+	notificationLabel->setText(n.trimmed());
+}
+
+/*!
+ * This function sets the "current tab path" that we're displaying. This should
+ * be the absolute path to the file which is open in the current tab, or an
+ * empty string if no valid absolute path exists.
+ *
+ * \param p The current tab path to display.
+ */
 void QomposeStatusBar::setCurrentTabPath(const QString &p)
 {
-	tabPathLabel->setText(p);
+	int l = p.trimmed().length();
+
+	if(l > 0)
+		tabPathLabel->setFrameStyle(QFrame::StyledPanel |
+			QFrame::Plain);
+	else
+		tabPathLabel->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
+
+	tabPathLabel->setText(p.trimmed());
+}
+
+/*!
+ * This function sets the line number we'll display in the status bar.
+ *
+ * \param l The current line number.
+ */
+void QomposeStatusBar::setLine(int l)
+{
+	lineLabel->setText(QString("L %1").arg(l));
+}
+
+/*!
+ * This function sets the column number we'll display in the status bar.
+ *
+ * \param c The current column number.
+ */
+void QomposeStatusBar::setColumn(int c)
+{
+	columnLabel->setText(QString("C %1").arg(c));
 }
