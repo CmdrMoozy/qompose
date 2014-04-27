@@ -22,6 +22,8 @@
 #include <QLabel>
 #include <QFrame>
 
+#include "gui/QomposeNotificationLabel.h"
+
 /*!
  * This is our default constructor, which creates a new instance of our status
  * bar widget.
@@ -37,7 +39,7 @@ QomposeStatusBar::QomposeStatusBar(QWidget *p)
 	statusLayout->setContentsMargins(5, 0, 5, 0);
 	statusLayout->setSpacing(5);
 
-	notificationLabel = new QLabel(statusWidget);
+	notificationLabel = new QomposeNotificationLabel(statusWidget);
 
 	tabPathLabel = new QLabel(statusWidget);
 
@@ -74,16 +76,7 @@ QomposeStatusBar::~QomposeStatusBar()
  */
 void QomposeStatusBar::displayNotification(const QString &n)
 {
-	int l = n.trimmed().length();
-
-	if(l > 0)
-		notificationLabel->setFrameStyle(QFrame::StyledPanel |
-			QFrame::Plain);
-	else
-		notificationLabel->setFrameStyle(QFrame::NoFrame |
-			QFrame::Plain);
-
-	notificationLabel->setText(n.trimmed());
+	notificationLabel->displayNotification(n);
 }
 
 /*!

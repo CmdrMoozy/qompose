@@ -16,42 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_STATUS_BAR_H
-#define INCLUDE_QOMPOSE_STATUS_BAR_H
+#ifndef INCLUDE_QOMPOSE_NOTIFICATION_LABEL_H
+#define INCLUDE_QOMPOSE_NOTIFICATION_LABEL_H
 
-#include <QStatusBar>
-
-class QGridLayout;
-class QLabel;
-
-class QomposeNotificationLabel;
+#include <QLabel>
+#include <QColor>
 
 /*!
- * \brief This class implements a status bar widget for our application.
+ * \brief This class implements a Label suitable for status bar notifications.
  */
-class QomposeStatusBar : public QStatusBar
+class QomposeNotificationLabel : public QLabel
 {
-	Q_OBJECT
+	Q_PROPERTY(QColor textColor READ getTextColor WRITE setTextColor)
 
 	public:
-		QomposeStatusBar(QWidget *p = 0);
-		virtual ~QomposeStatusBar();
+		QomposeNotificationLabel(QWidget *p = 0,
+			Qt::WindowFlags f = 0);
+		virtual ~QomposeNotificationLabel();
+
+		QColor getTextColor() const;
+		void setTextColor(const QColor &c);
 
 		void displayNotification(const QString &n);
-
-		void setCurrentTabPath(const QString &p);
-
-		void setLine(int l);
-		void setColumn(int c);
-
-	private:
-		QWidget *statusWidget;
-		QGridLayout *statusLayout;
-
-		QomposeNotificationLabel *notificationLabel;
-		QLabel *tabPathLabel;
-		QLabel *lineLabel;
-		QLabel *columnLabel;
 };
 
 #endif
