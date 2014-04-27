@@ -112,11 +112,14 @@ class QomposeBufferWidget : public QWidget
 		void doTabTitleChanged(const QString &t);
 		void doTabPathChanged(const QString &p);
 
+		void doCursorPositionChanged();
+
 		void doOpenDescriptor(const QomposeFileDescriptor &d);
 
 	Q_SIGNALS:
 		void pathChanged(const QString &);
 		void pathOpened(const QString &);
+		void cursorPositionChanged(int, int);
 };
 
 #endif

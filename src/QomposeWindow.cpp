@@ -77,6 +77,8 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 
 	QObject::connect( buffers, SIGNAL( pathChanged(const QString &) ),
 		this, SLOT( doTabPathChanged(const QString &) ) );
+	QObject::connect( buffers, SIGNAL( cursorPositionChanged(int, int) ),
+		this, SLOT( doCursorPositionChanged(int, int) ) );
 
 	// Apply any existing settings values to our UI.
 
@@ -275,6 +277,21 @@ void QomposeWindow::doTabPathChanged(const QString &p)
 { /* SLOT */
 
 	statusBar->setCurrentTabPath(p);
+
+}
+
+/*!
+ * This slot handles one of our tab's cursor positions changing by updating
+ * our status bar to display the current line and column position.
+ *
+ * \param l The new cursor line number.
+ * \param c The new cursor column number.
+ */
+void QomposeWindow::doCursorPositionChanged(int l, int c)
+{ /* SLOT */
+
+	statusBar->setLine(l);
+	statusBar->setColumn(c);
 
 }
 

@@ -212,6 +212,8 @@ QomposeBuffer *QomposeBufferWidget::newBuffer()
 		this, SLOT(doTabTitleChanged(const QString &)));
 	QObject::connect(b, SIGNAL(pathChanged(const QString &)),
 		this, SLOT(doTabPathChanged(const QString &)));
+	QObject::connect(b, SIGNAL(cursorPositionChanged()),
+		this, SLOT(doCursorPositionChanged()));
 
 	int i = tabWidget->addTab(b, b->getTitle());
 	tabWidget->setCurrentIndex(i);
@@ -913,12 +915,18 @@ void QomposeBufferWidget::doTabChanged(int i)
 
 	if(b != NULL)
 	{
+		QTextCursor curs = b->textCursor();
+
 		b->setFocus(Qt::OtherFocusReason);
+
 		Q_EMIT pathChanged(b->getPath());
+		Q_EMIT cursorPositionChanged(curs.blockNumber() + 1,
+			curs.positionInBlock() + 1);
 	}
 	else
 	{
 		Q_EMIT pathChanged("");
+		Q_EMIT cursorPositionChanged(1, 1);
 	}
 
 }
@@ -1001,6 +1009,30 @@ void QomposeBufferWidget::doTabPathChanged(const QString &p)
 		if(b == currentBuffer())
 		{
 			Q_EMIT pathChanged(p);
+		}
+	}
+
+}
+
+/*!
+ * This slot handles a buffer's cursor position changing by, if it is the
+ * current buffer, notifying our listeners that our cursor position has
+ * changed. The buffer whose cursor position changed is determined via the
+ * sender() function.
+ */
+void QomposeBufferWidget::doCursorPositionChanged()
+{ /* SLOT */
+
+	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(sender());
+
+	if(b != NULL)
+	{
+		if(b == currentBuffer())
+		{
+			QTextCursor curs = b->textCursor();
+
+			Q_EMIT cursorPositionChanged(curs.blockNumber() + 1,
+				curs.positionInBlock() + 1);
 		}
 	}
 
