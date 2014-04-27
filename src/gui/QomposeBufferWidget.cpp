@@ -53,8 +53,10 @@ QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
 	layout->addWidget(tabWidget, 0, 0, 1, 1);
 	setLayout(layout);
 
-	QObject::connect( tabWidget, SIGNAL( currentChanged(int)    ), this, SLOT( doTabChanged(int)        ) );
-	QObject::connect( tabWidget, SIGNAL( tabCloseRequested(int) ), this, SLOT( doTabCloseRequested(int) ) );
+	QObject::connect(tabWidget, SIGNAL(currentChanged(int)),
+		this, SLOT(doTabChanged(int)));
+	QObject::connect(tabWidget, SIGNAL(tabCloseRequested(int)),
+		this, SLOT(doTabCloseRequested(int)));
 }
 
 /*!
@@ -146,9 +148,9 @@ bool QomposeBufferWidget::prepareCloseParent()
 		{
 			QMessageBox::StandardButton b = QMessageBox::question(
 				this, tr("Qompose - Unsaved Changes"),
-				tr("Save changes to this buffer before closing?"),
-				QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-				QMessageBox::Yes);
+				tr("Save changes before closing?"),
+				QMessageBox::Yes | QMessageBox::No |
+				QMessageBox::Cancel, QMessageBox::Yes);
 
 			switch(b)
 			{
@@ -238,9 +240,9 @@ void QomposeBufferWidget::removeCurrentBuffer()
 }
 
 /*!
- * This function moves the tab at the given index "f" to the given index "t". That is,
- * its new index after being moved will be exactly "t." If the given from index is
- * out-of-bounds, then no action is taken.
+ * This function moves the tab at the given index "f" to the given index "t".
+ * That is, its new index after being moved will be exactly "t." If the given
+ * from index is out-of-bounds, then no action is taken.
  *
  * \param f The index to move a tab from.
  * \param t The index to move the tab to.
@@ -350,8 +352,9 @@ void QomposeBufferWidget::doOpen()
 
 	// Open the one or more selected files.
 
-	QList<QomposeFileDescriptor> files = QomposeFileDialog::getOpenFileNames(
-		this, tr("Open Files"), getDefaultDirectory());
+	QList<QomposeFileDescriptor> files =
+		QomposeFileDialog::getOpenFileNames(this,
+		tr("Open Files"), getDefaultDirectory());
 
 	for(int i = 0; i < files.size(); ++i)
 	{
@@ -448,8 +451,8 @@ void QomposeBufferWidget::doSave()
 }
 
 /*!
- * This slot executes a "save as" action by showing a save file dialog, and then
- * by instructing our current buffer to save to the selected path.
+ * This slot executes a "save as" action by showing a save file dialog, and
+ * then by instructing our current buffer to save to the selected path.
  */
 void QomposeBufferWidget::doSaveAs()
 { /* SLOT */
@@ -500,8 +503,8 @@ void QomposeBufferWidget::doClose()
 		QMessageBox::StandardButton b = QMessageBox::question(
 			this, tr("Qompose - Unsaved Changes"),
 			tr("Save changes to this buffer before closing?"),
-			QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-			QMessageBox::Yes);
+			QMessageBox::Yes | QMessageBox::No |
+			QMessageBox::Cancel, QMessageBox::Yes);
 
 		switch(b)
 		{
@@ -618,8 +621,8 @@ void QomposeBufferWidget::doPaste()
 }
 
 /*!
- * This slot executes a "duplicate line" action by instructing our current buffer
- * to duplicate its current line.
+ * This slot executes a "duplicate line" action by instructing our current
+ * buffer to duplicate its current line.
  */
 void QomposeBufferWidget::doDuplicateLine()
 { /* SLOT */
@@ -634,8 +637,8 @@ void QomposeBufferWidget::doDuplicateLine()
 }
 
 /*!
- * This slot executes a "select all" action by instructing our current buffer to
- * select all of its contents.
+ * This slot executes a "select all" action by instructing our current buffer
+ * to select all of its contents.
  */
 void QomposeBufferWidget::doSelectAll()
 { /* SLOT */
@@ -650,8 +653,8 @@ void QomposeBufferWidget::doSelectAll()
 }
 
 /*!
- * This slot executes a deslect action by instructing our current buffer to clear
- * any selection it currently has.
+ * This slot executes a deslect action by instructing our current buffer to
+ * clear any selection it currently has.
  */
 void QomposeBufferWidget::doDeselect()
 { /* SLOT */
@@ -666,8 +669,8 @@ void QomposeBufferWidget::doDeselect()
 }
 
 /*!
- * This slot executes an "increase indent" action by instructing our current buffer
- * to increase the indent of any selection it might have.
+ * This slot executes an "increase indent" action by instructing our current
+ * buffer to increase the indent of any selection it might have.
  */
 void QomposeBufferWidget::doIncreaseIndent()
 { /* SLOT */
@@ -682,8 +685,8 @@ void QomposeBufferWidget::doIncreaseIndent()
 }
 
 /*!
- * This slot executes a "decrease indent" action by instructing our current buffer
- * to decrease the indent of any selection it might have.
+ * This slot executes a "decrease indent" action by instructing our current
+ * buffer to decrease the indent of any selection it might have.
  */
 void QomposeBufferWidget::doDecreaseIndent()
 { /* SLOT */
@@ -704,7 +707,8 @@ void QomposeBufferWidget::doDecreaseIndent()
  * \param q The find query to execute.
  * \return The result of this find action.
  */
-QomposeEditor::FindResult QomposeBufferWidget::doFindNext(const QomposeFindQuery *q)
+QomposeEditor::FindResult QomposeBufferWidget::doFindNext(
+	const QomposeFindQuery *q)
 { /* SLOT */
 
 	QomposeBuffer *buf = currentBuffer();
@@ -717,13 +721,14 @@ QomposeEditor::FindResult QomposeBufferWidget::doFindNext(const QomposeFindQuery
 }
 
 /*!
- * This slot executes a "find previous" action by instructing our current buffer
- * to execute the given find query.
+ * This slot executes a "find previous" action by instructing our current
+ * buffer to execute the given find query.
  *
  * \param q The find query to execute.
  * \return The result of this find action.
  */
-QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(const QomposeFindQuery *q)
+QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(
+	const QomposeFindQuery *q)
 { /* SLOT */
 
 	QomposeBuffer *buf = currentBuffer();
@@ -736,13 +741,14 @@ QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(const QomposeFindQ
 }
 
 /*!
- * This slot executes a "replace" action by instructing our current buffer to execute
- * the given replace query.
+ * This slot executes a "replace" action by instructing our current buffer to
+ * execute the given replace query.
  *
  * \param q The replace query to execute.
  * \return The result of this replace action.
  */
-QomposeEditor::FindResult QomposeBufferWidget::doReplace(const QomposeReplaceQuery *q)
+QomposeEditor::FindResult QomposeBufferWidget::doReplace(
+	const QomposeReplaceQuery *q)
 { /* SLOT */
 
 	QomposeBuffer *buf = currentBuffer();
@@ -755,13 +761,14 @@ QomposeEditor::FindResult QomposeBufferWidget::doReplace(const QomposeReplaceQue
 }
 
 /*!
- * This slot executes a "replace in selection" action by instructing our current buffer
- * to execute the given replace query.
+ * This slot executes a "replace in selection" action by instructing our
+ * current buffer to execute the given replace query.
  *
  * \param q The replace query to execute.
  * \return The result of this "replace in selection" action.
  */
-QomposeEditor::FindResult QomposeBufferWidget::doReplaceSelection(const QomposeReplaceQuery *q)
+QomposeEditor::FindResult QomposeBufferWidget::doReplaceSelection(
+	const QomposeReplaceQuery *q)
 { /* SLOT */
 
 	QomposeBuffer *buf = currentBuffer();
@@ -774,13 +781,14 @@ QomposeEditor::FindResult QomposeBufferWidget::doReplaceSelection(const QomposeR
 }
 
 /*!
- * This slot executes a "replace all" action by instructing our current buffer to
- * execute the given replace query.
+ * This slot executes a "replace all" action by instructing our current buffer
+ * to execute the given replace query.
  *
  * \param q The replace query to execute.
  * \return The result of this "replace all" action.
  */
-QomposeEditor::FindResult QomposeBufferWidget::doReplaceAll(const QomposeReplaceQuery *q)
+QomposeEditor::FindResult QomposeBufferWidget::doReplaceAll(
+	const QomposeReplaceQuery *q)
 { /* SLOT */
 
 	QomposeBuffer *buf = currentBuffer();
