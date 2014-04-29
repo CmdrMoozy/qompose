@@ -18,7 +18,10 @@
 
 #include "QomposeNotificationLabel.h"
 
+#include <cmath>
+
 #include <QPalette>
+#include <QPropertyAnimation>
 
 /*!
  * This is our default constructor, which creates a new instance of our
@@ -31,6 +34,7 @@ QomposeNotificationLabel::QomposeNotificationLabel(
 	QWidget *p, Qt::WindowFlags f)
 	: QLabel(p, f)
 {
+	defaultColor = getTextColor();
 }
 
 /*!
@@ -51,7 +55,7 @@ QColor QomposeNotificationLabel::getTextColor() const
 {
 	QPalette p = palette();
 
-	return p.color(QPalette::Normal, QPalette::Window);
+	return p.color(foregroundRole());
 }
 
 /*!
@@ -63,12 +67,55 @@ void QomposeNotificationLabel::setTextColor(const QColor &c)
 {
 	QPalette p = palette();
 
-	p.setBrush(QPalette::WindowText, c);
+	p.setColor(foregroundRole(), c);
 
 	setPalette(p);
 }
 
-void QomposeNotificationLabel::displayNotification(const QString &n)
+/*!
+ * This function displays a new notification string in this label.
+ *
+ * \param n The notification to display.
+ * \param c Whether or not the notification is critical.
+ * \param d The duration for which the notification should be displayed.
+ */
+void QomposeNotificationLabel::displayNotification(
+	const QString &n, bool c, int d)
 {
 	setText(n.trimmed());
+
+	if(d <= 0)
+	{
+		double duration = log(static_cast<double>(n.length()));
+		duration /= log(10);
+
+		duration = qMax(duration, 1.0) * 2000.0;
+
+		d = static_cast<int>(round(duration));
+	}
+
+	QPropertyAnimation *anim = new QPropertyAnimation(
+		this, "textColor", this);
+
+	QColor transparent(defaultColor);
+	transparent.setAlpha(0);
+
+	if(c)
+	{
+		QColor critical(255, 0, 0);
+
+		anim->setKeyValueAt(0, critical);
+		anim->setKeyValueAt(1, transparent);
+
+		anim->setDuration(d);
+	}
+	else
+	{
+		anim->setKeyValueAt(0, defaultColor);
+		anim->setKeyValueAt(1, transparent);
+
+		anim->setDuration(d);
+	}
+
+	anim->start(QAbstractAnimation::DeleteWhenStopped);
 }

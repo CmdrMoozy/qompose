@@ -73,10 +73,11 @@ QomposeStatusBar::~QomposeStatusBar()
  * This function displays a notification in this status bar widget.
  *
  * \param n The notification to display.
+ * \param c Whether or not the notification is critical.
  */
-void QomposeStatusBar::displayNotification(const QString &n)
+void QomposeStatusBar::displayNotification(const QString &n, bool c)
 {
-	notificationLabel->displayNotification(n);
+	notificationLabel->displayNotification(n, c);
 }
 
 /*!

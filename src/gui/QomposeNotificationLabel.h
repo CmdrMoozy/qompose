@@ -27,6 +27,7 @@
  */
 class QomposeNotificationLabel : public QLabel
 {
+	Q_OBJECT
 	Q_PROPERTY(QColor textColor READ getTextColor WRITE setTextColor)
 
 	public:
@@ -37,7 +38,11 @@ class QomposeNotificationLabel : public QLabel
 		QColor getTextColor() const;
 		void setTextColor(const QColor &c);
 
-		void displayNotification(const QString &n);
+		void displayNotification(const QString &n, bool c = false,
+			int d = 0);
+
+	private:
+		QColor defaultColor;
 };
 
 #endif

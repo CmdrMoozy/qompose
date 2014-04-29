@@ -37,7 +37,7 @@ class QomposeStatusBar : public QStatusBar
 		QomposeStatusBar(QWidget *p = 0);
 		virtual ~QomposeStatusBar();
 
-		void displayNotification(const QString &n);
+		void displayNotification(const QString &n, bool c = false);
 
 		void setCurrentTabPath(const QString &p);
 

@@ -192,11 +192,11 @@ SET(qompose_test_SOURCES
 QT5_ADD_RESOURCES(qompose_RESOURCES_RCC ${qompose_RESOURCES})
 
 ADD_EXECUTABLE(Qompose ${qompose_RESOURCES_RCC} ${qompose_SOURCES})
-TARGET_LINK_LIBRARIES(Qompose icuuc icui18n ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+TARGET_LINK_LIBRARIES(Qompose m icuuc icui18n ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
 
 IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 	ADD_EXECUTABLE(QomposeTest ${qompose_test_SOURCES})
-	TARGET_LINK_LIBRARIES(QomposeTest icuuc icui18n ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+	TARGET_LINK_LIBRARIES(QomposeTest m icuuc icui18n ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
 ENDIF()
 
 QT5_USE_MODULES(Qompose Widgets Network PrintSupport)
