@@ -957,7 +957,7 @@ void QomposeBufferWidget::doTabClosing(int i)
 		closedTabs.push(buf->getFileDescriptor());
 
 		while(closedTabs.count() > 20)
-			closedTabs.pop();
+			closedTabs.remove(0);
 	}
 
 }
