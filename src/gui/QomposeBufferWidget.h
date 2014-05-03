@@ -120,6 +120,7 @@ class QomposeBufferWidget : public QWidget
 		void pathChanged(const QString &);
 		void pathOpened(const QString &);
 		void cursorPositionChanged(int, int);
+		void searchWrapped();
 };
 
 #endif

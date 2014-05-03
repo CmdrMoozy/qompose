@@ -216,6 +216,8 @@ QomposeBuffer *QomposeBufferWidget::newBuffer()
 		this, SLOT(doTabPathChanged(const QString &)));
 	QObject::connect(b, SIGNAL(cursorPositionChanged()),
 		this, SLOT(doCursorPositionChanged()));
+	QObject::connect(b, SIGNAL(searchWrapped()),
+		this, SIGNAL(searchWrapped()));
 
 	int i = tabWidget->addTab(b, b->getTitle());
 	tabWidget->setCurrentIndex(i);

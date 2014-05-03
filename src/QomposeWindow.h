@@ -75,6 +75,7 @@ class QomposeWindow : public QMainWindow
 	private Q_SLOTS:
 		void doTabPathChanged(const QString &p);
 		void doCursorPositionChanged(int l, int c);
+		void doSearchWrapped();
 
 		void doPreferencesDialog();
 		void doPrint();

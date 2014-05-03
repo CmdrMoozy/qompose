@@ -320,6 +320,9 @@ QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *
 			if(q->isWrapping())
 			{
 				found = document()->find(regex, restart, flags);
+
+				if(!found.isNull())
+					Q_EMIT searchWrapped();
 			}
 		}
 
@@ -340,6 +343,9 @@ QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *
 			if(q->isWrapping())
 			{
 				found = document()->find(expression, restart, flags);
+
+				if(!found.isNull())
+					Q_EMIT searchWrapped();
 			}
 		}
 

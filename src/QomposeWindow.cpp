@@ -79,6 +79,8 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 		this, SLOT( doTabPathChanged(const QString &) ) );
 	QObject::connect( buffers, SIGNAL( cursorPositionChanged(int, int) ),
 		this, SLOT( doCursorPositionChanged(int, int) ) );
+	QObject::connect( buffers, SIGNAL( searchWrapped() ),
+		this, SLOT( doSearchWrapped() ) );
 
 	// Apply any existing settings values to our UI.
 
@@ -292,6 +294,17 @@ void QomposeWindow::doCursorPositionChanged(int l, int c)
 
 	statusBar->setLine(l);
 	statusBar->setColumn(c);
+
+}
+
+/*!
+ * This function handles the case when whatever find/replace operation was
+ * being executed has wrapped to the opposite side of the document.
+ */
+void QomposeWindow::doSearchWrapped()
+{ /* SLOT */
+
+	statusBar->displayNotification(tr("Search wrapped around buffer."));
 
 }
 

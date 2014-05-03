@@ -93,6 +93,9 @@ class QomposeEditor : public QomposeDecoratedTextEdit
 		FindResult replaceSelection(const QomposeReplaceQuery *q);
 		FindResult replaceAll(const QomposeReplaceQuery *q);
 		void goToLine(int l);
+
+	Q_SIGNALS:
+		void searchWrapped();
 };
 
 #endif
