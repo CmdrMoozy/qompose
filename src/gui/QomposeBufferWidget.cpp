@@ -27,7 +27,6 @@
 #include <QPrinter>
 #include <QFileInfo>
 
-#include "QomposeTypes.h"
 #include "dialogs/QomposeFileDialog.h"
 #include "editor/QomposeBuffer.h"
 #include "util/QomposeFindQuery.h"
@@ -393,7 +392,7 @@ void QomposeBufferWidget::doReopen()
 { /* SLOT */
 
 	if(!closedTabs.empty())
-		doOpenDescriptor(closedTabs.pop());
+		doReopenBuffer(closedTabs.pop());
 
 }
 
@@ -973,7 +972,12 @@ void QomposeBufferWidget::doTabClosing(int i)
 
 	if(buf->hasBeenSaved())
 	{
-		closedTabs.push(buf->getFileDescriptor());
+		QomposeClosedBufferDescriptor desc;
+
+		desc.file = buf->getFileDescriptor();
+		desc.cursorPosition = buf->textCursor().position();
+
+		closedTabs.push(desc);
 
 		while(closedTabs.count() > 20)
 			closedTabs.remove(0);
@@ -1054,8 +1058,10 @@ void QomposeBufferWidget::doCursorPositionChanged()
  * contents of the file denoted by the given file descriptor.
  *
  * \param d The file descriptor to open.
+ * \return A pointer to the newly-opened buffer, or nullptr if none.
  */
-void QomposeBufferWidget::doOpenDescriptor(const QomposeFileDescriptor &d)
+QomposeBuffer *QomposeBufferWidget::doOpenDescriptor(
+	const QomposeFileDescriptor &d)
 { /* SLOT */
 
 	// If we only have one "Untitled" buffer, we'll replace it.
@@ -1081,12 +1087,37 @@ void QomposeBufferWidget::doOpenDescriptor(const QomposeFileDescriptor &d)
 	if(existing != -1)
 	{
 		tabWidget->setCurrentIndex(existing);
-		return;
+		return nullptr;
 	}
 
 	QomposeBuffer *b = newBuffer();
 	b->open(d);
 
 	Q_EMIT pathOpened(d.fileName);
+
+	return b;
+
+}
+
+/*!
+ * This is a utility function which attempts to reopen a closed buffer, using
+ * the given closed buffer descriptor.
+ *
+ * \param d The closed buffer descriptor to reopen.
+ */
+void QomposeBufferWidget::doReopenBuffer(
+	const QomposeClosedBufferDescriptor &d)
+{ /* SLOT */
+
+	QomposeBuffer *b = doOpenDescriptor(d.file);
+
+	if(b)
+	{
+		QTextCursor curs = b->textCursor();
+
+		curs.setPosition(d.cursorPosition);
+
+		b->setTextCursor(curs);
+	}
 
 }

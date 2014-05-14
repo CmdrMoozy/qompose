@@ -28,4 +28,13 @@ struct QomposeFileDescriptor
 	QString textCodec;
 };
 
+/*!
+ * \brief This structure stores closed buffer state, so it can be reopened.
+ */
+struct QomposeClosedBufferDescriptor
+{
+	QomposeFileDescriptor file;
+	int cursorPosition;
+};
+
 #endif

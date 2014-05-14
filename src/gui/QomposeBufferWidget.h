@@ -23,6 +23,7 @@
 #include <QSet>
 #include <QStack>
 
+#include "QomposeTypes.h"
 #include "editor/QomposeEditor.h"
 
 class QGridLayout;
@@ -33,7 +34,6 @@ class QomposeBuffer;
 class QomposeSettings;
 class QomposeFindQuery;
 class QomposeReplaceQuery;
-class QomposeFileDescriptor;
 
 /*!
  * \brief This class provides high-level management of a set of buffers.
@@ -63,7 +63,7 @@ class QomposeBufferWidget : public QWidget
 		QTabWidget *tabWidget;
 
 		QSet<QomposeBuffer *> tabs;
-		QStack<QomposeFileDescriptor> closedTabs;
+		QStack<QomposeClosedBufferDescriptor> closedTabs;
 
 		QomposeBuffer *newBuffer();
 		void removeCurrentBuffer();
@@ -114,7 +114,9 @@ class QomposeBufferWidget : public QWidget
 
 		void doCursorPositionChanged();
 
-		void doOpenDescriptor(const QomposeFileDescriptor &d);
+		QomposeBuffer *doOpenDescriptor(
+			const QomposeFileDescriptor &d);
+		void doReopenBuffer(const QomposeClosedBufferDescriptor &d);
 
 	Q_SIGNALS:
 		void pathChanged(const QString &);
