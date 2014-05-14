@@ -27,6 +27,7 @@
 #include <QPrinter>
 #include <QFileInfo>
 
+#include "QomposeTypes.h"
 #include "dialogs/QomposeFileDialog.h"
 #include "editor/QomposeBuffer.h"
 #include "util/QomposeFindQuery.h"

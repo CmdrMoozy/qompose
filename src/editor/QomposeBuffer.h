@@ -21,7 +21,7 @@
 
 #include "editor/QomposeEditor.h"
 
-#include "dialogs/QomposeFileDialog.h"
+#include "QomposeTypes.h"
 
 class QPrinter;
 

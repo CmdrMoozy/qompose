@@ -64,6 +64,7 @@ SET(qompose_RESOURCES
 SET(qompose_HEADERS
 
 	src/QomposeApplication.h
+	src/QomposeTypes.h
 	src/QomposeWindow.h
 
 	src/dialogs/QomposeAboutDialog.h

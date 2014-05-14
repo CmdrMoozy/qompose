@@ -28,6 +28,7 @@
 #include <QVariant>
 #include <QPrinter>
 #include <QTextBlock>
+#include <QDir>
 
 #include "QomposeDefines.h"
 #include "util/QomposeDocumentWriter.h"
