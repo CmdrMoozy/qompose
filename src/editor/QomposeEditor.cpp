@@ -19,6 +19,7 @@
 #include "QomposeEditor.h"
 
 #include <cstddef>
+#include <utility>
 
 #include <QGridLayout>
 #include <QPainter>
@@ -525,35 +526,30 @@ void QomposeEditor::deselect()
 
 /*!
  * This slot increases the indent of all the lines in the current selection.
- * Partially selected lines are included. This function will insert a single tab
- * character at the beginning of each included line.
+ * Partially selected lines are included. This function will insert a single
+ * tab character at the beginning of each included line.
  *
- * The resulting selection will have an anchor at the beginning of the first line,
- * and a cursor position at the end of the last line.
+ * The resulting selection will have an anchor at the beginning of the first
+ * line, and a cursor position at the end of the last line.
  *
- * Also note that this operation is done in a single "edit block," for undo/redo
- * actions.
+ * Also note that this operation is done in a single "edit block," for
+ * undo/redo actions.
  */
 void QomposeEditor::increaseSelectionIndent()
 { /* SLOT */
 
 	QTextCursor curs = textCursor();
 
-	// Do nothing if we don't have a selection.
-
 	if(!curs.hasSelection())
 		return;
 
 	// Get the first and count of lines to indent.
 
-	int spos = curs.anchor(), epos = curs.position();
+	int spos = curs.anchor();
+	int epos = curs.position();
 
 	if(spos > epos)
-	{
-		int hold = spos;
-		spos = epos;
-		epos = hold;
-	}
+		std::swap(spos, epos);
 
 	curs.setPosition(spos, QTextCursor::MoveAnchor);
 	int sblock = curs.block().blockNumber();
@@ -561,19 +557,23 @@ void QomposeEditor::increaseSelectionIndent()
 	curs.setPosition(epos, QTextCursor::MoveAnchor);
 	int eblock = curs.block().blockNumber();
 
+	int blockdiff = eblock - sblock;
+
 	// Do the indent.
 
 	curs.setPosition(spos, QTextCursor::MoveAnchor);
 
 	curs.beginEditBlock();
 
-	for(int i = 0; i <= (eblock - sblock); ++i)
+	for(int i = 0; i <= blockdiff; ++i)
 	{
-		curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+		curs.movePosition(QTextCursor::StartOfBlock,
+			QTextCursor::MoveAnchor);
 
 		curs.insertText("\t");
 
-		curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+		curs.movePosition(QTextCursor::NextBlock,
+			QTextCursor::MoveAnchor);
 	}
 
 	curs.endEditBlock();
@@ -585,12 +585,11 @@ void QomposeEditor::increaseSelectionIndent()
 
 	while(curs.block().blockNumber() < eblock)
 	{
-		curs.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+		curs.movePosition(QTextCursor::NextBlock,
+			QTextCursor::KeepAnchor);
 	}
 
 	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-	// Done!
 
 	setTextCursor(curs);
 
@@ -602,35 +601,30 @@ void QomposeEditor::increaseSelectionIndent()
  *
  * This slot considers tabs and sets of spaces the same length as the tab width
  * to be a single "indentation." This function will remove one indentation from
- * each line in the selection. If no indentations are present, then we will instead
- * look for any arbitrary leading spaces to remove.
+ * each line in the selection. If no indentations are present, then we will
+ * instead look for any arbitrary leading spaces to remove.
  *
- * The resulting selection will have an anchor at the beginning of the first line,
- * and a cursor position at the end of the last line.
+ * The resulting selection will have an anchor at the beginning of the first
+ * line, and a cursor position at the end of the last line.
  *
- * Also note that this operation is done in a single "edit block," for undo/redo
- * actions.
+ * Also note that this operation is done in a single "edit block," for
+ * undo/redo actions.
  */
 void QomposeEditor::decreaseSelectionIndent()
 { /* SLOT */
 
 	QTextCursor curs = textCursor();
 
-	// Do nothing if we don't have a selection.
-
 	if(!curs.hasSelection())
 		return;
 
 	// Get the first and count of lines to de-indent.
 
-	int spos = curs.anchor(), epos = curs.position();
+	int spos = curs.anchor();
+	int epos = curs.position();
 
 	if(spos > epos)
-	{
-		spos = spos ^ epos;
-		epos = spos ^ epos;
-		spos = spos ^ epos;
-	}
+		std::swap(spos, epos);
 
 	curs.setPosition(spos, QTextCursor::MoveAnchor);
 	int sblock = curs.block().blockNumber();
@@ -638,6 +632,8 @@ void QomposeEditor::decreaseSelectionIndent()
 
 	curs.setPosition(epos, QTextCursor::MoveAnchor);
 	int eblock = curs.block().blockNumber();
+
+	int blockdiff = eblock - sblock;
 
 	// Do the de-indent.
 
@@ -647,9 +643,10 @@ void QomposeEditor::decreaseSelectionIndent()
 
 	bool foundIndent = false;
 
-	for(int i = 0; i <= (eblock - sblock); ++i)
+	for(int i = 0; i <= blockdiff; ++i)
 	{
-		curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+		curs.movePosition(QTextCursor::StartOfBlock,
+			QTextCursor::MoveAnchor);
 
 		QString text = curs.block().text();
 
@@ -667,12 +664,13 @@ void QomposeEditor::decreaseSelectionIndent()
 			}
 		}
 
-		curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+		curs.movePosition(QTextCursor::NextBlock,
+			QTextCursor::MoveAnchor);
 	}
 
 	if(!foundIndent)
 	{
-		// If no lines were indented, try to remove any leading whitespace at all.
+		// If no lines were indented, try to remove any whitespace.
 
 		curs.setPosition(spos, QTextCursor::MoveAnchor);
 
@@ -694,7 +692,8 @@ void QomposeEditor::decreaseSelectionIndent()
 				curs.deleteChar();
 			}
 
-			curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+			curs.movePosition(QTextCursor::NextBlock,
+				QTextCursor::MoveAnchor);
 		}
 	}
 
@@ -706,12 +705,11 @@ void QomposeEditor::decreaseSelectionIndent()
 
 	while(curs.block().blockNumber() < eblock)
 	{
-		curs.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+		curs.movePosition(QTextCursor::NextBlock,
+			QTextCursor::KeepAnchor);
 	}
 
 	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-	// Done!
 
 	setTextCursor(curs);
 
