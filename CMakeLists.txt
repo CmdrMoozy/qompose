@@ -43,14 +43,14 @@ IF(NOT CMAKE_BUILD_TYPE)
 	SET(CMAKE_BUILD_TYPE "Release")
 ENDIF()
 
-SET(DBG_FLAGS "-rdynamic -Wall -Wextra -ansi -pedantic -Wshadow")
-SET(DBG_FLAGS "${DBG_FLAGS} -Wpointer-arith -Wcast-qual -std=c++0x -O0")
+SET(F_DBG "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual")
+SET(F_DBG "${F_DBG} -std=c++11 -O0")
 
-SET(REL_FLAGS "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith")
-SET(REL_FLAGS "${REL_FLAGS} -Wcast-qual -std=c++0x -fomit-frame-pointer")
+SET(F_REL "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual")
+SET(F_REL "${F_REL} -std=c++11 -fomit-frame-pointer")
 
-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DBG_FLAGS}")
-SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${REL_FLAGS}")
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${F_DBG}")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${F_REL}")
 
 ADD_DEFINITIONS(-DQT_NO_KEYWORDS)
 
