@@ -1,13 +1,14 @@
-####################################################################################################################
+##############################################################################
 #
-# This is the CMake build file for Qompose. The build process can be controlled in several ways:
+# This is the CMake build file for Qompose. The build process can be controlled
+# in several ways:
 #
-#     - To enable "release" or "debug" builds, CMake should be instantiated as follows:
+#     - To enable "release" or "debug" builds, CMake should be instantiated as:
 #
-#           cmake -DCMAKE_BUILD_TYPE=Release ..		(This is the default, if neither is selected.)
+#           cmake -DCMAKE_BUILD_TYPE=Release ..		(This is the default.)
 #           cmake -DCMAKE_BUILD_TYPE=Debug ..
 #
-####################################################################################################################
+##############################################################################
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
 PROJECT(qompose)
@@ -38,12 +39,20 @@ FIND_PACKAGE(Qt5PrintSupport REQUIRED)
 # Set INCLUDE and C(XX)FLAGS
 
 IF(NOT CMAKE_BUILD_TYPE)
-	MESSAGE(STATUS "No CMAKE_BUILD_TYPE specified; defaulting to Release mode.")
+	MESSAGE(STATUS "No CMAKE_BUILD_TYPE specified; defaulting to Release.")
 	SET(CMAKE_BUILD_TYPE "Release")
 ENDIF()
 
-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -rdynamic -Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual -std=c++0x -O0 -DQT_NO_KEYWORDS")
-SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual -std=c++0x -fomit-frame-pointer -DQT_NO_KEYWORDS")
+SET(DBG_FLAGS "-rdynamic -Wall -Wextra -ansi -pedantic -Wshadow")
+SET(DBG_FLAGS "${DBG_FLAGS} -Wpointer-arith -Wcast-qual -std=c++0x -O0")
+
+SET(REL_FLAGS "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith")
+SET(REL_FLAGS "${REL_FLAGS} -Wcast-qual -std=c++0x -fomit-frame-pointer")
+
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DBG_FLAGS}")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${REL_FLAGS}")
+
+ADD_DEFINITIONS(-DQT_NO_KEYWORDS)
 
 STRING(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
 IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
@@ -193,11 +202,13 @@ SET(qompose_test_SOURCES
 QT5_ADD_RESOURCES(qompose_RESOURCES_RCC ${qompose_RESOURCES})
 
 ADD_EXECUTABLE(Qompose ${qompose_RESOURCES_RCC} ${qompose_SOURCES})
-TARGET_LINK_LIBRARIES(Qompose m icuuc icui18n ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+TARGET_LINK_LIBRARIES(Qompose m icuuc icui18n ${Qt5Widgets_LIBRARIES}
+	${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
 
 IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 	ADD_EXECUTABLE(QomposeTest ${qompose_test_SOURCES})
-	TARGET_LINK_LIBRARIES(QomposeTest m icuuc icui18n ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+	TARGET_LINK_LIBRARIES(QomposeTest m icuuc icui18n ${Qt5Widgets_LIBRARIES}
+		${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
 ENDIF()
 
 QT5_USE_MODULES(Qompose Widgets Network PrintSupport)
