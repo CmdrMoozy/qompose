@@ -454,22 +454,36 @@ void QomposeDecoratedTextEdit::setGutterBackground(const QColor &c)
  */
 void QomposeDecoratedTextEdit::paintEvent(QPaintEvent *e)
 {
-	// Let our superclass do its normal painting.
+	// Let our superclass do its normal painting, and prepare to do our own.
 
 	QPlainTextEdit::paintEvent(e);
+
+	QRect eventRect = e->rect();
+	QPainter painter(viewport());
+
+	// Draw some extra lines for debugging, if applicable.
+
+#ifdef QOMPOSE_DEBUG
+	painter.setPen(QPen(QColor(255, 0, 0)));
+
+	painter.drawLine(contentOffset().x(), eventRect.top(),
+		contentOffset().x(), eventRect.bottom());
+
+	painter.setPen(QPen(QColor(0, 255, 0)));
+
+	painter.drawLine(document()->documentMargin(), eventRect.top(),
+		document()->documentMargin(), eventRect.bottom());
+#endif
 
 	// Draw our line wrap guide, if it is enabled.
 
 	if(isWrapGuideVisible())
 	{
-		QRect r = e->rect();
-		QPainter p(viewport());
-
-		p.setPen(QPen(getWrapGuideColor()));
-
 		int offset = wrapGuideOffset();
 
-		p.drawLine(offset, r.top(), offset, r.bottom());
+		painter.setPen(QPen(getWrapGuideColor()));
+		painter.drawLine(offset, eventRect.top(),
+			offset, eventRect.bottom());
 	}
 }
 
