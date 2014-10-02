@@ -44,9 +44,12 @@ QomposeDecoratedTextEdit::QomposeDecoratedTextEdit(QWidget *p)
 	setGutterForeground(QColor(255, 255, 255));
 	setGutterBackground(QColor(0, 0, 0));
 
-	QObject::connect( this, SIGNAL( blockCountChanged(int)            ), this, SLOT( updateGutterWidth()              ) );
-	QObject::connect( this, SIGNAL( updateRequest(const QRect &, int) ), this, SLOT( updateGutter(const QRect &, int) ) );
-	QObject::connect( this, SIGNAL( cursorPositionChanged()           ), this, SLOT( highlightCurrentLine()           ) );
+	QObject::connect(this, SIGNAL(blockCountChanged(int)),
+		this, SLOT(updateGutterWidth()));
+	QObject::connect(this, SIGNAL(updateRequest(const QRect &, int)),
+		this, SLOT(updateGutter(const QRect &, int)));
+	QObject::connect(this, SIGNAL(cursorPositionChanged()),
+		this, SLOT(highlightCurrentLine()));
 
 	// Set some of our widget's default properties.
 
@@ -71,7 +74,6 @@ QomposeDecoratedTextEdit::~QomposeDecoratedTextEdit()
 {
 }
 
-
 /*!
  * This function sets whether or not our gutter is visible.
  *
@@ -95,15 +97,15 @@ bool QomposeDecoratedTextEdit::isGutterVisible()
 }
 
 /*!
- * This function returns our current font. Note that the size in the returned font object
- * does NOT include any changes due to our current zoom factor. Our zoomed size can be determined
- * from fontZoomSize().
+ * This function returns our current font. Note that the size in the returned
+ * font object does NOT include any changes due to our current zoom factor. Our
+ * zoomed size can be determined from fontZoomSize().
  *
  * \return Our current font.
  */
 QFont QomposeDecoratedTextEdit::font() const
 {
-	// Return a font identical to ours, except with a size not including scaling.
+	// Return a font identical to ours, except with a size excluding scaling.
 
 	QFont f = currentFont;
 	f.setPointSizeF(originalFontSize);
@@ -112,8 +114,9 @@ QFont QomposeDecoratedTextEdit::font() const
 }
 
 /*!
- * This function sets our widget's font to the given value. Note that fonts which are
- * assigned a PIXEL SIZE are not allowed - these will be resized to 10 points.
+ * This function sets our widget's font to the given value. Note that fonts which
+ * are assigned a PIXEL SIZE are not allowed - these will be resized to 10
+ * points.
  *
  * \param f The new font to use.
  */
@@ -143,9 +146,9 @@ void QomposeDecoratedTextEdit::setFont(const QFont &f)
 }
 
 /*!
- * This function returns our widget's current font zoom factor. The value returned is
- * relative to zero; e.g., a value of 100 means doubling the original font size, whereas
- * a value of -100 means the original size reduced to 0.
+ * This function returns our widget's current font zoom factor. The value
+ * returned is relative to zero; e.g., a value of 100 means doubling the original
+ * font size, whereas a value of -100 means the original size reduced to 0.
  *
  * The minimum value this can return is -100, and there is no maximum value.
  *
@@ -157,7 +160,8 @@ int QomposeDecoratedTextEdit::fontZoom() const
 }
 
 /*!
- * This function returns the current font size, including any zooming currently in place.
+ * This function returns the current font size, including any zooming currently
+ * in place.
  *
  * \return Our current font size, including zooming.
  */
@@ -170,11 +174,12 @@ qreal QomposeDecoratedTextEdit::fontZoomSize() const
 }
 
 /*!
- * This function sets our widget's font zoom. The value given is relative to the current
- * size; e.g., passing 100 means doubling the size, whereas passing -100 means a size of 0.
+ * This function sets our widget's font zoom. The value given is relative to the
+ * current size; e.g., passing 100 means doubling the size, whereas passing -100
+ * means a size of 0.
  *
- * The minimum value that can be set is -100; this results in a size of 0. There is no
- * maximum value, however.
+ * The minimum value that can be set is -100; this results in a size of 0. There
+ * is no maximum value, however.
  *
  * \param z The new zoom factor for our font size.
  */
@@ -211,8 +216,8 @@ void QomposeDecoratedTextEdit::resetFontZoom()
 }
 
 /*!
- * This function returns the width of a tab stop, in spaces (based upon the current
- * font) - NOT in pixels.
+ * This function returns the width of a tab stop, in spaces (based upon the
+ * current font) - NOT in pixels.
  *
  * \return The editor's tab width.
  */
@@ -222,8 +227,8 @@ int QomposeDecoratedTextEdit::tabWidthSpaces() const
 }
 
 /*!
- * This function sets the width of our editor's tab stops, in spaces (based upon the
- * current font) - NOT in pixels.
+ * This function sets the width of our editor's tab stops, in spaces (based upon
+ * the current font) - NOT in pixels.
  *
  * \param w The new tab width to use.
  */
@@ -442,8 +447,8 @@ void QomposeDecoratedTextEdit::setGutterBackground(const QColor &c)
 }
 
 /*!
- * We override our superclass's paint event to draw some additional decorations on
- * our text edit's viewport.
+ * We override our superclass's paint event to draw some additional decorations
+ * on our text edit's viewport.
  *
  * \param e The paint event being handled.
  */
@@ -469,7 +474,8 @@ void QomposeDecoratedTextEdit::paintEvent(QPaintEvent *e)
 }
 
 /*!
- * We override our parent's focus-in event to update our UI when that event occurs.
+ * We override our parent's focus-in event to update our UI when that event
+ * occurs.
  *
  * \param e The event being handled.
  */
@@ -480,7 +486,8 @@ void QomposeDecoratedTextEdit::focusInEvent(QFocusEvent *e)
 }
 
 /*!
- * We override our parent's focus-out event to update our UI when that event occurs.
+ * We override our parent's focus-out event to update our UI when that event
+ * occurs.
  *
  * \param e The event being handled.
  */
@@ -491,7 +498,8 @@ void QomposeDecoratedTextEdit::focusOutEvent(QFocusEvent *e)
 }
 
 /*!
- * This function handles the resetting of our gutter's geometry when we get resized.
+ * This function handles the resetting of our gutter's geometry when we get
+ * resized.
  *
  * \param event The resize event we are handling.
  */
@@ -500,7 +508,8 @@ void QomposeDecoratedTextEdit::resizeEvent(QResizeEvent *e)
 	QPlainTextEdit::resizeEvent(e);
 
 	QRect cr = contentsRect();
-	gutter->setGeometry(QRect(cr.left(), cr.top(), gutterWidth(), cr.height()));
+	gutter->setGeometry(QRect(cr.left(), cr.top(),
+		gutterWidth(), cr.height()));
 }
 
 /*!
@@ -518,10 +527,14 @@ void QomposeDecoratedTextEdit::wheelEvent(QWheelEvent *e)
 {
 	if(e->modifiers() == Qt::ControlModifier)
 	{
-		// If the user does Ctrl+Wheel, zoom in/out on our text.
+		/*
+		 * If the user does Ctrl+Wheel, zoom in/out on our text. Delta
+		 * is degrees turned * 8. We scale by 100% for each 120 degrees
+		 * turned.
+		 */
 
-		qreal scale = static_cast<qreal>(e->delta()) / 8.0;	// Delta is degrees turned * 8.
-		scale *= 0.8333; 					// Scale by 100% for each 120 degrees.
+		qreal scale = static_cast<qreal>(e->delta()) / 8.0;
+		scale *= 0.8333;
 
 		setFontZoom(currentFontZoom + qRound(scale));
 	}
@@ -535,10 +548,10 @@ void QomposeDecoratedTextEdit::wheelEvent(QWheelEvent *e)
 }
 
 /*!
- * This function handles any "mouse release" events on our editor by re-highlighting
- * the current line. Ths is necessary to avoid a bug where rapidly clicking/arrow-key-ing
- * can result in the wrong line being highlighted - cursorPositionChanged is somewhat
- * unreliable.
+ * This function handles any "mouse release" events on our editor by
+ * re-highlighting the current line. Ths is necessary to avoid a bug where
+ * rapidly clicking/arrow-key-ing can result in the wrong line being highlighted;
+ * cursorPositionChanged is somewhat unreliable.
  *
  * \param e The event being handled.
  */
@@ -552,8 +565,8 @@ void QomposeDecoratedTextEdit::mouseReleaseEvent(QMouseEvent *e)
 }
 
 /*!
- * This function handles a paint event passed up to us by our gutter by rendering the gutter
- * according to our editor's current state.
+ * This function handles a paint event passed up to us by our gutter by rendering
+ * the gutter according to our editor's current state.
  *
  * \param e The paint event being handled.
  */
@@ -568,7 +581,8 @@ void QomposeDecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 
 	QTextBlock block = firstVisibleBlock();
 	int blockNumber = block.blockNumber();
-	int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
+	int top = (int) blockBoundingGeometry(block)
+		.translated(contentOffset()).top();
 	int bottom = top + (int) blockBoundingRect(block).height();
 
 	while(block.isValid() && top <= e->rect().bottom())
@@ -577,7 +591,9 @@ void QomposeDecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 		{
 			QString number = QString::number(blockNumber + 1);
 			painter.setPen(gutterForeground);
-			painter.drawText(0, top, gutter->width(), fontMetrics().height(), Qt::AlignCenter, number);
+			painter.drawText(0, top, gutter->width(),
+				fontMetrics().height(), Qt::AlignCenter,
+				number);
 		}
 
 		block = block.next();
@@ -588,9 +604,9 @@ void QomposeDecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 }
 
 /*!
- * This function computes the width our gutter should have, based upon the number of lines
- * in our document. We ensure that we have enough space to render our line numbers inside
- * the gutter.
+ * This function computes the width our gutter should have, based upon the number
+ * of lines in our document. We ensure that we have enough space to render our
+ * line numbers inside the gutter.
  *
  * \return The width of our gutter.
  */
@@ -614,27 +630,32 @@ int QomposeDecoratedTextEdit::gutterWidth()
 }
 
 /*!
- * This function computes and returns the offset from the left-hand side of our text editor widget
- * the line wrap guide should be painted. This value is rounded to the nearest pixel.
+ * This function computes and returns the offset from the left-hand side of our
+ * text editor widget the line wrap guide should be painted. This value is
+ * rounded to the nearest pixel.
  *
  * \return The offset of the line wrap guide.
  */
 int QomposeDecoratedTextEdit::wrapGuideOffset()
 {
-	// The character width is rounded, since it is rounded by the widget when the text
-	// is actually rendered. Without doing this, the offset will sometimes be incorrect.
+	/*
+	 * The character width is rounded, since it is rounded by the widget when
+	 * the text is actually rendered. Without doing this, the offset will
+	 * sometimes be incorrect.
+	 */
 	qreal charWidth = qRound(QFontMetricsF(currentFont).averageCharWidth());
 
 	qreal chars = static_cast<qreal>(getWrapGuideColumnWidth());
 	qreal contentOff = static_cast<qreal>(contentOffset().x());
 	qreal margin = static_cast<qreal>(document()->documentMargin());
 
-	return static_cast<int>(round( (charWidth * chars) + contentOff + margin ));
+	return static_cast<int>(round((charWidth * chars) +
+		contentOff + margin));
 }
 
 /*!
- * This is a utility function which calls update() on both this widget, as well as our
- * viewport widget, to make sure we are really updated.
+ * This is a utility function which calls update() on both this widget, as well
+ * as our viewport widget, to make sure we are really updated.
  */
 void QomposeDecoratedTextEdit::fullUpdate()
 { /* SLOT */
@@ -647,8 +668,8 @@ void QomposeDecoratedTextEdit::fullUpdate()
 }
 
 /*!
- * This is a utility function which calls repaint() on both this widget, as well as our
- * viewport widget, to make sure our paintEvent() function is called.
+ * This is a utility function which calls repaint() on both this widget, as well
+ * as our viewport widget, to make sure our paintEvent() function is called.
  */
 void QomposeDecoratedTextEdit::fullRepaint()
 { /* SLOT */
@@ -681,7 +702,8 @@ void QomposeDecoratedTextEdit::highlightCurrentLine()
 }
 
 /*!
- * This function updates our gutter's width, e.g. when the number of lines in our document changes.
+ * This function updates our gutter's width, e.g. when the number of lines in our
+ * document changes.
  */
 void QomposeDecoratedTextEdit::updateGutterWidth()
 { /* SLOT */
@@ -691,8 +713,8 @@ void QomposeDecoratedTextEdit::updateGutterWidth()
 }
 
 /*!
- * This function updates our gutter, e.g. when our editor widget's state is updated, by resetting the
- * gutter's scroll and width.
+ * This function updates our gutter, e.g. when our editor widget's state is
+ * updated, by resetting the gutter's scroll and width.
  *
  * \param r The viewport rect being updated.
  * \param dy The editor's current y scroll offset.
