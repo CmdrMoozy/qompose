@@ -29,7 +29,6 @@
 class QomposeTest
 {
 	public:
-		static std::string getProgramPath();
 		static std::string getStackTrace();
 
 		static void assertTrue(bool expr);

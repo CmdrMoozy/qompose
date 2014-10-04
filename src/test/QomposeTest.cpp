@@ -18,43 +18,9 @@
 
 #include "QomposeTest.h"
 
-#ifdef __unix__
-	#include <unistd.h>
-#endif
+#include <cstdio>
 
-#ifdef __GNUC__
-	#include <cstdio>
-	#include <cstdlib>
-	#include <sstream>
-
-	#include <cxxabi.h>
-	#include <execinfo.h>
-#endif
-
-/*!
- * This function will return the absolute path to the currently running program
- * (i.e., this program).
- *
- * \return The path to this program.
- */
-std::string QomposeTest::getProgramPath()
-{
-	#ifdef __unix__
-		char p[1024];
-
-		ssize_t s = readlink("/proc/self/exe", p, 1023);
-		p[s] = '\0';
-
-		std::string path;
-
-		if(s != -1)
-			path = std::string(p);
-
-		return path;
-	#else
-		return std::string();
-	#endif
-}
+#include "backward.hpp"
 
 /*!
  * This function returns, as a string, a rendered stack trace. This stack trace
@@ -65,39 +31,45 @@ std::string QomposeTest::getProgramPath()
  */
 std::string QomposeTest::getStackTrace()
 {
-	#if defined(__GNUC__) && defined(__unix__)
-		std::stringstream buf;
+	// Get a stack trace.
 
-		void *trace[100];
-		int traceSize;
+	backward::StackTrace trace;
+	trace.load_here(100);
 
-		traceSize = backtrace(trace, 100);
+	// Prepare our stack trace pretty-printer.
 
-		for(int i = 2; i < (traceSize - 2); ++i)
-		{
-			char syscom[1024];
-			snprintf(syscom, 1024, "addr2line %p -e %s", trace[i],
-				QomposeTest::getProgramPath().c_str());
+	backward::Printer p;
 
-			FILE *proc = popen(syscom, "r");
+	p.object = false;
+	p.color = false;
+	p.address = true;
 
-			if(proc)
-			{
-				buf << "[trace] " << i - 1 << " ";
+	// Prepare a memstream to write the trace to.
 
-				char pbuf[256];
+	char *buf = NULL;
+	size_t buflen;
 
-				while(fgets(pbuf, 256, proc))
-					buf << pbuf;
+	FILE *stream = open_memstream(&buf, &buflen);
 
-				pclose(proc);
-			}
-		}
+	// Print the stack trace to our buffer.
 
-		return buf.str();
-	#else
-		return std::string();
-	#endif
+	p.print(trace, stream);
+
+	// Close the memory stream.
+
+	fflush(stream);
+	fclose(stream);
+
+	// Convert to a C++ string, and free the buffer.
+
+	std::string ret(buf, buflen);
+
+	free(buf);
+	buf = NULL;
+
+	// Done!
+
+	return ret;
 }
 
 /*!

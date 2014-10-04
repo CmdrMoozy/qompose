@@ -18,6 +18,15 @@ SET(CMAKE_VERBOSE_MAKEFILE OFF)
 
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
+# Note which type of build we're performing.
+
+IF(NOT CMAKE_BUILD_TYPE)
+	MESSAGE(STATUS "No CMAKE_BUILD_TYPE specified; defaulting to Release.")
+	SET(CMAKE_BUILD_TYPE "Release")
+ENDIF()
+
+STRING(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
+
 # Set the Qt prefix we're going to use, if a custom one was requested.
 
 IF(CUSTOM_QT_DIR)
@@ -36,12 +45,11 @@ FIND_PACKAGE(Qt5Widgets REQUIRED)
 FIND_PACKAGE(Qt5Network REQUIRED)
 FIND_PACKAGE(Qt5PrintSupport REQUIRED)
 
-# Set INCLUDE and C(XX)FLAGS
-
-IF(NOT CMAKE_BUILD_TYPE)
-	MESSAGE(STATUS "No CMAKE_BUILD_TYPE specified; defaulting to Release.")
-	SET(CMAKE_BUILD_TYPE "Release")
+IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
+	FIND_PACKAGE(DWARF REQUIRED)
 ENDIF()
+
+# Set INCLUDE and C(XX)FLAGS
 
 SET(F_DBG "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual")
 SET(F_DBG "${F_DBG} -std=c++11 -O0")
@@ -54,12 +62,12 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${F_REL}")
 
 ADD_DEFINITIONS(-DQT_NO_KEYWORDS)
 
-STRING(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
 IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 	ADD_DEFINITIONS(-DQOMPOSE_DEBUG)
+	ADD_DEFINITIONS(-DBACKWARD_HAS_DW=1)
 ENDIF()
 
-INCLUDE_DIRECTORIES("src")
+INCLUDE_DIRECTORIES("src" "backward-cpp")
 
 # Define Qompose's source files.
 
@@ -207,8 +215,9 @@ TARGET_LINK_LIBRARIES(Qompose m icuuc icui18n ${Qt5Widgets_LIBRARIES}
 
 IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 	ADD_EXECUTABLE(QomposeTest ${qompose_test_SOURCES})
-	TARGET_LINK_LIBRARIES(QomposeTest m icuuc icui18n ${Qt5Widgets_LIBRARIES}
-		${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES})
+	TARGET_LINK_LIBRARIES(QomposeTest m icuuc icui18n ${DWARF_LIBRARIES}
+		${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES}
+		${Qt5PrintSupport_LIBRARIES})
 ENDIF()
 
 QT5_USE_MODULES(Qompose Widgets Network PrintSupport)
