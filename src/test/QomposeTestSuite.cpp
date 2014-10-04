@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QApplication>
+
 #include <iostream>
 #include <vector>
 #include <typeinfo>
@@ -28,15 +30,19 @@
 
 #include "test/QomposeAssertionException.h"
 #include "test/QomposeTest.h"
+#include "test/util/QomposeFontMetricsTest.h"
 #include "test/util/QomposeHotkeyTest.h"
 #include "test/util/QomposeHotkeyMapTest.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
+	QApplication app(argc, argv, false);
+
 	// Build the list of tests to run.
 
 	std::vector<QomposeTest *> tests;
 
+	tests.push_back(new QomposeFontMetricsTest());
 	tests.push_back(new QomposeHotkeyTest());
 	tests.push_back(new QomposeHotkeyMapTest());
 
@@ -86,4 +92,6 @@ int main(void)
 
 		delete t;
 	}
+
+	return 0;
 }

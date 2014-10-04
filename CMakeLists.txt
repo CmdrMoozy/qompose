@@ -121,6 +121,7 @@ SET(qompose_HEADERS
 
 	src/util/QomposeDocumentWriter.h
 	src/util/QomposeFindQuery.h
+	src/util/QomposeFontMetrics.h
 	src/util/QomposeHotkey.h
 	src/util/QomposeHotkeyMap.h
 	src/util/QomposeReplaceQuery.h
@@ -171,6 +172,7 @@ SET(qompose_SOURCES
 
 	src/util/QomposeDocumentWriter.cpp
 	src/util/QomposeFindQuery.cpp
+	src/util/QomposeFontMetrics.cpp
 	src/util/QomposeHotkey.cpp
 	src/util/QomposeReplaceQuery.cpp
 	src/util/QomposeSettings.cpp
@@ -184,9 +186,11 @@ SET(qompose_test_HEADERS
 	src/test/QomposeAssertionException.h
 	src/test/QomposeTest.h
 
+	src/test/util/QomposeFontMetricsTest.h
 	src/test/util/QomposeHotkeyTest.h
 	src/test/util/QomposeHotkeyMapTest.h
 
+	src/util/QomposeFontMetrics.h
 	src/util/QomposeHotkey.h
 	src/util/QomposeHotkeyMap.h
 
@@ -198,9 +202,11 @@ SET(qompose_test_SOURCES
 	src/test/QomposeTest.cpp
 	src/test/QomposeTestSuite.cpp
 
+	src/test/util/QomposeFontMetricsTest.cpp
 	src/test/util/QomposeHotkeyTest.cpp
 	src/test/util/QomposeHotkeyMapTest.cpp
 
+	src/util/QomposeFontMetrics.cpp
 	src/util/QomposeHotkey.cpp
 
 )
