@@ -226,7 +226,9 @@ void QomposeEditorPreferencesWidget::initializeGUI()
 	lineWrapGuideGroupBox = new QGroupBox(tr("Line Wrap Guide"), this);
 	lineWrapGuideLayout = new QGridLayout(lineWrapGuideGroupBox);
 
-	lineWrapGuideCheckBox = new QCheckBox(tr("Show Guide"), lineWrapGuideGroupBox);
+	lineWrapGuideCheckBox = new QCheckBox(
+		tr("Show Guide (Monospaced fonts only.)"),
+		lineWrapGuideGroupBox);
 
 	lineWrapGuideWidthLabel = new QLabel(tr("Character Width"), lineWrapGuideGroupBox);
 

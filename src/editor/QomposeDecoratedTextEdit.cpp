@@ -18,10 +18,11 @@
 
 #include "QomposeDecoratedTextEdit.h"
 
-#include "editor/QomposeGutter.h"
-
 #include <QPainter>
 #include <QTextBlock>
+
+#include "editor/QomposeGutter.h"
+#include "util/QomposeFontMetrics.h"
 
 /*!
  * This is our default constructor, which creates a new decorated text exit.
@@ -460,6 +461,7 @@ void QomposeDecoratedTextEdit::paintEvent(QPaintEvent *e)
 
 	QRect eventRect = e->rect();
 	QPainter painter(viewport());
+	QomposeFontMetrics metrics(currentFont);
 
 	// Draw some extra lines for debugging, if applicable.
 
@@ -477,7 +479,7 @@ void QomposeDecoratedTextEdit::paintEvent(QPaintEvent *e)
 
 	// Draw our line wrap guide, if it is enabled.
 
-	if(isWrapGuideVisible())
+	if(isWrapGuideVisible() && metrics.isMonospaced())
 	{
 		int offset = wrapGuideOffset();
 
