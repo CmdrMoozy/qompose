@@ -28,6 +28,7 @@
 void QomposeFontMetricsTest::test()
 {
 	testIsMonospaced();
+	testGetColumnWidth();
 }
 
 /*!
@@ -51,4 +52,16 @@ void QomposeFontMetricsTest::testIsMonospaced()
 
 	QomposeTest::assertTrue(times.exactMatch());
 	QomposeTest::assertEquals(false, timesMetrics.isMonospaced());
+}
+
+/*!
+ * This function tests that our font metrics class' getColumnWidthF() function
+ * can correctly compute column widths.
+ */
+void QomposeFontMetricsTest::testGetColumnWidth()
+{
+	QFont courier(QString("Courier New"), 11);
+	QomposeFontMetrics metrics(courier);
+
+	QomposeTest::assertEquals(720.0, metrics.getColumnWidthF(80));
 }

@@ -35,6 +35,9 @@ class QomposeFontMetrics
 
 		bool isMonospaced() const;
 
+		int getColumnWidth(int columns = 1) const;
+		qreal getColumnWidthF(int columns = 1) const;
+
 	private:
 		QFont font;
 };

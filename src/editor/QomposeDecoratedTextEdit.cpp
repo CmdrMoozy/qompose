@@ -463,7 +463,7 @@ void QomposeDecoratedTextEdit::paintEvent(QPaintEvent *e)
 	QPainter painter(viewport());
 	QomposeFontMetrics metrics(currentFont);
 
-	// Draw some extra lines for debugging, if applicable.
+	// Draw our offset and margin lines, if debugging is enabled.
 
 #ifdef QOMPOSE_DEBUG
 	painter.setPen(QPen(QColor(255, 0, 0)));
@@ -477,11 +477,28 @@ void QomposeDecoratedTextEdit::paintEvent(QPaintEvent *e)
 		document()->documentMargin(), eventRect.bottom());
 #endif
 
+	// Draw lines at each character column, if debugging is enabled.
+
+#ifdef QOMPOSE_DEBUG
+	painter.setPen(QPen(QColor(0, 0, 0)));
+
+	for(int col = 1; col <= 100; ++col)
+	{
+		qreal coff = metrics.getColumnWidthF() * col;
+
+		coff += contentOffset().x();
+		coff += document()->documentMargin();
+
+		painter.drawLine(coff, eventRect.top(),
+			coff, eventRect.bottom());
+	}
+#endif
+
 	// Draw our line wrap guide, if it is enabled.
 
 	if(isWrapGuideVisible() && metrics.isMonospaced())
 	{
-		int offset = wrapGuideOffset();
+		qreal offset = wrapGuideOffset();
 
 		painter.setPen(QPen(getWrapGuideColor()));
 		painter.drawLine(offset, eventRect.top(),
@@ -647,26 +664,19 @@ int QomposeDecoratedTextEdit::gutterWidth()
 
 /*!
  * This function computes and returns the offset from the left-hand side of our
- * text editor widget the line wrap guide should be painted. This value is
- * rounded to the nearest pixel.
+ * text editor widget the line wrap guide should be painted.
  *
  * \return The offset of the line wrap guide.
  */
-int QomposeDecoratedTextEdit::wrapGuideOffset()
+qreal QomposeDecoratedTextEdit::wrapGuideOffset()
 {
-	/*
-	 * The character width is rounded, since it is rounded by the widget when
-	 * the text is actually rendered. Without doing this, the offset will
-	 * sometimes be incorrect.
-	 */
-	qreal charWidth = qRound(QFontMetricsF(currentFont).averageCharWidth());
+	QomposeFontMetrics metrics(currentFont);
 
-	qreal chars = static_cast<qreal>(getWrapGuideColumnWidth());
-	qreal contentOff = static_cast<qreal>(contentOffset().x());
-	qreal margin = static_cast<qreal>(document()->documentMargin());
+	qreal offset = metrics.getColumnWidthF(getWrapGuideColumnWidth());
+	offset += contentOffset().x();
+	offset += document()->documentMargin();
 
-	return static_cast<int>(round((charWidth * chars) +
-		contentOff + margin));
+	return offset;
 }
 
 /*!

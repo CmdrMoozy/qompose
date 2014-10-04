@@ -34,6 +34,7 @@ class QomposeFontMetricsTest : public QomposeTest
 
 	private:
 		void testIsMonospaced();
+		void testGetColumnWidth();
 };
 
 #endif
