@@ -20,6 +20,7 @@
 
 #include <cstddef>
 #include <fstream>
+#include <memory>
 
 #include <QStringList>
 #include <QFileInfo>
@@ -205,7 +206,12 @@ QString QomposeFileDialog::detectTextCodec(const QString &f)
 	// Create our charset detector instance.
 
 	UErrorCode err = U_ZERO_ERROR;
-	UCharsetDetector *detector = ucsdet_open(&err);
+
+	std::shared_ptr<UCharsetDetector> detector(ucsdet_open(&err),
+		[](UCharsetDetector *p)
+		{
+			ucsdet_close(p);
+		});
 
 	if(U_FAILURE(err))
 		return QString();
@@ -213,61 +219,41 @@ QString QomposeFileDialog::detectTextCodec(const QString &f)
 	// Read 1 KiB from our file for testing.
 
 	std::ifstream fs(f.toStdString().c_str());
-	char *buf = (char *) malloc(sizeof(char) * 1024);
-	
-	fs.read(buf, 1024);
+	std::shared_ptr<char> buf(new char[1024], [](char *p)
+	{
+		delete[] p;
+	});
+
+	fs.read(buf.get(), 1024);
 	size_t read = fs.gcount();
 
 	fs.close();
 
 	// Try to detect the charset.
 
-	ucsdet_setText(detector, buf, read, &err);
+	ucsdet_setText(detector.get(), buf.get(), read, &err);
 
 	if(U_FAILURE(err))
-	{
-		free(buf);
-		ucsdet_close(detector);
-
 		return QString();
-	}
 
-	const UCharsetMatch *cs = ucsdet_detect(detector, &err);
+	const UCharsetMatch *cs = ucsdet_detect(detector.get(), &err);
 
 	if(U_FAILURE(err) || (cs == NULL))
-	{
-		free(buf);
-		ucsdet_close(detector);
-
 		return QString();
-	}
 
 	// Get the match confidence & charset name.
 
 	int32_t confidence = ucsdet_getConfidence(cs, &err);
 
 	if(U_FAILURE(err))
-	{
-		free(buf);
-		ucsdet_close(detector);
-
 		return QString();
-	}
 
 	const char *csn  = ucsdet_getName(cs, &err);
 
 	if(U_FAILURE(err))
-	{
-		free(buf);
-		ucsdet_close(detector);
-
 		return QString();
-	}
 
 	QString name(csn);
-
-	free(buf);
-	ucsdet_close(detector);
 
 	// Assuming we're confident enough, return the match.
 
