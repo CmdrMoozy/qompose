@@ -89,7 +89,7 @@ macro(icu_declare_component _NAME)
     set("${ICU_PRIVATE_VAR_NS}_COMPONENTS_${_NAME}" ${ARGN})
 endmacro(icu_declare_component)
 
-icu_declare_component(data icudata)
+icu_declare_component(data icudata icudt)
 icu_declare_component(uc   icuuc)         # Common and Data libraries
 icu_declare_component(i18n icui18n icuin) # Internationalization library
 icu_declare_component(io   icuio ustdio)  # Stream and I/O Library
@@ -210,6 +210,10 @@ if(${ICU_PUBLIC_VAR_NS}_INCLUDE_DIRS)
             list(APPEND ${ICU_PRIVATE_VAR_NS}_POSSIBLE_DEBUG_NAMES "${${ICU_PRIVATE_VAR_NS}_BASE_NAME}d")
             list(APPEND ${ICU_PRIVATE_VAR_NS}_POSSIBLE_RELEASE_NAMES "${${ICU_PRIVATE_VAR_NS}_BASE_NAME}${ICU_MAJOR_VERSION}${ICU_MINOR_VERSION}")
             list(APPEND ${ICU_PRIVATE_VAR_NS}_POSSIBLE_DEBUG_NAMES "${${ICU_PRIVATE_VAR_NS}_BASE_NAME}${ICU_MAJOR_VERSION}${ICU_MINOR_VERSION}d")
+	    list(APPEND ${ICU_PRIVATE_VAR_NS}_POSSIBLE_RELEASE_NAMES "s${${ICU_PRIVATE_VAR_NS}_BASE_NAME}")
+	    list(APPEND ${ICU_PRIVATE_VAR_NS}_POSSIBLE_DEBUG_NAMES "s${${ICU_PRIVATE_VAR_NS}_BASE_NAME}d")
+	    list(APPEND ${ICU_PRIVATE_VAR_NS}_POSSIBLE_RELEASE_NAMES "s${${ICU_PRIVATE_VAR_NS}_BASE_NAME}${ICU_MAJOR_VERSION}${ICU_MINOR_VERSION}")
+	    list(APPEND ${ICU_PRIVATE_VAR_NS}_POSSIBLE_DEBUG_NAMES "s${${ICU_PRIVATE_VAR_NS}_BASE_NAME}${ICU_MAJOR_VERSION}${ICU_MINOR_VERSION}d")
         endforeach(${ICU_PRIVATE_VAR_NS}_BASE_NAME)
 
         find_library(
