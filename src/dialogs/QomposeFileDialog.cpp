@@ -18,8 +18,8 @@
 
 #include "QomposeFileDialog.h"
 
-#include <cstdlib>
-#include <cstdio>
+#include <cstddef>
+#include <fstream>
 
 #include <QStringList>
 #include <QFileInfo>
@@ -212,12 +212,13 @@ QString QomposeFileDialog::detectTextCodec(const QString &f)
 
 	// Read 1 KiB from our file for testing.
 
-	FILE *fs = fopen(f.toStdString().c_str(), "r");
+	std::ifstream fs(f.toStdString().c_str());
 	char *buf = (char *) malloc(sizeof(char) * 1024);
+	
+	fs.read(buf, 1024);
+	size_t read = fs.gcount();
 
-	size_t read = fread(buf, sizeof(char), 1024, fs);
-
-	fclose(fs);
+	fs.close();
 
 	// Try to detect the charset.
 
