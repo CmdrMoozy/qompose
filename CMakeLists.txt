@@ -35,14 +35,6 @@ ENDIF()
 
 STRING(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
 
-# Set the Qt prefix we're going to use, if a custom one was requested.
-
-IF(CUSTOM_QT_DIR)
-	SET(CMAKE_PREFIX_PATH ${CUSTOM_QT_DIR} ${CMAKE_PREFIX_PATH})
-	SET(QT_ROOT_DIR ${CUSTOM_QT_DIR})
-	SET(QT_QMAKE_EXECUTABLE ${QT_ROOT_DIR}/bin/qmake)
-ENDIF()
-
 # Define what Qt dependencies we have.
 
 SET(CMAKE_AUTOMOC ON)
@@ -275,4 +267,4 @@ IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 	TARGET_LINK_LIBRARIES(QomposeTest ${Qompose_LIBS} ${DWARF_LIBRARIES})
 ENDIF()
 
-QT5_USE_MODULES(Qompose Widgets Network PrintSupport)
+QT5_USE_MODULES(Qompose Core Widgets Network PrintSupport)
