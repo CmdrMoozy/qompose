@@ -1,4 +1,4 @@
-##############################################################################
+###############################################################################
 #
 # This is the CMake build file for Qompose. The build process can be controlled
 # in several ways:
@@ -8,17 +8,19 @@
 #           cmake -DCMAKE_BUILD_TYPE=Release ..		(This is the default.)
 #           cmake -DCMAKE_BUILD_TYPE=Debug ..
 #
-##############################################################################
+###############################################################################
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 PROJECT(qompose)
 
 SET(CMAKE_COLOR_MAKEFILE ON)
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 
-# Use the new behavior for COMPILE_DEFINITIONS_<Config> target properties.
-# See: http://www.cmake.org/cmake/help/v3.0/policy/CMP0043.html
-cmake_policy(SET CMP0043 NEW)
+IF(CMAKE_MAJOR_VERSION GREATER 2)
+	# Use the new behavior for COMPILE_DEFINITIONS_<Config> properties.
+	# See: http://www.cmake.org/cmake/help/v3.0/policy/CMP0043.html
+	cmake_policy(SET CMP0043 NEW)
+ENDIF()
 
 # Automatically link to the static qtmain.lib on Windows.
 # See: http://www.cmake.org/cmake/help/v3.0/policy/CMP0020.html
@@ -53,17 +55,17 @@ ENDIF()
 # Set INCLUDE and C(XX)FLAGS
 
 IF(UNIX)
-	SET(F_DBG "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual")
-	SET(F_DBG "${F_DBG} -std=c++11 -O0")
+	SET(F_DBG "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith")
+	SET(F_DBG "${F_DBG} -Wcast-qual -std=c++11 -O0")
 
-	SET(F_REL "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith -Wcast-qual")
-	SET(F_REL "${F_REL} -std=c++11 -fomit-frame-pointer")
+	SET(F_REL "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith")
+	SET(F_REL "${F_REL} -Wcast-qual -std=c++11 -fomit-frame-pointer")
 
 	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${F_DBG}")
 	SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${F_REL}")
 ELSE()
 	# Use a static MSVC runtime on Windows.
-	
+
         SET(CMAKE_CXX_FLAGS_DEBUG_INIT "/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1")
         SET(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "/MT /O1 /Ob1 /D NDEBUG")
         SET(CMAKE_CXX_FLAGS_RELEASE_INIT "/MT /O2 /Ob2 /D NDEBUG")
@@ -226,13 +228,13 @@ SET(qompose_test_SOURCES
 QT5_ADD_RESOURCES(qompose_RESOURCES_RCC ${qompose_RESOURCES})
 
 SET(Qompose_LIBS
-	
+
 	${ICU_LIBRARIES}
 	${Qt5Core_LIBRARIES}
 	${Qt5Widgets_LIBRARIES}
 	${Qt5Network_LIBRARIES}
 	${Qt5PrintSupport_LIBRARIES}
-	
+
 )
 
 IF(UNIX)
@@ -243,9 +245,9 @@ ELSE()
 		${CMAKE_PREFIX_PATH}/lib64
 		${CMAKE_PREFIX_PATH}/plugins/platforms
 	)
-	
+
 	SET(Qompose_LIBS
-		
+
 		ws2_32
 		imm32
 		winmm
@@ -255,7 +257,7 @@ ELSE()
 		opengl32
 		qtharfbuzzng
 		${Qompose_LIBS}
-		
+
 	)
 ENDIF()
 
