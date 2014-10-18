@@ -91,7 +91,7 @@ void QomposeNotificationLabel::displayNotification(
 
 		duration = qMax(duration, 1.0) * 2000.0;
 
-		d = static_cast<int>(round(duration));
+		d = static_cast<int>(qRound(duration));
 	}
 
 	QPropertyAnimation *anim = new QPropertyAnimation(

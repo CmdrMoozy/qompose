@@ -62,13 +62,17 @@ class QomposeHotkeyMap
 		 * This is our default constructor, which creates a new hotkey
 		 * map instance.
 		 */
-		QomposeHotkeyMap() = default;
+		QomposeHotkeyMap()
+		{
+		}
 
 		/*!
 		 * This is our default destructor, which cleans up and destroys
 		 * this hotkey map instance.
 		 */
-		virtual ~QomposeHotkeyMap() = default;
+		virtual ~QomposeHotkeyMap()
+		{
+		}
 
 		/*!
 		 * This function adds the given hotkey to the map, with the

@@ -133,10 +133,12 @@ void QomposeColorPickerButton::paintEvent(QPaintEvent *e)
 
 	#ifdef _WIN32
 		r.adjust(5, 5, -5, -7);
-	#elifdef __APPLE__
-		r.adjust(9, 7, -9, -10);
 	#else
-		r.adjust(4, 4, -4, -5);
+		#ifdef __APPLE__
+			r.adjust(9, 7, -9, -10);
+		#else
+			r.adjust(4, 4, -4, -5);
+		#endif
 	#endif
 
 	// Fill our rectangle.

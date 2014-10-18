@@ -33,6 +33,13 @@ QomposeFontMetrics::QomposeFontMetrics(const QFont &f)
 }
 
 /*!
+ * This is our default destructor, which cleans up & destroys our object.
+ */
+QomposeFontMetrics::~QomposeFontMetrics()
+{
+}
+
+/*!
  * This function returns the font this object is currently examining.
  *
  * \return Our current font.

@@ -28,7 +28,7 @@ class QomposeFontMetrics
 {
 	public:
 		QomposeFontMetrics(const QFont &f);
-		virtual ~QomposeFontMetrics() = default;
+		virtual ~QomposeFontMetrics();
 
 		QFont getFont() const;
 		void setFont(const QFont &f);
