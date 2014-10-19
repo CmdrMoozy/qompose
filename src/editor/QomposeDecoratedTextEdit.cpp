@@ -30,8 +30,13 @@
  * \param p Our parent widget.
  */
 QomposeDecoratedTextEdit::QomposeDecoratedTextEdit(QWidget *p)
-	: QPlainTextEdit(p), originalFontSize(11.0), currentFontZoom(1),
-		tabWidth(8)
+	: QPlainTextEdit(p), gutter(nullptr), gutterVisible(false),
+		currentFont(QFont("Courier")), originalFontSize(11.0),
+		currentFontZoom(1), tabWidth(8), wrapGuideVisible(false),
+		wrapGuideWidth(0), wrapGuideColor(QColor(255, 255, 255)),
+		currentLineHighlight(QColor(128, 128, 128)),
+		gutterForeground(QColor(255, 255, 255)),
+		gutterBackground(QColor(0, 0, 0))
 {
 	// Set our editor's default font.
 
@@ -622,11 +627,13 @@ void QomposeDecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 	{
 		if(block.isVisible() && bottom >= e->rect().top())
 		{
-			QString number = QString::number(blockNumber + 1);
+			QString number =
+				QString::number(blockNumber + 1);
+
 			painter.setPen(gutterForeground);
 			painter.drawText(0, top, gutter->width(),
-				fontMetrics().height(), Qt::AlignCenter,
-				number);
+				fontMetrics().height(),
+				Qt::AlignCenter, number);
 		}
 
 		block = block.next();

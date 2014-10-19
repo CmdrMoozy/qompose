@@ -37,7 +37,8 @@ class QomposeGutter : public QWidget
 
 		void setEditor(QomposeDecoratedTextEdit *e);
 
-		QSize sizeHint() const;
+		virtual int width() const;
+		virtual QSize sizeHint() const;
 
 	protected:
 		virtual void paintEvent(QPaintEvent *e);
