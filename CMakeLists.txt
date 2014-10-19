@@ -28,6 +28,14 @@ cmake_policy(SET CMP0020 NEW)
 
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
+# Allow for custom Qt prefixes, for e.g. developer builds.
+
+IF(CUSTOM_QT_DIR)
+	SET(CMAKE_PREFIX_PATH ${CUSTOM_QT_DIR} ${CMAKE_PREFIX_PATH})
+	SET(QT_ROOT_DIR ${CUSTOM_QT_DIR})
+	SET(QT_QMAKE_EXECUTABLE ${QT_ROOT_DIR}/bin/qmake)
+ENDIF()
+
 # Note which type of build we're performing.
 
 IF(NOT CMAKE_BUILD_TYPE)
