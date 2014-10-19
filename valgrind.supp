@@ -1,117 +1,31 @@
-{
-   libx11_leak
-   Memcheck:Leak
-   fun:realloc
-   obj:/usr/lib64/libX11.so.6.3.0
-   obj:/usr/lib64/libX11.so.6.3.0
-   obj:/usr/lib64/libX11.so.6.3.0
-   fun:_XlcCreateLC
-   fun:_XlcDefaultLoader
-   fun:_XOpenLC
-   fun:_XrmInitParseInfo
-   obj:/usr/lib64/libX11.so.6.3.0
-   fun:XrmGetStringDatabase
-   obj:/usr/lib64/libX11.so.6.3.0
-   fun:XGetDefault
-}
+# Supress the use of uninitialized memory in Qt. This is a bug, but isn't
+# related to any Qompose code specifically. See:
+#
+# https://codereview.qt-project.org/#/c/97539/
 
 {
-   qtcore_qlibrary_leak
-   Memcheck:Leak
-   fun:_Znwm
-   obj:/usr/lib64/qt4/libQtCore.so.4.8.4
-   fun:_ZN8QLibrary21setFileNameAndVersionERK7QStringS2_
-   fun:_ZN8QLibraryC1ERK7QStringS2_P7QObject
-   obj:/usr/lib64/qt4/libQtCore.so.4.8.4
-   fun:_ZN14QLocalePrivate19updateSystemPrivateEv
-   obj:/usr/lib64/qt4/libQtCore.so.4.8.4
-   obj:/usr/lib64/qt4/libQtCore.so.4.8.4
-   fun:_ZN7QLocaleC1Ev
-   obj:/usr/lib64/qt4/libQtCore.so.4.8.4
-   obj:/usr/lib64/qt4/libQtCore.so.4.8.4
-   obj:/usr/lib64/qt4/libQtCore.so.4.8.4
+   QFontEngineFT-Uninitialized-Buffer
+   Memcheck:Cond
+   ...
+   fun:_ZL22qt_alphargbblit_argb32P13QRasterBufferiijPKjiiiPK9QClipData
+   fun:_ZN18QRasterPaintEngine11alphaPenBltEPKviiiiii
+   fun:_ZN18QRasterPaintEngine16drawCachedGlyphsEiPKjPK11QFixedPointP11QFontEngine
+   fun:_ZN18QRasterPaintEngine12drawTextItemERK7QPointFRK9QTextItem
+   fun:_ZN15QPainterPrivate12drawTextItemERK7QPointFRK9QTextItemP11QTextEngine
+   fun:_ZNK9QTextLine4drawEP8QPainterRK7QPointFPKN11QTextLayout11FormatRangeE
+   fun:_Z14qt_format_textRK5QFontRK6QRectFiPK11QTextOptionRK7QStringPS2_iPiiP8QPainter
+   ...
 }
-
 {
-   qtgui_glib_leak_1
-   Memcheck:Leak
-   fun:memalign
-   fun:posix_memalign
-   obj:/usr/lib64/libglib-2.0.so.0.3200.4
-   fun:g_slice_alloc
-   fun:g_slist_prepend
-   fun:g_once_init_enter
-   fun:g_main_context_new
-   fun:g_main_context_default
-   fun:_ZN27QEventDispatcherGlibPrivateC1EP13_GMainContext
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   fun:_ZN19QApplicationPrivate21createEventDispatcherEv
-}
-
-{
-   qtgui_lib_leak_2
-   Memcheck:Leak
-   fun:memalign
-   fun:posix_memalign
-   obj:/usr/lib64/libglib-2.0.so.0.3200.4
-   fun:g_slice_alloc
-   fun:g_slice_alloc0
-   fun:g_thread_self
-   fun:g_main_context_acquire
-   fun:g_main_context_push_thread_default
-   fun:_ZN27QEventDispatcherGlibPrivateC1EP13_GMainContext
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   fun:_ZN19QApplicationPrivate21createEventDispatcherEv
-}
-
-{
-   qtcore_nss_leak
-   Memcheck:Leak
-   fun:malloc
-   fun:nss_parse_service_list
-   fun:__nss_database_lookup
-   obj:*
-   obj:*
-   fun:getpwuid_r@@GLIBC_2.2.5
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   fun:_SmcProcessMessage
-   fun:IceProcessMessages
-   fun:_ZN11QMetaObject8activateEP7QObjectPKS_iPPv
-   fun:_ZN15QSocketNotifier9activatedEi
-}
-
-{
-   qtgui_qfactoryloader_leak_1
-   Memcheck:Leak
-   fun:_Znwm
-   obj:/usr/lib64/qt4/libQtCore.so.4.8.4
-   fun:_ZN14QFactoryLoader9updateDirERK7QStringR9QSettings
-   fun:_ZN14QFactoryLoader6updateEv
-   fun:_ZN14QFactoryLoaderC1EPKcRK7QStringN2Qt15CaseSensitivityE
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   fun:_ZN13QStyleFactory6createERK7QString
-   fun:_ZN12QApplication5styleEv
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   fun:_ZN19QApplicationPrivate9constructEP9_XDisplaymm
-   fun:_ZN12QApplicationC1ERiPPci
-}
-
-{
-   qtgui_qfactoryloader_leak_2
-   Memcheck:Leak
-   fun:_Znwm
-   obj:/usr/lib64/qt4/libQtCore.so.4.8.4
-   fun:_ZN14QFactoryLoader9updateDirERK7QStringR9QSettings
-   fun:_ZN14QFactoryLoader6updateEv
-   fun:_ZN14QFactoryLoaderC1EPKcRK7QStringN2Qt15CaseSensitivityE
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   fun:_ZN19QApplicationPrivate18x11_apply_settingsEv
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   obj:/usr/lib64/qt4/libQtGui.so.4.8.4
-   fun:_ZN19QApplicationPrivate9constructEP9_XDisplaymm
-   fun:_ZN12QApplicationC1ERiPPci
+   QFontEngineFT-Uninitialized-Buffer-Value
+   Memcheck:Value8
+   ...
+   fun:_ZL22qt_alphargbblit_argb32P13QRasterBufferiijPKjiiiPK9QClipData
+   fun:_ZN18QRasterPaintEngine11alphaPenBltEPKviiiiii
+   fun:_ZN18QRasterPaintEngine16drawCachedGlyphsEiPKjPK11QFixedPointP11QFontEngine
+   fun:_ZN18QRasterPaintEngine12drawTextItemERK7QPointFRK9QTextItem
+   fun:_ZN15QPainterPrivate12drawTextItemERK7QPointFRK9QTextItemP11QTextEngine
+   fun:_ZNK9QTextLine4drawEP8QPainterRK7QPointFPKN11QTextLayout11FormatRangeE
+   fun:_Z14qt_format_textRK5QFontRK6QRectFiPK11QTextOptionRK7QStringPS2_iPiiP8QPainter
+   ...
 }
