@@ -13,7 +13,6 @@
    fun:_ZN18QRasterPaintEngine12drawTextItemERK7QPointFRK9QTextItem
    fun:_ZN15QPainterPrivate12drawTextItemERK7QPointFRK9QTextItemP11QTextEngine
    fun:_ZNK9QTextLine4drawEP8QPainterRK7QPointFPKN11QTextLayout11FormatRangeE
-   fun:_Z14qt_format_textRK5QFontRK6QRectFiPK11QTextOptionRK7QStringPS2_iPiiP8QPainter
    ...
 }
 {
@@ -26,6 +25,161 @@
    fun:_ZN18QRasterPaintEngine12drawTextItemERK7QPointFRK9QTextItem
    fun:_ZN15QPainterPrivate12drawTextItemERK7QPointFRK9QTextItemP11QTextEngine
    fun:_ZNK9QTextLine4drawEP8QPainterRK7QPointFPKN11QTextLayout11FormatRangeE
-   fun:_Z14qt_format_textRK5QFontRK6QRectFiPK11QTextOptionRK7QStringPS2_iPiiP8QPainter
    ...
+}
+
+# Suppress false positives / ignorable issues in Qt 5.
+
+{
+   QFontDatabase-Leak-1
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:_ZL12initializeDbv
+   fun:_ZN13QFontDatabase8findFontEiPK12QFontPrivateRK8QFontDefbb
+   fun:_ZN13QFontDatabase4loadEPK12QFontPrivatei
+   fun:_ZNK12QFontPrivate15engineForScriptEi
+   fun:_ZN11QScriptLine16setDefaultHeightEP11QTextEngine
+   fun:_ZN9QTextLine13layout_helperEi
+}
+{
+   QFontDatabase-Leak-2
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:_ZL16fallbackFamiliesRK7QStringN5QFont5StyleENS2_9StyleHintEN5QChar6ScriptE
+   fun:_ZN13QFontDatabase8findFontEiPK12QFontPrivateRK8QFontDefbb
+   fun:_ZN13QFontDatabase4loadEPK12QFontPrivatei
+   fun:_ZNK12QFontPrivate15engineForScriptEi
+   fun:_ZN11QScriptLine16setDefaultHeightEP11QTextEngine
+   fun:_ZN9QTextLine13layout_helperEi
+   fun:_ZN9QTextLine12setLineWidthEd
+}
+{
+   QFontDatabase-Leak-3
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:_ZL12initializeDbv
+   fun:_ZN13QFontDatabase8findFontEiPK12QFontPrivateRK8QFontDefbb
+   fun:_ZN13QFontDatabase4loadEPK12QFontPrivatei
+   fun:_ZNK12QFontPrivate15engineForScriptEi
+   fun:_ZN11QScriptLine16setDefaultHeightEP11QTextEngine
+}
+{
+   QFontDatabase-Leak-4
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:calloc
+   fun:_ZN18hb_object_header_t6createEj
+   fun:_Z16hb_object_createI9hb_face_tEPT_v
+   fun:hb_face_create_for_tables
+   fun:_ZL18_hb_qt_face_createP11QFontEngine
+   fun:_Z25hb_qt_face_get_for_engineP11QFontEngine
+   fun:_ZNK11QFontEngine12harfbuzzFaceEv
+   ...
+   fun:_ZL16loadSingleEngineiRK8QFontDefP13QtFontFoundryP11QtFontStyleP10QtFontSize
+   fun:_ZL10loadEngineiRK8QFontDefP12QtFontFamilyP13QtFontFoundryP11QtFontStyleP10QtFontSize
+}
+{
+   QApplication-Leak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:_ZN22QSessionManagerPrivateC1ERK7QStringS2_
+   fun:_ZN15QSessionManagerC1EP15QGuiApplicationR7QStringS3_
+   fun:_ZN22QGuiApplicationPrivate4initEv
+   fun:_ZN15QGuiApplicationC1ER22QGuiApplicationPrivate
+   fun:_ZN12QApplicationC1ERiPPci
+   ...
+}
+{
+   QThread-Leak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_xcb_in_read
+   fun:_xcb_conn_wait
+   fun:xcb_wait_for_event
+   ...
+   fun:_ZN14QThreadPrivate5startEPv
+   fun:start_thread
+   fun:clone
+}
+
+# Suppress some false positives / ignorable issues in libX11.
+
+{
+   LibX11-Leak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:realloc
+   fun:add_codeset.isra.10
+   fun:load_generic
+   fun:initialize
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+   fun:XGetDefault
+}
+
+# Suppress some false positives / ignorable issues in libexpat.
+
+{
+   LibExpat-Leak
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:doContent
+   fun:contentProcessor
+   fun:doProlog
+   fun:prologProcessor
+   fun:XML_ParseBuffer
+   ...
+}
+
+# Suppress some unhelpful Valgrind output.
+
+{
+   Unknown-Symbol-Leak-1
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+}
+{
+   Unknown-Symbol-Leak-2
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:calloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
 }
