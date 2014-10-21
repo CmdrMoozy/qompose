@@ -322,7 +322,6 @@ QString QomposeBufferWidget::getDefaultDirectory() const
 				if(!buf->getDirectory().isNull())
 				{
 					defaultDirectory = buf->getDirectory();
-					found = true;
 					break;
 				}
 			}
@@ -420,11 +419,9 @@ void QomposeBufferWidget::doRevert()
 void QomposeBufferWidget::doRevertAll()
 { /* SLOT */
 
-	QomposeBuffer *buf;
-
 	for(int i = 0; i < tabWidget->count(); ++i)
 	{
-		buf = bufferAt(i);
+		QomposeBuffer *buf = bufferAt(i);
 
 		if(buf != NULL)
 			buf->revert();
@@ -1076,7 +1073,7 @@ QomposeBuffer *QomposeBufferWidget::doOpenDescriptor(
 		{
 			tabWidget->removeTab(idx);
 			delete b;
-			tabs.empty();
+			tabs.clear();
 		}
 	}
 
