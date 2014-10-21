@@ -18,8 +18,6 @@
 
 #include "QomposeApplication.h"
 
-#include <cstdlib>
-
 #include <QLocalServer>
 
 #include "QomposeDefines.h"
@@ -32,18 +30,21 @@
  * \param av The command-line arguments.
  */
 QomposeApplication::QomposeApplication(int &ac, char **av)
-	: QApplication(ac, av), sappServer(NULL)
+	: QApplication(ac, av), sappServer(nullptr)
 {
 }
 
 /*!
- * This is our default destructor, which cleans up our local "single application
- * server," and destroys all of our open window objects.
+ * This is our default destructor, which cleans up our local "single
+ * application server," and destroys all of our open window objects.
  */
 QomposeApplication::~QomposeApplication()
 {
-	if(sappServer != NULL)
+	if(sappServer != nullptr)
+	{
 		delete sappServer;
+		sappServer = nullptr;
+	}
 
 	while(windows.length() > 0)
 	{
@@ -53,21 +54,28 @@ QomposeApplication::~QomposeApplication()
 }
 
 /*!
- * This function initializes our QLocalServer instance by attempting to listen using
- * our pre-defined GUID value, to ensure that only one instance of our application is
- * running at a time. Duplicate instances will be handled by notifying the original
- * process.
+ * This function initializes our QLocalServer instance by attempting to listen
+ * using our pre-defined GUID value, to ensure that only one instance of our
+ * application is running at a time. Duplicate instances will be handled by
+ * notifying the original process.
  */
 void QomposeApplication::initializeLocalServer()
 {
+	if(sappServer != nullptr)
+	{
+		delete sappServer;
+		sappServer = nullptr;
+	}
+
 	sappServer = new QLocalServer();
 
 	if(!sappServer->listen(QOMPOSE_GUID))
 	{
 		/*
-		 * If we got to this point, it means that we didn't get a response
-		 * from the person that created our socket, but it is still present
-		 * for some reason. Try removing it; if that doesn't work, crash.
+		 * If we got to this point, it means that we didn't get a
+		 * response from the person that created our socket, but it is
+		 * still present for some reason. Try removing it; if that
+		 * doesn't work, crash.
 		 */
 
 		QLocalServer::removeServer(QOMPOSE_GUID);
@@ -81,8 +89,8 @@ void QomposeApplication::initializeLocalServer()
 }
 
 /*!
- * This slot handles a duplicate instance of our application being started by simply
- * opening a new window on the existing instance instead.
+ * This slot handles a duplicate instance of our application being started by
+ * simply opening a new window on the existing instance instead.
  */
 void QomposeApplication::doDuplicateInstanceDetected()
 { /* SLOT */
