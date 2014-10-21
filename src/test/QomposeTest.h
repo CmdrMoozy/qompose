@@ -62,9 +62,9 @@ class QomposeTest
 		static void assertEquals(const T &a, const T &b)
 		{
 			struct comparator {
-				bool operator()(const T &a, const T &b)
+				bool operator()(const T &ca, const T &cb)
 				{
-					return a == b;
+					return ca == cb;
 				}
 			} comp;
 
