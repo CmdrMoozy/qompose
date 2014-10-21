@@ -68,7 +68,7 @@ class QomposeTest
 				}
 			} comp;
 
-			QomposeTest::assertEquals(a, b, comp);
+			assertEquals(a, b, comp);
 		}
 
 		virtual ~QomposeTest();
