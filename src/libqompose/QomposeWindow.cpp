@@ -49,7 +49,10 @@
  * \param f The Qt window flags to use for this window.
  */
 QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
-	: QMainWindow(p, f)
+	: QMainWindow(p, f), settings(nullptr), preferencesDialog(nullptr),
+		findDialog(nullptr), replaceDialog(nullptr),
+		goToDialog(nullptr), aboutDialog(nullptr), mainMenu(nullptr),
+		buffers(nullptr), statusBar(nullptr)
 {
 	settings = new QomposeSettings(this);
 

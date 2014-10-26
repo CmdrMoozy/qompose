@@ -34,21 +34,24 @@ class QomposeSettings : public QObject
 	Q_OBJECT
 
 	public:
-		QomposeSettings(QObject *p = 0);
+		QomposeSettings(QObject * = nullptr);
 		virtual ~QomposeSettings();
 
 		int count() const;
 
 		void resetDefaults();
-		void resetDefault(const QString &k);
+		void resetDefault(const QString &);
 
-		void setSetting(const QString &k, const QVariant &v);
-		bool containsSetting(const QString &k) const;
-		QVariant getSetting(const QString &k) const;
+		void setSetting(const QString &, const QVariant &);
+		bool containsSetting(const QString &) const;
+		QVariant getSetting(const QString &) const;
 
 	private:
-		static const QList< QPair<QString, QVariant> > defaults;
+		static const QList<QPair<QString, QVariant>> defaults;
 		QSettings *settings;
+
+		QomposeSettings(const QomposeSettings &);
+		QomposeSettings &operator=(const QomposeSettings &);
 
 		void initializeDefaults();
 

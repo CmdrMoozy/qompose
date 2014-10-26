@@ -34,15 +34,15 @@ class QomposeStatusBar : public QStatusBar
 	Q_OBJECT
 
 	public:
-		QomposeStatusBar(QWidget *p = 0);
+		QomposeStatusBar(QWidget * = nullptr);
 		virtual ~QomposeStatusBar();
 
-		void displayNotification(const QString &n, bool c = false);
+		void displayNotification(const QString &, bool = false);
 
-		void setCurrentTabPath(const QString &p);
+		void setCurrentTabPath(const QString &);
 
-		void setLine(int l);
-		void setColumn(int c);
+		void setLine(int);
+		void setColumn(int);
 
 	private:
 		QWidget *statusWidget;
@@ -52,6 +52,9 @@ class QomposeStatusBar : public QStatusBar
 		QLabel *tabPathLabel;
 		QLabel *lineLabel;
 		QLabel *columnLabel;
+
+		QomposeStatusBar(const QomposeStatusBar &);
+		QomposeStatusBar &operator=(const QomposeStatusBar &);
 };
 
 #endif

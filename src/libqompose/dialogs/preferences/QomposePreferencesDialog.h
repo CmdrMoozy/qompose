@@ -35,15 +35,15 @@ class QomposePreferencesListModel;
 class QomposeSettings;
 
 /*!
- * \brief This class implements a dialog containing a list of preferences widgets.
+ * \brief This class implements a dialog for a list of preferences widgets.
  */
 class QomposePreferencesDialog : public QDialog
 {
 	Q_OBJECT
 
 	public:
-		QomposePreferencesDialog(QomposeSettings *s, QWidget *p = 0,
-			Qt::WindowFlags f = 0);
+		QomposePreferencesDialog(QomposeSettings *,
+			QWidget * = nullptr, Qt::WindowFlags f = nullptr);
 		virtual ~QomposePreferencesDialog();
 
 		void discardChanges();
@@ -69,10 +69,14 @@ class QomposePreferencesDialog : public QDialog
 		QPushButton *cancelButton;
 		QPushButton *defaultsButton;
 
+		QomposePreferencesDialog(const QomposePreferencesDialog &);
+		QomposePreferencesDialog &operator=(
+			const QomposePreferencesDialog &);
+
 		void createPreferencesModel();
 
 	private Q_SLOTS:
-		void doWidgetActivated(const QModelIndex &i);
+		void doWidgetActivated(const QModelIndex &);
 		void doOk();
 		void doApply();
 		void doDefaults();

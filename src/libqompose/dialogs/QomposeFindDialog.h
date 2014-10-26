@@ -33,20 +33,21 @@ class QShowEvent;
 class QomposeFindQuery;
 
 /*!
- * \brief This class implements a dialog to configure the options of a find query.
+ * \brief This class implements a dialog to configure a find query.
  */
 class QomposeFindDialog : public QDialog
 {
 	Q_OBJECT
 
 	public:
-		QomposeFindDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
+		QomposeFindDialog(QWidget * = nullptr,
+			Qt::WindowFlags = nullptr);
 		virtual ~QomposeFindDialog();
 
 		const QomposeFindQuery *getQuery() const;
 
 	protected:
-		virtual void showEvent(QShowEvent *e);
+		virtual void showEvent(QShowEvent *);
 
 	private:
 		QomposeFindQuery *query;
@@ -68,6 +69,9 @@ class QomposeFindDialog : public QDialog
 		QGridLayout *buttonsLayout;
 		QPushButton *findButton;
 		QPushButton *closeButton;
+
+		QomposeFindDialog(const QomposeFindDialog &);
+		QomposeFindDialog &operator=(const QomposeFindDialog &);
 
 		void initializeGUI();
 

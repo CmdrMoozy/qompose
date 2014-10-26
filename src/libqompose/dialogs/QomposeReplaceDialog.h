@@ -33,20 +33,21 @@ class QShowEvent;
 class QomposeReplaceQuery;
 
 /*!
- * \brief This class implements a dialog to configure the options of a replace query.
+ * \brief This class implements a dialog to configure a replace query.
  */
 class QomposeReplaceDialog : public QDialog
 {
 	Q_OBJECT
 
 	public:
-		QomposeReplaceDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
+		QomposeReplaceDialog(QWidget * = nullptr,
+			Qt::WindowFlags = nullptr);
 		virtual ~QomposeReplaceDialog();
 
 		const QomposeReplaceQuery *getQuery() const;
 
 	protected:
-		virtual void showEvent(QShowEvent *e);
+		virtual void showEvent(QShowEvent *);
 
 	private:
 		QomposeReplaceQuery *query;
@@ -73,6 +74,9 @@ class QomposeReplaceDialog : public QDialog
 		QPushButton *replaceSelButton;
 		QPushButton *replaceAllButton;
 		QPushButton *closeButton;
+
+		QomposeReplaceDialog(const QomposeReplaceDialog &);
+		QomposeReplaceDialog &operator=(const QomposeReplaceDialog &);
 
 		void initializeGUI();
 

@@ -45,10 +45,10 @@ class QomposeMainMenu : public QMenuBar
 	Q_OBJECT
 
 	public:
-		QomposeMainMenu(QomposeSettings *s, QWidget *p = 0);
+		QomposeMainMenu(QomposeSettings *, QWidget * = nullptr);
 		virtual ~QomposeMainMenu();
 
-		void connectBufferWidget(const QomposeBufferWidget *b);
+		void connectBufferWidget(const QomposeBufferWidget *);
 
 	private:
 		QomposeSettings *settings;
@@ -102,8 +102,11 @@ class QomposeMainMenu : public QMenuBar
 			QAction *debugAction;
 		#endif
 
+		QomposeMainMenu(const QomposeMainMenu &);
+		QomposeMainMenu &operator=(const QomposeMainMenu &);
+
 	private Q_SLOTS:
-		void doFileOpened(const QString &p);
+		void doFileOpened(const QString &);
 
 	Q_SIGNALS:
 		void printTriggered(bool);

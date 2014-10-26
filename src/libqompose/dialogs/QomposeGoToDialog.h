@@ -36,13 +36,14 @@ class QomposeGoToDialog : public QDialog
 	Q_OBJECT
 
 	public:
-		QomposeGoToDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
+		QomposeGoToDialog(QWidget * = nullptr,
+			Qt::WindowFlags = nullptr);
 		virtual ~QomposeGoToDialog();
 
 		int getSelectedLine() const;
 
 	protected:
-		virtual void showEvent(QShowEvent *e);
+		virtual void showEvent(QShowEvent *);
 
 	private:
 		int selectedLine;
@@ -56,6 +57,9 @@ class QomposeGoToDialog : public QDialog
 		QGridLayout *buttonsLayout;
 		QPushButton *closeButton;
 		QPushButton *goToButton;
+
+		QomposeGoToDialog(const QomposeGoToDialog &);
+		QomposeGoToDialog &operator=(const QomposeGoToDialog &);
 
 		void initializeGUI();
 

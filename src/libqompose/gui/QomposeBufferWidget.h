@@ -43,18 +43,18 @@ class QomposeBufferWidget : public QWidget
 	Q_OBJECT
 
 	public:
-		QomposeBufferWidget(QomposeSettings *s, QWidget *p = 0);
+		QomposeBufferWidget(QomposeSettings *, QWidget * = nullptr);
 		virtual ~QomposeBufferWidget();
 
 		int count() const;
-		QomposeBuffer *bufferAt(int i) const;
+		QomposeBuffer *bufferAt(int) const;
 		QomposeBuffer *currentBuffer() const;
 		bool hasCurrentBuffer() const;
-		void setCurrentBuffer(int i);
+		void setCurrentBuffer(int);
 
 		bool prepareCloseParent();
 
-		int findBufferWithPath(const QString &p);
+		int findBufferWithPath(const QString &);
 
 	private:
 		QomposeSettings *settings;
@@ -65,16 +65,19 @@ class QomposeBufferWidget : public QWidget
 		QSet<QomposeBuffer *> tabs;
 		QStack<QomposeClosedBufferDescriptor> closedTabs;
 
+		QomposeBufferWidget(const QomposeBufferWidget &);
+		QomposeBufferWidget &operator=(const QomposeBufferWidget &);
+
 		QomposeBuffer *newBuffer();
 		void removeCurrentBuffer();
-		void moveBuffer(int f, int t);
+		void moveBuffer(int, int);
 
 		QString getDefaultDirectory() const;
 
 	public Q_SLOTS:
 		void doNew();
 		void doOpen();
-		void doOpenPath(const QString &p);
+		void doOpenPath(const QString &);
 		void doReopen();
 		void doRevert();
 		void doRevertAll();
@@ -91,32 +94,37 @@ class QomposeBufferWidget : public QWidget
 		void doDeselect();
 		void doIncreaseIndent();
 		void doDecreaseIndent();
-		QomposeEditor::FindResult doFindNext(const QomposeFindQuery *q);
-		QomposeEditor::FindResult doFindPrevious(const QomposeFindQuery *q);
-		QomposeEditor::FindResult doReplace(const QomposeReplaceQuery *q);
-		QomposeEditor::FindResult doReplaceSelection(const QomposeReplaceQuery *q);
-		QomposeEditor::FindResult doReplaceAll(const QomposeReplaceQuery *q);
-		void doGoTo(int l);
+		QomposeEditor::FindResult doFindNext(
+			const QomposeFindQuery *);
+		QomposeEditor::FindResult doFindPrevious(
+			const QomposeFindQuery *);
+		QomposeEditor::FindResult doReplace(
+			const QomposeReplaceQuery *);
+		QomposeEditor::FindResult doReplaceSelection(
+			const QomposeReplaceQuery *);
+		QomposeEditor::FindResult doReplaceAll(
+			const QomposeReplaceQuery *);
+		void doGoTo(int);
 		void doPreviousBuffer();
 		void doNextBuffer();
 		void doMoveBufferLeft();
 		void doMoveBufferRight();
 
-		void doPrint(QPrinter *p);
+		void doPrint(QPrinter *);
 
 	private Q_SLOTS:
-		void doTabChanged(int i);
-		void doTabCloseRequested(int i);
-		void doTabClosing(int i);
+		void doTabChanged(int);
+		void doTabCloseRequested(int);
+		void doTabClosing(int);
 
-		void doTabTitleChanged(const QString &t);
-		void doTabPathChanged(const QString &p);
+		void doTabTitleChanged(const QString &);
+		void doTabPathChanged(const QString &);
 
 		void doCursorPositionChanged();
 
 		QomposeBuffer *doOpenDescriptor(
-			const QomposeFileDescriptor &d);
-		void doReopenBuffer(const QomposeClosedBufferDescriptor &d);
+			const QomposeFileDescriptor &);
+		void doReopenBuffer(const QomposeClosedBufferDescriptor &);
 
 	Q_SIGNALS:
 		void pathChanged(const QString &);

@@ -29,12 +29,13 @@ class QWidget;
 class QLabel;
 
 /*!
- * \brief This class implements our "About" dialog, with application and license information.
+ * \brief This class implements our "About" dialog.
  */
 class QomposeAboutDialog : public QDialog
 {
 	public:
-		QomposeAboutDialog(QWidget *p = 0, Qt::WindowFlags f = 0);
+		QomposeAboutDialog(QWidget * = nullptr,
+			Qt::WindowFlags = nullptr);
 		virtual ~QomposeAboutDialog();
 
 	private:
@@ -51,6 +52,9 @@ class QomposeAboutDialog : public QDialog
 		QTextEdit *qomposeTextEdit;
 
 		QPushButton *closeButton;
+
+		QomposeAboutDialog(const QomposeAboutDialog &);
+		QomposeAboutDialog &operator=(const QomposeAboutDialog &);
 
 		void initializeGUI();
 		void loadLicense();
