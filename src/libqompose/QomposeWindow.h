@@ -45,11 +45,11 @@ class QomposeWindow : public QMainWindow
 	Q_OBJECT
 
 	public:
-		QomposeWindow(QWidget *p = NULL, Qt::WindowFlags f = 0);
+		QomposeWindow(QWidget * = nullptr, Qt::WindowFlags = nullptr);
 		virtual ~QomposeWindow();
 
 	protected:
-		void closeEvent(QCloseEvent *e);
+		void closeEvent(QCloseEvent *);
 
 	private:
 		QomposeSettings *settings;
@@ -66,15 +66,18 @@ class QomposeWindow : public QMainWindow
 
 		QomposeStatusBar *statusBar;
 
+		QomposeWindow(const QomposeWindow &);
+		QomposeWindow &operator=(const QomposeWindow &);
+
 		void initializeDialogs();
 		void initializeMenus();
 		void applyExistingSettings();
 
-		void handleFindResult(QomposeEditor::FindResult r);
+		void handleFindResult(QomposeEditor::FindResult);
 
 	private Q_SLOTS:
-		void doTabPathChanged(const QString &p);
-		void doCursorPositionChanged(int l, int c);
+		void doTabPathChanged(const QString &);
+		void doCursorPositionChanged(int, int);
 		void doSearchWrapped();
 
 		void doPreferencesDialog();
@@ -94,7 +97,7 @@ class QomposeWindow : public QMainWindow
 			void doDebug();
 		#endif
 
-		void doSettingChanged(const QString &k, const QVariant &v);
+		void doSettingChanged(const QString &, const QVariant &);
 };
 
 #endif

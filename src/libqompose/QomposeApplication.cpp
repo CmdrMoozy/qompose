@@ -30,7 +30,8 @@
  * \param av The command-line arguments.
  */
 QomposeApplication::QomposeApplication(int &ac, char **av)
-	: QApplication(ac, av), sappServer(nullptr)
+	: QApplication(ac, av), sappServer(nullptr),
+		windows(QList<QomposeWindow *>())
 {
 }
 

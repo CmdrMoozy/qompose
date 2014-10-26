@@ -26,14 +26,14 @@ class QLocalServer;
 class QomposeWindow;
 
 /*!
- * \brief This class extends QApplication by allowing only one instance to exist at a time.
+ * \brief This class extends QApplication, allowing only one instance to exist.
  */
 class QomposeApplication : public QApplication
 {
 	Q_OBJECT
 
 	public:
-		QomposeApplication(int &ac, char **av);
+		QomposeApplication(int &, char **);
 		virtual ~QomposeApplication();
 
 		void initializeLocalServer();
@@ -41,6 +41,9 @@ class QomposeApplication : public QApplication
 	private:
 		QLocalServer *sappServer;
 		QList<QomposeWindow *> windows;
+
+		QomposeApplication(const QomposeApplication &);
+		QomposeApplication &operator=(const QomposeApplication &);
 
 	private Q_SLOTS:
 		void doDuplicateInstanceDetected();

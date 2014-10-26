@@ -39,48 +39,48 @@ class QomposeDecoratedTextEdit : public QPlainTextEdit
 	Q_OBJECT
 
 	public:
-		QomposeDecoratedTextEdit(QWidget *p = 0);
+		QomposeDecoratedTextEdit(QWidget * = nullptr);
 		virtual ~QomposeDecoratedTextEdit();
 
-		void setGutterVisible(bool v);
+		void setGutterVisible(bool);
 		bool isGutterVisible();
 
 		virtual QFont font() const;
-		virtual void setFont(const QFont &f);
+		virtual void setFont(const QFont &);
 		int fontZoom() const;
 		qreal fontZoomSize() const;
-		void setFontZoom(int z);
+		void setFontZoom(int);
 		void resetFontZoom();
 
 		int tabWidthSpaces() const;
-		void setTabWidthSpaces(int w);
+		void setTabWidthSpaces(int);
 
 		bool isWrapGuideVisible() const;
-		void setWrapGuideVisible(bool v);
+		void setWrapGuideVisible(bool);
 		int getWrapGuideColumnWidth() const;
-		void setWrapGuideColumnWidth(int w);
+		void setWrapGuideColumnWidth(int);
 		QColor getWrapGuideColor() const;
-		void setWrapGuideColor(const QColor &c);
+		void setWrapGuideColor(const QColor &);
 
 		QColor getEditorForeground() const;
-		void setEditorForeground(const QColor &c);
+		void setEditorForeground(const QColor &);
 		QColor getEditorBackground() const;
-		void setEditorBackground(const QColor &c);
+		void setEditorBackground(const QColor &);
 		QColor getCurrentLineColor() const;
-		void setCurrentLineColor(const QColor &c);
+		void setCurrentLineColor(const QColor &);
 		QColor getGutterForeground() const;
-		void setGutterForeground(const QColor &c);
+		void setGutterForeground(const QColor &);
 		QColor getGutterBackground() const;
-		void setGutterBackground(const QColor &c);
+		void setGutterBackground(const QColor &);
 
 	protected:
-		virtual void paintEvent(QPaintEvent *e);
+		virtual void paintEvent(QPaintEvent *);
 
-		virtual void focusInEvent(QFocusEvent *e);
-		virtual void focusOutEvent(QFocusEvent *e);
-		virtual void resizeEvent(QResizeEvent *e);
-		virtual void wheelEvent(QWheelEvent *e);
-		virtual void mouseReleaseEvent(QMouseEvent *e);
+		virtual void focusInEvent(QFocusEvent *);
+		virtual void focusOutEvent(QFocusEvent *);
+		virtual void resizeEvent(QResizeEvent *);
+		virtual void wheelEvent(QWheelEvent *);
+		virtual void mouseReleaseEvent(QMouseEvent *);
 
 	private:
 		QomposeGutter *gutter;
@@ -100,9 +100,13 @@ class QomposeDecoratedTextEdit : public QPlainTextEdit
 		QColor gutterForeground;
 		QColor gutterBackground;
 
-		void gutterPaintEvent(QPaintEvent *e);
+		void gutterPaintEvent(QPaintEvent *);
 		int gutterWidth();
 		qreal wrapGuideOffset();
+
+		QomposeDecoratedTextEdit(const QomposeDecoratedTextEdit &);
+		QomposeDecoratedTextEdit &operator=(
+			const QomposeDecoratedTextEdit &);
 
 	public Q_SLOTS:
 		void fullUpdate();
@@ -111,7 +115,7 @@ class QomposeDecoratedTextEdit : public QPlainTextEdit
 	private Q_SLOTS:
 		void highlightCurrentLine();
 		void updateGutterWidth();
-		void updateGutter(const QRect &r, int dy);
+		void updateGutter(const QRect &, int);
 };
 
 #endif
