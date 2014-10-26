@@ -21,7 +21,7 @@
 
 #include <string>
 
-#include "test/QomposeAssertionException.h"
+#include "QomposeTest/QomposeAssertionException.h"
 
 /*!
  * \brief This class implements a generic unit testing superclass.

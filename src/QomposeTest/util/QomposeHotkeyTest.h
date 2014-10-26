@@ -16,39 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef _WIN32
-	#include <QtPlugin>
-	Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
-#endif
+#ifndef INCLUDE_QOMPOSE_HOTKEY_TEST_H
+#define INCLUDE_QOMPOSE_HOTKEY_TEST_H
 
-#include <QLocalSocket>
-
-#include "QomposeApplication.h"
-#include "QomposeDefines.h"
-#include "QomposeWindow.h"
+#include "QomposeTest/QomposeTest.h"
 
 /*!
- * This is our main function, which initializes our application.
- *
- * \param argc The number of command-line arguments.
- * \param argv The command-line arguments.
+ * \brief This class implements unit tests for our hotkey object.
  */
-int main(int argc, char *argv[])
+class QomposeHotkeyTest : public QomposeTest
 {
-	QomposeApplication app(argc, argv);
+	public:
+		QomposeHotkeyTest();
+		virtual ~QomposeHotkeyTest();
 
-	QLocalSocket s;
-	s.connectToServer(QOMPOSE_GUID);
-	if(s.waitForConnected(2000))
-	{
-		// Qompose is already running - bail out.
-		return 0;
-	}
+		virtual void test();
 
-	app.initializeLocalServer();
+	private:
+		void testHotkeyConstruction();
+		void testHotkeyCopying();
+		void testHotkeyMatching();
+};
 
-	QomposeWindow w;
-	w.show();
-
-	return app.exec();
-}
+#endif

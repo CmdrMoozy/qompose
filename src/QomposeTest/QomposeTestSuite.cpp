@@ -28,11 +28,11 @@
 	#include <cxxabi.h>
 #endif
 
-#include "test/QomposeAssertionException.h"
-#include "test/QomposeTest.h"
-#include "test/util/QomposeFontMetricsTest.h"
-#include "test/util/QomposeHotkeyTest.h"
-#include "test/util/QomposeHotkeyMapTest.h"
+#include "QomposeTest/QomposeAssertionException.h"
+#include "QomposeTest/QomposeTest.h"
+#include "QomposeTest/util/QomposeFontMetricsTest.h"
+#include "QomposeTest/util/QomposeHotkeyTest.h"
+#include "QomposeTest/util/QomposeHotkeyMapTest.h"
 
 int main(int argc, char **argv)
 {

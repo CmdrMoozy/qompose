@@ -18,7 +18,7 @@
 
 #include "QomposeAssertionException.h"
 
-#include "test/QomposeTest.h"
+#include "QomposeTest/QomposeTest.h"
 
 /*!
  * This constructor creates a new assertion exception with an empty message.

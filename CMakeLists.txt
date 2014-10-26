@@ -87,7 +87,7 @@ IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 	ADD_DEFINITIONS(-DBACKWARD_HAS_DW=1)
 ENDIF()
 
-INCLUDE_DIRECTORIES("src" "backward-cpp")
+INCLUDE_DIRECTORIES("src/libqompose")
 
 # Define Qompose's source files.
 
@@ -98,136 +98,114 @@ SET(qompose_RESOURCES
 
 )
 
-SET(qompose_HEADERS
+SET(libqompose_SOURCES
 
-	src/QomposeApplication.h
-	src/QomposeTypes.h
-	src/QomposeWindow.h
+	src/libqompose/QomposeApplication.cpp
+	src/libqompose/QomposeApplication.h
+	src/libqompose/QomposeDefines.h
+	src/libqompose/QomposeTypes.h
+	src/libqompose/QomposeWindow.cpp
+	src/libqompose/QomposeWindow.h
 
-	src/dialogs/QomposeAboutDialog.h
-	src/dialogs/QomposeEncodingDialog.h
-	src/dialogs/QomposeFileDialog.h
-	src/dialogs/QomposeFindDialog.h
-	src/dialogs/QomposeGoToDialog.h
-	src/dialogs/QomposeReplaceDialog.h
+	src/libqompose/dialogs/QomposeAboutDialog.cpp
+	src/libqompose/dialogs/QomposeAboutDialog.h
+	src/libqompose/dialogs/QomposeEncodingDialog.cpp
+	src/libqompose/dialogs/QomposeEncodingDialog.h
+	src/libqompose/dialogs/QomposeFileDialog.cpp
+	src/libqompose/dialogs/QomposeFileDialog.h
+	src/libqompose/dialogs/QomposeFindDialog.cpp
+	src/libqompose/dialogs/QomposeFindDialog.h
+	src/libqompose/dialogs/QomposeGoToDialog.cpp
+	src/libqompose/dialogs/QomposeGoToDialog.h
+	src/libqompose/dialogs/QomposeReplaceDialog.cpp
+	src/libqompose/dialogs/QomposeReplaceDialog.h
 
-	src/dialogs/preferences/QomposePreferencesDialog.h
-	src/dialogs/preferences/QomposePreferencesListView.h
-	src/dialogs/preferences/QomposePreferencesListModel.h
+	src/libqompose/dialogs/preferences/QomposePreferencesDialog.cpp
+	src/libqompose/dialogs/preferences/QomposePreferencesDialog.h
+	src/libqompose/dialogs/preferences/QomposePreferencesListModel.cpp
+	src/libqompose/dialogs/preferences/QomposePreferencesListModel.h
+	src/libqompose/dialogs/preferences/QomposePreferencesListView.cpp
+	src/libqompose/dialogs/preferences/QomposePreferencesListView.h
 
-	src/dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h
-	src/dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h
-	src/dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.h
-	src/dialogs/preferences/widgets/QomposePreferencesScrollArea.h
-	src/dialogs/preferences/widgets/QomposePreferencesWidget.h
+	src/libqompose/dialogs/preferences/widgets/QomposeEditorPreferencesWidget.cpp
+	src/libqompose/dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h
+	src/libqompose/dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.cpp
+	src/libqompose/dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h
+	src/libqompose/dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.cpp
+	src/libqompose/dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.h
+	src/libqompose/dialogs/preferences/widgets/QomposePreferencesScrollArea.cpp
+	src/libqompose/dialogs/preferences/widgets/QomposePreferencesScrollArea.h
+	src/libqompose/dialogs/preferences/widgets/QomposePreferencesWidget.cpp
+	src/libqompose/dialogs/preferences/widgets/QomposePreferencesWidget.h
 
-	src/editor/QomposeBuffer.h
-	src/editor/QomposeDecoratedTextEdit.h
-	src/editor/QomposeEditor.h
-	src/editor/QomposeGutter.h
+	src/libqompose/editor/QomposeBuffer.cpp
+	src/libqompose/editor/QomposeBuffer.h
+	src/libqompose/editor/QomposeDecoratedTextEdit.cpp
+	src/libqompose/editor/QomposeDecoratedTextEdit.h
+	src/libqompose/editor/QomposeEditor.cpp
+	src/libqompose/editor/QomposeEditor.h
+	src/libqompose/editor/QomposeGutter.cpp
+	src/libqompose/editor/QomposeGutter.h
 
-	src/gui/QomposeBufferWidget.h
-	src/gui/QomposeColorPickerButton.h
-	src/gui/QomposeFontPickerButton.h
-	src/gui/QomposeGUIUtils.h
-	src/gui/QomposeNotificationLabel.h
-	src/gui/QomposeStatusBar.h
+	src/libqompose/gui/QomposeBufferWidget.cpp
+	src/libqompose/gui/QomposeBufferWidget.h
+	src/libqompose/gui/QomposeColorPickerButton.cpp
+	src/libqompose/gui/QomposeColorPickerButton.h
+	src/libqompose/gui/QomposeFontPickerButton.cpp
+	src/libqompose/gui/QomposeFontPickerButton.h
+	src/libqompose/gui/QomposeGUIUtils.cpp
+	src/libqompose/gui/QomposeGUIUtils.h
+	src/libqompose/gui/QomposeNotificationLabel.cpp
+	src/libqompose/gui/QomposeNotificationLabel.h
+	src/libqompose/gui/QomposeStatusBar.cpp
+	src/libqompose/gui/QomposeStatusBar.h
 
-	src/gui/menus/QomposeMainMenu.h
-	src/gui/menus/QomposeRecentMenu.h
+	src/libqompose/gui/menus/QomposeMainMenu.cpp
+	src/libqompose/gui/menus/QomposeMainMenu.h
+	src/libqompose/gui/menus/QomposeRecentMenu.cpp
+	src/libqompose/gui/menus/QomposeRecentMenu.h
 
-	src/syntax/QomposeLexer.h
-	src/syntax/QomposeSyntaxHighlighter.h
+	src/libqompose/syntax/QomposeLexer.cpp
+	src/libqompose/syntax/QomposeLexer.h
+	src/libqompose/syntax/QomposeSyntaxHighlighter.cpp
+	src/libqompose/syntax/QomposeSyntaxHighlighter.h
 
-	src/util/QomposeDocumentWriter.h
-	src/util/QomposeFindQuery.h
-	src/util/QomposeFontMetrics.h
-	src/util/QomposeHotkey.h
-	src/util/QomposeHotkeyMap.h
-	src/util/QomposeReplaceQuery.h
-	src/util/QomposeSettings.h
-
-)
-
-SET(qompose_SOURCES
-
-	src/Qompose.cpp
-	src/QomposeApplication.cpp
-	src/QomposeWindow.cpp
-
-	src/dialogs/QomposeAboutDialog.cpp
-	src/dialogs/QomposeEncodingDialog.cpp
-	src/dialogs/QomposeFileDialog.cpp
-	src/dialogs/QomposeFindDialog.cpp
-	src/dialogs/QomposeGoToDialog.cpp
-	src/dialogs/QomposeReplaceDialog.cpp
-
-	src/dialogs/preferences/QomposePreferencesDialog.cpp
-	src/dialogs/preferences/QomposePreferencesListView.cpp
-	src/dialogs/preferences/QomposePreferencesListModel.cpp
-
-	src/dialogs/preferences/widgets/QomposeEditorPreferencesWidget.cpp
-	src/dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.cpp
-	src/dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.cpp
-	src/dialogs/preferences/widgets/QomposePreferencesScrollArea.cpp
-	src/dialogs/preferences/widgets/QomposePreferencesWidget.cpp
-
-	src/editor/QomposeBuffer.cpp
-	src/editor/QomposeDecoratedTextEdit.cpp
-	src/editor/QomposeEditor.cpp
-	src/editor/QomposeGutter.cpp
-
-	src/gui/QomposeBufferWidget.cpp
-	src/gui/QomposeColorPickerButton.cpp
-	src/gui/QomposeFontPickerButton.cpp
-	src/gui/QomposeGUIUtils.cpp
-	src/gui/QomposeNotificationLabel.cpp
-	src/gui/QomposeStatusBar.cpp
-
-	src/gui/menus/QomposeMainMenu.cpp
-	src/gui/menus/QomposeRecentMenu.cpp
-
-	src/syntax/QomposeLexer.cpp
-	src/syntax/QomposeSyntaxHighlighter.cpp
-
-	src/util/QomposeDocumentWriter.cpp
-	src/util/QomposeFindQuery.cpp
-	src/util/QomposeFontMetrics.cpp
-	src/util/QomposeHotkey.cpp
-	src/util/QomposeReplaceQuery.cpp
-	src/util/QomposeSettings.cpp
+	src/libqompose/util/QomposeDocumentWriter.cpp
+	src/libqompose/util/QomposeDocumentWriter.h
+	src/libqompose/util/QomposeFindQuery.cpp
+	src/libqompose/util/QomposeFindQuery.h
+	src/libqompose/util/QomposeFontMetrics.cpp
+	src/libqompose/util/QomposeFontMetrics.h
+	src/libqompose/util/QomposeHotkey.cpp
+	src/libqompose/util/QomposeHotkey.h
+	src/libqompose/util/QomposeHotkeyMap.h
+	src/libqompose/util/QomposeReplaceQuery.cpp
+	src/libqompose/util/QomposeReplaceQuery.h
+	src/libqompose/util/QomposeSettings.cpp
+	src/libqompose/util/QomposeSettings.h
 
 )
 
-# Define our test suite's sources.
+SET(Qompose_SOURCES
 
-SET(qompose_test_HEADERS
-
-	src/test/QomposeAssertionException.h
-	src/test/QomposeTest.h
-
-	src/test/util/QomposeFontMetricsTest.h
-	src/test/util/QomposeHotkeyTest.h
-	src/test/util/QomposeHotkeyMapTest.h
-
-	src/util/QomposeFontMetrics.h
-	src/util/QomposeHotkey.h
-	src/util/QomposeHotkeyMap.h
+	src/Qompose/Qompose.cpp
 
 )
 
-SET(qompose_test_SOURCES
+SET(QomposeTest_SOURCES
 
-	src/test/QomposeAssertionException.cpp
-	src/test/QomposeTest.cpp
-	src/test/QomposeTestSuite.cpp
+	src/QomposeTest/QomposeAssertionException.cpp
+	src/QomposeTest/QomposeAssertionException.h
+	src/QomposeTest/QomposeTest.cpp
+	src/QomposeTest/QomposeTest.h
+	src/QomposeTest/QomposeTestSuite.cpp
 
-	src/test/util/QomposeFontMetricsTest.cpp
-	src/test/util/QomposeHotkeyTest.cpp
-	src/test/util/QomposeHotkeyMapTest.cpp
-
-	src/util/QomposeFontMetrics.cpp
-	src/util/QomposeHotkey.cpp
+	src/QomposeTest/util/QomposeFontMetricsTest.cpp
+	src/QomposeTest/util/QomposeFontMetricsTest.h
+	src/QomposeTest/util/QomposeHotkeyMapTest.cpp
+	src/QomposeTest/util/QomposeHotkeyMapTest.h
+	src/QomposeTest/util/QomposeHotkeyTest.cpp
+	src/QomposeTest/util/QomposeHotkeyTest.h
 
 )
 
@@ -237,6 +215,7 @@ QT5_ADD_RESOURCES(qompose_RESOURCES_RCC ${qompose_RESOURCES})
 
 SET(Qompose_LIBS
 
+	qompose
 	${ICU_LIBRARIES}
 	${Qt5Core_LIBRARIES}
 	${Qt5Widgets_LIBRARIES}
@@ -269,12 +248,21 @@ ELSE()
 	)
 ENDIF()
 
-ADD_EXECUTABLE(Qompose ${qompose_RESOURCES_RCC} ${qompose_SOURCES})
+ADD_LIBRARY(qompose STATIC ${qompose_RESOURCES_RCC} ${libqompose_SOURCES})
+
+ADD_EXECUTABLE(Qompose ${Qompose_SOURCES})
 TARGET_LINK_LIBRARIES(Qompose ${Qompose_LIBS})
 
 IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
-	ADD_EXECUTABLE(QomposeTest ${qompose_test_SOURCES})
+	ADD_EXECUTABLE(QomposeTest ${QomposeTest_SOURCES})
 	TARGET_LINK_LIBRARIES(QomposeTest ${Qompose_LIBS} ${DWARF_LIBRARIES})
+	SET_PROPERTY(TARGET QomposeTest PROPERTY INCLUDE_DIRECTORIES
+		"${CMAKE_SOURCE_DIR}/backward-cpp"
+		"${CMAKE_SOURCE_DIR}/src"
+		"${CMAKE_SOURCE_DIR}/src/libqompose"
+	)
 ENDIF()
 
+QT5_USE_MODULES(qompose Core Widgets Network PrintSupport)
 QT5_USE_MODULES(Qompose Core Widgets Network PrintSupport)
+QT5_USE_MODULES(QomposeTest Core Widgets Network PrintSupport)

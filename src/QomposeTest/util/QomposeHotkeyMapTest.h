@@ -16,25 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_FONT_METRICS_TEST_H
-#define INCLUDE_QOMPOSE_FONT_METRICS_TEST_H
+#ifndef INCLUDE_QOMPOSE_HOTKEY_MAP_TEST_H
+#define INCLUDE_QOMPOSE_HOTKEY_MAP_TEST_H
 
-#include "test/QomposeTest.h"
+#include "QomposeTest/QomposeTest.h"
 
 /*!
- * \brief This class defines unit tests for our font metrics class.
+ * \brief This class implements tests for our hotkey map class.
  */
-class QomposeFontMetricsTest : public QomposeTest
+class QomposeHotkeyMapTest : public QomposeTest
 {
 	public:
-		QomposeFontMetricsTest() = default;
-		virtual ~QomposeFontMetricsTest() = default;
+		QomposeHotkeyMapTest();
+		virtual ~QomposeHotkeyMapTest();
 
 		virtual void test();
-
-	private:
-		void testIsMonospaced();
-		void testGetColumnWidth();
 };
 
 #endif
