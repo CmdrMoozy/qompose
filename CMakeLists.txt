@@ -10,17 +10,15 @@
 #
 ###############################################################################
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0.2)
 PROJECT(qompose)
 
 SET(CMAKE_COLOR_MAKEFILE ON)
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 
-IF(CMAKE_MAJOR_VERSION GREATER 2)
-	# Use the new behavior for COMPILE_DEFINITIONS_<Config> properties.
-	# See: http://www.cmake.org/cmake/help/v3.0/policy/CMP0043.html
-	cmake_policy(SET CMP0043 NEW)
-ENDIF()
+# Use the new behavior for COMPILE_DEFINITIONS_<Config> properties.
+# See: http://www.cmake.org/cmake/help/v3.0/policy/CMP0043.html
+cmake_policy(SET CMP0043 NEW)
 
 # Automatically link to the static qtmain.lib on Windows.
 # See: http://www.cmake.org/cmake/help/v3.0/policy/CMP0020.html
@@ -62,16 +60,39 @@ ENDIF()
 
 # Set INCLUDE and C(XX)FLAGS
 
-IF(UNIX)
-	SET(F_DBG "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith")
-	SET(F_DBG "${F_DBG} -Wcast-qual -std=c++11 -O0")
+IF(CMAKE_CXX_COMPILER_ID MATCHES GNU)
+	SET(F_WARN "-pedantic -Wall -Wextra -Wcast-align -Wcast-qual")
+	SET(F_WARN "${F_WARN} -Wctor-dtor-privacy -Wdisabled-optimization")
+	SET(F_WARN "${F_WARN} -Wformat=2 -Winit-self -Wlogical-op")
+	SET(F_WARN "${F_WARN} -Wmissing-declarations -Wmissing-include-dirs")
+	SET(F_WARN "${F_WARN} -Wnoexcept -Wold-style-cast -Wshadow")
+	SET(F_WARN "${F_WARN} -Woverloaded-virtual -Wredundant-decls")
+	SET(F_WARN "${F_WARN} -Wsign-conversion -Wsign-promo -Wundef")
+	SET(F_WARN "${F_WARN} -Wstrict-null-sentinel -Wstrict-overflow=5")
+	SET(F_WARN "${F_WARN} -Wswitch-default -Weffc++ -Wuseless-cast")
+	SET(F_WARN "${F_WARN} -Wzero-as-null-pointer-constant")
 
-	SET(F_REL "-Wall -Wextra -ansi -pedantic -Wshadow -Wpointer-arith")
-	SET(F_REL "${F_REL} -Wcast-qual -std=c++11 -fomit-frame-pointer")
+	SET(F_DBG "${F_WARN} -std=c++11 -O0")
+	SET(F_REL "${F_WARN} -std=c++11 -fomit-frame-pointer")
 
 	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${F_DBG}")
 	SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${F_REL}")
-ELSE()
+ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES Clang)
+	SET(F_WARN "-pedantic -Wall -Wextra -Wcast-align -Wcast-qual")
+	SET(F_WARN "${F_WARN} -Wctor-dtor-privacy -Wdisabled-optimization")
+	SET(F_WARN "${F_WARN} -Wformat=2 -Winit-self -Wstrict-overflows=5")
+	SET(F_WARN "${F_WARN} -Wmissing-declarations -Wmissing-include-dirs")
+	SET(F_WARN "${F_WARN} -Wold-style-cast -Wshadow -Wswitch-default")
+	SET(F_WARN "${F_WARN} -Woverloaded-virtual -Wredundant-decls")
+	SET(F_WARN "${F_WARN} -Wsign-conversion -Wsign-promo -Wundef")
+	SET(F_WARN "${F_WARN} -Wint-to-void-pointer-cast -Weffc++")
+
+	SET(F_DBG "${F_WARN} -std=c++11 -O0")
+	SET(F_REL "${F_WARN} -std=c++11 -fomit-frame-pointer")
+
+	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${F_DBG}")
+	SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${F_REL}")
+ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES MSVC)
 	# Use a static MSVC runtime on Windows.
 
         SET(CMAKE_CXX_FLAGS_DEBUG_INIT "/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1")
