@@ -89,9 +89,6 @@ QVariant QomposePreferencesListModel::data(const QModelIndex &i, int r) const
 			return QVariant(QVariant::Invalid);
 			break;
 	};
-
-
-	return QVariant(QVariant::Invalid);
 }
 
 /*!
