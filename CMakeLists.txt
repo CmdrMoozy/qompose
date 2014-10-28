@@ -93,12 +93,7 @@ ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES Clang)
 	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${F_DBG}")
 	SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${F_REL}")
 ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES MSVC)
-	# Use a static MSVC runtime on Windows.
-
-        SET(CMAKE_CXX_FLAGS_DEBUG_INIT "/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1")
-        SET(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "/MT /O1 /Ob1 /D NDEBUG")
-        SET(CMAKE_CXX_FLAGS_RELEASE_INIT "/MT /O2 /Ob2 /D NDEBUG")
-        SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "/MT /Zi /O2 /Ob1 /D NDEBUG")
+	
 ENDIF()
 
 ADD_DEFINITIONS(-DQT_NO_KEYWORDS)
@@ -119,7 +114,7 @@ SET(qompose_RESOURCES
 
 )
 
-SET(libqompose_SOURCES
+SET(QomposeCommon_SOURCES
 
 	src/libqompose/QomposeApplication.cpp
 	src/libqompose/QomposeApplication.h
@@ -236,7 +231,7 @@ QT5_ADD_RESOURCES(qompose_RESOURCES_RCC ${qompose_RESOURCES})
 
 SET(Qompose_LIBS
 
-	qompose
+	QomposeCommon
 	${ICU_LIBRARIES}
 	${Qt5Core_LIBRARIES}
 	${Qt5Widgets_LIBRARIES}
@@ -247,31 +242,16 @@ SET(Qompose_LIBS
 
 IF(UNIX)
 	SET(Qompose_LIBS ${Qompose_LIBS} m)
-ELSE()
-	LINK_DIRECTORIES(
-		${CMAKE_PREFIX_PATH}/lib
-		${CMAKE_PREFIX_PATH}/lib64
-		${CMAKE_PREFIX_PATH}/plugins/platforms
-	)
-
-	SET(Qompose_LIBS
-
-		ws2_32
-		imm32
-		winmm
-		Qt5PlatformSupport
-		Qt5WinExtras
-		qwindows
-		opengl32
-		qtharfbuzzng
-		${Qompose_LIBS}
-
-	)
 ENDIF()
 
-ADD_LIBRARY(qompose STATIC ${qompose_RESOURCES_RCC} ${libqompose_SOURCES})
+ADD_LIBRARY(QomposeCommon STATIC ${qompose_RESOURCES_RCC} ${QomposeCommon_SOURCES})
 
-ADD_EXECUTABLE(Qompose ${Qompose_SOURCES})
+IF(UNIX)
+	ADD_EXECUTABLE(Qompose ${Qompose_SOURCES})
+ELSE()
+	ADD_EXECUTABLE(Qompose WIN32 ${Qompose_SOURCES})
+ENDIF()
+
 TARGET_LINK_LIBRARIES(Qompose ${Qompose_LIBS})
 
 IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
@@ -284,6 +264,9 @@ IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 	)
 ENDIF()
 
-QT5_USE_MODULES(qompose Core Widgets Network PrintSupport)
+QT5_USE_MODULES(QomposeCommon Core Widgets Network PrintSupport)
 QT5_USE_MODULES(Qompose Core Widgets Network PrintSupport)
-QT5_USE_MODULES(QomposeTest Core Widgets Network PrintSupport)
+
+IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
+	QT5_USE_MODULES(QomposeTest Core Widgets Network PrintSupport)
+ENDIF()
