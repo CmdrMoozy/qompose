@@ -27,7 +27,24 @@
 #include "util/QomposeSettings.h"
 
 QomposeMainMenu::QomposeMainMenu(QomposeSettings *s, QWidget *p)
-	: QMenuBar(p), settings(s)
+	: QMenuBar(p), settings(s), fileMenu(nullptr), editMenu(nullptr),
+		searchMenu(nullptr), buffersMenu(nullptr), helpMenu(nullptr),
+		newAction(nullptr), openAction(nullptr), recentMenu(nullptr),
+		reopenAction(nullptr), revertAction(nullptr),
+		revertAllAction(nullptr), saveAction(nullptr),
+		saveAsAction(nullptr), printAction(nullptr),
+		printPreviewAction(nullptr), closeAction(nullptr),
+		exitAction(nullptr), undoAction(nullptr), redoAction(nullptr),
+		cutAction(nullptr), copyAction(nullptr), pasteAction(nullptr),
+		duplicateLineAction(nullptr), selectAllAction(nullptr),
+		deselectAction(nullptr), increaseIndentAction(nullptr),
+		decreaseIndentAction(nullptr), preferencesAction(nullptr),
+		findAction(nullptr), findNextAction(nullptr),
+		findPreviousAction(nullptr), replaceAction(nullptr),
+		goToAction(nullptr), previousBufferAction(nullptr),
+		nextBufferAction(nullptr), moveBufferLeftAction(nullptr),
+		moveBufferRightAction(nullptr), aboutQomposeAction(nullptr),
+		aboutQtAction(nullptr)
 {
 	// Initialize our actions.
 

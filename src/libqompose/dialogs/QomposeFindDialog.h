@@ -41,7 +41,7 @@ class QomposeFindDialog : public QDialog
 
 	public:
 		QomposeFindDialog(QWidget * = nullptr,
-			Qt::WindowFlags = nullptr);
+			Qt::WindowFlags = 0);
 		virtual ~QomposeFindDialog();
 
 		const QomposeFindQuery *getQuery() const;

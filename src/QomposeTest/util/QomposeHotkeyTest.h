@@ -33,6 +33,9 @@ class QomposeHotkeyTest : public QomposeTest
 		virtual void test();
 
 	private:
+		QomposeHotkeyTest(const QomposeHotkeyTest &);
+		QomposeHotkeyTest &operator=(const QomposeHotkeyTest &);
+
 		void testHotkeyConstruction();
 		void testHotkeyCopying();
 		void testHotkeyMatching();

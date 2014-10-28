@@ -37,7 +37,7 @@ class QomposeGoToDialog : public QDialog
 
 	public:
 		QomposeGoToDialog(QWidget * = nullptr,
-			Qt::WindowFlags = nullptr);
+			Qt::WindowFlags = 0);
 		virtual ~QomposeGoToDialog();
 
 		int getSelectedLine() const;
