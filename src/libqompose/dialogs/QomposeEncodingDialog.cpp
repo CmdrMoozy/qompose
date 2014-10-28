@@ -41,7 +41,10 @@
  */
 QomposeEncodingDialog::QomposeEncodingDialog(QWidget *p, Qt::WindowFlags f,
 	const QString &d, const QString &m, const QString &t)
-	: QDialog(p, f), encoding(QString())
+	: QDialog(p, f), encoding(QString()), layout(nullptr),
+		messageLabel(nullptr), encodingList(nullptr),
+		buttonsWidget(nullptr), buttonsLayout(nullptr),
+		selectButton(nullptr), cancelButton(nullptr)
 {
 	layout = new QGridLayout(this);
 
@@ -54,7 +57,8 @@ QomposeEncodingDialog::QomposeEncodingDialog(QWidget *p, Qt::WindowFlags f,
 	for(int i = 0; i < codecs.size(); ++i)
 		encodingList->addItem(QString(codecs.at(i)));
 
-	QList<QListWidgetItem *> defaultEncoding = encodingList->findItems(d, Qt::MatchExactly);
+	QList<QListWidgetItem *> defaultEncoding =
+		encodingList->findItems(d, Qt::MatchExactly);
 
 	if(defaultEncoding.size() == 1)
 		encodingList->setCurrentItem(defaultEncoding.first());
@@ -76,8 +80,10 @@ QomposeEncodingDialog::QomposeEncodingDialog(QWidget *p, Qt::WindowFlags f,
 	layout->addWidget(buttonsWidget, 2, 0, 1, 1);
 	setLayout(layout);
 
-	QObject::connect( selectButton, SIGNAL( clicked(bool) ), this, SLOT( doSelectClicked() ) );
-	QObject::connect( cancelButton, SIGNAL( clicked(bool) ), this, SLOT( doCancelClicked() ) );
+	QObject::connect(selectButton, SIGNAL(clicked(bool)),
+		this, SLOT(doSelectClicked()));
+	QObject::connect(cancelButton, SIGNAL(clicked(bool)),
+		this, SLOT(doCancelClicked()));
 
 	setModal(true);
 	setWindowTitle(t);
@@ -120,8 +126,9 @@ QString QomposeEncodingDialog::promptEncoding(QWidget *p, const QString &d,
 
 /*!
  * This function returns the encoding selected by our user. If the dialog was
- * "accepted," then this returns the selected encoding. If the dialog was canceled,
- * or no valid encoding was selected, then this returns QString() instead.
+ * "accepted," then this returns the selected encoding. If the dialog was
+ * canceled, or no valid encoding was selected, then this returns QString()
+ * instead.
  *
  * \return The currently selected character encoding.
  */
@@ -131,8 +138,8 @@ QString QomposeEncodingDialog::getSelectedEncoding() const
 }
 
 /*!
- * This function handles our select button being clicked by updating our dialog's
- * selected encoding, and then closes our dialog.
+ * This function handles our select button being clicked by updating our
+ * dialog's selected encoding, and then closes our dialog.
  */
 void QomposeEncodingDialog::doSelectClicked()
 { /* SLOT */
@@ -149,8 +156,8 @@ void QomposeEncodingDialog::doSelectClicked()
 }
 
 /*!
- * This function handles our cancel button being clicked by clearing our dialog's
- * selected encoding, and then closes our dialog.
+ * This function handles our cancel button being clicked by clearing our
+ * dialog's selected encoding, and then closes our dialog.
  */
 void QomposeEncodingDialog::doCancelClicked()
 { /* SLOT */

@@ -39,7 +39,11 @@
  * \param f The window flags to use for this dialog.
  */
 QomposeAboutDialog::QomposeAboutDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f)
+	: QDialog(p, f), layout(nullptr), tabs(nullptr),
+		licenseTextEdit(nullptr), qomposeTab(nullptr),
+		qomposeTabLayout(nullptr), qomposeIconLabel(nullptr),
+		qomposeLabel(nullptr), qomposeDescriptionLabel(nullptr),
+		qomposeTextEdit(nullptr), closeButton(nullptr)
 {
 	setWindowTitle(tr("About Qompose"));
 

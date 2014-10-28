@@ -31,23 +31,28 @@
 class QomposeFileDialog : public QFileDialog
 {
 	public:
-		QomposeFileDialog(QWidget *p, Qt::WindowFlags f);
+		QomposeFileDialog(QWidget *, Qt::WindowFlags);
 		virtual ~QomposeFileDialog();
 
 		static QomposeFileDescriptor getNullDescriptor();
-		static QomposeFileDescriptor getPathDescriptor(const QString &p);
+		static QomposeFileDescriptor
+			getPathDescriptor(const QString &);
 
-		static QomposeFileDescriptor getOpenFileName(QWidget *p = 0,
-			const QString &c = QString(), const QString &d = QString(),
-			const QString &f = QString(), QString *sf = 0, QFileDialog::Options o = 0);
-		static QList<QomposeFileDescriptor> getOpenFileNames(QWidget *p = 0,
-			const QString &c = QString(), const QString &d = QString(),
-			const QString &f = QString(), QString *sf = 0, QFileDialog::Options o = 0);
+		static QomposeFileDescriptor getOpenFileName(
+			QWidget * = nullptr, const QString & = QString(),
+			const QString & = QString(),
+			const QString & = QString(), QString * = nullptr,
+			QFileDialog::Options = nullptr);
+		static QList<QomposeFileDescriptor> getOpenFileNames(
+			QWidget * = nullptr, const QString & = QString(),
+			const QString & = QString(),
+			const QString & = QString(), QString * = nullptr,
+			QFileDialog::Options = nullptr);
 
 	private:
-		static bool fileIsGood(const QString &f, QWidget *p = 0);
-		static QString detectTextCodec(const QString &f);
-		static QString promptTextCodec(const QString &f);
+		static bool fileIsGood(const QString &, QWidget * = nullptr);
+		static QString detectTextCodec(const QString &);
+		static QString promptTextCodec(const QString &);
 };
 
 #endif

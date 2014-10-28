@@ -35,15 +35,17 @@ class QomposeEncodingDialog : public QDialog
 	Q_OBJECT
 
 	public:
-		QomposeEncodingDialog(QWidget *p = 0, Qt::WindowFlags f = 0,
-			const QString &d = "UTF-8",
-			const QString &m = tr("Which character encoding should be used?"),
-			const QString &t = tr("Select Character Encoding"));
+		QomposeEncodingDialog(QWidget * = nullptr,
+			Qt::WindowFlags = 0, const QString & = "UTF-8",
+			const QString & =
+			tr("Which character encoding should be used?"),
+			const QString & = tr("Select Character Encoding"));
 		virtual ~QomposeEncodingDialog();
 
-		static QString promptEncoding(QWidget *p = 0, const QString &d = "UTF-8",
-			const QString &m = tr("Which character encoding should be used?"),
-			const QString &t = tr("Select Character Encoding"));
+		static QString promptEncoding(QWidget * = nullptr,
+			const QString & = "UTF-8", const QString & =
+			tr("Which character encoding should be used?"),
+			const QString & = tr("Select Character Encoding"));
 
 		QString getSelectedEncoding() const;
 
@@ -58,6 +60,10 @@ class QomposeEncodingDialog : public QDialog
 		QGridLayout *buttonsLayout;
 		QPushButton *selectButton;
 		QPushButton *cancelButton;
+
+		QomposeEncodingDialog(const QomposeEncodingDialog &);
+		QomposeEncodingDialog &operator=(
+			const QomposeEncodingDialog &);
 
 	private Q_SLOTS:
 		void doSelectClicked();
