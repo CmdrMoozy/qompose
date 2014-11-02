@@ -37,11 +37,18 @@
  * \param f The window flags to use for this dialog.
  */
 QomposeReplaceDialog::QomposeReplaceDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f)
+	: QDialog(p, f), query(new QomposeReplaceQuery(this)),
+		layout(nullptr), findLabel(nullptr), findTextEdit(nullptr),
+		replaceLabel(nullptr), replaceTextEdit(nullptr),
+		optionsGroupBox(nullptr), optionsLayout(nullptr),
+		wrapCheckBox(nullptr), wholeWordsCheckBox(nullptr),
+		caseSensitiveCheckBox(nullptr), reverseCheckBox(nullptr),
+		regexCheckBox(nullptr), buttonsWidget(nullptr),
+		buttonsLayout(nullptr), replaceButton(nullptr),
+		findButton(nullptr), replaceSelButton(nullptr),
+		replaceAllButton(nullptr), closeButton(nullptr)
 {
 	setWindowTitle(tr("Replace"));
-
-	query = new QomposeReplaceQuery(this);
 
 	initializeGUI();
 
@@ -118,11 +125,11 @@ void QomposeReplaceDialog::initializeGUI()
 
 	// Create our find and replace inputs.
 
-	findLabel = new QLabel(tr("Find expression:"), this);
+	findLabel = new QLabel(tr("Find expression:"), this, nullptr);
 
 	findTextEdit = new QLineEdit(this);
 
-	replaceLabel = new QLabel(tr("Replace with:"), this);
+	replaceLabel = new QLabel(tr("Replace with:"), this, nullptr);
 
 	replaceTextEdit = new QLineEdit(this);
 
@@ -142,17 +149,17 @@ void QomposeReplaceDialog::initializeGUI()
 
 	regexCheckBox = new QCheckBox(tr("Regular expression search?"), optionsGroupBox);
 
-	optionsLayout->addWidget(wrapCheckBox, 0, 0, 1, 1);
-	optionsLayout->addWidget(wholeWordsCheckBox, 1, 0, 1, 1);
-	optionsLayout->addWidget(caseSensitiveCheckBox, 2, 0, 1, 1);
-	optionsLayout->addWidget(reverseCheckBox, 3, 0, 1, 1);
-	optionsLayout->addWidget(regexCheckBox, 4, 0, 1, 1);
+	optionsLayout->addWidget(wrapCheckBox, 0, 0, 1, 1, nullptr);
+	optionsLayout->addWidget(wholeWordsCheckBox, 1, 0, 1, 1, nullptr);
+	optionsLayout->addWidget(caseSensitiveCheckBox, 2, 0, 1, 1, nullptr);
+	optionsLayout->addWidget(reverseCheckBox, 3, 0, 1, 1, nullptr);
+	optionsLayout->addWidget(regexCheckBox, 4, 0, 1, 1, nullptr);
 	optionsLayout->setRowStretch(5, 1);
 	optionsGroupBox->setLayout(optionsLayout);
 
 	// Create our buttons widget.
 
-	buttonsWidget = new QWidget(this);
+	buttonsWidget = new QWidget(this, nullptr);
 	buttonsLayout = new QGridLayout(buttonsWidget);
 
 	replaceButton = new QPushButton(tr("&Replace"), buttonsWidget);
@@ -165,22 +172,22 @@ void QomposeReplaceDialog::initializeGUI()
 
 	closeButton = new QPushButton(tr("Clos&e"), buttonsWidget);
 
-	buttonsLayout->addWidget(replaceButton, 0, 0, 1, 1);
-	buttonsLayout->addWidget(findButton, 1, 0, 1, 1);
-	buttonsLayout->addWidget(replaceSelButton, 2, 0, 1, 1);
-	buttonsLayout->addWidget(replaceAllButton, 3, 0, 1, 1);
-	buttonsLayout->addWidget(closeButton, 4, 0, 1, 1);
+	buttonsLayout->addWidget(replaceButton, 0, 0, 1, 1, nullptr);
+	buttonsLayout->addWidget(findButton, 1, 0, 1, 1, nullptr);
+	buttonsLayout->addWidget(replaceSelButton, 2, 0, 1, 1, nullptr);
+	buttonsLayout->addWidget(replaceAllButton, 3, 0, 1, 1, nullptr);
+	buttonsLayout->addWidget(closeButton, 4, 0, 1, 1, nullptr);
 	buttonsLayout->setRowStretch(5, 1);
 	buttonsWidget->setLayout(buttonsLayout);
 
 	// Add our widgets to our dialog.
 
-	layout->addWidget(findLabel, 0, 0, 1, 1);
-	layout->addWidget(findTextEdit, 0, 1, 1, 1);
-	layout->addWidget(replaceLabel, 1, 0, 1, 1);
-	layout->addWidget(replaceTextEdit, 1, 1, 1, 1);
-	layout->addWidget(optionsGroupBox, 2, 0, 1, 2);
-	layout->addWidget(buttonsWidget, 0, 2, 3, 1);
+	layout->addWidget(findLabel, 0, 0, 1, 1, nullptr);
+	layout->addWidget(findTextEdit, 0, 1, 1, 1, nullptr);
+	layout->addWidget(replaceLabel, 1, 0, 1, 1, nullptr);
+	layout->addWidget(replaceTextEdit, 1, 1, 1, 1, nullptr);
+	layout->addWidget(optionsGroupBox, 2, 0, 1, 2, nullptr);
+	layout->addWidget(buttonsWidget, 0, 2, 3, 1, nullptr);
 	layout->setRowStretch(2, 1);
 	layout->setColumnStretch(1, 1);
 	setLayout(layout);

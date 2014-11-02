@@ -369,7 +369,7 @@ void QomposeWindow::doPrintPreview()
 		return;
 	}
 
-	QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
+	QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this, nullptr);
 
 	QObject::connect( dialog, SIGNAL( paintRequested(QPrinter *) ),
 		buffers, SLOT( doPrint(QPrinter *) ) );

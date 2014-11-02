@@ -34,11 +34,15 @@
  * \param p The parent widget to use for this widget.
  * \param f The window flags to use for this widget.
  */
-QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(QomposeSettings *s,
-	QWidget *p, Qt::WindowFlags f)
-	: QomposePreferencesWidget(s, p, f)
+QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(
+	QomposeSettings *s, QWidget *p, Qt::WindowFlags f)
+	: QomposePreferencesWidget(s, p, f), layout(nullptr),
+		statusBarCheckBox(nullptr), recentListSizeLabel(nullptr),
+		recentListSizeSpinBox(nullptr),
+		saveWindowAttribsCheckBox(nullptr)
 {
-	setPreferencesIcon(QomposeGUIUtils::getIconFromTheme("preferences-other"));
+	setPreferencesIcon(
+		QomposeGUIUtils::getIconFromTheme("preferences-other"));
 	setPreferencesTitle(tr("General"));
 
 	initializeGUI();
@@ -112,7 +116,8 @@ void QomposeGeneralPreferencesWidget::initializeGUI()
 
 	statusBarCheckBox = new QCheckBox(tr("Show Status Bar"), this);
 
-	recentListSizeLabel = new QLabel(tr("Recently Opened List Size"), this);
+	recentListSizeLabel = new QLabel(
+		tr("Recently Opened List Size"), this, nullptr);
 
 	recentListSizeSpinBox = new QSpinBox(this);
 	recentListSizeSpinBox->setMinimum(0);
@@ -120,10 +125,10 @@ void QomposeGeneralPreferencesWidget::initializeGUI()
 
 	saveWindowAttribsCheckBox = new QCheckBox(tr("Save Window Attributes on Exit"), this);
 
-	layout->addWidget( statusBarCheckBox,         0, 0, 1, 1 );
-	layout->addWidget( recentListSizeLabel,       1, 0, 1, 1 );
-	layout->addWidget( recentListSizeSpinBox,     1, 1, 1, 1 );
-	layout->addWidget( saveWindowAttribsCheckBox, 2, 0, 1, 1 );
+	layout->addWidget(statusBarCheckBox, 0, 0, 1, 1, nullptr);
+	layout->addWidget(recentListSizeLabel, 1, 0, 1, 1, nullptr);
+	layout->addWidget(recentListSizeSpinBox, 1, 1, 1, 1, nullptr);
+	layout->addWidget(saveWindowAttribsCheckBox, 2, 0, 1, 1, nullptr);
 
 	layout->setColumnStretch(0, 1);
 	layout->setRowStretch(3, 1);

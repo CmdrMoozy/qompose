@@ -60,10 +60,10 @@ QomposeFileDialog::~QomposeFileDialog()
  */
 QomposeFileDescriptor QomposeFileDialog::getNullDescriptor()
 {
-	QomposeFileDescriptor desc;
-
-	desc.fileName = QString();
-	desc.textCodec = QString();
+	QomposeFileDescriptor desc = {
+		QString(),
+		QString()
+	};
 
 	return desc;
 }
@@ -78,10 +78,10 @@ QomposeFileDescriptor QomposeFileDialog::getNullDescriptor()
  */
 QomposeFileDescriptor QomposeFileDialog::getPathDescriptor(const QString &p)
 {
-	QomposeFileDescriptor desc;
-
-	desc.fileName = p;
-	desc.textCodec = QomposeFileDialog::detectTextCodec(p);
+	QomposeFileDescriptor desc = {
+		p,
+		QomposeFileDialog::detectTextCodec(p)
+	};
 
 	if(desc.textCodec.isNull())
 	{
@@ -225,7 +225,7 @@ QString QomposeFileDialog::detectTextCodec(const QString &f)
 	});
 
 	fs.read(buf.get(), 1024);
-	size_t read = fs.gcount();
+	size_t read = static_cast<size_t>(fs.gcount());
 
 	fs.close();
 
@@ -293,5 +293,5 @@ QString QomposeFileDialog::promptTextCodec(const QString &f)
 	QString message = QString("The character encoding for '%1' couldn't be auto-detected. "
 		"Which character encoding should be used to open it?").arg(file.fileName());
 
-	return QomposeEncodingDialog::promptEncoding(0, "UTF-8", message);
+	return QomposeEncodingDialog::promptEncoding(nullptr, "UTF-8", message);
 }

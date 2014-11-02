@@ -34,12 +34,15 @@ class QomposePreferencesScrollArea;
 class QomposePreferencesListModel : public QAbstractListModel
 {
 	public:
-		QomposePreferencesListModel(QObject *p = 0);
+		QomposePreferencesListModel(QObject *p = nullptr);
 		virtual ~QomposePreferencesListModel();
 
-		virtual int rowCount(const QModelIndex &p = QModelIndex()) const;
-		virtual QVariant data(const QModelIndex &i, int r = Qt::DisplayRole) const;
-		virtual QVariant headerData(int s, Qt::Orientation o, int r = Qt::DisplayRole) const;
+		virtual int rowCount(
+			const QModelIndex &p = QModelIndex()) const;
+		virtual QVariant data(const QModelIndex &i,
+			int r = Qt::DisplayRole) const;
+		virtual QVariant headerData(int s, Qt::Orientation o,
+			int r = Qt::DisplayRole) const;
 
 		QomposePreferencesWidget *widgetAt(int i) const;
 		QomposePreferencesScrollArea *scrollWidgetAt(int i) const;

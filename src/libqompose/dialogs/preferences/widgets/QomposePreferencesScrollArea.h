@@ -30,7 +30,7 @@ class QEvent;
 class QomposePreferencesScrollArea : public QScrollArea
 {
 	public:
-		QomposePreferencesScrollArea(QWidget *p = 0);
+		QomposePreferencesScrollArea(QWidget *p = nullptr);
 		virtual ~QomposePreferencesScrollArea();
 
 		virtual void setWidget(QWidget *w);

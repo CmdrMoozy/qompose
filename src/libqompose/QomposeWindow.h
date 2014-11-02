@@ -45,7 +45,7 @@ class QomposeWindow : public QMainWindow
 	Q_OBJECT
 
 	public:
-		QomposeWindow(QWidget * = nullptr, Qt::WindowFlags = 0);
+		QomposeWindow(QWidget * = nullptr, Qt::WindowFlags = nullptr);
 		virtual ~QomposeWindow();
 
 	protected:

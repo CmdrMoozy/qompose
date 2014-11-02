@@ -27,22 +27,23 @@ class QIcon;
 class QPaintEvent;
 
 /*!
- * \brief This class implements a QPushButton specifically for selecting a color.
+ * \brief This class implements a QPushButton for selecting a color.
  *
- * When clicked, this button automatically prompts the user for a new color. To demonstrate
- * the color selected, our widget displays a solid rectangle filled with the color instead of
- * text or an icon or whatever else.
+ * When clicked, this button automatically prompts the user for a new color.
+ * To demonstrate the color selected, our widget displays a solid rectangle
+ * filled with the color instead of text or an icon or whatever else.
  */
 class QomposeColorPickerButton : public QPushButton
 {
 	Q_OBJECT
 
 	public:
-		QomposeColorPickerButton(QWidget *p = 0, const QColor &iC = Qt::black);
-		QomposeColorPickerButton(const QString &t, QWidget *p = 0,
+		QomposeColorPickerButton(QWidget *p = nullptr,
 			const QColor &iC = Qt::black);
+		QomposeColorPickerButton(const QString &t,
+			QWidget *p = nullptr, const QColor &iC = Qt::black);
 		QomposeColorPickerButton(const QIcon &i, const QString &t,
-			QWidget *p = 0, const QColor &iC = Qt::black);
+			QWidget *p = nullptr, const QColor &iC = Qt::black);
 		virtual ~QomposeColorPickerButton();
 
 		const QColor &getSelectedColor() const;

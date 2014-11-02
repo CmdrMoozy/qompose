@@ -43,7 +43,7 @@ class QomposePreferencesDialog : public QDialog
 
 	public:
 		QomposePreferencesDialog(QomposeSettings *,
-			QWidget * = nullptr, Qt::WindowFlags = 0);
+			QWidget * = nullptr, Qt::WindowFlags = nullptr);
 		virtual ~QomposePreferencesDialog();
 
 		void discardChanges();

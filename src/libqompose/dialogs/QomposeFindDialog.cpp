@@ -38,11 +38,16 @@
  * \param f The window flags to use for this dialog.
  */
 QomposeFindDialog::QomposeFindDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f)
+	: QDialog(p, f), query(new QomposeFindQuery(this)),
+		layout(nullptr), findLabel(nullptr), findTextEdit(nullptr),
+		optionsGroupBox(nullptr), optionsLayout(nullptr),
+		wrapCheckBox(nullptr), wholeWordsCheckBox(nullptr),
+		caseSensitiveCheckBox(nullptr), reverseCheckBox(nullptr),
+		regexCheckBox(nullptr), buttonsWidget(nullptr),
+		buttonsLayout(nullptr), findButton(nullptr),
+		closeButton(nullptr)
 {
 	setWindowTitle(tr("Find"));
-
-	query = new QomposeFindQuery(this);
 
 	initializeGUI();
 
@@ -117,7 +122,7 @@ void QomposeFindDialog::initializeGUI()
 
 	// Create our find expression inputs.
 
-	findLabel = new QLabel(tr("Find expression:"), this);
+	findLabel = new QLabel(tr("Find expression:"), this, nullptr);
 
 	findTextEdit = new QLineEdit();
 
@@ -137,17 +142,17 @@ void QomposeFindDialog::initializeGUI()
 
 	regexCheckBox = new QCheckBox(tr("Regular expression search?"), optionsGroupBox);
 
-	optionsLayout->addWidget(wrapCheckBox, 0, 0, 1, 1);
-	optionsLayout->addWidget(wholeWordsCheckBox, 1, 0, 1, 1);
-	optionsLayout->addWidget(caseSensitiveCheckBox, 2, 0, 1, 1);
-	optionsLayout->addWidget(reverseCheckBox, 3, 0, 1, 1);
-	optionsLayout->addWidget(regexCheckBox, 4, 0, 1, 1);
+	optionsLayout->addWidget(wrapCheckBox, 0, 0, 1, 1, nullptr);
+	optionsLayout->addWidget(wholeWordsCheckBox, 1, 0, 1, 1, nullptr);
+	optionsLayout->addWidget(caseSensitiveCheckBox, 2, 0, 1, 1, nullptr);
+	optionsLayout->addWidget(reverseCheckBox, 3, 0, 1, 1, nullptr);
+	optionsLayout->addWidget(regexCheckBox, 4, 0, 1, 1, nullptr);
 	optionsLayout->setRowStretch(5, 1);
 	optionsGroupBox->setLayout(optionsLayout);
 
 	// Create our buttons widget.
 
-	buttonsWidget = new QWidget(this);
+	buttonsWidget = new QWidget(this, nullptr);
 	buttonsLayout = new QGridLayout(buttonsWidget);
 
 	findButton = new QPushButton(tr("&Find"), buttonsWidget);
@@ -155,17 +160,17 @@ void QomposeFindDialog::initializeGUI()
 
 	closeButton = new QPushButton(tr("Clos&e"), buttonsWidget);
 
-	buttonsLayout->addWidget(findButton, 0, 0, 1, 1);
-	buttonsLayout->addWidget(closeButton, 1, 0, 1, 1);
+	buttonsLayout->addWidget(findButton, 0, 0, 1, 1, nullptr);
+	buttonsLayout->addWidget(closeButton, 1, 0, 1, 1, nullptr);
 	buttonsLayout->setRowStretch(2, 1);
 	buttonsWidget->setLayout(buttonsLayout);
 
 	// Add our widgets to our dialog.
 
-	layout->addWidget(findLabel, 0, 0, 1, 1);
-	layout->addWidget(findTextEdit, 0, 1, 1, 1);
-	layout->addWidget(optionsGroupBox, 1, 0, 1, 2);
-	layout->addWidget(buttonsWidget, 0, 2, 2, 1);
+	layout->addWidget(findLabel, 0, 0, 1, 1, nullptr);
+	layout->addWidget(findTextEdit, 0, 1, 1, 1, nullptr);
+	layout->addWidget(optionsGroupBox, 1, 0, 1, 2, nullptr);
+	layout->addWidget(buttonsWidget, 0, 2, 2, 1, nullptr);
 	layout->setRowStretch(1, 1);
 	layout->setColumnStretch(1, 1);
 	setLayout(layout);

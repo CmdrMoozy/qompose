@@ -36,7 +36,10 @@
  * \param f The window falgs to use for our dialog.
  */
 QomposeGoToDialog::QomposeGoToDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f), selectedLine(0)
+	: QDialog(p, f), selectedLine(0), layout(nullptr),
+		lineLabel(nullptr), lineTextEdit(nullptr),
+		buttonsWidget(nullptr), buttonsLayout(nullptr),
+		closeButton(nullptr), goToButton(nullptr)
 {
 	setWindowTitle(tr("Go To Line"));
 
@@ -102,13 +105,13 @@ void QomposeGoToDialog::initializeGUI()
 
 	// Create our line inputs.
 
-	lineLabel = new QLabel(tr("Destination line number:"), this);
+	lineLabel = new QLabel(tr("Destination line number:"), this, nullptr);
 
 	lineTextEdit = new QLineEdit(this);
 
 	// Create our buttons widget.
 
-	buttonsWidget = new QWidget(this);
+	buttonsWidget = new QWidget(this, nullptr);
 	buttonsLayout = new QGridLayout(buttonsWidget);
 
 	closeButton = new QPushButton(tr("Clos&e"), buttonsWidget);
@@ -116,16 +119,16 @@ void QomposeGoToDialog::initializeGUI()
 	goToButton = new QPushButton(tr("&Go To"), buttonsWidget);
 	goToButton->setDefault(true);
 
-	buttonsLayout->addWidget(closeButton, 0, 1, 1, 1);
-	buttonsLayout->addWidget(goToButton, 0, 2, 1, 1);
+	buttonsLayout->addWidget(closeButton, 0, 1, 1, 1, nullptr);
+	buttonsLayout->addWidget(goToButton, 0, 2, 1, 1, nullptr);
 	buttonsLayout->setColumnStretch(0, 1);
 	buttonsWidget->setLayout(buttonsLayout);
 
 	// Add our widgets to our dialog.
 
-	layout->addWidget(lineLabel, 0, 0, 1, 1);
-	layout->addWidget(lineTextEdit, 0, 1, 1, 1);
-	layout->addWidget(buttonsWidget, 2, 0, 1, 2);
+	layout->addWidget(lineLabel, 0, 0, 1, 1, nullptr);
+	layout->addWidget(lineTextEdit, 0, 1, 1, 1, nullptr);
+	layout->addWidget(buttonsWidget, 2, 0, 1, 2, nullptr);
 	layout->setColumnStretch(1, 1);
 	layout->setRowStretch(1, 1);
 	setLayout(layout);

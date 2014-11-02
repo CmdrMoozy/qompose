@@ -24,7 +24,8 @@
 #include <QEvent>
 
 /*!
- * This is our default constructor, which creates a new scroll area with the given widget.
+ * This is our default constructor, which creates a new scroll area with the
+ * given widget.
  *
  * \param p The widget this scroll area will be displaying.
  */
@@ -38,7 +39,8 @@ QomposePreferencesScrollArea::QomposePreferencesScrollArea(QWidget *p)
 }
 
 /*!
- * This is our default destructor, which cleans up and destroys our scroll area.
+ * This is our default destructor, which cleans up and destroys our scroll
+ * area.
  */
 QomposePreferencesScrollArea::~QomposePreferencesScrollArea()
 {
@@ -58,8 +60,9 @@ void QomposePreferencesScrollArea::setWidget(QWidget *w)
 }
 
 /*!
- * We filter events to catch resize events from the widget we're displaying, to update the size of our
- * scroll area to prevent any horizontal scrolling from being neccessary.
+ * We filter events to catch resize events from the widget we're displaying,
+ * to update the size of our scroll area to prevent any horizontal scrolling
+ * from being neccessary.
  *
  * \param o The object whose event is being filtered.
  * \param e The event being handled.
@@ -79,9 +82,9 @@ bool QomposePreferencesScrollArea::eventFilter(QObject *o, QEvent *e)
 }
 
 /*!
- * We handle our superclass's show event to resize our scroll area to prevent horizontal scrolling from
- * being neccessary. Since we do this on resize events too, this is probably unneeded, but it doesn't
- * hurt anything.
+ * We handle our superclass's show event to resize our scroll area to prevent
+ * horizontal scrolling from being neccessary. Since we do this on resize
+ * events too, this is probably unneeded, but it doesn't hurt anything.
  *
  * \param e The event being handled.
  */
@@ -93,11 +96,12 @@ void QomposePreferencesScrollArea::showEvent(QShowEvent *e)
 }
 
 /*!
- * This is a utility function which updates our scroll area's minimum width to be the sum of the width
- * of our vertical scrollbar, and the minimum size hint width of the widget we're displaying.
+ * This is a utility function which updates our scroll area's minimum width
+ * to be the sum of the width of our vertical scrollbar, and the minimum size
+ * hint width of the widget we're displaying.
  *
- * This makes our scroll area always as wide as the widget we're displaying, so no horizontal scrolling
- * is necessary.
+ * This makes our scroll area always as wide as the widget we're displaying,
+ * so no horizontal scrolling is necessary.
  */
 void QomposePreferencesScrollArea::resizeFixedHorizontal()
 {
@@ -105,7 +109,7 @@ void QomposePreferencesScrollArea::resizeFixedHorizontal()
 
 	QWidget *w = widget();
 
-	if(w == 0)
+	if(w == nullptr)
 		return;
 
 	int ww = w->minimumSizeHint().width();

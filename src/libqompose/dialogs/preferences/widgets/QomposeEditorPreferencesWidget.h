@@ -32,13 +32,13 @@ class QomposeColorPickerButton;
 class QomposeFontPickerButton;
 
 /*!
- * \brief This class implements a widget to configure editor-related application settings.
+ * \brief This class implements a widget to configure editor-related settings.
  */
 class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 {
 	public:
 		QomposeEditorPreferencesWidget(QomposeSettings *s,
-			QWidget *p = 0, Qt::WindowFlags f = 0);
+			QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 		virtual ~QomposeEditorPreferencesWidget();
 
 		virtual void apply();
@@ -75,6 +75,11 @@ class QomposeEditorPreferencesWidget : public QomposePreferencesWidget
 		QomposeColorPickerButton *gutterFGButton;
 		QLabel *gutterBGLabel;
 		QomposeColorPickerButton *gutterBGButton;
+
+		QomposeEditorPreferencesWidget(
+			const QomposeEditorPreferencesWidget &);
+		QomposeEditorPreferencesWidget &operator=(
+			const QomposeEditorPreferencesWidget &);
 
 		void initializeGUI();
 };

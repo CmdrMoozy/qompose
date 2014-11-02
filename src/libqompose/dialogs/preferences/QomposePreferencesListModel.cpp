@@ -29,7 +29,9 @@
  * \param p The parent object for this new model.
  */
 QomposePreferencesListModel::QomposePreferencesListModel(QObject *p)
-	: QAbstractListModel(p)
+	: QAbstractListModel(p),
+		widgets(QList<QomposePreferencesWidget *>()),
+		scrollWidgets(QList<QomposePreferencesScrollArea *>())
 {
 }
 

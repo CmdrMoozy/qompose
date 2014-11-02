@@ -71,17 +71,17 @@ void QomposeAboutDialog::initializeGUI()
 
 	// Create our Qompose tab.
 
-	qomposeTab = new QWidget(tabs);
+	qomposeTab = new QWidget(tabs, nullptr);
 	qomposeTabLayout = new QGridLayout(qomposeTab);
 
-	qomposeIconLabel = new QLabel(qomposeTab);
+	qomposeIconLabel = new QLabel(qomposeTab, nullptr);
 	qomposeIconLabel->setPixmap(QPixmap(":/icons/qompose.png"));
 	qomposeIconLabel->setScaledContents(true);
 	qomposeIconLabel->resize(32, 32);
 
 	qomposeLabel = new QLabel(QString("Qompose %1.%2.%3")
 		.arg(QOMPOSE_VERSION_MAJ).arg(QOMPOSE_VERSION_MIN)
-		.arg(QOMPOSE_VERSION_BUG), qomposeTab);
+		.arg(QOMPOSE_VERSION_BUG), qomposeTab, nullptr);
 
 	QFont largeFont = qomposeLabel->font();
 	largeFont.setPointSize(24);
@@ -89,16 +89,16 @@ void QomposeAboutDialog::initializeGUI()
 	qomposeLabel->setFont(largeFont);
 
 	qomposeDescriptionLabel = new QLabel(tr("A simple programmer's "
-		"text editor."), qomposeTab);
+		"text editor."), qomposeTab, nullptr);
 
 	qomposeTextEdit = new QTextEdit(qomposeTab);
 	qomposeTextEdit->setLineWrapMode(QTextEdit::NoWrap);
 	qomposeTextEdit->setReadOnly(true);
 
-	qomposeTabLayout->addWidget(qomposeIconLabel, 0, 0, 2, 1);
-	qomposeTabLayout->addWidget(qomposeLabel, 0, 1, 1, 1);
-	qomposeTabLayout->addWidget(qomposeDescriptionLabel, 1, 1, 1, 1);
-	qomposeTabLayout->addWidget(qomposeTextEdit, 2, 0, 1, 3);
+	qomposeTabLayout->addWidget(qomposeIconLabel, 0, 0, 2, 1, nullptr);
+	qomposeTabLayout->addWidget(qomposeLabel, 0, 1, 1, 1, nullptr);
+	qomposeTabLayout->addWidget(qomposeDescriptionLabel, 1, 1, 1, 1, nullptr);
+	qomposeTabLayout->addWidget(qomposeTextEdit, 2, 0, 1, 3, nullptr);
 	qomposeTabLayout->setColumnStretch(1, 1);
 	qomposeTabLayout->setRowStretch(2, 1);
 	qomposeTab->setLayout(qomposeTabLayout);
@@ -122,8 +122,8 @@ void QomposeAboutDialog::initializeGUI()
 
 	closeButton = new QPushButton(tr("Clos&e"), this);
 
-	layout->addWidget(tabs, 0, 0, 1, 1);
-	layout->addWidget(closeButton, 1, 0, 1, 1);
+	layout->addWidget(tabs, 0, 0, 1, 1, nullptr);
+	layout->addWidget(closeButton, 1, 0, 1, 1, nullptr);
 	layout->setRowStretch(0, 1);
 	setLayout(layout);
 

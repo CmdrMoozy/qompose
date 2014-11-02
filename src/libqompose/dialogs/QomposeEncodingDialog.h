@@ -36,7 +36,7 @@ class QomposeEncodingDialog : public QDialog
 
 	public:
 		QomposeEncodingDialog(QWidget * = nullptr,
-			Qt::WindowFlags = 0, const QString & = "UTF-8",
+			Qt::WindowFlags = nullptr, const QString & = "UTF-8",
 			const QString & =
 			tr("Which character encoding should be used?"),
 			const QString & = tr("Select Character Encoding"));

@@ -35,7 +35,7 @@ class QomposeAboutDialog : public QDialog
 {
 	public:
 		QomposeAboutDialog(QWidget * = nullptr,
-			Qt::WindowFlags = 0);
+			Qt::WindowFlags = nullptr);
 		virtual ~QomposeAboutDialog();
 
 	private:

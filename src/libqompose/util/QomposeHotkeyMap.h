@@ -63,6 +63,7 @@ class QomposeHotkeyMap
 		 * map instance.
 		 */
 		QomposeHotkeyMap()
+			: hotkeys(HotkeyHash())
 		{
 		}
 

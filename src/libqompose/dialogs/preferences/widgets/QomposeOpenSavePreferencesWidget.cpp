@@ -34,9 +34,11 @@
  * \param p The parent widget to use for this widget.
  * \param f The window flags to use for this widget.
  */
-QomposeOpenSavePreferencesWidget::QomposeOpenSavePreferencesWidget(QomposeSettings *s,
-	QWidget *p, Qt::WindowFlags f)
-	: QomposePreferencesWidget(s, p, f)
+QomposeOpenSavePreferencesWidget::QomposeOpenSavePreferencesWidget(
+	QomposeSettings *s, QWidget *p, Qt::WindowFlags f)
+	: QomposePreferencesWidget(s, p, f), layout(nullptr),
+		generalGroupBox(nullptr), generalLayout(nullptr),
+		stripTrailingSpacesCheckBox(nullptr)
 {
 	setPreferencesIcon(QomposeGUIUtils::getIconFromTheme("document-save"));
 	setPreferencesTitle(tr("Open/Save"));
@@ -95,7 +97,8 @@ void QomposeOpenSavePreferencesWidget::initializeGUI()
 	stripTrailingSpacesCheckBox = new QCheckBox(tr("Strip Trailing Spaces"),
 		generalGroupBox);
 
-	generalLayout->addWidget( stripTrailingSpacesCheckBox, 0, 0, 1, 1 );
+	generalLayout->addWidget(
+		stripTrailingSpacesCheckBox, 0, 0, 1, 1, nullptr);
 
 	generalLayout->setRowStretch(1, 1);
 	generalLayout->setColumnStretch(0, 1);
@@ -104,7 +107,7 @@ void QomposeOpenSavePreferencesWidget::initializeGUI()
 
 	// Add these group boxes to our layout.
 
-	layout->addWidget(generalGroupBox, 0, 0, 1, 1);
+	layout->addWidget(generalGroupBox, 0, 0, 1, 1, nullptr);
 
 	layout->setRowStretch(1, 1);
 	layout->setColumnStretch(0, 1);

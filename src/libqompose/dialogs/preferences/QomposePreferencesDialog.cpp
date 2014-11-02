@@ -41,7 +41,15 @@
  */
 QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
 	QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f), settings(s)
+	: QDialog(p, f), settings(s), layout(nullptr),
+		generalPreferencesWidget(nullptr),
+		editorPreferencesWidget(nullptr),
+		openSavePreferencesWidget(nullptr),
+		preferencesView(nullptr), preferencesModel(nullptr),
+		preferencesDisplayWidget(nullptr), buttonsWidget(nullptr),
+		buttonsLayout(nullptr), okButton(nullptr),
+		applyButton(nullptr), cancelButton(nullptr),
+		defaultsButton(nullptr)
 {
 	layout = new QGridLayout(this);
 
@@ -60,7 +68,7 @@ QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
 	preferencesView->setCurrentIndex(preferencesModel->index(0));
 	preferencesDisplayWidget->setCurrentIndex(0);
 
-	buttonsWidget = new QWidget(this);
+	buttonsWidget = new QWidget(this, nullptr);
 	buttonsLayout = new QGridLayout(buttonsWidget);
 
 	okButton = new QPushButton(tr("&Ok"), buttonsWidget);
@@ -71,16 +79,16 @@ QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
 
 	defaultsButton = new QPushButton(tr("Restore &Defaults"), buttonsWidget);
 
-	buttonsLayout->addWidget(okButton, 0, 1, 1, 1);
-	buttonsLayout->addWidget(applyButton, 0, 2, 1, 1);
-	buttonsLayout->addWidget(cancelButton, 0, 3, 1, 1);
-	buttonsLayout->addWidget(defaultsButton, 0, 4, 1, 1);
+	buttonsLayout->addWidget(okButton, 0, 1, 1, 1, nullptr);
+	buttonsLayout->addWidget(applyButton, 0, 2, 1, 1, nullptr);
+	buttonsLayout->addWidget(cancelButton, 0, 3, 1, 1, nullptr);
+	buttonsLayout->addWidget(defaultsButton, 0, 4, 1, 1, nullptr);
 	buttonsLayout->setColumnStretch(0, 1);
 	buttonsWidget->setLayout(buttonsLayout);
 
-	layout->addWidget(preferencesView, 0, 0, 1, 1);
-	layout->addWidget(preferencesDisplayWidget, 0, 1, 1, 1);
-	layout->addWidget(buttonsWidget, 1, 0, 1, 2);
+	layout->addWidget(preferencesView, 0, 0, 1, 1, nullptr);
+	layout->addWidget(preferencesDisplayWidget, 0, 1, 1, 1, nullptr);
+	layout->addWidget(buttonsWidget, 1, 0, 1, 2, nullptr);
 	layout->setRowStretch(0, 1);
 	layout->setColumnStretch(1, 1);
 	setLayout(layout);

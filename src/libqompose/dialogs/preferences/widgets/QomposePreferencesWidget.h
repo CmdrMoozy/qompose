@@ -26,13 +26,13 @@
 class QomposeSettings;
 
 /*!
- * \brief This class provides a general interface common to all preferences widgets.
+ * \brief This class provides a common interface for all preferences widgets.
  */
 class QomposePreferencesWidget : public QWidget
 {
 	public:
-		QomposePreferencesWidget(QomposeSettings *s, QWidget *p = 0,
-			Qt::WindowFlags f = 0);
+		QomposePreferencesWidget(QomposeSettings *s,
+			QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 		virtual ~QomposePreferencesWidget();
 
 		QIcon getPreferencesIcon() const;
@@ -42,16 +42,17 @@ class QomposePreferencesWidget : public QWidget
 		void setPreferencesTitle(const QString &t);
 
 		/*!
-		 * This function should be implemented by subclasses, and should apply
-		 * all of that widget's settings to the QomposeSettings instance given in
-		 * the constructor.
+		 * This function should be implemented by subclasses, and
+		 * should apply all of that widget's settings to the
+		 * QomposeSettings instance given in the constructor.
 		 */
 		virtual void apply() = 0;
 
 		/*!
-		 * This function should be implemented by subclasses, and should discard
-		 * any settings values in the widget, replacing them with the existing values
-		 * stored in the QomposeSettings instance given in the constructor.
+		 * This function should be implemented by subclasses, and
+		 * should discard any settings values in the widget, replacing
+		 * them with the existing values stored in the QomposeSettings
+		 * instance given in the constructor.
 		 */
 		virtual void discardChanges() = 0;
 
@@ -63,6 +64,10 @@ class QomposePreferencesWidget : public QWidget
 
 		QIcon icon;
 		QString title;
+
+		QomposePreferencesWidget(const QomposePreferencesWidget &);
+		QomposePreferencesWidget &operator=(
+			const QomposePreferencesWidget &);
 };
 
 #endif

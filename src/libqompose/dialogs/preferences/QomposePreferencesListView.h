@@ -32,7 +32,7 @@ class QomposePreferencesListModel;
 class QomposePreferencesListView : public QListView
 {
 	public:
-		QomposePreferencesListView(QWidget *p = 0);
+		QomposePreferencesListView(QWidget *p = nullptr);
 		virtual ~QomposePreferencesListView();
 
 		void setModel(QomposePreferencesListModel *m);

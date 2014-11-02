@@ -48,7 +48,7 @@ QomposeEncodingDialog::QomposeEncodingDialog(QWidget *p, Qt::WindowFlags f,
 {
 	layout = new QGridLayout(this);
 
-	messageLabel = new QLabel(m, this);
+	messageLabel = new QLabel(m, this, nullptr);
 
 	encodingList = new QListWidget(this);
 
@@ -63,21 +63,21 @@ QomposeEncodingDialog::QomposeEncodingDialog(QWidget *p, Qt::WindowFlags f,
 	if(defaultEncoding.size() == 1)
 		encodingList->setCurrentItem(defaultEncoding.first());
 
-	buttonsWidget = new QWidget(this);
+	buttonsWidget = new QWidget(this, nullptr);
 	buttonsLayout = new QGridLayout(buttonsWidget);
 
 	selectButton = new QPushButton(tr("&Select"), buttonsWidget);
 
 	cancelButton = new QPushButton(tr("&Cancel"), buttonsWidget);
 
-	buttonsLayout->addWidget(selectButton, 0, 1, 1, 1);
-	buttonsLayout->addWidget(cancelButton, 0, 2, 1, 1);
+	buttonsLayout->addWidget(selectButton, 0, 1, 1, 1, nullptr);
+	buttonsLayout->addWidget(cancelButton, 0, 2, 1, 1, nullptr);
 	buttonsLayout->setColumnStretch(0, 1);
 	buttonsWidget->setLayout(buttonsLayout);
 
-	layout->addWidget(messageLabel, 0, 0, 1, 1);
-	layout->addWidget(encodingList, 1, 0, 1, 1);
-	layout->addWidget(buttonsWidget, 2, 0, 1, 1);
+	layout->addWidget(messageLabel, 0, 0, 1, 1, nullptr);
+	layout->addWidget(encodingList, 1, 0, 1, 1, nullptr);
+	layout->addWidget(buttonsWidget, 2, 0, 1, 1, nullptr);
 	setLayout(layout);
 
 	QObject::connect(selectButton, SIGNAL(clicked(bool)),
@@ -118,7 +118,7 @@ QString QomposeEncodingDialog::promptEncoding(QWidget *p, const QString &d,
 	const QString &m, const QString &t)
 {
 
-	QomposeEncodingDialog dialog(p, 0, d, m, t);
+	QomposeEncodingDialog dialog(p, nullptr, d, m, t);
 	dialog.exec();
 	return dialog.getSelectedEncoding();
 

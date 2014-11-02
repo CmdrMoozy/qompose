@@ -41,7 +41,7 @@ class QomposeReplaceDialog : public QDialog
 
 	public:
 		QomposeReplaceDialog(QWidget * = nullptr,
-			Qt::WindowFlags = 0);
+			Qt::WindowFlags = nullptr);
 		virtual ~QomposeReplaceDialog();
 
 		const QomposeReplaceQuery *getQuery() const;

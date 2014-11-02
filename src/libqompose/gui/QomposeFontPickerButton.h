@@ -26,12 +26,13 @@ class QString;
 class QIcon;
 
 /*!
- * \brief This class implements a QPushButton specifically for selecting a font.
+ * \brief This class implements a QPushButton for selecting a font.
  *
- * When clicked, this button automatically prompts the user for a new font. To demonstrate
- * the font selected, we set our widget's font to the one the user chose. Note that, to preserve
- * layouts, we do limit the font size we will display -- but any size of font can be selected,
- * and will be returned by getSelectedFont() appropriately.
+ * When clicked, this button automatically prompts the user for a new font. To
+ * demonstrate the font selected, we set our widget's font to the one the user
+ * chose. Note that, to preserve layouts, we do limit the font size we will
+ * display -- but any size of font can be selected, and will be returned by
+ * getSelectedFont() appropriately.
  */
 class QomposeFontPickerButton : public QPushButton
 {
@@ -39,11 +40,12 @@ class QomposeFontPickerButton : public QPushButton
 	Q_OBJECT
 
 	public:
-		QomposeFontPickerButton(QWidget *p = 0, const QFont &iF = QFont());
-		QomposeFontPickerButton(const QString &t, QWidget *p = 0,
+		QomposeFontPickerButton(QWidget *p = nullptr,
 			const QFont &iF = QFont());
+		QomposeFontPickerButton(const QString &t,
+			QWidget *p = nullptr, const QFont &iF = QFont());
 		QomposeFontPickerButton(const QIcon &i, const QString &t,
-			QWidget *p = 0, const QFont &iF = QFont());
+			QWidget *p = nullptr, const QFont &iF = QFont());
 		virtual ~QomposeFontPickerButton();
 
 		const QFont &getSelectedFont() const;

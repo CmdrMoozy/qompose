@@ -29,13 +29,13 @@ class QSpinBox;
 class QomposeSettings;
 
 /*!
- * \brief This class implements a widget to configure general application options.
+ * \brief This class implements a widget to configure general options.
  */
 class QomposeGeneralPreferencesWidget : public QomposePreferencesWidget
 {
 	public:
 		QomposeGeneralPreferencesWidget(QomposeSettings *s,
-			QWidget *p = 0, Qt::WindowFlags f = 0);
+			QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 		virtual ~QomposeGeneralPreferencesWidget();
 
 		virtual void apply();
@@ -47,6 +47,11 @@ class QomposeGeneralPreferencesWidget : public QomposePreferencesWidget
 		QLabel *recentListSizeLabel;
 		QSpinBox *recentListSizeSpinBox;
 		QCheckBox *saveWindowAttribsCheckBox;
+
+		QomposeGeneralPreferencesWidget(
+			const QomposeGeneralPreferencesWidget &);
+		QomposeGeneralPreferencesWidget &operator=(
+			const QomposeGeneralPreferencesWidget &);
 
 		void initializeGUI();
 };

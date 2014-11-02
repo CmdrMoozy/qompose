@@ -34,7 +34,7 @@ class QomposeOpenSavePreferencesWidget : public QomposePreferencesWidget
 {
 	public:
 		QomposeOpenSavePreferencesWidget(QomposeSettings *s,
-			QWidget *p = 0, Qt::WindowFlags f = 0);
+			QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 		virtual ~QomposeOpenSavePreferencesWidget();
 
 		virtual void apply();
@@ -46,6 +46,11 @@ class QomposeOpenSavePreferencesWidget : public QomposePreferencesWidget
 		QGroupBox *generalGroupBox;
 		QGridLayout *generalLayout;
 		QCheckBox *stripTrailingSpacesCheckBox;
+
+		QomposeOpenSavePreferencesWidget(
+			const QomposeOpenSavePreferencesWidget &);
+		QomposeOpenSavePreferencesWidget &operator=(
+			const QomposeOpenSavePreferencesWidget &);
 
 		void initializeGUI();
 };
