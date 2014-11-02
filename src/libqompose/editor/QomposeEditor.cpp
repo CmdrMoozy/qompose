@@ -50,7 +50,8 @@
  * \param p Our parent widget.
  */
 QomposeEditor::QomposeEditor(QWidget *p)
-	: QomposeDecoratedTextEdit(p)
+	: QomposeDecoratedTextEdit(p),
+		hotkeys(QomposeHotkeyMap<HotkeyFunction>())
 {
 	initializeHotkeys();
 }
@@ -127,11 +128,11 @@ void QomposeEditor::initializeHotkeys()
 {
 	// Enter
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Return, 0,
-		~Qt::KeyboardModifiers(0)), &QomposeEditor::doNewline);
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Return, nullptr,
+		~Qt::KeyboardModifiers(nullptr)), &QomposeEditor::doNewline);
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Enter, 0,
-		~Qt::KeyboardModifiers(0)), &QomposeEditor::doNewline);
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Enter, nullptr,
+		~Qt::KeyboardModifiers(nullptr)), &QomposeEditor::doNewline);
 
 	// Tab
 
@@ -398,7 +399,7 @@ QomposeEditor::FindResult QomposeEditor::doBatchReplace(
 	query.setReversed(false);
 	query.setRegularExpression(q->isRegularExpression());
 
-	q = NULL;
+	q = nullptr;
 
 	// Move our cursor to our start position.
 

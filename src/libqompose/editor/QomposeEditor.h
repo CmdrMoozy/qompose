@@ -56,7 +56,7 @@ class QomposeEditor : public QomposeDecoratedTextEdit
 			Found
 		};
 
-		QomposeEditor(QWidget *p = NULL);
+		QomposeEditor(QWidget *p = nullptr);
 		virtual ~QomposeEditor();
 
 	protected:

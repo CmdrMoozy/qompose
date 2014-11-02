@@ -46,9 +46,10 @@ QString QomposeLexer::getSettingKey(Token t)
 
 		case NumberToken:
 			return "token-number";
-	};
 
-	return QString();
+		default:
+			return QString();
+	};
 }
 
 /*!

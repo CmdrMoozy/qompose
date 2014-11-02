@@ -61,6 +61,9 @@ class QomposeBuffer : public QomposeEditor
 		QString path;
 		QString codec;
 
+		QomposeBuffer(const QomposeBuffer &);
+		QomposeBuffer &operator=(const QomposeBuffer &);
+
 		bool read(bool u = false);
 		bool write();
 

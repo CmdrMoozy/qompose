@@ -34,8 +34,9 @@
  * \param p Our parent widget.
  * \param iC Our initial color.
  */
-QomposeColorPickerButton::QomposeColorPickerButton(QWidget *p, const QColor &iC)
-	: QPushButton("", p)
+QomposeColorPickerButton::QomposeColorPickerButton(
+	QWidget *p, const QColor &iC)
+	: QPushButton("", p), selectedColor(QColor())
 {
 	setSelectedColor(iC);
 	setMinimumSize(75, minimumHeight());
@@ -53,7 +54,7 @@ QomposeColorPickerButton::QomposeColorPickerButton(QWidget *p, const QColor &iC)
  */
 QomposeColorPickerButton::QomposeColorPickerButton(const QString &QUNUSED(t),
 	QWidget *p, const QColor &iC)
-	: QPushButton("", p)
+	: QPushButton("", p), selectedColor(QColor())
 {
 	setSelectedColor(iC);
 	setMinimumSize(75, minimumHeight());
@@ -72,7 +73,7 @@ QomposeColorPickerButton::QomposeColorPickerButton(const QString &QUNUSED(t),
  */
 QomposeColorPickerButton::QomposeColorPickerButton(const QIcon &QUNUSED(i),
 	const QString &QUNUSED(t), QWidget *p, const QColor &iC)
-	: QPushButton("", p)
+	: QPushButton("", p), selectedColor(QColor())
 {
 	setSelectedColor(iC);
 	setMinimumSize(75, minimumHeight());
@@ -99,8 +100,8 @@ const QColor &QomposeColorPickerButton::getSelectedColor() const
 }
 
 /*!
- * This function allows the currently selected color to be set. This will be the
- * color that our button displays.
+ * This function allows the currently selected color to be set. This will be
+ * the color that our button displays.
  *
  * Note that this function does NOT emit a selectedColorChanged() signal - that
  * is reserved for the color being changed by the USER when they click us.
@@ -127,7 +128,7 @@ void QomposeColorPickerButton::paintEvent(QPaintEvent *e)
 	// Create a new painter for us.
 	QPainter painter(this);
 
-	// Figure out where we are going to paint - leave a margin for our buttony parts.
+	// Leave a margin for our buttony parts when painting.
 
 	QRect r = rect();
 
@@ -146,9 +147,9 @@ void QomposeColorPickerButton::paintEvent(QPaintEvent *e)
 }
 
 /*!
- * We override our parent class's setIcon() function, since this particular button
- * does not, by definition, display icons. Note that this function still performs its
- * function correctly, but is private.
+ * We override our parent class's setIcon() function, since this particular
+ * button does not, by definition, display icons. Note that this function
+ * still performs its function correctly, but is private.
  *
  * \param i The new icon to display.
  */
@@ -158,9 +159,9 @@ void QomposeColorPickerButton::setIcon(const QIcon &i)
 }
 
 /*!
- * We override our parent class's setText() function, since this particular button
- * does not, by definition, display text. Note that this function still performs its
- * function correctly, but is private.
+ * We override our parent class's setText() function, since this particular
+ * button does not, by definition, display text. Note that this function
+ * still performs its function correctly, but is private.
  *
  * \param i The new text to display.
  */
@@ -170,9 +171,10 @@ void QomposeColorPickerButton::setText(const QString &t)
 }
 
 /*!
- * When we are clicked, we want to automatically pop up a QColorDialog to get a new
- * color selection from the user. If the user selects a new color (i.e., doesn't
- * click "Cancel"), then we emit a selectedColorChanged() signal.
+ * When we are clicked, we want to automatically pop up a QColorDialog to get
+ * a new color selection from the user. If the user selects a new color
+ * (i.e., doesn't click "Cancel"), then we emit a selectedColorChanged()
+ * signal.
  */
 void QomposeColorPickerButton::doClicked()
 { /* SLOT */
@@ -182,7 +184,9 @@ void QomposeColorPickerButton::doClicked()
 
 	if(c.isValid())
 	{
-		c.setAlpha(255); // Make sure our alpha is normal, as it isn't selectable.
+		// Make sure our alpha is normal, as it isn't selectable.
+		c.setAlpha(255);
+
 		setSelectedColor(c);
 		Q_EMIT selectedColorChanged(getSelectedColor());
 	}

@@ -33,24 +33,28 @@ class QomposeSettings;
 class QomposeSyntaxHighlighter : public QSyntaxHighlighter
 {
 	public:
-		QomposeSyntaxHighlighter(QomposeSettings *s, QObject *p);
-		QomposeSyntaxHighlighter(QomposeSettings *s, QTextDocument *p);
+		QomposeSyntaxHighlighter(QomposeSettings *, QObject *);
+		QomposeSyntaxHighlighter(QomposeSettings *, QTextDocument *);
 		virtual ~QomposeSyntaxHighlighter();
 
 		QomposeSettings *getSettings() const;
-		void setSettings(QomposeSettings *s);
+		void setSettings(QomposeSettings *);
 
 		QomposeLexer *getLexer() const;
-		void setLexer(QomposeLexer *l);
+		void setLexer(QomposeLexer *);
 
 	protected:
-		virtual void highlightBlock(const QString &t);
+		virtual void highlightBlock(const QString &);
 
 	private:
 		QomposeSettings *settings;
 		QomposeLexer *lexer;
 
-		QTextCharFormat getFormatFor(const QomposeLexerToken &t);
+		QomposeSyntaxHighlighter(const QomposeSyntaxHighlighter &);
+		QomposeSyntaxHighlighter &operator=(
+			const QomposeSyntaxHighlighter &);
+
+		QTextCharFormat getFormatFor(const QomposeLexerToken &);
 };
 
 #endif

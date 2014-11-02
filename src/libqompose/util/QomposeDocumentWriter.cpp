@@ -30,7 +30,7 @@
  * with setDevice().
  */
 QomposeDocumentWriter::QomposeDocumentWriter()
-	: whitespaceTrimmed(false)
+	: whitespaceTrimmed(false), stream()
 {
 }
 
@@ -41,7 +41,7 @@ QomposeDocumentWriter::QomposeDocumentWriter()
  * \param d The device to write to.
  */
 QomposeDocumentWriter::QomposeDocumentWriter(QIODevice *d)
-	: whitespaceTrimmed(false)
+	: whitespaceTrimmed(false), stream()
 {
 	setDevice(d);
 }

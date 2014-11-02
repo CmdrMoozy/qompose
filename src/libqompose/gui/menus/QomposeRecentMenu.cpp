@@ -36,7 +36,8 @@
  * \param p This menu's parent object.
  */
 QomposeRecentMenu::QomposeRecentMenu(QomposeSettings *s, QObject *p)
-	: QObject(p), settings(s), capacity(0)
+	: QObject(p), settings(s), capacity(0), menu(nullptr),
+		menuActions(QList<QAction *>()), recentList(QQueue<QString>())
 {
 	// Initialize our menu.
 

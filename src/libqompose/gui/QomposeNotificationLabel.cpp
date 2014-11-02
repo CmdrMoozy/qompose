@@ -32,7 +32,7 @@
  */
 QomposeNotificationLabel::QomposeNotificationLabel(
 	QWidget *p, Qt::WindowFlags f)
-	: QLabel(p, f)
+	: QLabel(p, f), defaultColor(QColor())
 {
 	defaultColor = getTextColor();
 }
@@ -91,7 +91,7 @@ void QomposeNotificationLabel::displayNotification(
 
 		duration = qMax(duration, 1.0) * 2000.0;
 
-		d = static_cast<int>(qRound(duration));
+		d = qRound(duration);
 	}
 
 	QPropertyAnimation *anim = new QPropertyAnimation(

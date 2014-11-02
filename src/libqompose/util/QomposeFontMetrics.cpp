@@ -28,8 +28,8 @@
  * \param f The font we will be examining.
  */
 QomposeFontMetrics::QomposeFontMetrics(const QFont &f)
+	: font(f)
 {
-	font = f;
 }
 
 /*!
@@ -81,7 +81,7 @@ bool QomposeFontMetrics::isMonospaced() const
  */
 int QomposeFontMetrics::getColumnWidth(int columns) const
 {
-	return static_cast<int>(qRound(getColumnWidthF(columns)));
+	return qRound(getColumnWidthF(columns));
 }
 
 /*!

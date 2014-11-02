@@ -27,10 +27,9 @@
  * \param k The key this hotkey should match.
  */
 QomposeHotkey::QomposeHotkey(Qt::Key k)
+	: key(k), rModifiers(Qt::KeyboardModifiers(Qt::NoModifier)),
+		wlModifiers(Qt::KeyboardModifiers(Qt::NoModifier))
 {
-	key = k;
-	rModifiers = Qt::KeyboardModifiers(Qt::NoModifier);
-	wlModifiers = rModifiers;
 }
 
 /*!
@@ -41,6 +40,7 @@ QomposeHotkey::QomposeHotkey(Qt::Key k)
  * \param rm The modifiers required for this hotkey to match.
  */
 QomposeHotkey::QomposeHotkey(Qt::Key k, Qt::KeyboardModifiers rm)
+	: key(k), rModifiers(rm), wlModifiers(rm)
 {
 	key = k;
 	rModifiers = rm;
@@ -62,10 +62,8 @@ QomposeHotkey::QomposeHotkey(Qt::Key k, Qt::KeyboardModifiers rm)
  */
 QomposeHotkey::QomposeHotkey(Qt::Key k, Qt::KeyboardModifiers rm,
 	Qt::KeyboardModifiers wlm)
+	: key(k), rModifiers(rm), wlModifiers(wlm | rm)
 {
-	key = k;
-	rModifiers = rm;
-	wlModifiers = wlm | rm;
 }
 
 /*!
@@ -75,6 +73,9 @@ QomposeHotkey::QomposeHotkey(Qt::Key k, Qt::KeyboardModifiers rm,
  * \param o The other hotkey to create a copy of.
  */
 QomposeHotkey::QomposeHotkey(const QomposeHotkey &o)
+	: key(Qt::Key_Escape),
+		rModifiers(Qt::KeyboardModifiers(Qt::NoModifier)),
+		wlModifiers(Qt::KeyboardModifiers(Qt::NoModifier))
 {
 	*this = o;
 }
@@ -96,6 +97,9 @@ QomposeHotkey::~QomposeHotkey()
  */
 QomposeHotkey &QomposeHotkey::operator=(const QomposeHotkey &o)
 {
+	if(&o == this)
+		return *this;
+
 	key = o.key;
 	rModifiers = o.rModifiers;
 	wlModifiers = o.wlModifiers;

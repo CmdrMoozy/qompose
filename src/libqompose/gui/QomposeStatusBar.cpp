@@ -31,9 +31,11 @@
  * \param p Our status bar's parent widget.
  */
 QomposeStatusBar::QomposeStatusBar(QWidget *p)
-	: QStatusBar(p)
+	: QStatusBar(p), statusWidget(nullptr), statusLayout(nullptr),
+		notificationLabel(nullptr), tabPathLabel(nullptr),
+		lineLabel(nullptr), columnLabel(nullptr)
 {
-	statusWidget = new QWidget(this);
+	statusWidget = new QWidget(this, nullptr);
 
 	statusLayout = new QGridLayout(statusWidget);
 	statusLayout->setContentsMargins(5, 0, 5, 0);
@@ -41,20 +43,20 @@ QomposeStatusBar::QomposeStatusBar(QWidget *p)
 
 	notificationLabel = new QomposeNotificationLabel(statusWidget);
 
-	tabPathLabel = new QLabel(statusWidget);
+	tabPathLabel = new QLabel(statusWidget, nullptr);
 
-	lineLabel = new QLabel(statusWidget);
+	lineLabel = new QLabel(statusWidget, nullptr);
 	lineLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
 	setLine(1);
 
-	columnLabel = new QLabel(statusWidget);
+	columnLabel = new QLabel(statusWidget, nullptr);
 	columnLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
 	setColumn(1);
 
-	statusLayout->addWidget(notificationLabel, 0, 0, 1, 1);
-	statusLayout->addWidget(tabPathLabel, 0, 2, 1, 1);
-	statusLayout->addWidget(lineLabel, 0, 3, 1, 1);
-	statusLayout->addWidget(columnLabel, 0, 4, 1, 1);
+	statusLayout->addWidget(notificationLabel, 0, 0, 1, 1, nullptr);
+	statusLayout->addWidget(tabPathLabel, 0, 2, 1, 1, nullptr);
+	statusLayout->addWidget(lineLabel, 0, 3, 1, 1, nullptr);
+	statusLayout->addWidget(columnLabel, 0, 4, 1, 1, nullptr);
 	statusLayout->setColumnStretch(1, 1);
 	statusWidget->setLayout(statusLayout);
 

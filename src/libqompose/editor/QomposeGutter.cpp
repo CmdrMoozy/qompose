@@ -29,7 +29,7 @@
  * \param e The editor this gutter is attached to.
  */
 QomposeGutter::QomposeGutter(QomposeDecoratedTextEdit *e)
-	: QWidget(e), editor(e)
+	: QWidget(e, nullptr), editor(e)
 {
 }
 

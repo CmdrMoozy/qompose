@@ -45,6 +45,9 @@ class QomposeGutter : public QWidget
 
 	private:
 		QomposeDecoratedTextEdit *editor;
+
+		QomposeGutter(const QomposeGutter &);
+		QomposeGutter &operator=(const QomposeGutter &);
 };
 
 #endif

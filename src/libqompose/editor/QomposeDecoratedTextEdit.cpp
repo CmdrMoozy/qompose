@@ -619,9 +619,9 @@ void QomposeDecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 
 	QTextBlock block = firstVisibleBlock();
 	int blockNumber = block.blockNumber();
-	int top = (int) blockBoundingGeometry(block)
-		.translated(contentOffset()).top();
-	int bottom = top + (int) blockBoundingRect(block).height();
+	int top = static_cast<int>(blockBoundingGeometry(block)
+		.translated(contentOffset()).top());
+	int bottom = top + static_cast<int>(blockBoundingRect(block).height());
 
 	while(block.isValid() && top <= e->rect().bottom())
 	{
@@ -638,7 +638,8 @@ void QomposeDecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 
 		block = block.next();
 		top = bottom;
-		bottom = top + (int) blockBoundingRect(block).height();
+		bottom = top + static_cast<int>(
+			blockBoundingRect(block).height());
 		blockNumber++;
 	}
 }

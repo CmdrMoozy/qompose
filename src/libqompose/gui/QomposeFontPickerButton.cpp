@@ -30,7 +30,7 @@
  * \param iF Our initial font.
  */
 QomposeFontPickerButton::QomposeFontPickerButton(QWidget *p, const QFont &iF)
-	: QPushButton(tr("Select a Font"), p)
+	: QPushButton(tr("Select a Font"), p), selectedFont(QFont())
 {
 	setSelectedFont(iF);
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
@@ -46,7 +46,7 @@ QomposeFontPickerButton::QomposeFontPickerButton(QWidget *p, const QFont &iF)
  */
 QomposeFontPickerButton::QomposeFontPickerButton(const QString &t,
 	QWidget *p, const QFont &iF)
-	: QPushButton(t, p)
+	: QPushButton(t, p), selectedFont(QFont())
 {
 	setSelectedFont(iF);
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
@@ -63,7 +63,7 @@ QomposeFontPickerButton::QomposeFontPickerButton(const QString &t,
  */
 QomposeFontPickerButton::QomposeFontPickerButton(const QIcon &i,
 	const QString &t, QWidget *p, const QFont &iF)
-	: QPushButton(i, t, p)
+	: QPushButton(i, t, p), selectedFont(QFont())
 {
 	setSelectedFont(iF);
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
@@ -131,7 +131,8 @@ void QomposeFontPickerButton::setFont(const QFont &f)
 void QomposeFontPickerButton::doClicked()
 { /* SLOT */
 	bool ok;
-	setSelectedFont(QFontDialog::getFont(&ok, getSelectedFont(), this, tr("Select a Font")));
+	setSelectedFont(QFontDialog::getFont(&ok,
+		getSelectedFont(), this, tr("Select a Font"), nullptr));
 
 	if(ok)
 		Q_EMIT selectedFontChanged(getSelectedFont());

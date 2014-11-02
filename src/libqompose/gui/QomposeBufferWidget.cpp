@@ -41,7 +41,9 @@
  * \param p The parent widget to use for this widget.
  */
 QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
-	: QWidget(p), settings(s)
+	: QWidget(p, nullptr), settings(s), layout(nullptr),
+		tabWidget(nullptr), tabs(QSet<QomposeBuffer *>()),
+		closedTabs(QStack<QomposeClosedBufferDescriptor>())
 {
 	layout = new QGridLayout(this);
 
@@ -50,7 +52,7 @@ QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
 	tabWidget->setTabsClosable(true);
 	tabWidget->setUsesScrollButtons(true);
 
-	layout->addWidget(tabWidget, 0, 0, 1, 1);
+	layout->addWidget(tabWidget, 0, 0, 1, 1, nullptr);
 	setLayout(layout);
 
 	QObject::connect(tabWidget, SIGNAL(currentChanged(int)),
@@ -475,7 +477,8 @@ void QomposeBufferWidget::doSaveAs()
 		path.append(buf->getFile());
 	}
 
-	QString p = QFileDialog::getSaveFileName(this, tr("Save File"), path);
+	QString p = QFileDialog::getSaveFileName(this, tr("Save File"), path,
+		QString(), nullptr, nullptr);
 
 	if(p.length() <= 0)
 		return;
@@ -969,10 +972,10 @@ void QomposeBufferWidget::doTabClosing(int i)
 
 	if(buf->hasBeenSaved())
 	{
-		QomposeClosedBufferDescriptor desc;
-
-		desc.file = buf->getFileDescriptor();
-		desc.cursorPosition = buf->textCursor().position();
+		QomposeClosedBufferDescriptor desc = {
+			buf->getFileDescriptor(),
+			buf->textCursor().position()
+		};
 
 		closedTabs.push(desc);
 

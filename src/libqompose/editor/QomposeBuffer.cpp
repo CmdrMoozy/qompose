@@ -42,7 +42,7 @@
  * \param p The parent widget for our buffer widget.
  */
 QomposeBuffer::QomposeBuffer(QomposeSettings *s, QWidget *p)
-	: QomposeEditor(p), settings(s), path(QString())
+	: QomposeEditor(p), settings(s), path(QString()), codec(QString())
 {
 	// Load our initial settings, and connect our settings object.
 
@@ -247,10 +247,10 @@ QString QomposeBuffer::getFile() const
  */
 QomposeFileDescriptor QomposeBuffer::getFileDescriptor() const
 {
-	QomposeFileDescriptor d;
-
-	d.fileName = path;
-	d.textCodec = codec;
+	QomposeFileDescriptor d = {
+		path,
+		codec
+	};
 
 	return d;
 }
@@ -310,7 +310,7 @@ bool QomposeBuffer::read(bool u)
 {
 	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
 
-	if(c == 0)
+	if(c == nullptr)
 		return false;
 
 	QFile file(path);
@@ -348,7 +348,7 @@ bool QomposeBuffer::write()
 
 	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
 
-	if(c == 0)
+	if(c == nullptr)
 		return false;
 
 	// Try opening the file we're going to write.

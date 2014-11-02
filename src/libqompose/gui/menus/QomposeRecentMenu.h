@@ -38,13 +38,13 @@ class QomposeRecentMenu : public QObject
 	Q_OBJECT
 
 	public:
-		QomposeRecentMenu(QomposeSettings *s, QObject *p = 0);
+		QomposeRecentMenu(QomposeSettings *, QObject * = nullptr);
 		virtual ~QomposeRecentMenu();
 
 		int getCapacity() const;
 		QMenu *getMenu() const;
 
-		void addPath(const QString &p);
+		void addPath(const QString &);
 
 		void saveContents();
 
@@ -57,14 +57,17 @@ class QomposeRecentMenu : public QObject
 
 		QQueue<QString> recentList;
 
+		QomposeRecentMenu(const QomposeRecentMenu &);
+		QomposeRecentMenu &operator=(const QomposeRecentMenu &);
+
 		void updateActionsListSize();
-		void setCapacity(int c);
+		void setCapacity(int);
 		void renderListContents();
-		void setListContents(const QStringList &l);
+		void setListContents(const QStringList &);
 
 	private Q_SLOTS:
 		void doActionClicked();
-		void doSettingChanged(const QString &k, const QVariant &v);
+		void doSettingChanged(const QString &, const QVariant &);
 
 	Q_SIGNALS:
 		void recentClicked(const QString &);

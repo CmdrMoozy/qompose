@@ -31,15 +31,15 @@ class QomposeNotificationLabel : public QLabel
 	Q_PROPERTY(QColor textColor READ getTextColor WRITE setTextColor)
 
 	public:
-		QomposeNotificationLabel(QWidget *p = 0,
-			Qt::WindowFlags f = 0);
+		QomposeNotificationLabel(QWidget * = nullptr,
+			Qt::WindowFlags  = nullptr);
 		virtual ~QomposeNotificationLabel();
 
 		QColor getTextColor() const;
-		void setTextColor(const QColor &c);
+		void setTextColor(const QColor &);
 
-		void displayNotification(const QString &n, bool c = false,
-			int d = 0);
+		void displayNotification(const QString &, bool = false,
+			int = 0);
 
 	private:
 		QColor defaultColor;

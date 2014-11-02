@@ -24,13 +24,15 @@
 
 #include "util/QomposeSettings.h"
 
-QomposeSyntaxHighlighter::QomposeSyntaxHighlighter(QomposeSettings *s, QObject *p)
-	: QSyntaxHighlighter(p), settings(s), lexer(NULL)
+QomposeSyntaxHighlighter::QomposeSyntaxHighlighter(
+	QomposeSettings *s, QObject *p)
+	: QSyntaxHighlighter(p), settings(s), lexer(nullptr)
 {
 }
 
-QomposeSyntaxHighlighter::QomposeSyntaxHighlighter(QomposeSettings *s, QTextDocument *p)
-	: QSyntaxHighlighter(p), settings(s), lexer(NULL)
+QomposeSyntaxHighlighter::QomposeSyntaxHighlighter(
+	QomposeSettings *s, QTextDocument *p)
+	: QSyntaxHighlighter(p), settings(s), lexer(nullptr)
 {
 }
 
@@ -88,7 +90,8 @@ void QomposeSyntaxHighlighter::highlightBlock(const QString &t)
 		setCurrentBlockState(state);
 }
 
-QTextCharFormat QomposeSyntaxHighlighter::getFormatFor(const QomposeLexerToken &t)
+QTextCharFormat QomposeSyntaxHighlighter::getFormatFor(
+	const QomposeLexerToken &t)
 {
 	QString key = QomposeLexer::getSettingKey(t.token);
 

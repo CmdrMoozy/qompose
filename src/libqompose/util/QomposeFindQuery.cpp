@@ -185,7 +185,7 @@ void QomposeFindQuery::setRegularExpression(bool r)
  */
 QTextDocument::FindFlags QomposeFindQuery::getFindFlags(bool r) const
 {
-	QTextDocument::FindFlags f;
+	QTextDocument::FindFlags f = nullptr;
 
 	if(r && isReversed())
 		f |= QTextDocument::FindBackward;

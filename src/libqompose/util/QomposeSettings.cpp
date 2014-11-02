@@ -30,13 +30,13 @@
 const QList< QPair<QString, QVariant> > QomposeSettings::defaults
 	= (QList< QPair<QString, QVariant> >())
 		<< QPair<QString, QVariant>( "show-status-bar",            true                  )
-		<< QPair<QString, QVariant>( "recent-list-size",           static_cast<int>(10)  )
+		<< QPair<QString, QVariant>( "recent-list-size",           10                    )
 		<< QPair<QString, QVariant>( "recent-list",                QStringList()         )
 		<< QPair<QString, QVariant>( "window-save-attributes",     true                  )
 		<< QPair<QString, QVariant>( "show-gutter",                true                  )
 		<< QPair<QString, QVariant>( "save-strip-trailing-spaces", true                  )
 		<< QPair<QString, QVariant>( "editor-font",                QFont("Courier", 11)  )
-		<< QPair<QString, QVariant>( "editor-tab-width",           static_cast<int>(8)   )
+		<< QPair<QString, QVariant>( "editor-tab-width",           8                     )
 		<< QPair<QString, QVariant>( "editor-wrap-guide-visible",  true                  )
 		<< QPair<QString, QVariant>( "editor-wrap-guide-width",    90                    )
 		<< QPair<QString, QVariant>( "editor-wrap-guide-color",    QColor(127, 127, 127) )
@@ -56,7 +56,7 @@ const QList< QPair<QString, QVariant> > QomposeSettings::defaults
  * \param p Our parent object.
  */
 QomposeSettings::QomposeSettings(QObject *p)
-	: QObject(p)
+	: QObject(p), settings(nullptr)
 {
 	#ifdef QOMPOSE_DEBUG
 		settings = new QSettings(QSettings::UserScope,

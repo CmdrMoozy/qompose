@@ -45,6 +45,9 @@ QomposeMainMenu::QomposeMainMenu(QomposeSettings *s, QWidget *p)
 		nextBufferAction(nullptr), moveBufferLeftAction(nullptr),
 		moveBufferRightAction(nullptr), aboutQomposeAction(nullptr),
 		aboutQtAction(nullptr)
+#ifdef QOMPOSE_DEBUG
+		, debugAction(nullptr)
+#endif
 {
 	// Initialize our actions.
 

@@ -58,12 +58,13 @@ class QomposeLexer : public QObject
 			NumberToken = 5
 		};
 
-		static QString getSettingKey(Token t);
+		static QString getSettingKey(Token);
 
-		QomposeLexer(QObject *p = 0);
+		QomposeLexer(QObject * = nullptr);
 		virtual ~QomposeLexer();
 
-		virtual QList<QomposeLexerToken> lexBlock(int *s, const QString &t, int p) = 0;
+		virtual QList<QomposeLexerToken> lexBlock(
+			int *, const QString &, int ) = 0;
 };
 
 /*!

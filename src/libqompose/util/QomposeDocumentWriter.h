@@ -33,26 +33,26 @@ class QomposeDocumentWriter
 {
 	public:
 		QomposeDocumentWriter();
-		QomposeDocumentWriter(QIODevice *d);
+		QomposeDocumentWriter(QIODevice *);
 		virtual ~QomposeDocumentWriter();
 
 		QIODevice *getDevice() const;
-		void setDevice(QIODevice *d);
+		void setDevice(QIODevice *);
 
 		QTextCodec *getCodec() const;
-		void setCodec(QTextCodec *codec);
+		void setCodec(QTextCodec *);
 
 		bool isWhitespaceTrimmed() const;
-		void setWhitespaceTrimmed(bool w);
+		void setWhitespaceTrimmed(bool);
 
-		bool write(const QTextDocument *d);
+		bool write(const QTextDocument *);
 
 	private:
 		bool whitespaceTrimmed;
 
 		QTextStream stream;
 
-		QString trimWhitespace(const QString &s) const;
+		QString trimWhitespace(const QString &) const;
 };
 
 #endif

@@ -26,6 +26,33 @@ struct QomposeFileDescriptor
 {
 	QString fileName;
 	QString textCodec;
+
+	QomposeFileDescriptor()
+		: fileName(QString()), textCodec(QString())
+	{
+	}
+
+	QomposeFileDescriptor(const QString &f, const QString &c)
+		: fileName(f), textCodec(c)
+	{
+	}
+
+	QomposeFileDescriptor(const QomposeFileDescriptor &o)
+		: fileName(QString()), textCodec(QString())
+	{
+		*this = o;
+	}
+
+	QomposeFileDescriptor &operator=(const QomposeFileDescriptor &o)
+	{
+		if(&o == this)
+			return *this;
+
+		fileName = o.fileName;
+		textCodec = o.textCodec;
+
+		return *this;
+	}
 };
 
 /*!
@@ -35,6 +62,35 @@ struct QomposeClosedBufferDescriptor
 {
 	QomposeFileDescriptor file;
 	int cursorPosition;
+
+	QomposeClosedBufferDescriptor()
+		: file(QomposeFileDescriptor()), cursorPosition(0)
+	{
+	}
+
+	QomposeClosedBufferDescriptor(QomposeFileDescriptor f, int c)
+		: file(f), cursorPosition(c)
+	{
+	}
+
+	QomposeClosedBufferDescriptor(const QomposeClosedBufferDescriptor &o)
+		: file(QomposeFileDescriptor()),
+			cursorPosition(0)
+	{
+		*this = o;
+	}
+
+	QomposeClosedBufferDescriptor &operator=(
+		const QomposeClosedBufferDescriptor &o)
+	{
+		if(&o == this)
+			return *this;
+
+		file = o.file;
+		cursorPosition = o.cursorPosition;
+
+		return *this;
+	}
 };
 
 #endif
