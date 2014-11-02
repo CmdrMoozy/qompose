@@ -57,8 +57,8 @@ void QomposeHotkeyMapTest::test()
 
 	// Enter
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Enter, 0,
-		~Qt::KeyboardModifiers(0)), &doNewline);
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Enter, nullptr,
+		~Qt::KeyboardModifiers(nullptr)), &doNewline);
 
 	// Tab
 
@@ -121,11 +121,11 @@ void QomposeHotkeyMapTest::test()
 
 	// Test a series of example QKeyEvents against this hotkey mapping.
 
-	QKeyEvent enterEvent(QKeyEvent::KeyPress, Qt::Key_Enter, 0);
-	QKeyEvent tabEvent(QKeyEvent::KeyPress, Qt::Key_Tab, 0);
+	QKeyEvent enterEvent(QKeyEvent::KeyPress, Qt::Key_Enter, nullptr);
+	QKeyEvent tabEvent(QKeyEvent::KeyPress, Qt::Key_Tab, nullptr);
 	QKeyEvent backtabEvent(QKeyEvent::KeyPress, Qt::Key_Tab,
 		Qt::KeyboardModifiers(Qt::ShiftModifier));
-	QKeyEvent homeEvent(QKeyEvent::KeyPress, Qt::Key_Home, 0);
+	QKeyEvent homeEvent(QKeyEvent::KeyPress, Qt::Key_Home, nullptr);
 	QKeyEvent selectHomeEvent(QKeyEvent::KeyPress, Qt::Key_Home,
 		Qt::KeyboardModifiers(Qt::ShiftModifier));
 	QKeyEvent duplicateEvent(QKeyEvent::KeyPress, Qt::Key_D,

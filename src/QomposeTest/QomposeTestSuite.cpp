@@ -30,9 +30,9 @@
 
 #include "QomposeTest/QomposeAssertionException.h"
 #include "QomposeTest/QomposeTest.h"
-#include "QomposeTest/util/QomposeFontMetricsTest.h"
-#include "QomposeTest/util/QomposeHotkeyTest.h"
-#include "QomposeTest/util/QomposeHotkeyMapTest.h"
+#include "QomposeTest/tests/QomposeFontMetricsTest.h"
+#include "QomposeTest/tests/QomposeHotkeyTest.h"
+#include "QomposeTest/tests/QomposeHotkeyMapTest.h"
 
 int main(int argc, char **argv)
 {
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 			int status;
 
 			char *t = abi::__cxa_demangle(typeid(*test).name(),
-				0, 0, &status);
+				nullptr, nullptr, &status);
 
 			std::string type = std::string(t);
 			free(t);

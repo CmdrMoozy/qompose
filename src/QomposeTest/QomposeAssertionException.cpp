@@ -49,6 +49,7 @@ QomposeAssertionException::QomposeAssertionException(
  */
 QomposeAssertionException::QomposeAssertionException(
 	const QomposeAssertionException &e) noexcept
+	: message(""), trace("")
 {
 	*this = e;
 }
@@ -70,6 +71,9 @@ QomposeAssertionException::~QomposeAssertionException() noexcept
 QomposeAssertionException &QomposeAssertionException::operator=(
 	const QomposeAssertionException &e) noexcept
 {
+	if(&e == this)
+		return *this;
+
 	message = e.message;
 	trace = e.trace;
 

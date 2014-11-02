@@ -65,7 +65,7 @@ std::string QomposeTest::getStackTrace()
 	std::string ret(buf, buflen);
 
 	free(buf);
-	buf = NULL;
+	buf = nullptr;
 
 	// Done!
 

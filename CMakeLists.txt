@@ -54,10 +54,6 @@ FIND_PACKAGE(Qt5Widgets REQUIRED)
 FIND_PACKAGE(Qt5Network REQUIRED)
 FIND_PACKAGE(Qt5PrintSupport REQUIRED)
 
-IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
-	FIND_PACKAGE(DWARF REQUIRED)
-ENDIF()
-
 # Set INCLUDE and C(XX)FLAGS
 
 IF(CMAKE_CXX_COMPILER_ID MATCHES GNU)
@@ -209,23 +205,6 @@ SET(Qompose_SOURCES
 
 )
 
-SET(QomposeTest_SOURCES
-
-	src/QomposeTest/QomposeAssertionException.cpp
-	src/QomposeTest/QomposeAssertionException.h
-	src/QomposeTest/QomposeTest.cpp
-	src/QomposeTest/QomposeTest.h
-	src/QomposeTest/QomposeTestSuite.cpp
-
-	src/QomposeTest/util/QomposeFontMetricsTest.cpp
-	src/QomposeTest/util/QomposeFontMetricsTest.h
-	src/QomposeTest/util/QomposeHotkeyMapTest.cpp
-	src/QomposeTest/util/QomposeHotkeyMapTest.h
-	src/QomposeTest/util/QomposeHotkeyTest.cpp
-	src/QomposeTest/util/QomposeHotkeyTest.h
-
-)
-
 # Build our project!
 
 QT5_ADD_RESOURCES(qompose_RESOURCES_RCC ${qompose_RESOURCES})
@@ -256,18 +235,8 @@ ENDIF()
 TARGET_LINK_LIBRARIES(Qompose ${Qompose_LIBS})
 
 IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
-	ADD_EXECUTABLE(QomposeTest ${QomposeTest_SOURCES})
-	TARGET_LINK_LIBRARIES(QomposeTest ${Qompose_LIBS} ${DWARF_LIBRARIES})
-	SET_PROPERTY(TARGET QomposeTest PROPERTY INCLUDE_DIRECTORIES
-		"${CMAKE_SOURCE_DIR}/backward-cpp"
-		"${CMAKE_SOURCE_DIR}/src"
-		"${CMAKE_SOURCE_DIR}/src/libqompose"
-	)
+	ADD_SUBDIRECTORY(src/QomposeTest)
 ENDIF()
 
 QT5_USE_MODULES(QomposeCommon Core Widgets Network PrintSupport)
 QT5_USE_MODULES(Qompose Core Widgets Network PrintSupport)
-
-IF(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
-	QT5_USE_MODULES(QomposeTest Core Widgets Network PrintSupport)
-ENDIF()
