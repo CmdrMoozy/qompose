@@ -1,15 +1,15 @@
-SET(Qompose_SOURCES
+set(Qompose_SOURCES
 
 	Qompose.cpp
 
 )
 
-IF(UNIX)
+if(UNIX)
 	ADD_EXECUTABLE(Qompose ${Qompose_SOURCES})
-ELSE()
+else()
 	ADD_EXECUTABLE(Qompose WIN32 ${Qompose_SOURCES})
-ENDIF()
+endif()
 
-TARGET_LINK_LIBRARIES(Qompose ${Qompose_LIBS})
+target_link_libraries(Qompose ${Qompose_LIBS})
 
-QT5_USE_MODULES(Qompose Core Widgets Network PrintSupport)
+qt5_use_modules(Qompose Core Widgets Network PrintSupport)

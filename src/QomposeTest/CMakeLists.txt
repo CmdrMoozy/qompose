@@ -1,6 +1,6 @@
-FIND_PACKAGE(DWARF REQUIRED)
+find_package(DWARF REQUIRED)
 
-SET(QomposeTest_SOURCES
+set(QomposeTest_SOURCES
 
 	QomposeAssertionException.cpp
 	QomposeAssertionException.h
@@ -17,12 +17,12 @@ SET(QomposeTest_SOURCES
 
 )
 
-INCLUDE_DIRECTORIES(SYSTEM "${CMAKE_SOURCE_DIR}/backward-cpp")
-INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/src")
+include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/backward-cpp")
+include_directories("${CMAKE_SOURCE_DIR}/src")
 
-ADD_DEFINITIONS(-DBACKWARD_HAS_DW=1)
+add_definitions(-DBACKWARD_HAS_DW=1)
 
-ADD_EXECUTABLE(QomposeTest ${QomposeTest_SOURCES})
-TARGET_LINK_LIBRARIES(QomposeTest ${Qompose_LIBS} ${DWARF_LIBRARIES})
+add_executable(QomposeTest ${QomposeTest_SOURCES})
+target_link_libraries(QomposeTest ${Qompose_LIBS} ${DWARF_LIBRARIES})
 
-QT5_USE_MODULES(QomposeTest Core Widgets Network PrintSupport)
+qt5_use_modules(QomposeTest Core Widgets Network PrintSupport)

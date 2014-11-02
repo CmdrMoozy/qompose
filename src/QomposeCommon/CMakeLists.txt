@@ -1,11 +1,11 @@
-SET(QomposeCommon_RESOURCES
+set(QomposeCommon_RESOURCES
 
 	data.qrc
 	icons.qrc
 
 )
 
-SET(QomposeCommon_SOURCES
+set(QomposeCommon_SOURCES
 
 	QomposeApplication.cpp
 	QomposeApplication.h
@@ -93,13 +93,13 @@ SET(QomposeCommon_SOURCES
 
 )
 
-QT5_ADD_RESOURCES(QomposeCommon_RESOURCES_RCC ${QomposeCommon_RESOURCES})
+qt5_add_resources(QomposeCommon_RESOURCES_RCC ${QomposeCommon_RESOURCES})
 
-ADD_LIBRARY(QomposeCommon STATIC
+add_library(QomposeCommon STATIC
 
 	${QomposeCommon_RESOURCES_RCC}
 	${QomposeCommon_SOURCES}
 
 )
 
-QT5_USE_MODULES(QomposeCommon Core Widgets Network PrintSupport)
+qt5_use_modules(QomposeCommon Core Widgets Network PrintSupport)
