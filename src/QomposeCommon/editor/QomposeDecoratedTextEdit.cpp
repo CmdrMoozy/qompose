@@ -242,9 +242,10 @@ void QomposeDecoratedTextEdit::setTabWidthSpaces(int w)
 {
 	tabWidth = qAbs(w);
 
-	QFontMetrics m(QPlainTextEdit::font());
+	QomposeFontMetrics metrics(currentFont);
+	qreal tabw = metrics.getColumnWidthF(tabWidth);
 
-	setTabStopWidth(tabWidth * m.width(' '));
+	setTabStopWidth(qRound(tabw));
 }
 
 /*!
