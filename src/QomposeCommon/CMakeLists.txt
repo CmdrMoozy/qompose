@@ -102,4 +102,4 @@ add_library(QomposeCommon STATIC
 
 )
 
-qt5_use_modules(QomposeCommon Core Widgets Network PrintSupport)
+qt5_use_modules(QomposeCommon Core Gui Widgets Network PrintSupport)

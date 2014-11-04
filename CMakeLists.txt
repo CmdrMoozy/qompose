@@ -31,7 +31,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
 if(CUSTOM_QT_DIR)
 	set(CMAKE_PREFIX_PATH ${CUSTOM_QT_DIR} ${CMAKE_PREFIX_PATH})
 	set(QT_ROOT_DIR ${CUSTOM_QT_DIR})
-	set(QT_QMAKE_EXECUTABLE ${QT_ROOT_DIR}/bin/qmake)
+	set(QT_QMAKE_EXECUTABLE ${CUSTOM_QT_DIR}/bin/qmake)
 endif()
 
 # Note which type of build we're performing.
@@ -50,6 +50,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(ICU COMPONENTS data uc i18n REQUIRED)
 find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)

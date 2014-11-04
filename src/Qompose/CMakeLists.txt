@@ -12,4 +12,4 @@ endif()
 
 target_link_libraries(Qompose ${Qompose_LIBS})
 
-qt5_use_modules(Qompose Core Widgets Network PrintSupport)
+qt5_use_modules(Qompose Core Gui Widgets Network PrintSupport)

@@ -25,4 +25,4 @@ add_definitions(-DBACKWARD_HAS_DW=1)
 add_executable(QomposeTest ${QomposeTest_SOURCES})
 target_link_libraries(QomposeTest ${Qompose_LIBS} ${DWARF_LIBRARIES})
 
-qt5_use_modules(QomposeTest Core Widgets Network PrintSupport)
+qt5_use_modules(QomposeTest Core Gui Widgets Network PrintSupport)
