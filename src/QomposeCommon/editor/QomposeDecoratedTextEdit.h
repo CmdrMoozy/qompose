@@ -73,6 +73,9 @@ class QomposeDecoratedTextEdit : public QPlainTextEdit
 		QColor getGutterBackground() const;
 		void setGutterBackground(const QColor &);
 
+		int getCurrentLine() const;
+		int getCurrentColumn() const;
+
 	protected:
 		virtual void paintEvent(QPaintEvent *);
 

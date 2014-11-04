@@ -1044,10 +1044,8 @@ void QomposeBufferWidget::doCursorPositionChanged()
 	{
 		if(b == currentBuffer())
 		{
-			QTextCursor curs = b->textCursor();
-
-			Q_EMIT cursorPositionChanged(curs.blockNumber() + 1,
-				curs.positionInBlock() + 1);
+			Q_EMIT cursorPositionChanged(b->getCurrentLine(),
+				b->getCurrentColumn());
 		}
 	}
 

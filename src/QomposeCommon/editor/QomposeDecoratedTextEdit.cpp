@@ -454,6 +454,38 @@ void QomposeDecoratedTextEdit::setGutterBackground(const QColor &c)
 }
 
 /*!
+ * This function returns the current cursor's 1-indexed line number.
+ *
+ * \return The current cursor's line number.
+ */
+int QomposeDecoratedTextEdit::getCurrentLine() const
+{
+	return textCursor().blockNumber() + 1;
+}
+
+/*!
+ * This function returns the current cursor's 1-indexed column number. This is
+ * based upon the pixel offset of the cursor, so we properly account for tab
+ * stops.
+ *
+ * \return The current cursor's column number.
+ */
+int QomposeDecoratedTextEdit::getCurrentColumn() const
+{
+	QomposeFontMetrics metrics(currentFont);
+
+	qreal xoff = static_cast<qreal>(cursorRect().x());
+
+	xoff -= x();
+	xoff -= contentOffset().x();
+	xoff -= document()->documentMargin();
+
+	xoff /= metrics.getColumnWidthF(1);
+
+	return qRound(xoff);
+}
+
+/*!
  * We override our superclass's paint event to draw some additional decorations
  * on our text edit's viewport.
  *
