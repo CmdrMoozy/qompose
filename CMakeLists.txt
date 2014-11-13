@@ -55,9 +55,14 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 
+# Perform any configure checks.
+
+include(${CMAKE_SOURCE_DIR}/CMake/Platform.cmake)
+qomposePlatformChecks()
+
 # Set INCLUDE and C(XX)FLAGS
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/Warnings.cmake)
+include(${CMAKE_SOURCE_DIR}/CMake/Warnings.cmake)
 qomposeEnableWarnings()
 
 add_definitions(-DQT_NO_KEYWORDS)
@@ -66,7 +71,7 @@ if(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 	add_definitions(-DQOMPOSE_DEBUG)
 endif()
 
-include_directories("src/QomposeCommon")
+include_directories("src/QomposeCommon" ${CMAKE_BINARY_DIR})
 
 # Define the libraries Qompose uses.
 
