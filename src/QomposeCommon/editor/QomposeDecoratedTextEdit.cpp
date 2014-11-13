@@ -487,7 +487,7 @@ int QomposeDecoratedTextEdit::getCurrentColumn() const
 
 	xoff /= metrics.getColumnWidthF(1);
 
-	return qRound(xoff);
+	return qRound(xoff) + 1;
 }
 
 /*!
