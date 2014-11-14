@@ -21,7 +21,6 @@
 #include <QPainter>
 #include <QTextBlock>
 
-#include "Config.h"
 #include "editor/QomposeGutter.h"
 #include "util/QomposeFontMetrics.h"
 
@@ -246,11 +245,9 @@ void QomposeDecoratedTextEdit::setTabWidthSpaces(int w)
 	QomposeFontMetrics metrics(currentFont);
 	qreal tabw = metrics.getColumnWidthF(tabWidth);
 
-#ifdef HAVE_QREAL_TAB_STOPS
-	setTabStopWidthF(tabw);
-#else
-	setTabStopWidth(qRound(tabw));
-#endif
+	QTextOption opt = document()->defaultTextOption();
+	opt.setTabStop(tabw);
+	document()->setDefaultTextOption(opt);
 }
 
 /*!

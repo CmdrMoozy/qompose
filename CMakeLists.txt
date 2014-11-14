@@ -55,11 +55,6 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 
-# Perform any configure checks.
-
-include(${CMAKE_SOURCE_DIR}/CMake/Platform.cmake)
-qomposePlatformChecks()
-
 # Set INCLUDE and C(XX)FLAGS
 
 include(${CMAKE_SOURCE_DIR}/CMake/Warnings.cmake)
