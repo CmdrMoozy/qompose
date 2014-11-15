@@ -28,7 +28,7 @@ class QPrinter;
 class QomposeSettings;
 
 /*!
- * \brief This class provides high-level open/save/etc. functionality for editors.
+ * \brief This class provides high-level buffer functionality for editors.
  */
 class QomposeBuffer : public QomposeEditor
 {

@@ -49,17 +49,27 @@ QomposeBuffer::QomposeBuffer(QomposeSettings *s, QWidget *p)
 	setGutterVisible(settings->getSetting("show-gutter").toBool());
 	setFont(settings->getSetting("editor-font").value<QFont>());
 	setTabWidthSpaces(settings->getSetting("editor-tab-width").toInt());
-	setWrapGuideVisible(settings->getSetting("editor-wrap-guide-visible").toBool());
-	setWrapGuideColumnWidth(settings->getSetting("editor-wrap-guide-width").toInt());
-	setWrapGuideColor(settings->getSetting("editor-wrap-guide-color").value<QColor>());
-	setEditorForeground(settings->getSetting("editor-foreground").value<QColor>());
-	setEditorBackground(settings->getSetting("editor-background").value<QColor>());
-	setCurrentLineColor(settings->getSetting("editor-current-line").value<QColor>());
-	setGutterForeground(settings->getSetting("gutter-foreground").value<QColor>());
-	setGutterBackground(settings->getSetting("gutter-background").value<QColor>());
+	setWrapGuideVisible(settings->getSetting(
+		"editor-wrap-guide-visible").toBool());
+	setWrapGuideColumnWidth(settings->getSetting(
+		"editor-wrap-guide-width").toInt());
+	setWrapGuideColor(settings->getSetting(
+		"editor-wrap-guide-color").value<QColor>());
+	setEditorForeground(settings->getSetting(
+		"editor-foreground").value<QColor>());
+	setEditorBackground(settings->getSetting(
+		"editor-background").value<QColor>());
+	setCurrentLineColor(settings->getSetting(
+		"editor-current-line").value<QColor>());
+	setGutterForeground(settings->getSetting(
+		"gutter-foreground").value<QColor>());
+	setGutterBackground(settings->getSetting(
+		"gutter-background").value<QColor>());
 
-	QObject::connect( settings, SIGNAL( settingChanged(const QString &, const QVariant &) ),
-		this, SLOT( doSettingChanged(const QString &, const QVariant &) ) );
+	QObject::connect(settings,
+		SIGNAL(settingChanged(const QString &, const QVariant &)),
+		this,
+		SLOT(doSettingChanged(const QString &, const QVariant &)));
 
 	// Connect other various signals.
 
@@ -75,8 +85,8 @@ QomposeBuffer::~QomposeBuffer()
 }
 
 /*!
- * This function attempts to open the file denoted by the given file descriptor,
- * and using the associated character encoding.
+ * This function attempts to open the file denoted by the given file
+ * descriptor, and using the associated character encoding.
  *
  * \param f The file descriptor we will attempt to open.
  * \return True on success, or false otherwise.
@@ -119,14 +129,20 @@ bool QomposeBuffer::revert()
 	if(r)
 	{
 		QTextCursor endCurs = textCursor();
-		endCurs.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+		endCurs.movePosition(
+			QTextCursor::End, QTextCursor::MoveAnchor);
 
 		int endPos = endCurs.position();
 
 		if(cursPos <= endPos)
+		{
 			curs.setPosition(cursPos, QTextCursor::MoveAnchor);
+		}
 		else
-			curs.setPosition(QTextCursor::End, QTextCursor::MoveAnchor);
+		{
+			curs.setPosition(
+				QTextCursor::End, QTextCursor::MoveAnchor);
+		}
 
 		setTextCursor(curs);
 	}
@@ -191,8 +207,8 @@ QString QomposeBuffer::getTitle() const
 }
 
 /*!
- * This function returns the path to the file this buffer is currently representing,
- * or QString() if we don't have a valid file.
+ * This function returns the path to the file this buffer is currently
+ * representing, or QString() if we don't have a valid file.
  *
  * \return The path to this buffer's current file.
  */
@@ -202,9 +218,9 @@ QString QomposeBuffer::getPath() const
 }
 
 /*!
- * This function returns the path to the directory the file this buffer is currently
- * representing resides in. If we don't have a valid path (e.g., this buffer has never
- * been saved), then we return QString() instead.
+ * This function returns the path to the directory the file this buffer is
+ * currently representing resides in. If we don't have a valid path (e.g., this
+ * buffer has never been saved), then we return QString() instead.
  *
  * \return The path to this buffer's current file's parent directory.
  */
@@ -221,9 +237,9 @@ QString QomposeBuffer::getDirectory() const
 }
 
 /*!
- * This function returns the name of the file this buffer is representing, without
- * any path information. If we don't have a valid path (e.g., this buffer has never
- * been saved), then we return QString() instead.
+ * This function returns the name of the file this buffer is representing,
+ * without any path information. If we don't have a valid path (e.g., this
+ * buffer has never been saved), then we return QString() instead.
  *
  * \return The name of this buffer's current file.
  */
@@ -256,8 +272,8 @@ QomposeFileDescriptor QomposeBuffer::getFileDescriptor() const
 }
 
 /*!
- * This function returns whether or not this buffer has ever been saved, or if it
- * is a brand-new document (possibly with unsaved changes).
+ * This function returns whether or not this buffer has ever been saved, or if
+ * it is a brand-new document (possibly with unsaved changes).
  */
 bool QomposeBuffer::hasBeenSaved() const
 {
@@ -265,8 +281,8 @@ bool QomposeBuffer::hasBeenSaved() const
 }
 
 /*!
- * This function returns whether or not our contents have been altered since our buffer's
- * last save or load action.
+ * This function returns whether or not our contents have been altered since
+ * our buffer's last save or load action.
  *
  * \return True if our buffer has been modified, or false otherwise.
  */
@@ -276,8 +292,8 @@ bool QomposeBuffer::isModified() const
 }
 
 /*!
- * This function sets our buffer's modified status to the given value, and emits a
- * modificationChanged() signal.
+ * This function sets our buffer's modified status to the given value, and
+ * emits a modificationChanged() signal.
  *
  * \param m The new modified status for our buffer.
  */
@@ -300,8 +316,8 @@ void QomposeBuffer::print(QPrinter *p)
 }
 
 /*!
- * This function (re-)reads our buffer's contents from the disk, using our object's
- * current path and text codec attributes.
+ * This function (re-)reads our buffer's contents from the disk, using our
+ * object's current path and text codec attributes.
  *
  * \param u Whether or not "undo" operations should be supported.
  * \return True on success, or false otherwise.
@@ -390,8 +406,8 @@ void QomposeBuffer::doModificationChanged(bool QUNUSED(c))
 }
 
 /*!
- * This function handles a setting being changed by, if it's a setting this widget
- * cares about, updating our object's properties accordingly.
+ * This function handles a setting being changed by, if it's a setting this
+ * widget cares about, updating our object's properties accordingly.
  *
  * \param k The setting key whose value was changed.
  * \param v The new value for this particular setting.
