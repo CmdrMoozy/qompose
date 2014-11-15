@@ -41,9 +41,9 @@
 	#define QMEGABYTE (1048576)
 
 	/*
-	 * Define our QLUNUSED macro, which is used on win32 to suppress the "unreferenced local
-	 * variable" warning (4101) in cases where we are very intentionally NOT referencing said
-	 * variable.
+	 * Define our QLUNUSED macro, which is used on win32 to suppress the
+	 * "unreferenced local variable" warning (4101) in cases where we are
+	 * very intentionally NOT referencing said variable.
 	 */
 	#ifndef QLUNUSED
 		#ifdef _WIN32
@@ -54,9 +54,9 @@
 	#endif
 
 	/*
-	 * Define our QUNUSED macro, which is used to suppress unused variable warnings
-	 * by indicating that the variable is intended to be unused. Note that this only
-	 * does anything significant for GNU compilers.
+	 * Define our QUNUSED macro, which is used to suppress unused variable
+	 * warnings by indicating that the variable is intended to be unused.
+	 * Note that this only does anything significant for GNU compilers.
 	 */
 	#ifndef QUNUSED
 		#if defined(__GNUC__)

@@ -97,7 +97,8 @@ void QomposeAboutDialog::initializeGUI()
 
 	qomposeTabLayout->addWidget(qomposeIconLabel, 0, 0, 2, 1, nullptr);
 	qomposeTabLayout->addWidget(qomposeLabel, 0, 1, 1, 1, nullptr);
-	qomposeTabLayout->addWidget(qomposeDescriptionLabel, 1, 1, 1, 1, nullptr);
+	qomposeTabLayout->addWidget(
+		qomposeDescriptionLabel, 1, 1, 1, 1, nullptr);
 	qomposeTabLayout->addWidget(qomposeTextEdit, 2, 0, 1, 3, nullptr);
 	qomposeTabLayout->setColumnStretch(1, 1);
 	qomposeTabLayout->setRowStretch(2, 1);
@@ -127,7 +128,8 @@ void QomposeAboutDialog::initializeGUI()
 	layout->setRowStretch(0, 1);
 	setLayout(layout);
 
-	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close() ) );
+	QObject::connect(closeButton, SIGNAL(clicked(bool)),
+		this, SLOT(close()));
 }
 
 /*!
