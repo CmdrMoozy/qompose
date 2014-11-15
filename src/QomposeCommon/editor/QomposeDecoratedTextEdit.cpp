@@ -730,6 +730,8 @@ qreal QomposeDecoratedTextEdit::wrapGuideOffset()
 void QomposeDecoratedTextEdit::fullUpdate()
 { /* SLOT */
 
+	updateGutterWidth();
+
 	update();
 	viewport()->update();
 
