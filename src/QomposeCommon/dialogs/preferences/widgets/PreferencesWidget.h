@@ -23,10 +23,10 @@
 #include <QIcon>
 #include <QString>
 
-class QomposeSettings;
-
 namespace qompose
 {
+
+class Settings;
 
 /*!
  * \brief This class provides a common interface for all preferences widgets.
@@ -34,7 +34,7 @@ namespace qompose
 class PreferencesWidget : public QWidget
 {
 public:
-	PreferencesWidget(QomposeSettings *s, QWidget *p = nullptr,
+	PreferencesWidget(Settings *s, QWidget *p = nullptr,
 		Qt::WindowFlags f = nullptr);
 	virtual ~PreferencesWidget();
 
@@ -60,10 +60,10 @@ public:
 	virtual void discardChanges() = 0;
 
 protected:
-	QomposeSettings *getSettings() const;
+	Settings *getSettings() const;
 
 private:
-	QomposeSettings *settings;
+	Settings *settings;
 
 	QIcon icon;
 	QString title;

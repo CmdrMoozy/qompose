@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeFontPickerButton.h"
+#include "FontPickerButton.h"
 
 #include <QString>
 #include <QIcon>
 #include <QFontDialog>
+
+namespace qompose
+{
 
 /*!
  * This is one of our constructors, which intializes a new font picker
@@ -29,7 +32,7 @@
  * \param p Our parent widget.
  * \param iF Our initial font.
  */
-QomposeFontPickerButton::QomposeFontPickerButton(QWidget *p, const QFont &iF)
+FontPickerButton::FontPickerButton(QWidget *p, const QFont &iF)
 	: QPushButton(tr("Select a Font"), p), selectedFont(QFont())
 {
 	setSelectedFont(iF);
@@ -44,7 +47,7 @@ QomposeFontPickerButton::QomposeFontPickerButton(QWidget *p, const QFont &iF)
  * \param p Our parent widget.
  * \param iF Our initial font.
  */
-QomposeFontPickerButton::QomposeFontPickerButton(const QString &t,
+FontPickerButton::FontPickerButton(const QString &t,
 	QWidget *p, const QFont &iF)
 	: QPushButton(t, p), selectedFont(QFont())
 {
@@ -61,7 +64,7 @@ QomposeFontPickerButton::QomposeFontPickerButton(const QString &t,
  * \param p Our parent widget.
  * \param iF Our initial font.
  */
-QomposeFontPickerButton::QomposeFontPickerButton(const QIcon &i,
+FontPickerButton::FontPickerButton(const QIcon &i,
 	const QString &t, QWidget *p, const QFont &iF)
 	: QPushButton(i, t, p), selectedFont(QFont())
 {
@@ -72,7 +75,7 @@ QomposeFontPickerButton::QomposeFontPickerButton(const QIcon &i,
 /*!
  * This is our default destructor, which cleans up and destroys our object.
  */
-QomposeFontPickerButton::~QomposeFontPickerButton()
+FontPickerButton::~FontPickerButton()
 {
 }
 
@@ -83,7 +86,7 @@ QomposeFontPickerButton::~QomposeFontPickerButton()
  *
  * \return Our currently selected font.
  */
-const QFont &QomposeFontPickerButton::getSelectedFont() const
+const QFont &FontPickerButton::getSelectedFont() const
 {
 	return selectedFont;
 }
@@ -97,7 +100,7 @@ const QFont &QomposeFontPickerButton::getSelectedFont() const
  *
  * \param f The new font to represent.
  */
-void QomposeFontPickerButton::setSelectedFont(const QFont &f)
+void FontPickerButton::setSelectedFont(const QFont &f)
 {
 	QFont display = selectedFont = f;
 
@@ -117,7 +120,7 @@ void QomposeFontPickerButton::setSelectedFont(const QFont &f)
  *
  * \param f The font we will display.
  */
-void QomposeFontPickerButton::setFont(const QFont &f)
+void FontPickerButton::setFont(const QFont &f)
 {
 	QPushButton::setFont(f);
 }
@@ -128,7 +131,7 @@ void QomposeFontPickerButton::setFont(const QFont &f)
  * new font (i.e., doesn't click "Cancel"), then we emit a
  * selectedFontChanged() signal.
  */
-void QomposeFontPickerButton::doClicked()
+void FontPickerButton::doClicked()
 { /* SLOT */
 	bool ok;
 	setSelectedFont(QFontDialog::getFont(&ok,
@@ -138,3 +141,4 @@ void QomposeFontPickerButton::doClicked()
 		Q_EMIT selectedFontChanged(getSelectedFont());
 }
 
+}

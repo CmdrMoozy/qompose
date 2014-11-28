@@ -27,11 +27,10 @@ class QGridLayout;
 class QStackedWidget;
 class QPushButton;
 
-class QomposeSettings;
-
 namespace qompose
 {
 
+class Settings;
 class GeneralPreferencesWidget;
 class EditorPreferencesWidget;
 class OpenSavePreferencesWidget;
@@ -46,14 +45,14 @@ class PreferencesDialog : public QDialog
 	Q_OBJECT
 
 public:
-	PreferencesDialog(QomposeSettings *, QWidget * = nullptr,
+	PreferencesDialog(Settings *, QWidget * = nullptr,
 		Qt::WindowFlags = nullptr);
 	virtual ~PreferencesDialog();
 
 	void discardChanges();
 
 private:
-	QomposeSettings *settings;
+	Settings *settings;
 
 	QGridLayout *layout;
 

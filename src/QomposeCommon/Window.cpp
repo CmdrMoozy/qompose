@@ -34,12 +34,12 @@
 #include "QomposeCommon/dialogs/ReplaceDialog.h"
 #include "QomposeCommon/dialogs/preferences/PreferencesDialog.h"
 #include "QomposeCommon/gui/BufferWidget.h"
-#include "QomposeCommon/gui/QomposeGUIUtils.h"
-#include "QomposeCommon/gui/QomposeStatusBar.h"
+#include "QomposeCommon/gui/GUIUtils.h"
+#include "QomposeCommon/gui/StatusBar.h"
 #include "QomposeCommon/gui/menus/MainMenu.h"
 #include "QomposeCommon/util/QomposeFindQuery.h"
 #include "QomposeCommon/util/QomposeReplaceQuery.h"
-#include "QomposeCommon/util/QomposeSettings.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -57,7 +57,7 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 		goToDialog(nullptr), aboutDialog(nullptr), mainMenu(nullptr),
 		buffers(nullptr), statusBar(nullptr)
 {
-	settings = new QomposeSettings(this);
+	settings = new Settings(this);
 
 	// Set some of our window's properties.
 
@@ -75,7 +75,7 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 	buffers->doNew();
 	setCentralWidget(buffers);
 
-	statusBar = new QomposeStatusBar(this);
+	statusBar = new StatusBar(this);
 	setStatusBar(statusBar);
 
 	initializeDialogs();

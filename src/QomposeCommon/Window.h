@@ -27,9 +27,6 @@
 class QCloseEvent;
 class QPrinter;
 
-class QomposeSettings;
-class QomposeStatusBar;
-
 namespace qompose
 {
 
@@ -40,6 +37,8 @@ class FindDialog;
 class ReplaceDialog;
 class GoToDialog;
 class MainMenu;
+class StatusBar;
+class Settings;
 
 /*!
  * \brief This class implements one of our application's standard windows.
@@ -56,7 +55,7 @@ protected:
 	void closeEvent(QCloseEvent *);
 
 private:
-	QomposeSettings *settings;
+	Settings *settings;
 
 	PreferencesDialog *preferencesDialog;
 	FindDialog *findDialog;
@@ -68,7 +67,7 @@ private:
 
 	BufferWidget *buffers;
 
-	QomposeStatusBar *statusBar;
+	StatusBar *statusBar;
 
 	Window(const Window &);
 	Window &operator=(const Window &);

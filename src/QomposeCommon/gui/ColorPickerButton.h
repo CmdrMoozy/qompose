@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_COLOR_PICKER_BUTTON_H
-#define INCLUDE_QOMPOSE_COLOR_PICKER_BUTTON_H
+#ifndef INCLUDE_QOMPOSECOMMON_GUI_COLOR_PICKER_BUTTON_H
+#define INCLUDE_QOMPOSECOMMON_GUI_COLOR_PICKER_BUTTON_H
 
 #include <QPushButton>
 #include <QColor>
@@ -26,6 +26,9 @@ class QString;
 class QIcon;
 class QPaintEvent;
 
+namespace qompose
+{
+
 /*!
  * \brief This class implements a QPushButton for selecting a color.
  *
@@ -33,37 +36,37 @@ class QPaintEvent;
  * To demonstrate the color selected, our widget displays a solid rectangle
  * filled with the color instead of text or an icon or whatever else.
  */
-class QomposeColorPickerButton : public QPushButton
+class ColorPickerButton : public QPushButton
 {
 	Q_OBJECT
 
-	public:
-		QomposeColorPickerButton(QWidget *p = nullptr,
-			const QColor &iC = Qt::black);
-		QomposeColorPickerButton(const QString &t,
-			QWidget *p = nullptr, const QColor &iC = Qt::black);
-		QomposeColorPickerButton(const QIcon &i, const QString &t,
-			QWidget *p = nullptr, const QColor &iC = Qt::black);
-		virtual ~QomposeColorPickerButton();
+public:
+	ColorPickerButton(QWidget *p = nullptr, const QColor &iC = Qt::black);
+	ColorPickerButton(const QString &t, QWidget *p = nullptr,
+		const QColor &iC = Qt::black);
+	ColorPickerButton(const QIcon &i, const QString &t,
+		QWidget *p = nullptr, const QColor &iC = Qt::black);
+	virtual ~ColorPickerButton();
 
-		const QColor &getSelectedColor() const;
-		void setSelectedColor(const QColor &c);
+	const QColor &getSelectedColor() const;
+	void setSelectedColor(const QColor &c);
 
-	protected:
-		virtual void paintEvent(QPaintEvent *e);
+protected:
+	virtual void paintEvent(QPaintEvent *e);
 
-	private:
-		QColor selectedColor;
+private:
+	QColor selectedColor;
 
-		virtual void setIcon(const QIcon &i);
-		virtual void setText(const QString &t);
+	virtual void setIcon(const QIcon &i);
+	virtual void setText(const QString &t);
 
-	private Q_SLOTS:
-		void doClicked();
+private Q_SLOTS:
+	void doClicked();
 
-	Q_SIGNALS:
-		void selectedColorChanged(const QColor &);
+Q_SIGNALS:
+	void selectedColorChanged(const QColor &);
 };
 
-#endif
+}
 
+#endif

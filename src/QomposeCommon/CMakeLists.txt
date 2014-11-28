@@ -56,21 +56,21 @@ set(QomposeCommon_SOURCES
 
 	gui/BufferWidget.cpp
 	gui/BufferWidget.h
-	gui/QomposeColorPickerButton.cpp
-	gui/QomposeColorPickerButton.h
-	gui/QomposeFontPickerButton.cpp
-	gui/QomposeFontPickerButton.h
-	gui/QomposeGUIUtils.cpp
-	gui/QomposeGUIUtils.h
-	gui/QomposeNotificationLabel.cpp
-	gui/QomposeNotificationLabel.h
-	gui/QomposeStatusBar.cpp
-	gui/QomposeStatusBar.h
+	gui/ColorPickerButton.cpp
+	gui/ColorPickerButton.h
+	gui/FontPickerButton.cpp
+	gui/FontPickerButton.h
+	gui/GUIUtils.cpp
+	gui/GUIUtils.h
+	gui/NotificationLabel.cpp
+	gui/NotificationLabel.h
+	gui/StatusBar.cpp
+	gui/StatusBar.h
 
 	gui/menus/MainMenu.cpp
 	gui/menus/MainMenu.h
-	gui/menus/QomposeRecentMenu.cpp
-	gui/menus/QomposeRecentMenu.h
+	gui/menus/RecentMenu.cpp
+	gui/menus/RecentMenu.h
 
 	syntax/Lexer.cpp
 	syntax/Lexer.h
@@ -88,8 +88,8 @@ set(QomposeCommon_SOURCES
 	util/QomposeHotkeyMap.h
 	util/QomposeReplaceQuery.cpp
 	util/QomposeReplaceQuery.h
-	util/QomposeSettings.cpp
-	util/QomposeSettings.h
+	util/Settings.cpp
+	util/Settings.h
 
 )
 

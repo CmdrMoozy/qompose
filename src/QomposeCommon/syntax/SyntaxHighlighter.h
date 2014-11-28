@@ -28,20 +28,20 @@
 class QObject;
 class QTextDocument;
 
-class QomposeSettings;
-
 namespace qompose
 {
+
+class Settings;
 
 class SyntaxHighlighter : public QSyntaxHighlighter
 {
 public:
-	SyntaxHighlighter(QomposeSettings *, QObject *);
-	SyntaxHighlighter(QomposeSettings *, QTextDocument *);
+	SyntaxHighlighter(Settings *, QObject *);
+	SyntaxHighlighter(Settings *, QTextDocument *);
 	virtual ~SyntaxHighlighter();
 
-	QomposeSettings *getSettings() const;
-	void setSettings(QomposeSettings *);
+	Settings *getSettings() const;
+	void setSettings(Settings *);
 
 	Lexer *getLexer() const;
 	void setLexer(Lexer *);
@@ -50,7 +50,7 @@ protected:
 	virtual void highlightBlock(const QString &);
 
 private:
-	QomposeSettings *settings;
+	Settings *settings;
 	Lexer *lexer;
 
 	SyntaxHighlighter(const SyntaxHighlighter &);

@@ -23,8 +23,8 @@
 #include <QLabel>
 #include <QSpinBox>
 
-#include "QomposeCommon/gui/QomposeGUIUtils.h"
-#include "QomposeCommon/util/QomposeSettings.h"
+#include "QomposeCommon/gui/GUIUtils.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -37,15 +37,14 @@ namespace qompose
  * \param p The parent widget to use for this widget.
  * \param f The window flags to use for this widget.
  */
-GeneralPreferencesWidget::GeneralPreferencesWidget(QomposeSettings *s,
+GeneralPreferencesWidget::GeneralPreferencesWidget(Settings *s,
 		QWidget *p, Qt::WindowFlags f)
 	: PreferencesWidget(s, p, f), layout(nullptr),
 		statusBarCheckBox(nullptr), recentListSizeLabel(nullptr),
 		recentListSizeSpinBox(nullptr),
 		saveWindowAttribsCheckBox(nullptr)
 {
-	setPreferencesIcon(
-		QomposeGUIUtils::getIconFromTheme("preferences-other"));
+	setPreferencesIcon(GUIUtils::getIconFromTheme("preferences-other"));
 	setPreferencesTitle(tr("General"));
 
 	initializeGUI();

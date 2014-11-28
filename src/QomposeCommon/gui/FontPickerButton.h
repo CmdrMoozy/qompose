@@ -16,14 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_FONT_PICKER_BUTTON_H
-#define INCLUDE_QOMPOSE_FONT_PICKER_BUTTON_H
+#ifndef INCLUDE_QOMPOSECOMMON_GUI_FONT_PICKER_BUTTON_H
+#define INCLUDE_QOMPOSECOMMON_GUI_FONT_PICKER_BUTTON_H
 
 #include <QPushButton>
 #include <QFont>
 
 class QString;
 class QIcon;
+
+namespace qompose
+{
 
 /*!
  * \brief This class implements a QPushButton for selecting a font.
@@ -34,34 +37,35 @@ class QIcon;
  * display -- but any size of font can be selected, and will be returned by
  * getSelectedFont() appropriately.
  */
-class QomposeFontPickerButton : public QPushButton
+class FontPickerButton : public QPushButton
 {
 
 	Q_OBJECT
 
-	public:
-		QomposeFontPickerButton(QWidget *p = nullptr,
-			const QFont &iF = QFont());
-		QomposeFontPickerButton(const QString &t,
-			QWidget *p = nullptr, const QFont &iF = QFont());
-		QomposeFontPickerButton(const QIcon &i, const QString &t,
-			QWidget *p = nullptr, const QFont &iF = QFont());
-		virtual ~QomposeFontPickerButton();
+public:
+	FontPickerButton(QWidget *p = nullptr, const QFont &iF = QFont());
+	FontPickerButton(const QString &t, QWidget *p = nullptr,
+		const QFont &iF = QFont());
+	FontPickerButton(const QIcon &i, const QString &t,
+		QWidget *p = nullptr, const QFont &iF = QFont());
+	virtual ~FontPickerButton();
 
-		const QFont &getSelectedFont() const;
-		void setSelectedFont(const QFont &f);
+	const QFont &getSelectedFont() const;
+	void setSelectedFont(const QFont &f);
 
-	private:
-		QFont selectedFont;
+private:
+	QFont selectedFont;
 
-		virtual void setFont(const QFont &f);
+	virtual void setFont(const QFont &f);
 
-	private Q_SLOTS:
-		void doClicked();
+private Q_SLOTS:
+	void doClicked();
 
-	Q_SIGNALS:
-		void selectedFontChanged(const QFont &);
+Q_SIGNALS:
+	void selectedFontChanged(const QFont &);
 
 };
+
+}
 
 #endif

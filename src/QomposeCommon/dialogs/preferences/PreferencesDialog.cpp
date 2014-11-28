@@ -29,7 +29,7 @@
 #include "QomposeCommon/dialogs/preferences/widgets/GeneralPreferencesWidget.h"
 #include "QomposeCommon/dialogs/preferences/widgets/OpenSavePreferencesWidget.h"
 #include "QomposeCommon/dialogs/preferences/widgets/PreferencesScrollArea.h"
-#include "QomposeCommon/util/QomposeSettings.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -42,7 +42,7 @@ namespace qompose
  * \param p The parent widget for this dialog.
  * \param f The window flags for this dialog.
  */
-PreferencesDialog::PreferencesDialog(QomposeSettings *s,
+PreferencesDialog::PreferencesDialog(Settings *s,
 		QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f), settings(s), layout(nullptr),
 		generalPreferencesWidget(nullptr),

@@ -16,45 +16,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_STATUS_BAR_H
-#define INCLUDE_QOMPOSE_STATUS_BAR_H
+#ifndef INCLUDE_QOMPOSECOMMON_GUI_STATUS_BAR_H
+#define INCLUDE_QOMPOSECOMMON_GUI_STATUS_BAR_H
 
 #include <QStatusBar>
 
 class QGridLayout;
 class QLabel;
 
-class QomposeNotificationLabel;
+namespace qompose
+{
+
+class NotificationLabel;
 
 /*!
  * \brief This class implements a status bar widget for our application.
  */
-class QomposeStatusBar : public QStatusBar
+class StatusBar : public QStatusBar
 {
 	Q_OBJECT
 
-	public:
-		QomposeStatusBar(QWidget * = nullptr);
-		virtual ~QomposeStatusBar();
+public:
+	StatusBar(QWidget * = nullptr);
+	virtual ~StatusBar();
 
-		void displayNotification(const QString &, bool = false);
+	void displayNotification(const QString &, bool = false);
 
-		void setCurrentTabPath(const QString &);
+	void setCurrentTabPath(const QString &);
 
-		void setLine(int);
-		void setColumn(int);
+	void setLine(int);
+	void setColumn(int);
 
-	private:
-		QWidget *statusWidget;
-		QGridLayout *statusLayout;
+private:
+	QWidget *statusWidget;
+	QGridLayout *statusLayout;
 
-		QomposeNotificationLabel *notificationLabel;
-		QLabel *tabPathLabel;
-		QLabel *lineLabel;
-		QLabel *columnLabel;
+	NotificationLabel *notificationLabel;
+	QLabel *tabPathLabel;
+	QLabel *lineLabel;
+	QLabel *columnLabel;
 
-		QomposeStatusBar(const QomposeStatusBar &);
-		QomposeStatusBar &operator=(const QomposeStatusBar &);
+	StatusBar(const StatusBar &);
+	StatusBar &operator=(const StatusBar &);
 };
+
+}
 
 #endif

@@ -16,13 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeStatusBar.h"
+#include "StatusBar.h"
 
 #include <QGridLayout>
 #include <QLabel>
 #include <QFrame>
 
-#include "QomposeCommon/gui/QomposeNotificationLabel.h"
+#include "QomposeCommon/gui/NotificationLabel.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new instance of our status
@@ -30,7 +33,7 @@
  *
  * \param p Our status bar's parent widget.
  */
-QomposeStatusBar::QomposeStatusBar(QWidget *p)
+StatusBar::StatusBar(QWidget *p)
 	: QStatusBar(p), statusWidget(nullptr), statusLayout(nullptr),
 		notificationLabel(nullptr), tabPathLabel(nullptr),
 		lineLabel(nullptr), columnLabel(nullptr)
@@ -41,7 +44,7 @@ QomposeStatusBar::QomposeStatusBar(QWidget *p)
 	statusLayout->setContentsMargins(5, 0, 5, 0);
 	statusLayout->setSpacing(5);
 
-	notificationLabel = new QomposeNotificationLabel(statusWidget);
+	notificationLabel = new NotificationLabel(statusWidget);
 
 	tabPathLabel = new QLabel(statusWidget, nullptr);
 
@@ -67,7 +70,7 @@ QomposeStatusBar::QomposeStatusBar(QWidget *p)
  * This is our default destructor, which cleans up and destroys our this status
  * bar widget instance.
  */
-QomposeStatusBar::~QomposeStatusBar()
+StatusBar::~StatusBar()
 {
 }
 
@@ -77,7 +80,7 @@ QomposeStatusBar::~QomposeStatusBar()
  * \param n The notification to display.
  * \param c Whether or not the notification is critical.
  */
-void QomposeStatusBar::displayNotification(const QString &n, bool c)
+void StatusBar::displayNotification(const QString &n, bool c)
 {
 	notificationLabel->displayNotification(n, c);
 }
@@ -89,7 +92,7 @@ void QomposeStatusBar::displayNotification(const QString &n, bool c)
  *
  * \param p The current tab path to display.
  */
-void QomposeStatusBar::setCurrentTabPath(const QString &p)
+void StatusBar::setCurrentTabPath(const QString &p)
 {
 	int l = p.trimmed().length();
 
@@ -107,7 +110,7 @@ void QomposeStatusBar::setCurrentTabPath(const QString &p)
  *
  * \param l The current line number.
  */
-void QomposeStatusBar::setLine(int l)
+void StatusBar::setLine(int l)
 {
 	lineLabel->setText(QString("L %1").arg(l));
 }
@@ -117,7 +120,9 @@ void QomposeStatusBar::setLine(int l)
  *
  * \param c The current column number.
  */
-void QomposeStatusBar::setColumn(int c)
+void StatusBar::setColumn(int c)
 {
 	columnLabel->setText(QString("C %1").arg(c));
+}
+
 }

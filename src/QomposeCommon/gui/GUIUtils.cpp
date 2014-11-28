@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeGUIUtils.h"
+#include "GUIUtils.h"
 
 #include <QFile>
+
+namespace qompose
+{
 
 /*!
  * This function will return the icon for the given standard name. We try to
@@ -35,7 +38,7 @@
  * \param n The name of the icon to find.
  * \return An icon object corresponding to the given name.
  */
-QIcon QomposeGUIUtils::getIconFromTheme(const QString &n)
+QIcon GUIUtils::getIconFromTheme(const QString &n)
 {
 	QIcon defaultIcon;
 
@@ -49,4 +52,6 @@ QIcon QomposeGUIUtils::getIconFromTheme(const QString &n)
 		qDebug("Couldn't find icon: %s", qPrintable(n));
 
 	return QIcon::fromTheme(n, defaultIcon);
+}
+
 }

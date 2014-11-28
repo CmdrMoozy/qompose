@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_SETTINGS_H
-#define INCLUDE_QOMPOSE_SETTINGS_H
+#ifndef INCLUDE_QOMPOSECOMMON_UTIL_SETTINGS_H
+#define INCLUDE_QOMPOSECOMMON_UTIL_SETTINGS_H
 
 #include <QObject>
 #include <QPair>
@@ -26,37 +26,42 @@
 class QSettings;
 class QString;
 
+namespace qompose
+{
+
 /*!
  * \brief This class uses QSettings to provide persistent settings for Qompose.
  */
-class QomposeSettings : public QObject
+class Settings : public QObject
 {
 	Q_OBJECT
 
-	public:
-		QomposeSettings(QObject * = nullptr);
-		virtual ~QomposeSettings();
+public:
+	Settings(QObject * = nullptr);
+	virtual ~Settings();
 
-		int count() const;
+	int count() const;
 
-		void resetDefaults();
-		void resetDefault(const QString &);
+	void resetDefaults();
+	void resetDefault(const QString &);
 
-		void setSetting(const QString &, const QVariant &);
-		bool containsSetting(const QString &) const;
-		QVariant getSetting(const QString &) const;
+	void setSetting(const QString &, const QVariant &);
+	bool containsSetting(const QString &) const;
+	QVariant getSetting(const QString &) const;
 
-	private:
-		static const QList<QPair<QString, QVariant>> defaults;
-		QSettings *settings;
+private:
+	static const QList<QPair<QString, QVariant>> defaults;
+	QSettings *settings;
 
-		QomposeSettings(const QomposeSettings &);
-		QomposeSettings &operator=(const QomposeSettings &);
+	Settings(const Settings &);
+	Settings &operator=(const Settings &);
 
-		void initializeDefaults();
+	void initializeDefaults();
 
-	Q_SIGNALS:
-		void settingChanged(const QString &, const QVariant &);
+Q_SIGNALS:
+	void settingChanged(const QString &, const QVariant &);
 };
+
+}
 
 #endif

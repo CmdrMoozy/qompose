@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_RECENT_MENU_H
-#define INCLUDE_QOMPOSE_RECENT_MENU_H
+#ifndef INCLUDE_QOMPOSECOMMON_GUI_MENUS_RECENT_MENU_H
+#define INCLUDE_QOMPOSECOMMON_GUI_MENUS_RECENT_MENU_H
 
 #include <QObject>
 
@@ -28,49 +28,54 @@
 class QMenu;
 class QAction;
 
-class QomposeSettings;
+namespace qompose
+{
+
+class Settings;
 
 /*!
  * \brief This object implements a "recently opened files" menu.
  */
-class QomposeRecentMenu : public QObject
+class RecentMenu : public QObject
 {
 	Q_OBJECT
 
-	public:
-		QomposeRecentMenu(QomposeSettings *, QObject * = nullptr);
-		virtual ~QomposeRecentMenu();
+public:
+	RecentMenu(Settings *, QObject * = nullptr);
+	virtual ~RecentMenu();
 
-		int getCapacity() const;
-		QMenu *getMenu() const;
+	int getCapacity() const;
+	QMenu *getMenu() const;
 
-		void addPath(const QString &);
+	void addPath(const QString &);
 
-		void saveContents();
+	void saveContents();
 
-	private:
-		QomposeSettings *settings;
-		int capacity;
+private:
+	Settings *settings;
+	int capacity;
 
-		QMenu *menu;
-		QList<QAction *> menuActions;
+	QMenu *menu;
+	QList<QAction *> menuActions;
 
-		QQueue<QString> recentList;
+	QQueue<QString> recentList;
 
-		QomposeRecentMenu(const QomposeRecentMenu &);
-		QomposeRecentMenu &operator=(const QomposeRecentMenu &);
+	RecentMenu(const RecentMenu &);
+	RecentMenu &operator=(const RecentMenu &);
 
-		void updateActionsListSize();
-		void setCapacity(int);
-		void renderListContents();
-		void setListContents(const QStringList &);
+	void updateActionsListSize();
+	void setCapacity(int);
+	void renderListContents();
+	void setListContents(const QStringList &);
 
-	private Q_SLOTS:
-		void doActionClicked();
-		void doSettingChanged(const QString &, const QVariant &);
+private Q_SLOTS:
+	void doActionClicked();
+	void doSettingChanged(const QString &, const QVariant &);
 
-	Q_SIGNALS:
-		void recentClicked(const QString &);
+Q_SIGNALS:
+	void recentClicked(const QString &);
 };
+
+}
 
 #endif

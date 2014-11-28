@@ -24,13 +24,12 @@
 class QMenu;
 class QAction;
 
-class QomposeRecentMenu;
-class QomposeSettings;
-
 namespace qompose
 {
 
 class BufferWidget;
+class Settings;
+class RecentMenu;
 
 /*!
  * \brief This class implements Qompose's main menu bar.
@@ -49,13 +48,13 @@ class MainMenu : public QMenuBar
 	Q_OBJECT
 
 public:
-	MainMenu(QomposeSettings *, QWidget * = nullptr);
+	MainMenu(Settings *, QWidget * = nullptr);
 	virtual ~MainMenu();
 
 	void connectBufferWidget(const BufferWidget *);
 
 private:
-	QomposeSettings *settings;
+	Settings *settings;
 
 	QMenu *fileMenu;
 	QMenu *editMenu;
@@ -65,7 +64,7 @@ private:
 
 	QAction *newAction;
 	QAction *openAction;
-	QomposeRecentMenu *recentMenu;
+	RecentMenu *recentMenu;
 	QAction *reopenAction;
 	QAction *revertAction;
 	QAction *revertAllAction;

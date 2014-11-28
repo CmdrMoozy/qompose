@@ -32,7 +32,7 @@
 
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/util/QomposeDocumentWriter.h"
-#include "QomposeCommon/util/QomposeSettings.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -44,7 +44,7 @@ namespace qompose
  * \param s The settings instance to get our preferences from.
  * \param p The parent widget for our buffer widget.
  */
-Buffer::Buffer(QomposeSettings *s, QWidget *p)
+Buffer::Buffer(Settings *s, QWidget *p)
 	: Editor(p), settings(s), path(QString()), codec(QString())
 {
 	// Load our initial settings, and connect our settings object.

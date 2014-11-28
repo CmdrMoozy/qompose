@@ -27,12 +27,12 @@ class QCheckBox;
 class QLabel;
 class QSpinBox;
 
-class QomposeSettings;
-class QomposeColorPickerButton;
-class QomposeFontPickerButton;
-
 namespace qompose
 {
+
+class ColorPickerButton;
+class FontPickerButton;
+class Settings;
 
 /*!
  * \brief This class implements a widget to configure editor-related settings.
@@ -40,7 +40,7 @@ namespace qompose
 class EditorPreferencesWidget : public PreferencesWidget
 {
 public:
-	EditorPreferencesWidget(QomposeSettings *s, QWidget *p = nullptr,
+	EditorPreferencesWidget(Settings *s, QWidget *p = nullptr,
 		Qt::WindowFlags f = nullptr);
 	virtual ~EditorPreferencesWidget();
 
@@ -54,7 +54,7 @@ private:
 	QGridLayout *generalLayout;
 	QCheckBox *showGutterCheckBox;
 	QLabel *editorFontLabel;
-	QomposeFontPickerButton *editorFontButton;
+	FontPickerButton *editorFontButton;
 	QLabel *tabWidthLabel;
 	QSpinBox *tabWidthSpinBox;
 
@@ -64,20 +64,20 @@ private:
 	QLabel *lineWrapGuideWidthLabel;
 	QSpinBox *lineWrapGuideWidthSpinBox;
 	QLabel *lineWrapGuideColorLabel;
-	QomposeColorPickerButton *lineWrapGuideColorButton;
+	ColorPickerButton *lineWrapGuideColorButton;
 
 	QGroupBox *colorsGroupBox;
 	QGridLayout *colorsLayout;
 	QLabel *editorFGLabel;
-	QomposeColorPickerButton *editorFGButton;
+	ColorPickerButton *editorFGButton;
 	QLabel *editorBGLabel;
-	QomposeColorPickerButton *editorBGButton;
+	ColorPickerButton *editorBGButton;
 	QLabel *currentLineBGLabel;
-	QomposeColorPickerButton *currentLineBGButton;
+	ColorPickerButton *currentLineBGButton;
 	QLabel *gutterFGLabel;
-	QomposeColorPickerButton *gutterFGButton;
+	ColorPickerButton *gutterFGButton;
 	QLabel *gutterBGLabel;
-	QomposeColorPickerButton *gutterBGButton;
+	ColorPickerButton *gutterBGButton;
 
 	EditorPreferencesWidget(const EditorPreferencesWidget &);
 	EditorPreferencesWidget &operator=(const EditorPreferencesWidget &);

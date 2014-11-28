@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeRecentMenu.h"
+#include "RecentMenu.h"
 
 #include <QMenu>
 #include <QStringList>
@@ -24,8 +24,11 @@
 #include <QFileInfo>
 #include <QVariant>
 
-#include "QomposeCommon/gui/QomposeGUIUtils.h"
-#include "QomposeCommon/util/QomposeSettings.h"
+#include "QomposeCommon/gui/GUIUtils.h"
+#include "QomposeCommon/util/Settings.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new instance of our
@@ -35,14 +38,14 @@
  * \param s The settings instance to use.
  * \param p This menu's parent object.
  */
-QomposeRecentMenu::QomposeRecentMenu(QomposeSettings *s, QObject *p)
+RecentMenu::RecentMenu(Settings *s, QObject *p)
 	: QObject(p), settings(s), capacity(0), menu(nullptr),
 		menuActions(QList<QAction *>()), recentList(QQueue<QString>())
 {
 	// Initialize our menu.
 
 	menu = new QMenu(tr("Open Recent"));
-	menu->setIcon(QomposeGUIUtils::getIconFromTheme("document-open"));
+	menu->setIcon(GUIUtils::getIconFromTheme("document-open"));
 
 	// Load our list's size from our settings instance.
 
@@ -74,7 +77,7 @@ QomposeRecentMenu::QomposeRecentMenu(QomposeSettings *s, QObject *p)
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposeRecentMenu::~QomposeRecentMenu()
+RecentMenu::~RecentMenu()
 {
 	delete menu;
 }
@@ -84,7 +87,7 @@ QomposeRecentMenu::~QomposeRecentMenu()
  *
  * \return The current capacity of our menu.
  */
-int QomposeRecentMenu::getCapacity() const
+int RecentMenu::getCapacity() const
 {
 	return capacity;
 }
@@ -97,7 +100,7 @@ int QomposeRecentMenu::getCapacity() const
  *
  * \return A pointer to our internal QMenu instance.
  */
-QMenu *QomposeRecentMenu::getMenu() const
+QMenu *RecentMenu::getMenu() const
 {
 	return menu;
 }
@@ -114,7 +117,7 @@ QMenu *QomposeRecentMenu::getMenu() const
  *
  * \param p The path to add to our list.
  */
-void QomposeRecentMenu::addPath(const QString &p)
+void RecentMenu::addPath(const QString &p)
 {
 	// If we already have this path, remove it first (move to the top).
 
@@ -150,7 +153,7 @@ void QomposeRecentMenu::addPath(const QString &p)
  * This function saves our menu's current contents using the settings
  * instance given to our constructor.
  */
-void QomposeRecentMenu::saveContents()
+void RecentMenu::saveContents()
 {
 	QStringList l;
 
@@ -171,7 +174,7 @@ void QomposeRecentMenu::saveContents()
  * Note that this function does NOT alter the text of the actions; this
  * should be done by renderListContents() AFTER calling this function.
  */
-void QomposeRecentMenu::updateActionsListSize()
+void RecentMenu::updateActionsListSize()
 {
 	// Make sure our items list isn't too long.
 
@@ -207,7 +210,7 @@ void QomposeRecentMenu::updateActionsListSize()
  *
  * \param c The new capacity for our menu.
  */
-void QomposeRecentMenu::setCapacity(int c)
+void RecentMenu::setCapacity(int c)
 {
 	capacity = c;
 
@@ -234,7 +237,7 @@ void QomposeRecentMenu::setCapacity(int c)
  * This function renders our list contents by setting the appropriate text
  * for each action, based upon the contents of our recent items list.
  */
-void QomposeRecentMenu::renderListContents()
+void RecentMenu::renderListContents()
 {
 	for(int i = (recentList.count() - 1); i >= 0; --i)
 	{
@@ -257,7 +260,7 @@ void QomposeRecentMenu::renderListContents()
  *
  * \param l Our new list of items.
  */
-void QomposeRecentMenu::setListContents(const QStringList &l)
+void RecentMenu::setListContents(const QStringList &l)
 {
 	// Set our recent list's contents to the given list.
 
@@ -288,7 +291,7 @@ void QomposeRecentMenu::setListContents(const QStringList &l)
  * was clicked, and then emitting an appropriate "recentClicked" signal with
  * the path corresponding to the action that was clicked.
  */
-void QomposeRecentMenu::doActionClicked()
+void RecentMenu::doActionClicked()
 { /* SLOT */
 
 	// Get the action that was clicked.
@@ -322,7 +325,7 @@ void QomposeRecentMenu::doActionClicked()
  * \param k The key of the setting that was changed.
  * \param v The setting's new value.
  */
-void QomposeRecentMenu::doSettingChanged(const QString &k, const QVariant &v)
+void RecentMenu::doSettingChanged(const QString &k, const QVariant &v)
 { /* SLOT */
 
 	if(k == "recent-list-size")
@@ -338,5 +341,7 @@ void QomposeRecentMenu::doSettingChanged(const QString &k, const QVariant &v)
 		if(v.canConvert(QMetaType::QStringList))
 			setListContents(v.toStringList());
 	}
+
+}
 
 }

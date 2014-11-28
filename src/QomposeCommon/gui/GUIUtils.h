@@ -16,33 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_NOTIFICATION_LABEL_H
-#define INCLUDE_QOMPOSE_NOTIFICATION_LABEL_H
+#ifndef INCLUDE_QOMPOSECOMMON_GUI_GUI_UTILS_H
+#define INCLUDE_QOMPOSECOMMON_GUI_GUI_UTILS_H
 
-#include <QLabel>
-#include <QColor>
+#include <QIcon>
+#include <QString>
+
+namespace qompose
+{
 
 /*!
- * \brief This class implements a Label suitable for status bar notifications.
+ * \brief This class provides various GUI-related utility functions.
  */
-class QomposeNotificationLabel : public QLabel
+class GUIUtils
 {
-	Q_OBJECT
-	Q_PROPERTY(QColor textColor READ getTextColor WRITE setTextColor)
-
-	public:
-		QomposeNotificationLabel(QWidget * = nullptr,
-			Qt::WindowFlags  = nullptr);
-		virtual ~QomposeNotificationLabel();
-
-		QColor getTextColor() const;
-		void setTextColor(const QColor &);
-
-		void displayNotification(const QString &, bool = false,
-			int = 0);
-
-	private:
-		QColor defaultColor;
+public:
+	static QIcon getIconFromTheme(const QString &n);
 };
+
+}
 
 #endif

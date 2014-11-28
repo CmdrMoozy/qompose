@@ -22,17 +22,17 @@
 #include <QTextDocument>
 #include <QList>
 
-#include "QomposeCommon/util/QomposeSettings.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
 
-SyntaxHighlighter::SyntaxHighlighter(QomposeSettings *s, QObject *p)
+SyntaxHighlighter::SyntaxHighlighter(Settings *s, QObject *p)
 	: QSyntaxHighlighter(p), settings(s), lexer(nullptr)
 {
 }
 
-SyntaxHighlighter::SyntaxHighlighter(QomposeSettings *s, QTextDocument *p)
+SyntaxHighlighter::SyntaxHighlighter(Settings *s, QTextDocument *p)
 	: QSyntaxHighlighter(p), settings(s), lexer(nullptr)
 {
 }
@@ -41,12 +41,12 @@ SyntaxHighlighter::~SyntaxHighlighter()
 {
 }
 
-QomposeSettings *SyntaxHighlighter::getSettings() const
+Settings *SyntaxHighlighter::getSettings() const
 {
 	return settings;
 }
 
-void SyntaxHighlighter::setSettings(QomposeSettings *s)
+void SyntaxHighlighter::setSettings(Settings *s)
 {
 	settings = s;
 

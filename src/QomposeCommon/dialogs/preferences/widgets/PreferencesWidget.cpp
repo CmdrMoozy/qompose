@@ -18,7 +18,7 @@
 
 #include "PreferencesWidget.h"
 
-#include "QomposeCommon/util/QomposeSettings.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -31,7 +31,7 @@ namespace qompose
  * \param p This widget's parent widget.
  * \param f The window flags to use for this widget.
  */
-PreferencesWidget::PreferencesWidget(QomposeSettings *s,
+PreferencesWidget::PreferencesWidget(Settings *s,
 		QWidget *p, Qt::WindowFlags f)
 	: QWidget(p, f), settings(s), icon(QIcon()), title(QString())
 {
@@ -95,7 +95,7 @@ void PreferencesWidget::setPreferencesTitle(const QString &t)
  *
  * \return Our widget's settings instance.
  */
-QomposeSettings *PreferencesWidget::getSettings() const
+Settings *PreferencesWidget::getSettings() const
 {
 	return settings;
 }

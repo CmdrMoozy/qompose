@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeColorPickerButton.h"
+#include "ColorPickerButton.h"
 
 #include <QString>
 #include <QIcon>
@@ -27,6 +27,9 @@
 
 #include "QomposeCommon/Defines.h"
 
+namespace qompose
+{
+
 /*!
  * This is one of our constructors, which intializes a new color picker
  * object with the given parameters.
@@ -34,8 +37,7 @@
  * \param p Our parent widget.
  * \param iC Our initial color.
  */
-QomposeColorPickerButton::QomposeColorPickerButton(
-	QWidget *p, const QColor &iC)
+ColorPickerButton::ColorPickerButton(QWidget *p, const QColor &iC)
 	: QPushButton("", p), selectedColor(QColor())
 {
 	setSelectedColor(iC);
@@ -52,8 +54,8 @@ QomposeColorPickerButton::QomposeColorPickerButton(
  * \param p Our parent widget.
  * \param iC Our initial color.
  */
-QomposeColorPickerButton::QomposeColorPickerButton(const QString &QUNUSED(t),
-	QWidget *p, const QColor &iC)
+ColorPickerButton::ColorPickerButton(const QString &QUNUSED(t),
+		QWidget *p, const QColor &iC)
 	: QPushButton("", p), selectedColor(QColor())
 {
 	setSelectedColor(iC);
@@ -71,8 +73,8 @@ QomposeColorPickerButton::QomposeColorPickerButton(const QString &QUNUSED(t),
  * \param p Our parent widget.
  * \param iC Our initial color.
  */
-QomposeColorPickerButton::QomposeColorPickerButton(const QIcon &QUNUSED(i),
-	const QString &QUNUSED(t), QWidget *p, const QColor &iC)
+ColorPickerButton::ColorPickerButton(const QIcon &QUNUSED(i),
+		const QString &QUNUSED(t), QWidget *p, const QColor &iC)
 	: QPushButton("", p), selectedColor(QColor())
 {
 	setSelectedColor(iC);
@@ -84,7 +86,7 @@ QomposeColorPickerButton::QomposeColorPickerButton(const QIcon &QUNUSED(i),
 /*!
  * This is our default constructor, which cleans up and destroys our object.
  */
-QomposeColorPickerButton::~QomposeColorPickerButton()
+ColorPickerButton::~ColorPickerButton()
 {
 }
 
@@ -94,7 +96,7 @@ QomposeColorPickerButton::~QomposeColorPickerButton()
  *
  * \return Our currently selected color.
  */
-const QColor &QomposeColorPickerButton::getSelectedColor() const
+const QColor &ColorPickerButton::getSelectedColor() const
 {
 	return selectedColor;
 }
@@ -108,7 +110,7 @@ const QColor &QomposeColorPickerButton::getSelectedColor() const
  *
  * \param c The new color to represent.
  */
-void QomposeColorPickerButton::setSelectedColor(const QColor &c)
+void ColorPickerButton::setSelectedColor(const QColor &c)
 {
 	selectedColor = c;
 	update();
@@ -120,7 +122,7 @@ void QomposeColorPickerButton::setSelectedColor(const QColor &c)
  *
  * \param e The event we are handling.
  */
-void QomposeColorPickerButton::paintEvent(QPaintEvent *e)
+void ColorPickerButton::paintEvent(QPaintEvent *e)
 {
 	// Call our superclass' paint event so we still look like a button.
 	QPushButton::paintEvent(e);
@@ -153,7 +155,7 @@ void QomposeColorPickerButton::paintEvent(QPaintEvent *e)
  *
  * \param i The new icon to display.
  */
-void QomposeColorPickerButton::setIcon(const QIcon &i)
+void ColorPickerButton::setIcon(const QIcon &i)
 {
 	QPushButton::setIcon(i);
 }
@@ -165,7 +167,7 @@ void QomposeColorPickerButton::setIcon(const QIcon &i)
  *
  * \param i The new text to display.
  */
-void QomposeColorPickerButton::setText(const QString &t)
+void ColorPickerButton::setText(const QString &t)
 {
 	QPushButton::setText(t);
 }
@@ -176,7 +178,7 @@ void QomposeColorPickerButton::setText(const QString &t)
  * (i.e., doesn't click "Cancel"), then we emit a selectedColorChanged()
  * signal.
  */
-void QomposeColorPickerButton::doClicked()
+void ColorPickerButton::doClicked()
 { /* SLOT */
 
 	QColor c = QColorDialog::getColor(getSelectedColor(), this,
@@ -193,3 +195,4 @@ void QomposeColorPickerButton::doClicked()
 
 }
 
+}

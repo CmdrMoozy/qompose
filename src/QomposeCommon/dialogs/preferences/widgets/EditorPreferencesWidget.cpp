@@ -24,10 +24,10 @@
 #include <QCheckBox>
 #include <QSpinBox>
 
-#include "QomposeCommon/gui/QomposeColorPickerButton.h"
-#include "QomposeCommon/gui/QomposeFontPickerButton.h"
-#include "QomposeCommon/gui/QomposeGUIUtils.h"
-#include "QomposeCommon/util/QomposeSettings.h"
+#include "QomposeCommon/gui/ColorPickerButton.h"
+#include "QomposeCommon/gui/FontPickerButton.h"
+#include "QomposeCommon/gui/GUIUtils.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -40,7 +40,7 @@ namespace qompose
  * \param p The parent widget to use for this widget.
  * \param f The window flags to use for this widget.
  */
-EditorPreferencesWidget::EditorPreferencesWidget(QomposeSettings *s,
+EditorPreferencesWidget::EditorPreferencesWidget(Settings *s,
 		QWidget *p, Qt::WindowFlags f)
 	: PreferencesWidget(s, p, f), layout(nullptr),
 		generalGroupBox(nullptr), generalLayout(nullptr),
@@ -60,7 +60,7 @@ EditorPreferencesWidget::EditorPreferencesWidget(QomposeSettings *s,
 		gutterBGButton(nullptr)
 {
 	setPreferencesIcon(
-		QomposeGUIUtils::getIconFromTheme("accessories-text-editor"));
+		GUIUtils::getIconFromTheme("accessories-text-editor"));
 	setPreferencesTitle(tr("Editor"));
 
 	initializeGUI();
@@ -221,7 +221,7 @@ void EditorPreferencesWidget::initializeGUI()
 
 	editorFontLabel = new QLabel(tr("Editor Font"), generalGroupBox, nullptr);
 
-	editorFontButton = new QomposeFontPickerButton(generalGroupBox);
+	editorFontButton = new FontPickerButton(generalGroupBox);
 
 	tabWidthLabel = new QLabel(tr("Tab Width"), generalGroupBox, nullptr);
 
@@ -260,7 +260,7 @@ void EditorPreferencesWidget::initializeGUI()
 		lineWrapGuideGroupBox, nullptr);
 
 	lineWrapGuideColorButton =
-		new QomposeColorPickerButton(lineWrapGuideGroupBox);
+		new ColorPickerButton(lineWrapGuideGroupBox);
 
 	lineWrapGuideLayout->addWidget(
 		lineWrapGuideCheckBox, 0, 0, 1, 1, nullptr);
@@ -285,21 +285,21 @@ void EditorPreferencesWidget::initializeGUI()
 
 	editorFGLabel = new QLabel(tr("Editor Foreground"),
 		colorsGroupBox, nullptr);
-	editorFGButton = new QomposeColorPickerButton(colorsGroupBox);
+	editorFGButton = new ColorPickerButton(colorsGroupBox);
 
 	editorBGLabel = new QLabel(tr("Editor Background"),
 		colorsGroupBox, nullptr);
-	editorBGButton = new QomposeColorPickerButton(colorsGroupBox);
+	editorBGButton = new ColorPickerButton(colorsGroupBox);
 
 	currentLineBGLabel = new QLabel(tr("Current Line Background"),
 		colorsGroupBox, nullptr);
-	currentLineBGButton = new QomposeColorPickerButton(colorsGroupBox);
+	currentLineBGButton = new ColorPickerButton(colorsGroupBox);
 
 	gutterFGLabel = new QLabel(tr("Gutter Foreground"), colorsGroupBox, nullptr);
-	gutterFGButton = new QomposeColorPickerButton(colorsGroupBox);
+	gutterFGButton = new ColorPickerButton(colorsGroupBox);
 
 	gutterBGLabel = new QLabel(tr("Gutter Background"), colorsGroupBox, nullptr);
-	gutterBGButton = new QomposeColorPickerButton(colorsGroupBox);
+	gutterBGButton = new ColorPickerButton(colorsGroupBox);
 
 	colorsLayout->addWidget(editorFGLabel, 0, 0, 1, 1, nullptr);
 	colorsLayout->addWidget(editorFGButton, 0, 1, 1, 1, nullptr);

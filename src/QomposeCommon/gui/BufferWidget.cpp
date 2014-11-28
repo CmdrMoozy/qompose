@@ -31,7 +31,7 @@
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/util/QomposeFindQuery.h"
 #include "QomposeCommon/util/QomposeReplaceQuery.h"
-#include "QomposeCommon/util/QomposeSettings.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -43,7 +43,7 @@ namespace qompose
  * \param s The settings instance to give to our buffers.
  * \param p The parent widget to use for this widget.
  */
-BufferWidget::BufferWidget(QomposeSettings *s, QWidget *p)
+BufferWidget::BufferWidget(Settings *s, QWidget *p)
 	: QWidget(p, nullptr), settings(s), layout(nullptr),
 		tabWidget(nullptr), tabs(), closedTabs()
 {

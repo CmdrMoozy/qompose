@@ -25,10 +25,10 @@
 
 class QPrinter;
 
-class QomposeSettings;
-
 namespace qompose
 {
+
+class Settings;
 
 /*!
  * \brief This class provides high-level buffer functionality for editors.
@@ -38,7 +38,7 @@ class Buffer : public Editor
 	Q_OBJECT
 
 public:
-	Buffer(QomposeSettings *s, QWidget *p = NULL);
+	Buffer(Settings *s, QWidget *p = NULL);
 	virtual ~Buffer();
 
 	bool open(const FileDescriptor &f);
@@ -59,7 +59,7 @@ public Q_SLOTS:
 	void print(QPrinter *p);
 
 private:
-	QomposeSettings *settings;
+	Settings *settings;
 
 	QString path;
 	QString codec;

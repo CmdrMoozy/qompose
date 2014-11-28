@@ -26,10 +26,10 @@ class QCheckBox;
 class QLabel;
 class QSpinBox;
 
-class QomposeSettings;
-
 namespace qompose
 {
+
+class Settings;
 
 /*!
  * \brief This class implements a widget to configure general options.
@@ -37,7 +37,7 @@ namespace qompose
 class GeneralPreferencesWidget : public PreferencesWidget
 {
 public:
-	GeneralPreferencesWidget(QomposeSettings *s, QWidget *p = nullptr,
+	GeneralPreferencesWidget(Settings *s, QWidget *p = nullptr,
 		Qt::WindowFlags f = nullptr);
 	virtual ~GeneralPreferencesWidget();
 

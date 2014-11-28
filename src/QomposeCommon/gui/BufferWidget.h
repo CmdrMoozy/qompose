@@ -30,7 +30,6 @@ class QGridLayout;
 class QTabWidget;
 class QPrinter;
 
-class QomposeSettings;
 class QomposeFindQuery;
 class QomposeReplaceQuery;
 
@@ -38,6 +37,7 @@ namespace qompose
 {
 
 class Buffer;
+class Settings;
 
 /*!
  * \brief This class provides high-level management of a set of buffers.
@@ -47,7 +47,7 @@ class BufferWidget : public QWidget
 	Q_OBJECT
 
 public:
-	BufferWidget(QomposeSettings *, QWidget * = nullptr);
+	BufferWidget(Settings *, QWidget * = nullptr);
 	virtual ~BufferWidget();
 
 	int count() const;
@@ -61,7 +61,7 @@ public:
 	int findBufferWithPath(const QString &);
 
 private:
-	QomposeSettings *settings;
+	Settings *settings;
 
 	QGridLayout *layout;
 	QTabWidget *tabWidget;

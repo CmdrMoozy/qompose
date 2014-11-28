@@ -25,10 +25,10 @@ class QGridLayout;
 class QGroupBox;
 class QCheckBox;
 
-class QomposeSettings;
-
 namespace qompose
 {
+
+class Settings;
 
 /*!
  * \brief This widget provides a UI for configuring for open/save preferences.
@@ -36,7 +36,7 @@ namespace qompose
 class OpenSavePreferencesWidget : public PreferencesWidget
 {
 public:
-	OpenSavePreferencesWidget(QomposeSettings *s, QWidget *p = nullptr,
+	OpenSavePreferencesWidget(Settings *s, QWidget *p = nullptr,
 		Qt::WindowFlags f = nullptr);
 	virtual ~OpenSavePreferencesWidget();
 

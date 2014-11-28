@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeSettings.h"
+#include "Settings.h"
 
 #include <QSettings>
 #include <QStringList>
@@ -25,9 +25,12 @@
 #include <QFont>
 #include <QColor>
 
+namespace qompose
+{
+
 // Load our default settings values into our static defaults list.
 
-const QList< QPair<QString, QVariant> > QomposeSettings::defaults
+const QList< QPair<QString, QVariant> > Settings::defaults
 	= (QList< QPair<QString, QVariant> >())
 		<< QPair<QString, QVariant>( "show-status-bar",            true                  )
 		<< QPair<QString, QVariant>( "recent-list-size",           10                    )
@@ -55,7 +58,7 @@ const QList< QPair<QString, QVariant> > QomposeSettings::defaults
  *
  * \param p Our parent object.
  */
-QomposeSettings::QomposeSettings(QObject *p)
+Settings::Settings(QObject *p)
 	: QObject(p), settings(nullptr)
 {
 	#ifdef QOMPOSE_DEBUG
@@ -72,7 +75,7 @@ QomposeSettings::QomposeSettings(QObject *p)
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposeSettings::~QomposeSettings()
+Settings::~Settings()
 {
 	delete settings;
 }
@@ -82,7 +85,7 @@ QomposeSettings::~QomposeSettings()
  *
  * \return The total number of settings keys.
  */
-int QomposeSettings::count() const
+int Settings::count() const
 {
 	return settings->allKeys().count();
 }
@@ -91,7 +94,7 @@ int QomposeSettings::count() const
  * This function resets ALL of our settings to their default values. Any existing
  * data will be overwritten.
  */
-void QomposeSettings::resetDefaults()
+void Settings::resetDefaults()
 {
 	for(int i = 0; i < defaults.count(); ++i)
 		setSetting(defaults.at(i).first, defaults.at(i).second);
@@ -103,7 +106,7 @@ void QomposeSettings::resetDefaults()
  *
  * \param k The key of the setting to reset.
  */
-void QomposeSettings::resetDefault(const QString &k)
+void Settings::resetDefault(const QString &k)
 {
 	for(int i = 0; i < defaults.count(); ++i)
 	{
@@ -121,7 +124,7 @@ void QomposeSettings::resetDefault(const QString &k)
  * \param k The setting key to set.
  * \param v The new value for the given key.
  */
-void QomposeSettings::setSetting(const QString &k, const QVariant &v)
+void Settings::setSetting(const QString &k, const QVariant &v)
 {
 	settings->setValue(k, v);
 	Q_EMIT settingChanged(k, v);
@@ -134,7 +137,7 @@ void QomposeSettings::setSetting(const QString &k, const QVariant &v)
  * \param k The key to search for.
  * \return True if we have a value for the given key, or false otherwise.
  */
-bool QomposeSettings::containsSetting(const QString &k) const
+bool Settings::containsSetting(const QString &k) const
 {
 	return settings->contains(k);
 }
@@ -146,7 +149,7 @@ bool QomposeSettings::containsSetting(const QString &k) const
  * \param k The key to search for.
  * \return The value for the given settings key.
  */
-QVariant QomposeSettings::getSetting(const QString &k) const
+QVariant Settings::getSetting(const QString &k) const
 {
 	return settings->value(k, QVariant());
 }
@@ -155,7 +158,7 @@ QVariant QomposeSettings::getSetting(const QString &k) const
  * This function initializes default values, for settings which have no value set
  * for them already. Existing values will NOT be overwritten - unlike resetDefaults().
  */
-void QomposeSettings::initializeDefaults()
+void Settings::initializeDefaults()
 {
 	for(int i = 0; i < defaults.count(); ++i)
 	{
@@ -165,4 +168,6 @@ void QomposeSettings::initializeDefaults()
 				defaults.at(i).second);
 		}
 	}
+}
+
 }

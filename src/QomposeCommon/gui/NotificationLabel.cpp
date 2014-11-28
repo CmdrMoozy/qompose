@@ -16,12 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeNotificationLabel.h"
+#include "NotificationLabel.h"
 
 #include <cmath>
 
 #include <QPalette>
 #include <QPropertyAnimation>
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new instance of our
@@ -30,8 +33,7 @@
  * \param p The parent widget for this label.
  * \param f The window flags for this label.
  */
-QomposeNotificationLabel::QomposeNotificationLabel(
-	QWidget *p, Qt::WindowFlags f)
+NotificationLabel::NotificationLabel(QWidget *p, Qt::WindowFlags f)
 	: QLabel(p, f), defaultColor(QColor())
 {
 	defaultColor = getTextColor();
@@ -41,7 +43,7 @@ QomposeNotificationLabel::QomposeNotificationLabel(
  * This is our default destructor, which cleans up and destroys this
  * notification label instance.
  */
-QomposeNotificationLabel::~QomposeNotificationLabel()
+NotificationLabel::~NotificationLabel()
 {
 }
 
@@ -51,7 +53,7 @@ QomposeNotificationLabel::~QomposeNotificationLabel()
  *
  * \return This label's current text color.
  */
-QColor QomposeNotificationLabel::getTextColor() const
+QColor NotificationLabel::getTextColor() const
 {
 	QPalette p = palette();
 
@@ -63,7 +65,7 @@ QColor QomposeNotificationLabel::getTextColor() const
  *
  * \param c This label's new text color.
  */
-void QomposeNotificationLabel::setTextColor(const QColor &c)
+void NotificationLabel::setTextColor(const QColor &c)
 {
 	QPalette p = palette();
 
@@ -79,8 +81,7 @@ void QomposeNotificationLabel::setTextColor(const QColor &c)
  * \param c Whether or not the notification is critical.
  * \param d The duration for which the notification should be displayed.
  */
-void QomposeNotificationLabel::displayNotification(
-	const QString &n, bool c, int d)
+void NotificationLabel::displayNotification(const QString &n, bool c, int d)
 {
 	setText(n.trimmed());
 
@@ -118,4 +119,6 @@ void QomposeNotificationLabel::displayNotification(
 	}
 
 	anim->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
 }

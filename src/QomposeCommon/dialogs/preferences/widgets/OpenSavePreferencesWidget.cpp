@@ -23,8 +23,8 @@
 #include <QCheckBox>
 #include <QVariant>
 
-#include "QomposeCommon/gui/QomposeGUIUtils.h"
-#include "QomposeCommon/util/QomposeSettings.h"
+#include "QomposeCommon/gui/GUIUtils.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -37,13 +37,13 @@ namespace qompose
  * \param p The parent widget to use for this widget.
  * \param f The window flags to use for this widget.
  */
-OpenSavePreferencesWidget::OpenSavePreferencesWidget(QomposeSettings *s,
+OpenSavePreferencesWidget::OpenSavePreferencesWidget(Settings *s,
 		QWidget *p, Qt::WindowFlags f)
 	: PreferencesWidget(s, p, f), layout(nullptr),
 		generalGroupBox(nullptr), generalLayout(nullptr),
 		stripTrailingSpacesCheckBox(nullptr)
 {
-	setPreferencesIcon(QomposeGUIUtils::getIconFromTheme("document-save"));
+	setPreferencesIcon(GUIUtils::getIconFromTheme("document-save"));
 	setPreferencesTitle(tr("Open/Save"));
 
 	initializeGUI();
