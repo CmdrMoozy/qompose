@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_OPEN_SAVE_PREFERENCES_WIDGET_H
-#define INCLUDE_QOMPOSE_OPEN_SAVE_PREFERENCES_WIDGET_H
+#ifndef INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_WIDGETS_OPEN_SAVE_PREFERENCES_WIDGET_H
+#define INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_WIDGETS_OPEN_SAVE_PREFERENCES_WIDGET_H
 
-#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/PreferencesWidget.h"
 
 class QGridLayout;
 class QGroupBox;
@@ -27,32 +27,36 @@ class QCheckBox;
 
 class QomposeSettings;
 
+namespace qompose
+{
+
 /*!
  * \brief This widget provides a UI for configuring for open/save preferences.
  */
-class QomposeOpenSavePreferencesWidget : public QomposePreferencesWidget
+class OpenSavePreferencesWidget : public PreferencesWidget
 {
-	public:
-		QomposeOpenSavePreferencesWidget(QomposeSettings *s,
-			QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
-		virtual ~QomposeOpenSavePreferencesWidget();
+public:
+	OpenSavePreferencesWidget(QomposeSettings *s, QWidget *p = nullptr,
+		Qt::WindowFlags f = nullptr);
+	virtual ~OpenSavePreferencesWidget();
 
-		virtual void apply();
-		virtual void discardChanges();
+	virtual void apply();
+	virtual void discardChanges();
 
-	private:
-		QGridLayout *layout;
+private:
+	QGridLayout *layout;
 
-		QGroupBox *generalGroupBox;
-		QGridLayout *generalLayout;
-		QCheckBox *stripTrailingSpacesCheckBox;
+	QGroupBox *generalGroupBox;
+	QGridLayout *generalLayout;
+	QCheckBox *stripTrailingSpacesCheckBox;
 
-		QomposeOpenSavePreferencesWidget(
-			const QomposeOpenSavePreferencesWidget &);
-		QomposeOpenSavePreferencesWidget &operator=(
-			const QomposeOpenSavePreferencesWidget &);
+	OpenSavePreferencesWidget(const OpenSavePreferencesWidget &);
+	OpenSavePreferencesWidget &operator=(
+		const OpenSavePreferencesWidget &);
 
-		void initializeGUI();
+	void initializeGUI();
 };
+
+}
 
 #endif

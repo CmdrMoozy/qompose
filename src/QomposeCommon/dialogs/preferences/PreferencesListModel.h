@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_PREFERENCES_LIST_MODEL_H
-#define INCLUDE_QOMPOSE_PREFERENCES_LIST_MODEL_H
+#ifndef INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_PREFERENCES_LIST_MODEL_H
+#define INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_PREFERENCES_LIST_MODEL_H
 
 #include <QAbstractListModel>
 
@@ -25,33 +25,38 @@
 #include <QVariant>
 #include <QList>
 
-class QomposePreferencesWidget;
-class QomposePreferencesScrollArea;
+namespace qompose
+{
+
+class PreferencesWidget;
+class PreferencesScrollArea;
 
 /*!
  * \brief This class implements a model to store a list of preferences widgets.
  */
-class QomposePreferencesListModel : public QAbstractListModel
+class PreferencesListModel : public QAbstractListModel
 {
-	public:
-		QomposePreferencesListModel(QObject *p = nullptr);
-		virtual ~QomposePreferencesListModel();
+public:
+	PreferencesListModel(QObject *p = nullptr);
+	virtual ~PreferencesListModel();
 
-		virtual int rowCount(
-			const QModelIndex &p = QModelIndex()) const;
-		virtual QVariant data(const QModelIndex &i,
-			int r = Qt::DisplayRole) const;
-		virtual QVariant headerData(int s, Qt::Orientation o,
-			int r = Qt::DisplayRole) const;
+	virtual int rowCount(
+		const QModelIndex &p = QModelIndex()) const;
+	virtual QVariant data(const QModelIndex &i,
+		int r = Qt::DisplayRole) const;
+	virtual QVariant headerData(int s, Qt::Orientation o,
+		int r = Qt::DisplayRole) const;
 
-		QomposePreferencesWidget *widgetAt(int i) const;
-		QomposePreferencesScrollArea *scrollWidgetAt(int i) const;
+	PreferencesWidget *widgetAt(int i) const;
+	PreferencesScrollArea *scrollWidgetAt(int i) const;
 
-		void addPreferencesWidget(QomposePreferencesWidget *w);
+	void addPreferencesWidget(PreferencesWidget *w);
 
-	private:
-		QList<QomposePreferencesWidget *> widgets;
-		QList<QomposePreferencesScrollArea *> scrollWidgets;
+private:
+	QList<PreferencesWidget *> widgets;
+	QList<PreferencesScrollArea *> scrollWidgets;
 };
+
+}
 
 #endif

@@ -16,20 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposePreferencesDialog.h"
+#include "PreferencesDialog.h"
 
 #include <QGridLayout>
 #include <QStackedWidget>
 #include <QPushButton>
 #include <QMessageBox>
 
-#include "QomposeCommon/dialogs/preferences/QomposePreferencesListModel.h"
-#include "QomposeCommon/dialogs/preferences/QomposePreferencesListView.h"
-#include "QomposeCommon/dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h"
-#include "QomposeCommon/dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h"
-#include "QomposeCommon/dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.h"
-#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesScrollArea.h"
+#include "QomposeCommon/dialogs/preferences/PreferencesListModel.h"
+#include "QomposeCommon/dialogs/preferences/PreferencesListView.h"
+#include "QomposeCommon/dialogs/preferences/widgets/EditorPreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/GeneralPreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/OpenSavePreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/PreferencesScrollArea.h"
 #include "QomposeCommon/util/QomposeSettings.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new instance of our
@@ -39,8 +42,8 @@
  * \param p The parent widget for this dialog.
  * \param f The window flags for this dialog.
  */
-QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
-	QWidget *p, Qt::WindowFlags f)
+PreferencesDialog::PreferencesDialog(QomposeSettings *s,
+		QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f), settings(s), layout(nullptr),
 		generalPreferencesWidget(nullptr),
 		editorPreferencesWidget(nullptr),
@@ -53,7 +56,7 @@ QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
 {
 	layout = new QGridLayout(this);
 
-	preferencesView = new QomposePreferencesListView(this);
+	preferencesView = new PreferencesListView(this);
 	createPreferencesModel();
 	preferencesView->setModel(preferencesModel);
 
@@ -107,7 +110,7 @@ QomposePreferencesDialog::QomposePreferencesDialog(QomposeSettings *s,
 /*!
  * This is our default destructor, which cleans up & destroys our dialog.
  */
-QomposePreferencesDialog::~QomposePreferencesDialog()
+PreferencesDialog::~PreferencesDialog()
 {
 }
 
@@ -116,7 +119,7 @@ QomposePreferencesDialog::~QomposePreferencesDialog()
  * preferences widgets by instructing each widget in our model to discard
  * its changes.
  */
-void QomposePreferencesDialog::discardChanges()
+void PreferencesDialog::discardChanges()
 {
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 		preferencesModel->widgetAt(i)->discardChanges();
@@ -126,15 +129,18 @@ void QomposePreferencesDialog::discardChanges()
  * This function initializes our preferences model by creating the model
  * as well as all of the widgets that will be placed inside of it.
  */
-void QomposePreferencesDialog::createPreferencesModel()
+void PreferencesDialog::createPreferencesModel()
 {
-	preferencesModel = new QomposePreferencesListModel(preferencesView);
+	preferencesModel = new PreferencesListModel(preferencesView);
 
-	generalPreferencesWidget = new QomposeGeneralPreferencesWidget(settings, this);
+	generalPreferencesWidget =
+		new GeneralPreferencesWidget(settings, this);
 
-	editorPreferencesWidget = new QomposeEditorPreferencesWidget(settings, this);
+	editorPreferencesWidget =
+		new EditorPreferencesWidget(settings, this);
 
-	openSavePreferencesWidget = new QomposeOpenSavePreferencesWidget(settings, this);
+	openSavePreferencesWidget =
+		new OpenSavePreferencesWidget(settings, this);
 
 	preferencesModel->addPreferencesWidget(generalPreferencesWidget);
 	preferencesModel->addPreferencesWidget(editorPreferencesWidget);
@@ -148,7 +154,7 @@ void QomposePreferencesDialog::createPreferencesModel()
  *
  * \param i The model index (i.e., the row) of the widget that was activated.
  */
-void QomposePreferencesDialog::doWidgetActivated(const QModelIndex &i)
+void PreferencesDialog::doWidgetActivated(const QModelIndex &i)
 { /* SLOT */
 
 	preferencesDisplayWidget->setCurrentWidget(
@@ -160,7 +166,7 @@ void QomposePreferencesDialog::doWidgetActivated(const QModelIndex &i)
  * This function handles our OK button being clicked by applying all of our
  * preferences values, and then closing our dialog.
  */
-void QomposePreferencesDialog::doOk()
+void PreferencesDialog::doOk()
 { /* SLOT */
 
 	doApply();
@@ -173,7 +179,7 @@ void QomposePreferencesDialog::doOk()
  * This function handles our apply button being clicked by instructing each of
  * the preferences widgets in our model to apply their respective settings.
  */
-void QomposePreferencesDialog::doApply()
+void PreferencesDialog::doApply()
 { /* SLOT */
 
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
@@ -187,7 +193,7 @@ void QomposePreferencesDialog::doApply()
  * the preferences widgets in our model to reload the settings from the settings
  * instance.
  */
-void QomposePreferencesDialog::doDefaults()
+void PreferencesDialog::doDefaults()
 { /* SLOT */
 
 	QMessageBox::StandardButton ret = QMessageBox::question(this,
@@ -202,5 +208,7 @@ void QomposePreferencesDialog::doDefaults()
 
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 		preferencesModel->widgetAt(i)->discardChanges();
+
+}
 
 }

@@ -32,7 +32,7 @@
 #include "QomposeCommon/dialogs/FindDialog.h"
 #include "QomposeCommon/dialogs/GoToDialog.h"
 #include "QomposeCommon/dialogs/ReplaceDialog.h"
-#include "QomposeCommon/dialogs/preferences/QomposePreferencesDialog.h"
+#include "QomposeCommon/dialogs/preferences/PreferencesDialog.h"
 #include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/QomposeGUIUtils.h"
 #include "QomposeCommon/gui/QomposeStatusBar.h"
@@ -136,7 +136,7 @@ void Window::initializeDialogs()
 {
 	// Create our dialog objects.
 
-	preferencesDialog = new QomposePreferencesDialog(settings, this);
+	preferencesDialog = new PreferencesDialog(settings, this);
 
 	findDialog = new FindDialog(this);
 

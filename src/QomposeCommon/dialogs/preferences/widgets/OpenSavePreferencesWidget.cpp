@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeOpenSavePreferencesWidget.h"
+#include "OpenSavePreferencesWidget.h"
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -26,6 +26,9 @@
 #include "QomposeCommon/gui/QomposeGUIUtils.h"
 #include "QomposeCommon/util/QomposeSettings.h"
 
+namespace qompose
+{
+
 /*!
  * This is our default constructor, which creates a new instance of our
  * open/save preferences widget.
@@ -34,9 +37,9 @@
  * \param p The parent widget to use for this widget.
  * \param f The window flags to use for this widget.
  */
-QomposeOpenSavePreferencesWidget::QomposeOpenSavePreferencesWidget(
-	QomposeSettings *s, QWidget *p, Qt::WindowFlags f)
-	: QomposePreferencesWidget(s, p, f), layout(nullptr),
+OpenSavePreferencesWidget::OpenSavePreferencesWidget(QomposeSettings *s,
+		QWidget *p, Qt::WindowFlags f)
+	: PreferencesWidget(s, p, f), layout(nullptr),
 		generalGroupBox(nullptr), generalLayout(nullptr),
 		stripTrailingSpacesCheckBox(nullptr)
 {
@@ -49,7 +52,7 @@ QomposeOpenSavePreferencesWidget::QomposeOpenSavePreferencesWidget(
 /*!
  * This is our default destructor, which cleans up & destroys our widget.
  */
-QomposeOpenSavePreferencesWidget::~QomposeOpenSavePreferencesWidget()
+OpenSavePreferencesWidget::~OpenSavePreferencesWidget()
 {
 }
 
@@ -57,7 +60,7 @@ QomposeOpenSavePreferencesWidget::~QomposeOpenSavePreferencesWidget()
  * We implement our superclass's apply() function to save our various open/save
  * preferences values using our settings instance.
  */
-void QomposeOpenSavePreferencesWidget::apply()
+void OpenSavePreferencesWidget::apply()
 {
 	// Strip Trailing Spaces
 
@@ -70,7 +73,7 @@ void QomposeOpenSavePreferencesWidget::apply()
  * any preferences changes that may have been made to our widget by
  * reloading the existing values from our settings instance.
  */
-void QomposeOpenSavePreferencesWidget::discardChanges()
+void OpenSavePreferencesWidget::discardChanges()
 {
 	// Strip Trailing Spaces
 
@@ -85,7 +88,7 @@ void QomposeOpenSavePreferencesWidget::discardChanges()
  * This function initializes our widget's GUI by creating the various widgets
  * we contain, and adding them to our layout.
  */
-void QomposeOpenSavePreferencesWidget::initializeGUI()
+void OpenSavePreferencesWidget::initializeGUI()
 {
 	layout = new QGridLayout(this);
 
@@ -113,4 +116,6 @@ void QomposeOpenSavePreferencesWidget::initializeGUI()
 	layout->setColumnStretch(0, 1);
 
 	setLayout(layout);
+}
+
 }

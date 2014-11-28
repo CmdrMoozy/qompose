@@ -27,13 +27,13 @@
 class QCloseEvent;
 class QPrinter;
 
-class QomposePreferencesDialog;
 class QomposeSettings;
 class QomposeStatusBar;
 
 namespace qompose
 {
 
+class PreferencesDialog;
 class BufferWidget;
 class AboutDialog;
 class FindDialog;
@@ -58,7 +58,7 @@ protected:
 private:
 	QomposeSettings *settings;
 
-	QomposePreferencesDialog *preferencesDialog;
+	PreferencesDialog *preferencesDialog;
 	FindDialog *findDialog;
 	ReplaceDialog *replaceDialog;
 	GoToDialog *goToDialog;

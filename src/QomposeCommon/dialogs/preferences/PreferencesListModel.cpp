@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposePreferencesListModel.h"
+#include "PreferencesListModel.h"
 
 #include "QomposeCommon/Defines.h"
-#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesScrollArea.h"
-#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/PreferencesScrollArea.h"
+#include "QomposeCommon/dialogs/preferences/widgets/PreferencesWidget.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new, empty preferences
@@ -28,21 +31,20 @@
  *
  * \param p The parent object for this new model.
  */
-QomposePreferencesListModel::QomposePreferencesListModel(QObject *p)
+PreferencesListModel::PreferencesListModel(QObject *p)
 	: QAbstractListModel(p),
-		widgets(QList<QomposePreferencesWidget *>()),
-		scrollWidgets(QList<QomposePreferencesScrollArea *>())
+		widgets(), scrollWidgets()
 {
 }
 
 /*!
  * This is our default destructor, which cleans up and destroys our list.
  */
-QomposePreferencesListModel::~QomposePreferencesListModel()
+PreferencesListModel::~PreferencesListModel()
 {
 	while(!scrollWidgets.isEmpty())
 	{
-		QomposePreferencesScrollArea *w = scrollWidgets.takeLast();
+		PreferencesScrollArea *w = scrollWidgets.takeLast();
 
 		delete w;
 	}
@@ -54,7 +56,7 @@ QomposePreferencesListModel::~QomposePreferencesListModel()
  * \param p The parent model index - this is ignored.
  * \return The number of rows currently in our model.
  */
-int QomposePreferencesListModel::rowCount(const QModelIndex &QUNUSED(p)) const
+int PreferencesListModel::rowCount(const QModelIndex &QUNUSED(p)) const
 {
 	return widgets.count();
 }
@@ -64,18 +66,18 @@ int QomposePreferencesListModel::rowCount(const QModelIndex &QUNUSED(p)) const
  * return valid data for a display role (the widget title) as well as the
  * decoration role (the widget icon).
  *
- * \param i The model index (i.e., the row - the column is ignored) to get data for.
+ * \param i The model index (i.e., the row) to get data for.
  * \param r The role to get data for.
  * \return The data matching the given row and role.
  */
-QVariant QomposePreferencesListModel::data(const QModelIndex &i, int r) const
+QVariant PreferencesListModel::data(const QModelIndex &i, int r) const
 {
 	int idx = i.row();
 
 	if( (idx < 0) || (idx >= widgets.count()) )
 		return QVariant(QVariant::Invalid);
 
-	QomposePreferencesWidget *widget = widgets.at(idx);
+	PreferencesWidget *widget = widgets.at(idx);
 
 	switch(r)
 	{
@@ -94,15 +96,15 @@ QVariant QomposePreferencesListModel::data(const QModelIndex &i, int r) const
 }
 
 /*!
- * This function returns an invalid QVariant, since out model doesn't keep track
- * of any "header data."
+ * This function returns an invalid QVariant, since out model doesn't keep
+ * track of any "header data."
  *
  * \param s The section number of the desired data - this is ignored.
  * \param o The orientation the data will be displayed in - this is ignored.
  * \param r The role of the desired data - this is ignored.
  * \return An invalid QVariant, since we do not store any header data.
  */
-QVariant QomposePreferencesListModel::headerData(int QUNUSED(s),
+QVariant PreferencesListModel::headerData(int QUNUSED(s),
 	Qt::Orientation QUNUSED(o), int QUNUSED(r)) const
 {
 	return QVariant(QVariant::Invalid);
@@ -110,13 +112,13 @@ QVariant QomposePreferencesListModel::headerData(int QUNUSED(s),
 
 /*!
  * This is a utility function which returns the preferences widget on the given
- * row of our model. If the given row number is out-of-bounds, then this function
- * will return NULL instead.
+ * row of our model. If the given row number is out-of-bounds, then this
+ * function will return NULL instead.
  *
  * \param i The row of the desired widget.
  * \return The desired preferences widget.
  */
-QomposePreferencesWidget *QomposePreferencesListModel::widgetAt(int i) const
+PreferencesWidget *PreferencesListModel::widgetAt(int i) const
 {
 	if( (i < 0) || (i >= rowCount()) )
 		return NULL;
@@ -125,14 +127,14 @@ QomposePreferencesWidget *QomposePreferencesListModel::widgetAt(int i) const
 }
 
 /*!
- * This is a utility function which returns the preferences widget on the given row
- * of our model, encapsulated in a scroll area. If the given row number is out-of-bounds,
- * then this function will return NULL instead.
+ * This is a utility function which returns the preferences widget on the given
+ * row of our model, encapsulated in a scroll area. If the given row number is
+ * out-of-bounds, then this function will return NULL instead.
  *
  * \param i The row of the desired widget.
  * \return The desired preferences widget, encapsulated in a scroll area.
  */
-QomposePreferencesScrollArea *QomposePreferencesListModel::scrollWidgetAt(int i) const
+PreferencesScrollArea *PreferencesListModel::scrollWidgetAt(int i) const
 {
 	if( (i < 0) || (i >= rowCount()) )
 		return NULL;
@@ -141,11 +143,12 @@ QomposePreferencesScrollArea *QomposePreferencesListModel::scrollWidgetAt(int i)
 }
 
 /*!
- * This function appends the given preferences widget to our model's list of widgets.
+ * This function appends the given preferences widget to our model's list of
+ * widgets.
  *
  * \param w The widget to add to our model.
  */
-void QomposePreferencesListModel::addPreferencesWidget(QomposePreferencesWidget *w)
+void PreferencesListModel::addPreferencesWidget(PreferencesWidget *w)
 {
 	// Add the widget to our list.
 
@@ -153,9 +156,11 @@ void QomposePreferencesListModel::addPreferencesWidget(QomposePreferencesWidget 
 
 	// Add a scroll area containing this widget to our list.
 
-	QomposePreferencesScrollArea *sw = new QomposePreferencesScrollArea();
+	PreferencesScrollArea *sw = new PreferencesScrollArea();
 
 	sw->setWidget(w);
 
 	scrollWidgets.append(sw);
+}
+
 }

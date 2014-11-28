@@ -16,29 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_PREFERENCES_LIST_VIEW_H
-#define INCLUDE_QOMPOSE_PREFERENCES_LIST_VIEW_H
+#ifndef INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_PREFERENCES_LIST_VIEW_H
+#define INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_PREFERENCES_LIST_VIEW_H
 
 #include <QListView>
 #include <QSize>
 
 class QAbstractItemModel;
 
-class QomposePreferencesListModel;
+namespace qompose
+{
+
+class PreferencesListModel;
 
 /*!
  * \brief This class implements a view for a list of preferences widgets.
  */
-class QomposePreferencesListView : public QListView
+class PreferencesListView : public QListView
 {
-	public:
-		QomposePreferencesListView(QWidget *p = nullptr);
-		virtual ~QomposePreferencesListView();
+public:
+	PreferencesListView(QWidget *p = nullptr);
+	virtual ~PreferencesListView();
 
-		void setModel(QomposePreferencesListModel *m);
+	void setModel(PreferencesListModel *m);
 
-	private:
-		virtual void setModel(QAbstractItemModel *m);
+private:
+	virtual void setModel(QAbstractItemModel *m);
 };
+
+}
 
 #endif

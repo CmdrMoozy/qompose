@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_GENERAL_PREFERENCES_WIDGET_H
-#define INCLUDE_QOMPOSE_GENERAL_PREFERENCES_WIDGET_H
+#ifndef INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_WIDGETS_GENERAL_PREFERENCES_WIDGET_H
+#define INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_WIDGETS_GENERAL_PREFERENCES_WIDGET_H
 
-#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/PreferencesWidget.h"
 
 class QGridLayout;
 class QCheckBox;
@@ -28,32 +28,35 @@ class QSpinBox;
 
 class QomposeSettings;
 
+namespace qompose
+{
+
 /*!
  * \brief This class implements a widget to configure general options.
  */
-class QomposeGeneralPreferencesWidget : public QomposePreferencesWidget
+class GeneralPreferencesWidget : public PreferencesWidget
 {
-	public:
-		QomposeGeneralPreferencesWidget(QomposeSettings *s,
-			QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
-		virtual ~QomposeGeneralPreferencesWidget();
+public:
+	GeneralPreferencesWidget(QomposeSettings *s, QWidget *p = nullptr,
+		Qt::WindowFlags f = nullptr);
+	virtual ~GeneralPreferencesWidget();
 
-		virtual void apply();
-		virtual void discardChanges();
+	virtual void apply();
+	virtual void discardChanges();
 
-	private:
-		QGridLayout *layout;
-		QCheckBox *statusBarCheckBox;
-		QLabel *recentListSizeLabel;
-		QSpinBox *recentListSizeSpinBox;
-		QCheckBox *saveWindowAttribsCheckBox;
+private:
+	QGridLayout *layout;
+	QCheckBox *statusBarCheckBox;
+	QLabel *recentListSizeLabel;
+	QSpinBox *recentListSizeSpinBox;
+	QCheckBox *saveWindowAttribsCheckBox;
 
-		QomposeGeneralPreferencesWidget(
-			const QomposeGeneralPreferencesWidget &);
-		QomposeGeneralPreferencesWidget &operator=(
-			const QomposeGeneralPreferencesWidget &);
+	GeneralPreferencesWidget(const GeneralPreferencesWidget &);
+	GeneralPreferencesWidget &operator=(const GeneralPreferencesWidget &);
 
-		void initializeGUI();
+	void initializeGUI();
 };
+
+}
 
 #endif

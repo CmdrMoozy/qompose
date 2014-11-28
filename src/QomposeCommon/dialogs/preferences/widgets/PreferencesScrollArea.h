@@ -16,31 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_PREFERENCES_SCROLL_AREA_H
-#define INCLUDE_QOMPOSE_PREFERENCES_SCROLL_AREA_H
+#ifndef INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_WIDGETS_PREFERENCES_SCROLL_AREA_H
+#define INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_WIDGETS_PREFERENCES_SCROLL_AREA_H
 
 #include <QScrollArea>
 
 class QShowEvent;
 class QEvent;
 
+namespace qompose
+{
+
 /*!
  * \brief This class implements a scroll area for a preferences widget.
  */
-class QomposePreferencesScrollArea : public QScrollArea
+class PreferencesScrollArea : public QScrollArea
 {
-	public:
-		QomposePreferencesScrollArea(QWidget *p = nullptr);
-		virtual ~QomposePreferencesScrollArea();
+public:
+	PreferencesScrollArea(QWidget *p = nullptr);
+	virtual ~PreferencesScrollArea();
 
-		virtual void setWidget(QWidget *w);
+	virtual void setWidget(QWidget *w);
 
-	protected:
-		virtual bool eventFilter(QObject *o, QEvent *e);
-		virtual void showEvent(QShowEvent *e);
+protected:
+	virtual bool eventFilter(QObject *o, QEvent *e);
+	virtual void showEvent(QShowEvent *e);
 
-	private:
-		void resizeFixedHorizontal();
+private:
+	void resizeFixedHorizontal();
 };
+
+}
 
 #endif

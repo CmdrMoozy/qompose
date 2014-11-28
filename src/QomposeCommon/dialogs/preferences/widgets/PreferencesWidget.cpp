@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposePreferencesWidget.h"
+#include "PreferencesWidget.h"
 
 #include "QomposeCommon/util/QomposeSettings.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new, empty preferences
@@ -28,8 +31,8 @@
  * \param p This widget's parent widget.
  * \param f The window flags to use for this widget.
  */
-QomposePreferencesWidget::QomposePreferencesWidget(QomposeSettings *s,
-	QWidget *p, Qt::WindowFlags f)
+PreferencesWidget::PreferencesWidget(QomposeSettings *s,
+		QWidget *p, Qt::WindowFlags f)
 	: QWidget(p, f), settings(s), icon(QIcon()), title(QString())
 {
 }
@@ -37,7 +40,7 @@ QomposePreferencesWidget::QomposePreferencesWidget(QomposeSettings *s,
 /*!
  * This is our default destructor, which cleans up & destroys our widget.
  */
-QomposePreferencesWidget::~QomposePreferencesWidget()
+PreferencesWidget::~PreferencesWidget()
 {
 }
 
@@ -47,7 +50,7 @@ QomposePreferencesWidget::~QomposePreferencesWidget()
  *
  * \return Our widget's icon.
  */
-QIcon QomposePreferencesWidget::getPreferencesIcon() const
+QIcon PreferencesWidget::getPreferencesIcon() const
 {
 	return icon;
 }
@@ -58,7 +61,7 @@ QIcon QomposePreferencesWidget::getPreferencesIcon() const
  *
  * \param i The new icon for our widget to use.
  */
-void QomposePreferencesWidget::setPreferencesIcon(const QIcon &i)
+void PreferencesWidget::setPreferencesIcon(const QIcon &i)
 {
 	icon = i;
 }
@@ -70,7 +73,7 @@ void QomposePreferencesWidget::setPreferencesIcon(const QIcon &i)
  *
  * \return Our widget's title.
  */
-QString QomposePreferencesWidget::getPreferencesTitle() const
+QString PreferencesWidget::getPreferencesTitle() const
 {
 	return title;
 }
@@ -81,7 +84,7 @@ QString QomposePreferencesWidget::getPreferencesTitle() const
  *
  * \param t The new title for our widget to use.
  */
-void QomposePreferencesWidget::setPreferencesTitle(const QString &t)
+void PreferencesWidget::setPreferencesTitle(const QString &t)
 {
 	title = t;
 }
@@ -92,7 +95,9 @@ void QomposePreferencesWidget::setPreferencesTitle(const QString &t)
  *
  * \return Our widget's settings instance.
  */
-QomposeSettings *QomposePreferencesWidget::getSettings() const
+QomposeSettings *PreferencesWidget::getSettings() const
 {
 	return settings;
+}
+
 }

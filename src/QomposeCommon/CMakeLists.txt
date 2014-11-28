@@ -27,23 +27,23 @@ set(QomposeCommon_SOURCES
 	dialogs/ReplaceDialog.cpp
 	dialogs/ReplaceDialog.h
 
-	dialogs/preferences/QomposePreferencesDialog.cpp
-	dialogs/preferences/QomposePreferencesDialog.h
-	dialogs/preferences/QomposePreferencesListModel.cpp
-	dialogs/preferences/QomposePreferencesListModel.h
-	dialogs/preferences/QomposePreferencesListView.cpp
-	dialogs/preferences/QomposePreferencesListView.h
+	dialogs/preferences/PreferencesDialog.cpp
+	dialogs/preferences/PreferencesDialog.h
+	dialogs/preferences/PreferencesListModel.cpp
+	dialogs/preferences/PreferencesListModel.h
+	dialogs/preferences/PreferencesListView.cpp
+	dialogs/preferences/PreferencesListView.h
 
-	dialogs/preferences/widgets/QomposeEditorPreferencesWidget.cpp
-	dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h
-	dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.cpp
-	dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h
-	dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.cpp
-	dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.h
-	dialogs/preferences/widgets/QomposePreferencesScrollArea.cpp
-	dialogs/preferences/widgets/QomposePreferencesScrollArea.h
-	dialogs/preferences/widgets/QomposePreferencesWidget.cpp
-	dialogs/preferences/widgets/QomposePreferencesWidget.h
+	dialogs/preferences/widgets/EditorPreferencesWidget.cpp
+	dialogs/preferences/widgets/EditorPreferencesWidget.h
+	dialogs/preferences/widgets/GeneralPreferencesWidget.cpp
+	dialogs/preferences/widgets/GeneralPreferencesWidget.h
+	dialogs/preferences/widgets/OpenSavePreferencesWidget.cpp
+	dialogs/preferences/widgets/OpenSavePreferencesWidget.h
+	dialogs/preferences/widgets/PreferencesScrollArea.cpp
+	dialogs/preferences/widgets/PreferencesScrollArea.h
+	dialogs/preferences/widgets/PreferencesWidget.cpp
+	dialogs/preferences/widgets/PreferencesWidget.h
 
 	editor/Buffer.cpp
 	editor/Buffer.h

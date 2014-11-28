@@ -16,12 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposePreferencesScrollArea.h"
+#include "PreferencesScrollArea.h"
 
 #include <QShowEvent>
 #include <QScrollBar>
 #include <QLayout>
 #include <QEvent>
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new scroll area with the
@@ -29,7 +32,7 @@
  *
  * \param p The widget this scroll area will be displaying.
  */
-QomposePreferencesScrollArea::QomposePreferencesScrollArea(QWidget *p)
+PreferencesScrollArea::PreferencesScrollArea(QWidget *p)
 	: QScrollArea(p)
 {
 	setWidgetResizable(true);
@@ -42,7 +45,7 @@ QomposePreferencesScrollArea::QomposePreferencesScrollArea(QWidget *p)
  * This is our default destructor, which cleans up and destroys our scroll
  * area.
  */
-QomposePreferencesScrollArea::~QomposePreferencesScrollArea()
+PreferencesScrollArea::~PreferencesScrollArea()
 {
 }
 
@@ -51,7 +54,7 @@ QomposePreferencesScrollArea::~QomposePreferencesScrollArea()
  *
  * \param w The new widget to display.
  */
-void QomposePreferencesScrollArea::setWidget(QWidget *w)
+void PreferencesScrollArea::setWidget(QWidget *w)
 {
 	QScrollArea::setWidget(w);
 
@@ -68,7 +71,7 @@ void QomposePreferencesScrollArea::setWidget(QWidget *w)
  * \param e The event being handled.
  * \return True if the event was handled, or false otherwise.
  */
-bool QomposePreferencesScrollArea::eventFilter(QObject *o, QEvent *e)
+bool PreferencesScrollArea::eventFilter(QObject *o, QEvent *e)
 {
 	if( (o == widget()) && (e->type() == QEvent::Resize) )
 	{
@@ -88,7 +91,7 @@ bool QomposePreferencesScrollArea::eventFilter(QObject *o, QEvent *e)
  *
  * \param e The event being handled.
  */
-void QomposePreferencesScrollArea::showEvent(QShowEvent *e)
+void PreferencesScrollArea::showEvent(QShowEvent *e)
 {
 	QScrollArea::showEvent(e);
 
@@ -103,7 +106,7 @@ void QomposePreferencesScrollArea::showEvent(QShowEvent *e)
  * This makes our scroll area always as wide as the widget we're displaying,
  * so no horizontal scrolling is necessary.
  */
-void QomposePreferencesScrollArea::resizeFixedHorizontal()
+void PreferencesScrollArea::resizeFixedHorizontal()
 {
 	// Get our widget's size.
 
@@ -123,4 +126,6 @@ void QomposePreferencesScrollArea::resizeFixedHorizontal()
 	// Set our fixed width.
 
 	setMinimumWidth(ww + sw);
+}
+
 }

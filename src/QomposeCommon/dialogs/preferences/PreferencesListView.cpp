@@ -16,17 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposePreferencesListView.h"
+#include "PreferencesListView.h"
 
-#include "QomposeCommon/dialogs/preferences/QomposePreferencesListModel.h"
-#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/PreferencesListModel.h"
+#include "QomposeCommon/dialogs/preferences/widgets/PreferencesWidget.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new preferences list view.
  *
  * \param p The parent widget to use for this widget.
  */
-QomposePreferencesListView::QomposePreferencesListView(QWidget *p)
+PreferencesListView::PreferencesListView(QWidget *p)
 	: QListView(p)
 {
 	setIconSize(QSize(30, 30));
@@ -40,7 +43,7 @@ QomposePreferencesListView::QomposePreferencesListView(QWidget *p)
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposePreferencesListView::~QomposePreferencesListView()
+PreferencesListView::~PreferencesListView()
 {
 }
 
@@ -49,7 +52,7 @@ QomposePreferencesListView::~QomposePreferencesListView()
  *
  * \param m The new model for our view to use.
  */
-void QomposePreferencesListView::setModel(QomposePreferencesListModel *m)
+void PreferencesListView::setModel(PreferencesListModel *m)
 {
 	QAbstractItemModel *aim = dynamic_cast<QAbstractItemModel *>(m);
 
@@ -58,11 +61,13 @@ void QomposePreferencesListView::setModel(QomposePreferencesListModel *m)
 
 /*!
  * We override our superclass's setModel() function to make it private,
- * so we can ensure any model we are given is a QomposePreferencesListModel.
+ * so we can ensure any model we are given is a PreferencesListModel.
  *
  * \param m The new model to use.
  */
-void QomposePreferencesListView::setModel(QAbstractItemModel *m)
+void PreferencesListView::setModel(QAbstractItemModel *m)
 {
 	QListView::setModel(m);
+}
+
 }

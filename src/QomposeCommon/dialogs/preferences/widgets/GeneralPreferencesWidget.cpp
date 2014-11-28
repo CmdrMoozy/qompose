@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeGeneralPreferencesWidget.h"
+#include "GeneralPreferencesWidget.h"
 
 #include <QGridLayout>
 #include <QCheckBox>
@@ -26,6 +26,9 @@
 #include "QomposeCommon/gui/QomposeGUIUtils.h"
 #include "QomposeCommon/util/QomposeSettings.h"
 
+namespace qompose
+{
+
 /*!
  * This is our default constructor, which creates a new instance of our general
  * preferences widget.
@@ -34,9 +37,9 @@
  * \param p The parent widget to use for this widget.
  * \param f The window flags to use for this widget.
  */
-QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(
-	QomposeSettings *s, QWidget *p, Qt::WindowFlags f)
-	: QomposePreferencesWidget(s, p, f), layout(nullptr),
+GeneralPreferencesWidget::GeneralPreferencesWidget(QomposeSettings *s,
+		QWidget *p, Qt::WindowFlags f)
+	: PreferencesWidget(s, p, f), layout(nullptr),
 		statusBarCheckBox(nullptr), recentListSizeLabel(nullptr),
 		recentListSizeSpinBox(nullptr),
 		saveWindowAttribsCheckBox(nullptr)
@@ -51,7 +54,7 @@ QomposeGeneralPreferencesWidget::QomposeGeneralPreferencesWidget(
 /*!
  * This is our default destructor, which cleans up & destroys our widget.
  */
-QomposeGeneralPreferencesWidget::~QomposeGeneralPreferencesWidget()
+GeneralPreferencesWidget::~GeneralPreferencesWidget()
 {
 }
 
@@ -59,7 +62,7 @@ QomposeGeneralPreferencesWidget::~QomposeGeneralPreferencesWidget()
  * We implement our superclass's apply() function to save our various general
  * preferences values using our settings instance.
  */
-void QomposeGeneralPreferencesWidget::apply()
+void GeneralPreferencesWidget::apply()
 {
 	// Show Status Bar
 
@@ -82,7 +85,7 @@ void QomposeGeneralPreferencesWidget::apply()
  * any preferences changes that may have been made to our widget by
  * reloading the existing values from our settings instance.
  */
-void QomposeGeneralPreferencesWidget::discardChanges()
+void GeneralPreferencesWidget::discardChanges()
 {
 	// Show Status Bar
 
@@ -110,7 +113,7 @@ void QomposeGeneralPreferencesWidget::discardChanges()
  * This function initializes our widget's GUI by creating the various widgets
  * we contain, and adding them to our layout.
  */
-void QomposeGeneralPreferencesWidget::initializeGUI()
+void GeneralPreferencesWidget::initializeGUI()
 {
 	layout = new QGridLayout(this);
 
@@ -134,4 +137,6 @@ void QomposeGeneralPreferencesWidget::initializeGUI()
 	layout->setRowStretch(3, 1);
 
 	setLayout(layout);
+}
+
 }

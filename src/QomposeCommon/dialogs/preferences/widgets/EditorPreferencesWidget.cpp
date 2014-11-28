@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeEditorPreferencesWidget.h"
+#include "EditorPreferencesWidget.h"
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -29,6 +29,9 @@
 #include "QomposeCommon/gui/QomposeGUIUtils.h"
 #include "QomposeCommon/util/QomposeSettings.h"
 
+namespace qompose
+{
+
 /*!
  * This is our default constructor, which creates a new instance of our
  * editor preferences widget.
@@ -37,9 +40,9 @@
  * \param p The parent widget to use for this widget.
  * \param f The window flags to use for this widget.
  */
-QomposeEditorPreferencesWidget::QomposeEditorPreferencesWidget(
-	QomposeSettings *s, QWidget *p, Qt::WindowFlags f)
-	: QomposePreferencesWidget(s, p, f), layout(nullptr),
+EditorPreferencesWidget::EditorPreferencesWidget(QomposeSettings *s,
+		QWidget *p, Qt::WindowFlags f)
+	: PreferencesWidget(s, p, f), layout(nullptr),
 		generalGroupBox(nullptr), generalLayout(nullptr),
 		showGutterCheckBox(nullptr), editorFontLabel(nullptr),
 		editorFontButton(nullptr), tabWidthLabel(nullptr),
@@ -66,7 +69,7 @@ QomposeEditorPreferencesWidget::QomposeEditorPreferencesWidget(
 /*!
  * This is our default destructor, which cleans up & destroys our widget.
  */
-QomposeEditorPreferencesWidget::~QomposeEditorPreferencesWidget()
+EditorPreferencesWidget::~EditorPreferencesWidget()
 {
 }
 
@@ -74,7 +77,7 @@ QomposeEditorPreferencesWidget::~QomposeEditorPreferencesWidget()
  * We implement our superclass's apply() function to save our various editor
  * preferences values using our settings instance.
  */
-void QomposeEditorPreferencesWidget::apply()
+void EditorPreferencesWidget::apply()
 {
 	// Show Gutter
 
@@ -137,7 +140,7 @@ void QomposeEditorPreferencesWidget::apply()
  * any preferences changes that may have been made to our widget by
  * reloading the existing values from our settings instance.
  */
-void QomposeEditorPreferencesWidget::discardChanges()
+void EditorPreferencesWidget::discardChanges()
 {
 	// Show Gutter
 
@@ -205,7 +208,7 @@ void QomposeEditorPreferencesWidget::discardChanges()
  * This function initializes our widget's GUI by creating the various widgets
  * we contain, and adding them to our layout.
  */
-void QomposeEditorPreferencesWidget::initializeGUI()
+void EditorPreferencesWidget::initializeGUI()
 {
 	layout = new QGridLayout(this);
 
@@ -324,4 +327,6 @@ void QomposeEditorPreferencesWidget::initializeGUI()
 	layout->setRowStretch(4, 1);
 
 	setLayout(layout);
+}
+
 }
