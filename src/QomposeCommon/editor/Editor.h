@@ -20,7 +20,7 @@
 #define INCLUDE_QOMPOSECOMMON_EDITOR_EDITOR_H
 
 #include "QomposeCommon/editor/DecoratedTextEdit.h"
-#include "QomposeCommon/util/QomposeHotkeyMap.h"
+#include "QomposeCommon/util/HotkeyMap.h"
 
 #include <QSize>
 
@@ -30,11 +30,11 @@ class QKeyEvent;
 class QWheelEvent;
 class QMouseEvent;
 
-class QomposeFindQuery;
-class QomposeReplaceQuery;
-
 namespace qompose
 {
+
+class FindQuery;
+class ReplaceQuery;
 
 /*!
  * \brief This class implements our main text editor widget.
@@ -67,7 +67,7 @@ protected:
 
 private:
 	typedef void (Editor::*HotkeyFunction)();
-	QomposeHotkeyMap<HotkeyFunction> hotkeys;
+	HotkeyMap<HotkeyFunction> hotkeys;
 
 	void initializeHotkeys();
 
@@ -78,8 +78,8 @@ private:
 	void doMoveHome();
 	void doSelectHome();
 
-	FindResult doFind(bool forward, const QomposeFindQuery *q);
-	FindResult doBatchReplace(const QomposeReplaceQuery *q,
+	FindResult doFind(bool forward, const FindQuery *q);
+	FindResult doBatchReplace(const ReplaceQuery *q,
 		int start = -1, int end = -1);
 
 public Q_SLOTS:
@@ -90,11 +90,11 @@ public Q_SLOTS:
 	void increaseSelectionIndent();
 	void decreaseSelectionIndent();
 	void doHome(bool moveAnchor);
-	FindResult findNext(const QomposeFindQuery *q);
-	FindResult findPrevious(const QomposeFindQuery *q);
-	FindResult replace(const QomposeReplaceQuery *q);
-	FindResult replaceSelection(const QomposeReplaceQuery *q);
-	FindResult replaceAll(const QomposeReplaceQuery *q);
+	FindResult findNext(const FindQuery *q);
+	FindResult findPrevious(const FindQuery *q);
+	FindResult replace(const ReplaceQuery *q);
+	FindResult replaceSelection(const ReplaceQuery *q);
+	FindResult replaceAll(const ReplaceQuery *q);
 	void goToLine(int l);
 
 Q_SIGNALS:

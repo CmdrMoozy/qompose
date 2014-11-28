@@ -31,7 +31,7 @@
 #include <QDir>
 
 #include "QomposeCommon/Defines.h"
-#include "QomposeCommon/util/QomposeDocumentWriter.h"
+#include "QomposeCommon/util/DocumentWriter.h"
 #include "QomposeCommon/util/Settings.h"
 
 namespace qompose
@@ -379,7 +379,7 @@ bool Buffer::write()
 
 	// Setup our document writer.
 
-	QomposeDocumentWriter writer(&file);
+	DocumentWriter writer(&file);
 
 	writer.setCodec(c);
 	writer.setWhitespaceTrimmed(settings->getSetting(

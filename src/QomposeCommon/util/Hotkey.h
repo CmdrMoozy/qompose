@@ -16,12 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_HOTKEY_H
-#define INCLUDE_QOMPOSE_HOTKEY_H
+#ifndef INCLUDE_QOMPOSECOMMON_UTIL_HOTKEY_H
+#define INCLUDE_QOMPOSECOMMON_UTIL_HOTKEY_H
 
 #include <Qt>
 
 class QKeyEvent;
+
+namespace qompose
+{
 
 /*!
  * \brief This class denotes a single hotkey Key/Modifiers combination.
@@ -30,36 +33,37 @@ class QKeyEvent;
  * the allowed (or whitelisted) modifiers for the hotkey, we can test if some
  * given QKeyEvent matches this hotkey.
  *
- * Note that, because more than one QomposeHotkey can match a single QKeyEvent,
- * we can also comput a "match quality" for a given event. See the documentation
- * on QomposeHotkey::matches for more information.
+ * Note that, because more than one Hotkey can match a single QKeyEvent, we can
+ * also comput a "match quality" for a given event. See the documentation on
+ * Hotkey::matches for more information.
  */
-class QomposeHotkey
+class Hotkey
 {
-	public:
-		QomposeHotkey(Qt::Key k);
-		QomposeHotkey(Qt::Key k, Qt::KeyboardModifiers rm);
-		QomposeHotkey(Qt::Key k, Qt::KeyboardModifiers rm,
-			Qt::KeyboardModifiers wlm);
-		QomposeHotkey(const QomposeHotkey &o);
-		virtual ~QomposeHotkey();
+public:
+	Hotkey(Qt::Key k);
+	Hotkey(Qt::Key k, Qt::KeyboardModifiers rm);
+	Hotkey(Qt::Key k, Qt::KeyboardModifiers rm, Qt::KeyboardModifiers wlm);
+	Hotkey(const Hotkey &o);
+	virtual ~Hotkey();
 
-		QomposeHotkey &operator=(const QomposeHotkey &o);
-		bool operator==(const QomposeHotkey &o) const;
+	Hotkey &operator=(const Hotkey &o);
+	bool operator==(const Hotkey &o) const;
 
-		Qt::Key getKey() const;
-		quint64 getKeyInteger() const;
-		Qt::KeyboardModifiers getRequiredModifiers() const;
-		Qt::KeyboardModifiers getWhitelistedModifiers() const;
+	Qt::Key getKey() const;
+	quint64 getKeyInteger() const;
+	Qt::KeyboardModifiers getRequiredModifiers() const;
+	Qt::KeyboardModifiers getWhitelistedModifiers() const;
 
-		int matches(const QKeyEvent *e) const;
+	int matches(const QKeyEvent *e) const;
 
-	private:
-		Qt::Key key;
-		Qt::KeyboardModifiers rModifiers;
-		Qt::KeyboardModifiers wlModifiers;
+private:
+	Qt::Key key;
+	Qt::KeyboardModifiers rModifiers;
+	Qt::KeyboardModifiers wlModifiers;
 
-		static int opop(quint64 v);
+	static int opop(quint64 v);
 };
+
+}
 
 #endif

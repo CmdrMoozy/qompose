@@ -16,51 +16,56 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_FIND_QUERY_H
-#define INCLUDE_QOMPOSE_FIND_QUERY_H
+#ifndef INCLUDE_QOMPOSECOMMON_UTIL_FIND_QUERY_H
+#define INCLUDE_QOMPOSECOMMON_UTIL_FIND_QUERY_H
 
 #include <QObject>
 
 #include <QString>
 #include <QTextDocument>
 
+namespace qompose
+{
+
 /*!
  * \brief This class encapsulates the options and expression of a find query.
  */
-class QomposeFindQuery : public QObject
+class FindQuery : public QObject
 {
-	public:
-		QomposeFindQuery(QObject * = nullptr);
-		virtual ~QomposeFindQuery();
+public:
+	FindQuery(QObject * = nullptr);
+	virtual ~FindQuery();
 
-		QString getExpression() const;
-		void setExpression(const QString &);
+	QString getExpression() const;
+	void setExpression(const QString &);
 
-		bool isWrapping() const;
-		void setWrapping(bool);
+	bool isWrapping() const;
+	void setWrapping(bool);
 
-		bool isWholeWords() const;
-		void setWholeWords(bool);
+	bool isWholeWords() const;
+	void setWholeWords(bool);
 
-		bool isCaseSensitive() const;
-		void setCaseSensitive(bool);
+	bool isCaseSensitive() const;
+	void setCaseSensitive(bool);
 
-		bool isReversed() const;
-		void setReversed(bool);
+	bool isReversed() const;
+	void setReversed(bool);
 
-		bool isRegularExpression() const;
-		void setRegularExpression(bool);
+	bool isRegularExpression() const;
+	void setRegularExpression(bool);
 
-		QTextDocument::FindFlags getFindFlags(bool = false) const;
+	QTextDocument::FindFlags getFindFlags(bool = false) const;
 
-	private:
-		QString expression;
+private:
+	QString expression;
 
-		bool wrap;
-		bool wholeWords;
-		bool caseSensitive;
-		bool reverse;
-		bool regex;
+	bool wrap;
+	bool wholeWords;
+	bool caseSensitive;
+	bool reverse;
+	bool regex;
 };
+
+}
 
 #endif

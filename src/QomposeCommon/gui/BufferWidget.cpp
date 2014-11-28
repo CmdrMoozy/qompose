@@ -29,8 +29,8 @@
 
 #include "QomposeCommon/dialogs/FileDialog.h"
 #include "QomposeCommon/editor/Buffer.h"
-#include "QomposeCommon/util/QomposeFindQuery.h"
-#include "QomposeCommon/util/QomposeReplaceQuery.h"
+#include "QomposeCommon/util/FindQuery.h"
+#include "QomposeCommon/util/ReplaceQuery.h"
 #include "QomposeCommon/util/Settings.h"
 
 namespace qompose
@@ -710,7 +710,7 @@ void BufferWidget::doDecreaseIndent()
  * \param q The find query to execute.
  * \return The result of this find action.
  */
-Editor::FindResult BufferWidget::doFindNext(const QomposeFindQuery *q)
+Editor::FindResult BufferWidget::doFindNext(const FindQuery *q)
 { /* SLOT */
 
 	Buffer *buf = currentBuffer();
@@ -729,7 +729,7 @@ Editor::FindResult BufferWidget::doFindNext(const QomposeFindQuery *q)
  * \param q The find query to execute.
  * \return The result of this find action.
  */
-Editor::FindResult BufferWidget::doFindPrevious(const QomposeFindQuery *q)
+Editor::FindResult BufferWidget::doFindPrevious(const FindQuery *q)
 { /* SLOT */
 
 	Buffer *buf = currentBuffer();
@@ -748,7 +748,7 @@ Editor::FindResult BufferWidget::doFindPrevious(const QomposeFindQuery *q)
  * \param q The replace query to execute.
  * \return The result of this replace action.
  */
-Editor::FindResult BufferWidget::doReplace(const QomposeReplaceQuery *q)
+Editor::FindResult BufferWidget::doReplace(const ReplaceQuery *q)
 { /* SLOT */
 
 	Buffer *buf = currentBuffer();
@@ -767,8 +767,7 @@ Editor::FindResult BufferWidget::doReplace(const QomposeReplaceQuery *q)
  * \param q The replace query to execute.
  * \return The result of this "replace in selection" action.
  */
-Editor::FindResult BufferWidget::doReplaceSelection(
-	const QomposeReplaceQuery *q)
+Editor::FindResult BufferWidget::doReplaceSelection(const ReplaceQuery *q)
 { /* SLOT */
 
 	Buffer *buf = currentBuffer();
@@ -787,7 +786,7 @@ Editor::FindResult BufferWidget::doReplaceSelection(
  * \param q The replace query to execute.
  * \return The result of this "replace all" action.
  */
-Editor::FindResult BufferWidget::doReplaceAll(const QomposeReplaceQuery *q)
+Editor::FindResult BufferWidget::doReplaceAll(const ReplaceQuery *q)
 { /* SLOT */
 
 	Buffer *buf = currentBuffer();

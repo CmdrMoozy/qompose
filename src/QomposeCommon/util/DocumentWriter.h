@@ -16,27 +16,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_REPLACE_QUERY_H
-#define INCLUDE_QOMPOSE_REPLACE_QUERY_H
+#ifndef INCLUDE_QOMPOSECOMMON_UTIL_DOCUMENT_WRITER_H
+#define INCLUDE_QOMPOSECOMMON_UTIL_DOCUMENT_WRITER_H
 
-#include "QomposeCommon/util/QomposeFindQuery.h"
-
+#include <QTextStream>
 #include <QString>
 
-/*!
- * \brief This class extends our find query object by adding replace details.
- */
-class QomposeReplaceQuery : public QomposeFindQuery
+class QIODevice;
+class QTextCodec;
+class QTextDocument;
+
+namespace qompose
 {
-	public:
-		QomposeReplaceQuery(QObject * = nullptr);
-		virtual ~QomposeReplaceQuery();
 
-		QString getReplaceValue() const;
-		void setReplaceValue(const QString &);
+/*!
+ * \brief This class encapsulates code to write QDocuments to QIODevices.
+ */
+class DocumentWriter
+{
+public:
+	DocumentWriter();
+	DocumentWriter(QIODevice *);
+	virtual ~DocumentWriter();
 
-	private:
-		QString replaceValue;
+	QIODevice *getDevice() const;
+	void setDevice(QIODevice *);
+
+	QTextCodec *getCodec() const;
+	void setCodec(QTextCodec *);
+
+	bool isWhitespaceTrimmed() const;
+	void setWhitespaceTrimmed(bool);
+
+	bool write(const QTextDocument *);
+
+private:
+	bool whitespaceTrimmed;
+
+	QTextStream stream;
+
+	QString trimWhitespace(const QString &) const;
 };
+
+}
 
 #endif

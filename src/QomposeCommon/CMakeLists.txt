@@ -77,17 +77,17 @@ set(QomposeCommon_SOURCES
 	syntax/SyntaxHighlighter.cpp
 	syntax/SyntaxHighlighter.h
 
-	util/QomposeDocumentWriter.cpp
-	util/QomposeDocumentWriter.h
-	util/QomposeFindQuery.cpp
-	util/QomposeFindQuery.h
-	util/QomposeFontMetrics.cpp
-	util/QomposeFontMetrics.h
-	util/QomposeHotkey.cpp
-	util/QomposeHotkey.h
-	util/QomposeHotkeyMap.h
-	util/QomposeReplaceQuery.cpp
-	util/QomposeReplaceQuery.h
+	util/DocumentWriter.cpp
+	util/DocumentWriter.h
+	util/FindQuery.cpp
+	util/FindQuery.h
+	util/FontMetrics.cpp
+	util/FontMetrics.h
+	util/Hotkey.cpp
+	util/Hotkey.h
+	util/HotkeyMap.h
+	util/ReplaceQuery.cpp
+	util/ReplaceQuery.h
 	util/Settings.cpp
 	util/Settings.h
 

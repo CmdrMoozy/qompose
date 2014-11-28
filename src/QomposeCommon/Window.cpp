@@ -37,8 +37,8 @@
 #include "QomposeCommon/gui/GUIUtils.h"
 #include "QomposeCommon/gui/StatusBar.h"
 #include "QomposeCommon/gui/menus/MainMenu.h"
-#include "QomposeCommon/util/QomposeFindQuery.h"
-#include "QomposeCommon/util/QomposeReplaceQuery.h"
+#include "QomposeCommon/util/FindQuery.h"
+#include "QomposeCommon/util/ReplaceQuery.h"
 #include "QomposeCommon/util/Settings.h"
 
 namespace qompose

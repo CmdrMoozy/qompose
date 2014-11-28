@@ -20,7 +20,7 @@
 
 #include <QKeyEvent>
 
-#include "QomposeCommon/util/QomposeHotkeyMap.h"
+#include "QomposeCommon/util/HotkeyMap.h"
 
 namespace qompose
 {
@@ -44,12 +44,12 @@ HotkeyMapTest::~HotkeyMapTest()
 
 /*!
  * We implement our superclass's test() function to perform a test against the
- * QomposeHotkeyMap implementation. We'll setup a "typical" hotkey setup, and
+ * HotkeyMap implementation. We'll setup a "typical" hotkey setup, and
  * then test a series of example QKeyEvents against it.
  */
 void HotkeyMapTest::test()
 {
-	QomposeHotkeyMap<int *> hotkeys;
+	HotkeyMap<int *> hotkeys;
 
 	int doNewline = 0;
 	int doTab = 0;
@@ -62,66 +62,66 @@ void HotkeyMapTest::test()
 
 	// Enter
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Enter, nullptr,
+	hotkeys.addHotkey(Hotkey(Qt::Key_Enter, nullptr,
 		~Qt::KeyboardModifiers(nullptr)), &doNewline);
 
 	// Tab
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Tab), &doTab);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Tab), &doTab);
 
 	// Shift + Tab
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Tab, Qt::ShiftModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier),
 		&decreaseSelectionIndent);
 
 	// Home
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Home),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Home),
 		&doMoveHome);
 
 	// Shift + Home
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Home, Qt::ShiftModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier),
 		&doSelectHome);
 
 	// Ctrl+D
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_D, Qt::ControlModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier),
 		&duplicateLine);
 
 	// Ctrl+(Zero)
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_0, Qt::ControlModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_0, Qt::ControlModifier),
 		&resetFontZoom);
 
 	// Ctrl+Shift+Left
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Left, Qt::ControlModifier |
+	hotkeys.addHotkey(Hotkey(Qt::Key_Left, Qt::ControlModifier |
 		Qt::ShiftModifier), &doNoop);
 
 	// Ctrl+Shift+Right
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Right, Qt::ControlModifier |
+	hotkeys.addHotkey(Hotkey(Qt::Key_Right, Qt::ControlModifier |
 		Qt::ShiftModifier), &doNoop);
 
 	// Ctrl+Insert
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Insert, Qt::ControlModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier),
 		&doNoop);
 
 	// Ctrl+K
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_K, Qt::ControlModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier),
 		&doNoop);
 
 	// Shift+Insert
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Insert, Qt::ShiftModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier),
 		&doNoop);
 
 	// Shift+Delete
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Delete, Qt::ShiftModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier),
 		&doNoop);
 
 	// Test a series of example QKeyEvents against this hotkey mapping.

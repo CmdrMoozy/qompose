@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeDocumentWriter.h"
+#include "DocumentWriter.h"
 
 #include <QIODevice>
 #include <QTextCodec>
@@ -24,12 +24,15 @@
 #include <QStringList>
 #include <QRegExp>
 
+namespace qompose
+{
+
 /*!
  * This is our default constructor, which creates a new document writer
  * instance. Before writing any documents, one will need to set the QIODevice
  * with setDevice().
  */
-QomposeDocumentWriter::QomposeDocumentWriter()
+DocumentWriter::DocumentWriter()
 	: whitespaceTrimmed(false), stream()
 {
 }
@@ -40,7 +43,7 @@ QomposeDocumentWriter::QomposeDocumentWriter()
  *
  * \param d The device to write to.
  */
-QomposeDocumentWriter::QomposeDocumentWriter(QIODevice *d)
+DocumentWriter::DocumentWriter(QIODevice *d)
 	: whitespaceTrimmed(false), stream()
 {
 	setDevice(d);
@@ -49,7 +52,7 @@ QomposeDocumentWriter::QomposeDocumentWriter(QIODevice *d)
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposeDocumentWriter::~QomposeDocumentWriter()
+DocumentWriter::~DocumentWriter()
 {
 }
 
@@ -59,7 +62,7 @@ QomposeDocumentWriter::~QomposeDocumentWriter()
  *
  * \return The device this object is currently using.
  */
-QIODevice *QomposeDocumentWriter::getDevice() const
+QIODevice *DocumentWriter::getDevice() const
 {
 	return stream.device();
 }
@@ -70,7 +73,7 @@ QIODevice *QomposeDocumentWriter::getDevice() const
  *
  * \param d The device to write to.
  */
-void QomposeDocumentWriter::setDevice(QIODevice *d)
+void DocumentWriter::setDevice(QIODevice *d)
 {
 	stream.setDevice(d);
 }
@@ -81,7 +84,7 @@ void QomposeDocumentWriter::setDevice(QIODevice *d)
  *
  * \return The text codec this object is currently using.
  */
-QTextCodec *QomposeDocumentWriter::getCodec() const
+QTextCodec *DocumentWriter::getCodec() const
 {
 	return stream.codec();
 }
@@ -92,7 +95,7 @@ QTextCodec *QomposeDocumentWriter::getCodec() const
  *
  * \param codec The text codec to use for encoding.
  */
-void QomposeDocumentWriter::setCodec(QTextCodec *codec)
+void DocumentWriter::setCodec(QTextCodec *codec)
 {
 	stream.setCodec(codec);
 }
@@ -103,7 +106,7 @@ void QomposeDocumentWriter::setCodec(QTextCodec *codec)
  *
  * \return Whether or not this object will trim trailing whitespace.
  */
-bool QomposeDocumentWriter::isWhitespaceTrimmed() const
+bool DocumentWriter::isWhitespaceTrimmed() const
 {
 	return whitespaceTrimmed;
 }
@@ -114,7 +117,7 @@ bool QomposeDocumentWriter::isWhitespaceTrimmed() const
  *
  * \param w Whether or not to trim trailing whitespace.
  */
-void QomposeDocumentWriter::setWhitespaceTrimmed(bool w)
+void DocumentWriter::setWhitespaceTrimmed(bool w)
 {
 	whitespaceTrimmed = w;
 }
@@ -130,7 +133,7 @@ void QomposeDocumentWriter::setWhitespaceTrimmed(bool w)
  * \param d The text document to write.
  * \return True on success, or false otherwise.
  */
-bool QomposeDocumentWriter::write(const QTextDocument *d)
+bool DocumentWriter::write(const QTextDocument *d)
 {
 	// Make sure our device is good for writing.
 
@@ -167,7 +170,7 @@ bool QomposeDocumentWriter::write(const QTextDocument *d)
  * \param s The string to trim trailing whitespace from.
  * \return A copy of the given string, after processing.
  */
-QString QomposeDocumentWriter::trimWhitespace(const QString &s) const
+QString DocumentWriter::trimWhitespace(const QString &s) const
 {
 	QString result("");
 
@@ -187,4 +190,6 @@ QString QomposeDocumentWriter::trimWhitespace(const QString &s) const
 	}
 
 	return result;
+}
+
 }

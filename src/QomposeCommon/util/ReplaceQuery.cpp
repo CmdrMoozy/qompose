@@ -16,22 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeReplaceQuery.h"
+#include "ReplaceQuery.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new replace query.
  *
  * \param p The parent object for this replace query.
  */
-QomposeReplaceQuery::QomposeReplaceQuery(QObject *p)
-	: QomposeFindQuery(p), replaceValue("")
+ReplaceQuery::ReplaceQuery(QObject *p)
+	: FindQuery(p), replaceValue("")
 {
 }
 
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposeReplaceQuery::~QomposeReplaceQuery()
+ReplaceQuery::~ReplaceQuery()
 {
 }
 
@@ -41,7 +44,7 @@ QomposeReplaceQuery::~QomposeReplaceQuery()
  *
  * \return Our current replacement value.
  */
-QString QomposeReplaceQuery::getReplaceValue() const
+QString ReplaceQuery::getReplaceValue() const
 {
 	return replaceValue;
 }
@@ -52,7 +55,9 @@ QString QomposeReplaceQuery::getReplaceValue() const
  *
  * \param v The new replacement value.
  */
-void QomposeReplaceQuery::setReplaceValue(const QString &v)
+void ReplaceQuery::setReplaceValue(const QString &v)
 {
 	replaceValue = v;
+}
+
 }

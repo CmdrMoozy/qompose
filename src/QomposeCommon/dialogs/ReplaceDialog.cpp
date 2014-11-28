@@ -27,7 +27,7 @@
 #include <QPushButton>
 #include <QShowEvent>
 
-#include "QomposeCommon/util/QomposeReplaceQuery.h"
+#include "QomposeCommon/util/ReplaceQuery.h"
 
 namespace qompose
 {
@@ -40,7 +40,7 @@ namespace qompose
  * \param f The window flags to use for this dialog.
  */
 ReplaceDialog::ReplaceDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f), query(new QomposeReplaceQuery(this)),
+	: QDialog(p, f), query(new ReplaceQuery(this)),
 		layout(nullptr), findLabel(nullptr), findTextEdit(nullptr),
 		replaceLabel(nullptr), replaceTextEdit(nullptr),
 		optionsGroupBox(nullptr), optionsLayout(nullptr),
@@ -71,7 +71,7 @@ ReplaceDialog::~ReplaceDialog()
  *
  * \return The replace query containing our dialog's selected data.
  */
-const QomposeReplaceQuery *ReplaceDialog::getQuery() const
+const ReplaceQuery *ReplaceDialog::getQuery() const
 {
 	return query;
 }

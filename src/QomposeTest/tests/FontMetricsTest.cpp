@@ -18,7 +18,7 @@
 
 #include "FontMetricsTest.h"
 
-#include "QomposeCommon/util/QomposeFontMetrics.h"
+#include "QomposeCommon/util/FontMetrics.h"
 
 #include <QFont>
 
@@ -45,7 +45,7 @@ void FontMetricsTest::testIsMonospaced()
 	// Test that we can identify monospaced fonts.
 
 	QFont courier(QString("Courier New"), 12);
-	QomposeFontMetrics courierMetrics(courier);
+	FontMetrics courierMetrics(courier);
 
 	Test::assertTrue(courier.exactMatch());
 	Test::assertEquals(true, courierMetrics.isMonospaced());
@@ -53,7 +53,7 @@ void FontMetricsTest::testIsMonospaced()
 	// Test that we can identify non-monospaced fonts.
 
 	QFont times(QString("Times New Roman"), 12);
-	QomposeFontMetrics timesMetrics(times);
+	FontMetrics timesMetrics(times);
 
 	Test::assertTrue(times.exactMatch());
 	Test::assertEquals(false, timesMetrics.isMonospaced());
@@ -66,7 +66,7 @@ void FontMetricsTest::testIsMonospaced()
 void FontMetricsTest::testGetColumnWidth()
 {
 	QFont courier(QString("Courier New"), 11);
-	QomposeFontMetrics metrics(courier);
+	FontMetrics metrics(courier);
 
 	Test::assertEquals(720.0, metrics.getColumnWidthF(80));
 }

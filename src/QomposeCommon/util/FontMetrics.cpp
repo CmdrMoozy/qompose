@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeFontMetrics.h"
+#include "FontMetrics.h"
 
 #include <QFontInfo>
 #include <QFontMetricsF>
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new instance of our font
@@ -27,7 +30,7 @@
  *
  * \param f The font we will be examining.
  */
-QomposeFontMetrics::QomposeFontMetrics(const QFont &f)
+FontMetrics::FontMetrics(const QFont &f)
 	: font(f)
 {
 }
@@ -35,7 +38,7 @@ QomposeFontMetrics::QomposeFontMetrics(const QFont &f)
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposeFontMetrics::~QomposeFontMetrics()
+FontMetrics::~FontMetrics()
 {
 }
 
@@ -44,7 +47,7 @@ QomposeFontMetrics::~QomposeFontMetrics()
  *
  * \return Our current font.
  */
-QFont QomposeFontMetrics::getFont() const
+QFont FontMetrics::getFont() const
 {
 	return font;
 }
@@ -54,7 +57,7 @@ QFont QomposeFontMetrics::getFont() const
  *
  * \param f The new font to examine.
  */
-void QomposeFontMetrics::setFont(const QFont &f)
+void FontMetrics::setFont(const QFont &f)
 {
 	font = f;
 }
@@ -64,7 +67,7 @@ void QomposeFontMetrics::setFont(const QFont &f)
  *
  * \return True if our current font is monospaced, or false otherwise.
  */
-bool QomposeFontMetrics::isMonospaced() const
+bool FontMetrics::isMonospaced() const
 {
 	QFontInfo into(font);
 
@@ -79,7 +82,7 @@ bool QomposeFontMetrics::isMonospaced() const
  * \param columns The number of columns to get the width of.
  * \return The width of the given number of columns.
  */
-int QomposeFontMetrics::getColumnWidth(int columns) const
+int FontMetrics::getColumnWidth(int columns) const
 {
 	return qRound(getColumnWidthF(columns));
 }
@@ -95,9 +98,11 @@ int QomposeFontMetrics::getColumnWidth(int columns) const
  * \param columns The number of columns to get the width of.
  * \return The width of the given number of columns.
  */
-qreal QomposeFontMetrics::getColumnWidthF(int columns) const
+qreal FontMetrics::getColumnWidthF(int columns) const
 {
 	QFontMetricsF metrics(font);
 
 	return (metrics.averageCharWidth() * static_cast<qreal>(columns));
+}
+
 }

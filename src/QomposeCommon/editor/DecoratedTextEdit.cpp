@@ -22,7 +22,7 @@
 #include <QTextBlock>
 
 #include "QomposeCommon/editor/Gutter.h"
-#include "QomposeCommon/util/QomposeFontMetrics.h"
+#include "QomposeCommon/util/FontMetrics.h"
 
 namespace qompose
 {
@@ -246,7 +246,7 @@ void DecoratedTextEdit::setTabWidthSpaces(int w)
 {
 	tabWidth = qAbs(w);
 
-	QomposeFontMetrics metrics(currentFont);
+	FontMetrics metrics(currentFont);
 	qreal tabw = metrics.getColumnWidthF(tabWidth);
 
 	QTextOption opt = document()->defaultTextOption();
@@ -478,7 +478,7 @@ int DecoratedTextEdit::getCurrentLine() const
  */
 int DecoratedTextEdit::getCurrentColumn() const
 {
-	QomposeFontMetrics metrics(currentFont);
+	FontMetrics metrics(currentFont);
 
 	qreal xoff = static_cast<qreal>(cursorRect().x());
 
@@ -505,7 +505,7 @@ void DecoratedTextEdit::paintEvent(QPaintEvent *e)
 
 	QRect eventRect = e->rect();
 	QPainter painter(viewport());
-	QomposeFontMetrics metrics(currentFont);
+	FontMetrics metrics(currentFont);
 
 	// Draw our offset and margin lines, if debugging is enabled.
 
@@ -717,7 +717,7 @@ int DecoratedTextEdit::gutterWidth()
  */
 qreal DecoratedTextEdit::wrapGuideOffset()
 {
-	QomposeFontMetrics metrics(currentFont);
+	FontMetrics metrics(currentFont);
 
 	qreal offset = metrics.getColumnWidthF(getWrapGuideColumnWidth());
 	offset += contentOffset().x();

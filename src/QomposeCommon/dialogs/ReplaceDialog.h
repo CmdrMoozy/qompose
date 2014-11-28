@@ -30,10 +30,10 @@ class QPushButton;
 class QCheckBox;
 class QShowEvent;
 
-class QomposeReplaceQuery;
-
 namespace qompose
 {
+
+class ReplaceQuery;
 
 /*!
  * \brief This class implements a dialog to configure a replace query.
@@ -46,13 +46,13 @@ public:
 	ReplaceDialog(QWidget * = nullptr, Qt::WindowFlags = nullptr);
 	virtual ~ReplaceDialog();
 
-	const QomposeReplaceQuery *getQuery() const;
+	const ReplaceQuery *getQuery() const;
 
 protected:
 	virtual void showEvent(QShowEvent *);
 
 private:
-	QomposeReplaceQuery *query;
+	ReplaceQuery *query;
 
 	QGridLayout *layout;
 

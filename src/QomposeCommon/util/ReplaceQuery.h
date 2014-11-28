@@ -16,30 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_FONT_METRICS_H
-#define INCLUDE_QOMPOSE_FONT_METRICS_H
+#ifndef INCLUDE_QOMPOSECOMMON_UTIL_REPLACE_QUERY_H
+#define INCLUDE_QOMPOSECOMMON_UTIL_REPLACE_QUERY_H
 
-#include <QFont>
+#include "QomposeCommon/util/FindQuery.h"
+
+#include <QString>
+
+namespace qompose
+{
 
 /*!
- * \brief This class provides some various font metric utility functions.
+ * \brief This class extends our find query object by adding replace details.
  */
-class QomposeFontMetrics
+class ReplaceQuery : public FindQuery
 {
-	public:
-		QomposeFontMetrics(const QFont &f);
-		virtual ~QomposeFontMetrics();
+public:
+	ReplaceQuery(QObject * = nullptr);
+	virtual ~ReplaceQuery();
 
-		QFont getFont() const;
-		void setFont(const QFont &f);
+	QString getReplaceValue() const;
+	void setReplaceValue(const QString &);
 
-		bool isMonospaced() const;
-
-		int getColumnWidth(int columns = 1) const;
-		qreal getColumnWidthF(int columns = 1) const;
-
-	private:
-		QFont font;
+private:
+	QString replaceValue;
 };
+
+}
 
 #endif

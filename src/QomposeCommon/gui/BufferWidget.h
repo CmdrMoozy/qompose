@@ -30,12 +30,11 @@ class QGridLayout;
 class QTabWidget;
 class QPrinter;
 
-class QomposeFindQuery;
-class QomposeReplaceQuery;
-
 namespace qompose
 {
 
+class FindQuery;
+class ReplaceQuery;
 class Buffer;
 class Settings;
 
@@ -98,11 +97,11 @@ public Q_SLOTS:
 	void doDeselect();
 	void doIncreaseIndent();
 	void doDecreaseIndent();
-	Editor::FindResult doFindNext(const QomposeFindQuery *);
-	Editor::FindResult doFindPrevious(const QomposeFindQuery *);
-	Editor::FindResult doReplace(const QomposeReplaceQuery *);
-	Editor::FindResult doReplaceSelection(const QomposeReplaceQuery *);
-	Editor::FindResult doReplaceAll(const QomposeReplaceQuery *);
+	Editor::FindResult doFindNext(const FindQuery *);
+	Editor::FindResult doFindPrevious(const FindQuery *);
+	Editor::FindResult doReplace(const ReplaceQuery *);
+	Editor::FindResult doReplaceSelection(const ReplaceQuery *);
+	Editor::FindResult doReplaceAll(const ReplaceQuery *);
 	void doGoTo(int);
 	void doPreviousBuffer();
 	void doNextBuffer();

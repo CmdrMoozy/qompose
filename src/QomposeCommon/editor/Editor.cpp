@@ -38,9 +38,9 @@
 #include <QFontMetrics>
 #include <QRegExp>
 
-#include "QomposeCommon/util/QomposeFindQuery.h"
-#include "QomposeCommon/util/QomposeHotkey.h"
-#include "QomposeCommon/util/QomposeReplaceQuery.h"
+#include "QomposeCommon/util/FindQuery.h"
+#include "QomposeCommon/util/Hotkey.h"
+#include "QomposeCommon/util/ReplaceQuery.h"
 
 #define CALL_HOTKEY_FUNCTION(obj,fn) ((obj).*(fn))
 
@@ -69,7 +69,7 @@ Editor::~Editor()
 /*!
  * We implement the following hotkeys:
  *
- * Custom hotkeys implemented by QomposeTextEdit:
+ * Custom hotkeys implemented by TextEdit:
  * 	Return           Move to a new line, maintaining indent.
  * 	Enter            Move to a new line, maintaining indent.
  * 	Tab              Increase indent on selection.
@@ -103,7 +103,7 @@ Editor::~Editor()
  * 	Ctrl+End         Moves the cursor to the end of the document.
  * 	Alt+Wheel        Scrolls the page horizontally.
  *
- * Inherited, but ignored by QomposeTextEdit:
+ * Inherited, but ignored by TextEdit:
  *      Ctrl+Shift+Left  Select to beginning of line.
  *      Ctrl+Shift+Right Select to end of line.
  * 	Ctrl+Insert      Copy selected text to clipboard.
@@ -132,72 +132,72 @@ void Editor::initializeHotkeys()
 {
 	// Enter
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Return, nullptr,
+	hotkeys.addHotkey(Hotkey(Qt::Key_Return, nullptr,
 		~Qt::KeyboardModifiers(nullptr)), &Editor::doNewline);
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Enter, nullptr,
+	hotkeys.addHotkey(Hotkey(Qt::Key_Enter, nullptr,
 		~Qt::KeyboardModifiers(nullptr)), &Editor::doNewline);
 
 	// Tab
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Tab), &Editor::doTab);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Tab), &Editor::doTab);
 
 	// Shift + Tab
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Tab, Qt::ShiftModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier),
 		&Editor::decreaseSelectionIndent);
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Backtab, Qt::ShiftModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Backtab, Qt::ShiftModifier),
 		&Editor::decreaseSelectionIndent);
 
 	// Home
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Home),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Home),
 		&Editor::doMoveHome);
 
 	// Shift + Home
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Home, Qt::ShiftModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier),
 		&Editor::doSelectHome);
 
 	// Ctrl+D
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_D, Qt::ControlModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier),
 		&Editor::duplicateLine);
 
 	// Ctrl+(Zero)
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_0, Qt::ControlModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_0, Qt::ControlModifier),
 		&Editor::resetFontZoom);
 
 	// Ctrl+Shift+Left
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Left, Qt::ControlModifier |
+	hotkeys.addHotkey(Hotkey(Qt::Key_Left, Qt::ControlModifier |
 		Qt::ShiftModifier), &Editor::doNoop);
 
 	// Ctrl+Shift+Right
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Right, Qt::ControlModifier |
+	hotkeys.addHotkey(Hotkey(Qt::Key_Right, Qt::ControlModifier |
 		Qt::ShiftModifier), &Editor::doNoop);
 
 	// Ctrl+Insert
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Insert, Qt::ControlModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier),
 		&Editor::doNoop);
 
 	// Ctrl+K
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_K, Qt::ControlModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier),
 		&Editor::doNoop);
 
 	// Shift+Insert
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Insert, Qt::ShiftModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier),
 		&Editor::doNoop);
 
 	// Shift+Delete
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Delete, Qt::ShiftModifier),
+	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier),
 		&Editor::doNoop);
 }
 
@@ -291,7 +291,7 @@ void Editor::doSelectHome()
  * \param q The query to execute.
  * \return The results of executing this find query.
  */
-Editor::FindResult Editor::doFind(bool f, const QomposeFindQuery *q)
+Editor::FindResult Editor::doFind(bool f, const FindQuery *q)
 {
 	// Prepare our find flags.
 
@@ -382,7 +382,7 @@ Editor::FindResult Editor::doFind(bool f, const QomposeFindQuery *q)
  * \return The result of this replacement's find operation.
  */
 Editor::FindResult Editor::doBatchReplace(
-	const QomposeReplaceQuery *q, int start, int end)
+	const ReplaceQuery *q, int start, int end)
 {
 	// If we weren't given a start position, use the current cursor.
 
@@ -394,7 +394,7 @@ Editor::FindResult Editor::doBatchReplace(
 
 	// Create a query with "replace in selection"-compatible properties.
 
-	QomposeReplaceQuery query;
+	ReplaceQuery query;
 
 	query.setExpression(q->getExpression());
 	query.setReplaceValue(q->getReplaceValue());
@@ -830,7 +830,7 @@ void Editor::doHome(bool moveAnchor)
  * \param q The query to execute.
  * \return The result of the find query's execution.
  */
-Editor::FindResult Editor::findNext(const QomposeFindQuery *q)
+Editor::FindResult Editor::findNext(const FindQuery *q)
 { /* SLOT */
 
 	bool forward = true;
@@ -849,7 +849,7 @@ Editor::FindResult Editor::findNext(const QomposeFindQuery *q)
  * \param q The query to execute.
  * \return The result of the find query's execution.
  */
-Editor::FindResult Editor::findPrevious(const QomposeFindQuery *q)
+Editor::FindResult Editor::findPrevious(const FindQuery *q)
 { /* SLOT */
 
 	bool forward = false;
@@ -870,7 +870,7 @@ Editor::FindResult Editor::findPrevious(const QomposeFindQuery *q)
  * \param q The replace query to execute.
  * \return The result of this replacement's find operation.
  */
-Editor::FindResult Editor::replace(const QomposeReplaceQuery *q)
+Editor::FindResult Editor::replace(const ReplaceQuery *q)
 { /* SLOT */
 
 	// Reset our cursor's position.
@@ -928,7 +928,7 @@ Editor::FindResult Editor::replace(const QomposeReplaceQuery *q)
  * \param q The replace query to execute.
  * \return The result of this replacement's find operation.
  */
-Editor::FindResult Editor::replaceSelection(const QomposeReplaceQuery *q)
+Editor::FindResult Editor::replaceSelection(const ReplaceQuery *q)
 { /* SLOT */
 
 	QTextCursor curs = textCursor();
@@ -953,7 +953,7 @@ Editor::FindResult Editor::replaceSelection(const QomposeReplaceQuery *q)
  * \param q The replace query to execute.
  * \return The result of this replacement's find operation.
  */
-Editor::FindResult Editor::replaceAll(const QomposeReplaceQuery *q)
+Editor::FindResult Editor::replaceAll(const ReplaceQuery *q)
 { /* SLOT */
 
 	return doBatchReplace(q, 0);

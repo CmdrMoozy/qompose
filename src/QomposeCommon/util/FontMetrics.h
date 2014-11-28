@@ -16,43 +16,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_DOCUMENT_WRITER_H
-#define INCLUDE_QOMPOSE_DOCUMENT_WRITER_H
+#ifndef INCLUDE_QOMPOSECOMMON_UTIL_FONT_METRICS_H
+#define INCLUDE_QOMPOSECOMMON_UTIL_FONT_METRICS_H
 
-#include <QTextStream>
-#include <QString>
+#include <QFont>
 
-class QIODevice;
-class QTextCodec;
-class QTextDocument;
+namespace qompose
+{
 
 /*!
- * \brief This class encapsulates code to write QDocuments to QIODevices.
+ * \brief This class provides some various font metric utility functions.
  */
-class QomposeDocumentWriter
+class FontMetrics
 {
-	public:
-		QomposeDocumentWriter();
-		QomposeDocumentWriter(QIODevice *);
-		virtual ~QomposeDocumentWriter();
+public:
+	FontMetrics(const QFont &f);
+	virtual ~FontMetrics();
 
-		QIODevice *getDevice() const;
-		void setDevice(QIODevice *);
+	QFont getFont() const;
+	void setFont(const QFont &f);
 
-		QTextCodec *getCodec() const;
-		void setCodec(QTextCodec *);
+	bool isMonospaced() const;
 
-		bool isWhitespaceTrimmed() const;
-		void setWhitespaceTrimmed(bool);
+	int getColumnWidth(int columns = 1) const;
+	qreal getColumnWidthF(int columns = 1) const;
 
-		bool write(const QTextDocument *);
-
-	private:
-		bool whitespaceTrimmed;
-
-		QTextStream stream;
-
-		QString trimWhitespace(const QString &) const;
+private:
+	QFont font;
 };
+
+}
 
 #endif

@@ -30,10 +30,10 @@ class QWidget;
 class QPushButton;
 class QShowEvent;
 
-class QomposeFindQuery;
-
 namespace qompose
 {
+
+class FindQuery;
 
 /*!
  * \brief This class implements a dialog to configure a find query.
@@ -46,13 +46,13 @@ public:
 	FindDialog(QWidget * = nullptr, Qt::WindowFlags = nullptr);
 	virtual ~FindDialog();
 
-	const QomposeFindQuery *getQuery() const;
+	const FindQuery *getQuery() const;
 
 protected:
 	virtual void showEvent(QShowEvent *);
 
 private:
-	QomposeFindQuery *query;
+	FindQuery *query;
 
 	QGridLayout *layout;
 

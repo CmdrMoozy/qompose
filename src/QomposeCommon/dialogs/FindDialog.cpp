@@ -28,7 +28,7 @@
 #include <QShowEvent>
 
 #include "QomposeCommon/Defines.h"
-#include "QomposeCommon/util/QomposeFindQuery.h"
+#include "QomposeCommon/util/FindQuery.h"
 
 namespace qompose
 {
@@ -41,7 +41,7 @@ namespace qompose
  * \param f The window flags to use for this dialog.
  */
 FindDialog::FindDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f), query(new QomposeFindQuery(this)),
+	: QDialog(p, f), query(new FindQuery(this)),
 		layout(nullptr), findLabel(nullptr), findTextEdit(nullptr),
 		optionsGroupBox(nullptr), optionsLayout(nullptr),
 		wrapCheckBox(nullptr), wholeWordsCheckBox(nullptr),
@@ -70,7 +70,7 @@ FindDialog::~FindDialog()
  *
  * \return The find query containing our dialog's selected data.
  */
-const QomposeFindQuery *FindDialog::getQuery() const
+const FindQuery *FindDialog::getQuery() const
 {
 	return query;
 }

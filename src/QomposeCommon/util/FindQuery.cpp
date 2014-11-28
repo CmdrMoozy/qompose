@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeFindQuery.h"
+#include "FindQuery.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new find query object
@@ -24,7 +27,7 @@
  *
  * \param p This object's parent object.
  */
-QomposeFindQuery::QomposeFindQuery(QObject *p)
+FindQuery::FindQuery(QObject *p)
 	: QObject(p), expression(""), wrap(true), wholeWords(false),
 		caseSensitive(false), reverse(false), regex(false)
 {
@@ -33,7 +36,7 @@ QomposeFindQuery::QomposeFindQuery(QObject *p)
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposeFindQuery::~QomposeFindQuery()
+FindQuery::~FindQuery()
 {
 }
 
@@ -44,7 +47,7 @@ QomposeFindQuery::~QomposeFindQuery()
  *
  * \return Our object's current find expression.
  */
-QString QomposeFindQuery::getExpression() const
+QString FindQuery::getExpression() const
 {
 	return expression;
 }
@@ -56,7 +59,7 @@ QString QomposeFindQuery::getExpression() const
  *
  * \param e The new expression to use.
  */
-void QomposeFindQuery::setExpression(const QString &e)
+void FindQuery::setExpression(const QString &e)
 {
 	expression = e;
 }
@@ -68,7 +71,7 @@ void QomposeFindQuery::setExpression(const QString &e)
  *
  * \return Whether or not wrapping is currently enabled.
  */
-bool QomposeFindQuery::isWrapping() const
+bool FindQuery::isWrapping() const
 {
 	return wrap;
 }
@@ -80,7 +83,7 @@ bool QomposeFindQuery::isWrapping() const
  *
  * \param w The new wrapping setting to use.
  */
-void QomposeFindQuery::setWrapping(bool w)
+void FindQuery::setWrapping(bool w)
 {
 	wrap = w;
 }
@@ -91,7 +94,7 @@ void QomposeFindQuery::setWrapping(bool w)
  *
  * \return Whether or not our query will only match whole words currently.
  */
-bool QomposeFindQuery::isWholeWords() const
+bool FindQuery::isWholeWords() const
 {
 	return wholeWords;
 }
@@ -102,7 +105,7 @@ bool QomposeFindQuery::isWholeWords() const
  *
  * \param w The new whole words matching setting to use.
  */
-void QomposeFindQuery::setWholeWords(bool w)
+void FindQuery::setWholeWords(bool w)
 {
 	wholeWords = w;
 }
@@ -112,7 +115,7 @@ void QomposeFindQuery::setWholeWords(bool w)
  *
  * \return Whether or not our query is case sensitive currently.
  */
-bool QomposeFindQuery::isCaseSensitive() const
+bool FindQuery::isCaseSensitive() const
 {
 	return caseSensitive;
 }
@@ -122,68 +125,70 @@ bool QomposeFindQuery::isCaseSensitive() const
  *
  * \param c The new case sensitive setting to use.
  */
-void QomposeFindQuery::setCaseSensitive(bool c)
+void FindQuery::setCaseSensitive(bool c)
 {
 	caseSensitive = c;
 }
 
 /*!
  * This function returns whether or not our find query's direction should be
- * reversed. Note that this does not guarantee one direction or the other, since
- * "find next" and "find previous" have different default directions.
+ * reversed. Note that this does not guarantee one direction or the other,
+ * since "find next" and "find previous" have different default directions.
  *
  * \return Whether or not our query is currently searching in reverse order.
  */
-bool QomposeFindQuery::isReversed() const
+bool FindQuery::isReversed() const
 {
 	return reverse;
 }
 
 /*!
- * This function sets whether or not our find query's direction should be reversed.
- * Note that this does not guarantee one direction or the other, since "find next"
- * and "find previous" have different default directions.
+ * This function sets whether or not our find query's direction should be
+ * reversed. Note that this does not guarantee one direction or the other,
+ * since "find next" and "find previous" have different default directions.
  *
  * \param r The new reversed direction setting to use.
  */
-void QomposeFindQuery::setReversed(bool r)
+void FindQuery::setReversed(bool r)
 {
 	reverse = r;
 }
 
 /*!
- * This function returns whether or not our find expression is a regular expression.
+ * This function returns whether or not our find expression is a regular
+ * expression.
  *
  * \return Whether or not our query is currently a regular expression.
  */
-bool QomposeFindQuery::isRegularExpression() const
+bool FindQuery::isRegularExpression() const
 {
 	return regex;
 }
 
 /*!
- * This function sets whether or not our query's find expression is a regular expression.
+ * This function sets whether or not our query's find expression is a regular
+ * expression.
  *
  * \param r The new regular expression setting to use.
  */
-void QomposeFindQuery::setRegularExpression(bool r)
+void FindQuery::setRegularExpression(bool r)
 {
 	regex = r;
 }
 
 /*!
- * This function encodes our find query options as a QTextDocument::FindFlags value,
- * optionally including the "reversed" option in the resulting flags.
+ * This function encodes our find query options as a QTextDocument::FindFlags
+ * value, optionally including the "reversed" option in the resulting flags.
  *
- * The direction of a search is dependant on whether the operation is a "next" or
- * "previous" operation, as well as the reversed flag, so it may be valuable for the
- * user of this class to exclude the "reversed" flag from the end set of find flags,
- * instead determining direction separately.
+ * The direction of a search is dependant on whether the operation is a "next"
+ * or "previous" operation, as well as the reversed flag, so it may be valuable
+ * for the user of this class to exclude the "reversed" flag from the end set
+ * of find flags, instead determining direction separately.
  *
  * \param r Whether or not the "reversed" option should be added to the flags.
  * \return The FindFlags value for our current set of find query options.
  */
-QTextDocument::FindFlags QomposeFindQuery::getFindFlags(bool r) const
+QTextDocument::FindFlags FindQuery::getFindFlags(bool r) const
 {
 	QTextDocument::FindFlags f = nullptr;
 
@@ -197,4 +202,6 @@ QTextDocument::FindFlags QomposeFindQuery::getFindFlags(bool r) const
 		f |= QTextDocument::FindWholeWords;
 
 	return f;
+}
+
 }

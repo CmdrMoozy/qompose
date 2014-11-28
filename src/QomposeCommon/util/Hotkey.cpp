@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeHotkey.h"
+#include "Hotkey.h"
 
 #include <QKeyEvent>
+
+namespace qompose
+{
 
 /*!
  * This constructor creates a new hotkey instance which matches the given key,
@@ -26,7 +29,7 @@
  *
  * \param k The key this hotkey should match.
  */
-QomposeHotkey::QomposeHotkey(Qt::Key k)
+Hotkey::Hotkey(Qt::Key k)
 	: key(k), rModifiers(Qt::KeyboardModifiers(Qt::NoModifier)),
 		wlModifiers(Qt::KeyboardModifiers(Qt::NoModifier))
 {
@@ -39,7 +42,7 @@ QomposeHotkey::QomposeHotkey(Qt::Key k)
  * \param k The key this hotkey should match.
  * \param rm The modifiers required for this hotkey to match.
  */
-QomposeHotkey::QomposeHotkey(Qt::Key k, Qt::KeyboardModifiers rm)
+Hotkey::Hotkey(Qt::Key k, Qt::KeyboardModifiers rm)
 	: key(k), rModifiers(rm), wlModifiers(rm)
 {
 	key = k;
@@ -60,7 +63,7 @@ QomposeHotkey::QomposeHotkey(Qt::Key k, Qt::KeyboardModifiers rm)
  * \param rm The modifiers required for this hotkey to match.
  * \param wlm Additional modifiers which are allowed when matching this hotkey.
  */
-QomposeHotkey::QomposeHotkey(Qt::Key k, Qt::KeyboardModifiers rm,
+Hotkey::Hotkey(Qt::Key k, Qt::KeyboardModifiers rm,
 	Qt::KeyboardModifiers wlm)
 	: key(k), rModifiers(rm), wlModifiers(wlm | rm)
 {
@@ -72,7 +75,7 @@ QomposeHotkey::QomposeHotkey(Qt::Key k, Qt::KeyboardModifiers rm,
  *
  * \param o The other hotkey to create a copy of.
  */
-QomposeHotkey::QomposeHotkey(const QomposeHotkey &o)
+Hotkey::Hotkey(const Hotkey &o)
 	: key(Qt::Key_Escape),
 		rModifiers(Qt::KeyboardModifiers(Qt::NoModifier)),
 		wlModifiers(Qt::KeyboardModifiers(Qt::NoModifier))
@@ -84,7 +87,7 @@ QomposeHotkey::QomposeHotkey(const QomposeHotkey &o)
  * This is our default destructor, which cleans up and destroys this hotkey
  * instance.
  */
-QomposeHotkey::~QomposeHotkey()
+Hotkey::~Hotkey()
 {
 }
 
@@ -95,7 +98,7 @@ QomposeHotkey::~QomposeHotkey()
  * \param o The other hotkey to copy.
  * \return A reference to this, for operator chaining.
  */
-QomposeHotkey &QomposeHotkey::operator=(const QomposeHotkey &o)
+Hotkey &Hotkey::operator=(const Hotkey &o)
 {
 	if(&o == this)
 		return *this;
@@ -115,7 +118,7 @@ QomposeHotkey &QomposeHotkey::operator=(const QomposeHotkey &o)
  * \param o The other hotkey to compare ourself to.
  * \return True if we are equal, or false otherwise.
  */
-bool QomposeHotkey::operator==(const QomposeHotkey &o) const
+bool Hotkey::operator==(const Hotkey &o) const
 {
 	return (key == o.key) &&
 		(rModifiers == o.rModifiers) &&
@@ -127,7 +130,7 @@ bool QomposeHotkey::operator==(const QomposeHotkey &o) const
  *
  * \return Our hotkey's key.
  */
-Qt::Key QomposeHotkey::getKey() const
+Qt::Key Hotkey::getKey() const
 {
 	return key;
 }
@@ -139,7 +142,7 @@ Qt::Key QomposeHotkey::getKey() const
  *
  * \return Our hotkey's key, as an unsigned integer.
  */
-quint64 QomposeHotkey::getKeyInteger() const
+quint64 Hotkey::getKeyInteger() const
 {
 	return static_cast<quint64>(key);
 }
@@ -150,7 +153,7 @@ quint64 QomposeHotkey::getKeyInteger() const
  *
  * \return Our hotkey's required keyboard modifiers.
  */
-Qt::KeyboardModifiers QomposeHotkey::getRequiredModifiers() const
+Qt::KeyboardModifiers Hotkey::getRequiredModifiers() const
 {
 	return rModifiers;
 }
@@ -176,7 +179,7 @@ Qt::KeyboardModifiers QomposeHotkey::getRequiredModifiers() const
  *
  * \return The keyboard modifiers whitelist for this hotkey.
  */
-Qt::KeyboardModifiers QomposeHotkey::getWhitelistedModifiers() const
+Qt::KeyboardModifiers Hotkey::getWhitelistedModifiers() const
 {
 	return wlModifiers;
 }
@@ -193,7 +196,7 @@ Qt::KeyboardModifiers QomposeHotkey::getWhitelistedModifiers() const
  * \param e The key event to compare to this hotkey.
  * \return If (and how well) this hotkey matches the given key event.
  */
-int QomposeHotkey::matches(const QKeyEvent *e) const
+int Hotkey::matches(const QKeyEvent *e) const
 {
 	// If the key doesn't match, bail out now.
 
@@ -215,7 +218,7 @@ int QomposeHotkey::matches(const QKeyEvent *e) const
 	Qt::KeyboardModifiers em = wlModifiers & ~rModifiers;
 	quint64 extra = static_cast<quint64>(e->modifiers() & em);
 
-	return QomposeHotkey::opop(extra);
+	return Hotkey::opop(extra);
 }
 
 /*!
@@ -232,7 +235,7 @@ int QomposeHotkey::matches(const QKeyEvent *e) const
  * \param v The value to count the number of one bits in.
  * \return The number of one bits set in the given value.
  */
-int QomposeHotkey::opop(quint64 v)
+int Hotkey::opop(quint64 v)
 {
 	v -= (v >> 1) & Q_UINT64_C(0x5555555555555555);
 
@@ -242,4 +245,6 @@ int QomposeHotkey::opop(quint64 v)
 	v = (v + (v >> 4)) & Q_UINT64_C(0x0F0F0F0F0F0F0F0F);
 
 	return (v * Q_UINT64_C(0x0101010101010101)) >> 56;
+}
+
 }
