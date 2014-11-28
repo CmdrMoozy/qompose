@@ -16,34 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_TYPES_H
-#define INCLUDE_QOMPOSE_TYPES_H
+#ifndef INCLUDE_QOMPOSECOMMON_TYPES_H
+#define INCLUDE_QOMPOSECOMMON_TYPES_H
+
+namespace qompose
+{
 
 /*!
  * \brief This structure stores a filename and its detected character encoding.
  */
-struct QomposeFileDescriptor
+struct FileDescriptor
 {
 	QString fileName;
 	QString textCodec;
 
-	QomposeFileDescriptor()
-		: fileName(QString()), textCodec(QString())
+	FileDescriptor()
+		: fileName(), textCodec()
 	{
 	}
 
-	QomposeFileDescriptor(const QString &f, const QString &c)
+	FileDescriptor(const QString &f, const QString &c)
 		: fileName(f), textCodec(c)
 	{
 	}
 
-	QomposeFileDescriptor(const QomposeFileDescriptor &o)
-		: fileName(QString()), textCodec(QString())
+	FileDescriptor(const FileDescriptor &o)
+		: fileName(), textCodec()
 	{
 		*this = o;
 	}
 
-	QomposeFileDescriptor &operator=(const QomposeFileDescriptor &o)
+	FileDescriptor &operator=(const FileDescriptor &o)
 	{
 		if(&o == this)
 			return *this;
@@ -58,30 +61,28 @@ struct QomposeFileDescriptor
 /*!
  * \brief This structure stores closed buffer state, so it can be reopened.
  */
-struct QomposeClosedBufferDescriptor
+struct ClosedBufferDescriptor
 {
-	QomposeFileDescriptor file;
+	FileDescriptor file;
 	int cursorPosition;
 
-	QomposeClosedBufferDescriptor()
-		: file(QomposeFileDescriptor()), cursorPosition(0)
+	ClosedBufferDescriptor()
+		: file(), cursorPosition(0)
 	{
 	}
 
-	QomposeClosedBufferDescriptor(QomposeFileDescriptor f, int c)
+	ClosedBufferDescriptor(FileDescriptor f, int c)
 		: file(f), cursorPosition(c)
 	{
 	}
 
-	QomposeClosedBufferDescriptor(const QomposeClosedBufferDescriptor &o)
-		: file(QomposeFileDescriptor()),
-			cursorPosition(0)
+	ClosedBufferDescriptor(const ClosedBufferDescriptor &o)
+		: file(), cursorPosition(0)
 	{
 		*this = o;
 	}
 
-	QomposeClosedBufferDescriptor &operator=(
-		const QomposeClosedBufferDescriptor &o)
+	ClosedBufferDescriptor &operator=(const ClosedBufferDescriptor &o)
 	{
 		if(&o == this)
 			return *this;
@@ -92,5 +93,7 @@ struct QomposeClosedBufferDescriptor
 		return *this;
 	}
 };
+
+}
 
 #endif

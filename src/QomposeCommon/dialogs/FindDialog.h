@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_FIND_DIALOG_H
-#define INCLUDE_QOMPOSE_FIND_DIALOG_H
+#ifndef INCLUDE_QOMPOSECOMMON_DIALOGS_FIND_DIALOG_H
+#define INCLUDE_QOMPOSECOMMON_DIALOGS_FIND_DIALOG_H
 
 #include <QDialog>
 
@@ -32,54 +32,58 @@ class QShowEvent;
 
 class QomposeFindQuery;
 
+namespace qompose
+{
+
 /*!
  * \brief This class implements a dialog to configure a find query.
  */
-class QomposeFindDialog : public QDialog
+class FindDialog : public QDialog
 {
 	Q_OBJECT
 
-	public:
-		QomposeFindDialog(QWidget * = nullptr,
-			Qt::WindowFlags = nullptr);
-		virtual ~QomposeFindDialog();
+public:
+	FindDialog(QWidget * = nullptr, Qt::WindowFlags = nullptr);
+	virtual ~FindDialog();
 
-		const QomposeFindQuery *getQuery() const;
+	const QomposeFindQuery *getQuery() const;
 
-	protected:
-		virtual void showEvent(QShowEvent *);
+protected:
+	virtual void showEvent(QShowEvent *);
 
-	private:
-		QomposeFindQuery *query;
+private:
+	QomposeFindQuery *query;
 
-		QGridLayout *layout;
+	QGridLayout *layout;
 
-		QLabel *findLabel;
-		QLineEdit *findTextEdit;
+	QLabel *findLabel;
+	QLineEdit *findTextEdit;
 
-		QGroupBox *optionsGroupBox;
-		QGridLayout *optionsLayout;
-		QCheckBox *wrapCheckBox;
-		QCheckBox *wholeWordsCheckBox;
-		QCheckBox *caseSensitiveCheckBox;
-		QCheckBox *reverseCheckBox;
-		QCheckBox *regexCheckBox;
+	QGroupBox *optionsGroupBox;
+	QGridLayout *optionsLayout;
+	QCheckBox *wrapCheckBox;
+	QCheckBox *wholeWordsCheckBox;
+	QCheckBox *caseSensitiveCheckBox;
+	QCheckBox *reverseCheckBox;
+	QCheckBox *regexCheckBox;
 
-		QWidget *buttonsWidget;
-		QGridLayout *buttonsLayout;
-		QPushButton *findButton;
-		QPushButton *closeButton;
+	QWidget *buttonsWidget;
+	QGridLayout *buttonsLayout;
+	QPushButton *findButton;
+	QPushButton *closeButton;
 
-		QomposeFindDialog(const QomposeFindDialog &);
-		QomposeFindDialog &operator=(const QomposeFindDialog &);
+	FindDialog(const FindDialog &);
+	FindDialog &operator=(const FindDialog &);
 
-		void initializeGUI();
+	void initializeGUI();
 
-	private Q_SLOTS:
-		void doFind();
+private Q_SLOTS:
+	void doFind();
 
-	Q_SIGNALS:
-		void accepted();
+Q_SIGNALS:
+	void accepted();
 };
+
+}
 
 #endif

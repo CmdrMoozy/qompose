@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeBufferWidget.h"
+#include "BufferWidget.h"
 
 #include <QGridLayout>
 #include <QSet>
@@ -27,11 +27,14 @@
 #include <QPrinter>
 #include <QFileInfo>
 
-#include "QomposeCommon/dialogs/QomposeFileDialog.h"
-#include "QomposeCommon/editor/QomposeBuffer.h"
+#include "QomposeCommon/dialogs/FileDialog.h"
+#include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/util/QomposeFindQuery.h"
 #include "QomposeCommon/util/QomposeReplaceQuery.h"
 #include "QomposeCommon/util/QomposeSettings.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new instance of our buffers
@@ -40,10 +43,9 @@
  * \param s The settings instance to give to our buffers.
  * \param p The parent widget to use for this widget.
  */
-QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
+BufferWidget::BufferWidget(QomposeSettings *s, QWidget *p)
 	: QWidget(p, nullptr), settings(s), layout(nullptr),
-		tabWidget(nullptr), tabs(QSet<QomposeBuffer *>()),
-		closedTabs(QStack<QomposeClosedBufferDescriptor>())
+		tabWidget(nullptr), tabs(), closedTabs()
 {
 	layout = new QGridLayout(this);
 
@@ -64,7 +66,7 @@ QomposeBufferWidget::QomposeBufferWidget(QomposeSettings *s, QWidget *p)
 /*!
  * This is our default destructor, which cleans up & destroys our widget.
  */
-QomposeBufferWidget::~QomposeBufferWidget()
+BufferWidget::~BufferWidget()
 {
 }
 
@@ -73,7 +75,7 @@ QomposeBufferWidget::~QomposeBufferWidget()
  *
  * \return The number of buffers we have.
  */
-int QomposeBufferWidget::count() const
+int BufferWidget::count() const
 {
 	return tabWidget->count();
 }
@@ -85,9 +87,9 @@ int QomposeBufferWidget::count() const
  * \param i The index of the desired buffer.
  * \return The buffer at the given index.
  */
-QomposeBuffer *QomposeBufferWidget::bufferAt(int i) const
+Buffer *BufferWidget::bufferAt(int i) const
 {
-	return dynamic_cast<QomposeBuffer *>(tabWidget->widget(i));
+	return dynamic_cast<Buffer *>(tabWidget->widget(i));
 }
 
 /*!
@@ -96,9 +98,9 @@ QomposeBuffer *QomposeBufferWidget::bufferAt(int i) const
  *
  * \return Our widget's current buffer.
  */
-QomposeBuffer *QomposeBufferWidget::currentBuffer() const
+Buffer *BufferWidget::currentBuffer() const
 {
-	return dynamic_cast<QomposeBuffer *>(tabWidget->currentWidget());
+	return dynamic_cast<Buffer *>(tabWidget->currentWidget());
 }
 
 /*!
@@ -108,7 +110,7 @@ QomposeBuffer *QomposeBufferWidget::currentBuffer() const
  *
  * \return Whether or not this widget has a valid "current buffer."
  */
-bool QomposeBufferWidget::hasCurrentBuffer() const
+bool BufferWidget::hasCurrentBuffer() const
 {
 	return (currentBuffer() != NULL);
 }
@@ -119,7 +121,7 @@ bool QomposeBufferWidget::hasCurrentBuffer() const
  *
  * \param i The index of the desired buffer.
  */
-void QomposeBufferWidget::setCurrentBuffer(int i)
+void BufferWidget::setCurrentBuffer(int i)
 {
 	tabWidget->setCurrentIndex(i);
 }
@@ -135,11 +137,11 @@ void QomposeBufferWidget::setCurrentBuffer(int i)
  *
  * \return True if we are ready to be closed, or false otherwise.
  */
-bool QomposeBufferWidget::prepareCloseParent()
+bool BufferWidget::prepareCloseParent()
 {
 	for(int i = 0; i < count(); ++i)
 	{
-		QomposeBuffer *buf = bufferAt(i);
+		Buffer *buf = bufferAt(i);
 
 		if(buf == NULL)
 			continue;
@@ -185,13 +187,13 @@ bool QomposeBufferWidget::prepareCloseParent()
  * \param p The path to search for.
  * \return The index of the (first) buffer which has the given path.
  */
-int QomposeBufferWidget::findBufferWithPath(const QString &p)
+int BufferWidget::findBufferWithPath(const QString &p)
 {
 	QFileInfo file(p);
 
 	for(int i = 0; i < count(); ++i)
 	{
-		QomposeBuffer *buf = bufferAt(i);
+		Buffer *buf = bufferAt(i);
 		QFileInfo bufFile(buf->getPath());
 
 		if(file == bufFile)
@@ -208,9 +210,9 @@ int QomposeBufferWidget::findBufferWithPath(const QString &p)
  *
  * \return The newly-created buffer widget.
  */
-QomposeBuffer *QomposeBufferWidget::newBuffer()
+Buffer *BufferWidget::newBuffer()
 {
-	QomposeBuffer *b = new QomposeBuffer(settings, tabWidget);
+	Buffer *b = new Buffer(settings, tabWidget);
 
 	QObject::connect(b, SIGNAL(titleChanged(const QString &)),
 		this, SLOT(doTabTitleChanged(const QString &)));
@@ -232,10 +234,10 @@ QomposeBuffer *QomposeBufferWidget::newBuffer()
 /*!
  * This function removes the current buffer from our tab widget, and deletes it.
  */
-void QomposeBufferWidget::removeCurrentBuffer()
+void BufferWidget::removeCurrentBuffer()
 {
 	int i = tabWidget->currentIndex();
-	QomposeBuffer *b = currentBuffer();
+	Buffer *b = currentBuffer();
 
 	tabWidget->removeTab(i);
 
@@ -251,9 +253,9 @@ void QomposeBufferWidget::removeCurrentBuffer()
  * \param f The index to move a tab from.
  * \param t The index to move the tab to.
  */
-void QomposeBufferWidget::moveBuffer(int f, int t)
+void BufferWidget::moveBuffer(int f, int t)
 {
-	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(tabWidget->widget(f));
+	Buffer *b = dynamic_cast<Buffer *>(tabWidget->widget(f));
 
 	if(b == NULL)
 		return;
@@ -272,12 +274,12 @@ void QomposeBufferWidget::moveBuffer(int f, int t)
  *
  * \return A default directory to use for open/save actions.
  */
-QString QomposeBufferWidget::getDefaultDirectory() const
+QString BufferWidget::getDefaultDirectory() const
 {
 	QString defaultDirectory = QDir::homePath();
 	bool found = false;
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 	int ci = tabWidget->indexOf(buf);
 
 	// See if the current buffer has a valid default path.
@@ -338,7 +340,7 @@ QString QomposeBufferWidget::getDefaultDirectory() const
 /*!
  * This slot executes a new action by creating a new buffer widget.
  */
-void QomposeBufferWidget::doNew()
+void BufferWidget::doNew()
 { /* SLOT */
 
 	newBuffer();
@@ -350,13 +352,12 @@ void QomposeBufferWidget::doNew()
  * opening the selected file. If we only had one "Untitled" tab before, then
  * it will be replaced by the newly opened file.
  */
-void QomposeBufferWidget::doOpen()
+void BufferWidget::doOpen()
 { /* SLOT */
 
 	// Open the one or more selected files.
 
-	QList<QomposeFileDescriptor> files =
-		QomposeFileDialog::getOpenFileNames(this,
+	QList<FileDescriptor> files = FileDialog::getOpenFileNames(this,
 		tr("Open Files"), getDefaultDirectory());
 
 	for(int i = 0; i < files.size(); ++i)
@@ -372,10 +373,10 @@ void QomposeBufferWidget::doOpen()
  *
  * \param p The path to open.
  */
-void QomposeBufferWidget::doOpenPath(const QString &p)
+void BufferWidget::doOpenPath(const QString &p)
 { /* SLOT */
 
-	QomposeFileDescriptor desc = QomposeFileDialog::getPathDescriptor(p);
+	FileDescriptor desc = FileDialog::getPathDescriptor(p);
 
 	if(desc.fileName.isNull())
 		return;
@@ -389,7 +390,7 @@ void QomposeBufferWidget::doOpenPath(const QString &p)
  * tab in a new tab. If the list of recently closed tabs is empty, then no
  * action is taken.
  */
-void QomposeBufferWidget::doReopen()
+void BufferWidget::doReopen()
 { /* SLOT */
 
 	if(!closedTabs.empty())
@@ -401,10 +402,10 @@ void QomposeBufferWidget::doReopen()
  * This slot executes a revert action by instructing our current buffer to
  * revert its changes.
  */
-void QomposeBufferWidget::doRevert()
+void BufferWidget::doRevert()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -418,12 +419,12 @@ void QomposeBufferWidget::doRevert()
  * instructing each buffer to revert its changes. Note that this has no effect
  * on buffers which have never been saved.
  */
-void QomposeBufferWidget::doRevertAll()
+void BufferWidget::doRevertAll()
 { /* SLOT */
 
 	for(int i = 0; i < tabWidget->count(); ++i)
 	{
-		QomposeBuffer *buf = bufferAt(i);
+		Buffer *buf = bufferAt(i);
 
 		if(buf != NULL)
 			buf->revert();
@@ -436,10 +437,10 @@ void QomposeBufferWidget::doRevertAll()
  * save its changes, potentially showing a "save as" dialog if it hasn't ever
  * been saved before.
  */
-void QomposeBufferWidget::doSave()
+void BufferWidget::doSave()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -455,12 +456,12 @@ void QomposeBufferWidget::doSave()
  * This slot executes a "save as" action by showing a save file dialog, and
  * then by instructing our current buffer to save to the selected path.
  */
-void QomposeBufferWidget::doSaveAs()
+void BufferWidget::doSaveAs()
 { /* SLOT */
 
 	// Make sure the current buffer is valid.
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -491,11 +492,11 @@ void QomposeBufferWidget::doSaveAs()
  * This slot executes a close action by possibly prompting to save any unsaved
  * changes, and ultimately by removing the current buffer from our tab widget.
  */
-void QomposeBufferWidget::doClose()
+void BufferWidget::doClose()
 { /* SLOT */
 
 	bool remove = false;
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -546,10 +547,10 @@ void QomposeBufferWidget::doClose()
  * This slot executes an undo action by instructing our current buffer to
  * undo the most recent edit block.
  */
-void QomposeBufferWidget::doUndo()
+void BufferWidget::doUndo()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -562,10 +563,10 @@ void QomposeBufferWidget::doUndo()
  * This slot executes a redo action by instructing our current buffer to
  * redo the most recent edit block.
  */
-void QomposeBufferWidget::doRedo()
+void BufferWidget::doRedo()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -578,10 +579,10 @@ void QomposeBufferWidget::doRedo()
  * This slot executes a cut action by instructing our current buffer to cut
  * any selected text.
  */
-void QomposeBufferWidget::doCut()
+void BufferWidget::doCut()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -594,10 +595,10 @@ void QomposeBufferWidget::doCut()
  * This slot executes a copy action by instructing our current buffer to copy
  * any selected text.
  */
-void QomposeBufferWidget::doCopy()
+void BufferWidget::doCopy()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -610,10 +611,10 @@ void QomposeBufferWidget::doCopy()
  * This slot executes a paste action by instructing our current buffer to paste
  * any text in the clipboard.
  */
-void QomposeBufferWidget::doPaste()
+void BufferWidget::doPaste()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -626,10 +627,10 @@ void QomposeBufferWidget::doPaste()
  * This slot executes a "duplicate line" action by instructing our current
  * buffer to duplicate its current line.
  */
-void QomposeBufferWidget::doDuplicateLine()
+void BufferWidget::doDuplicateLine()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -642,10 +643,10 @@ void QomposeBufferWidget::doDuplicateLine()
  * This slot executes a "select all" action by instructing our current buffer
  * to select all of its contents.
  */
-void QomposeBufferWidget::doSelectAll()
+void BufferWidget::doSelectAll()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -658,10 +659,10 @@ void QomposeBufferWidget::doSelectAll()
  * This slot executes a deslect action by instructing our current buffer to
  * clear any selection it currently has.
  */
-void QomposeBufferWidget::doDeselect()
+void BufferWidget::doDeselect()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -674,10 +675,10 @@ void QomposeBufferWidget::doDeselect()
  * This slot executes an "increase indent" action by instructing our current
  * buffer to increase the indent of any selection it might have.
  */
-void QomposeBufferWidget::doIncreaseIndent()
+void BufferWidget::doIncreaseIndent()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -690,10 +691,10 @@ void QomposeBufferWidget::doIncreaseIndent()
  * This slot executes a "decrease indent" action by instructing our current
  * buffer to decrease the indent of any selection it might have.
  */
-void QomposeBufferWidget::doDecreaseIndent()
+void BufferWidget::doDecreaseIndent()
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -709,11 +710,11 @@ void QomposeBufferWidget::doDecreaseIndent()
  * \param q The find query to execute.
  * \return The result of this find action.
  */
-QomposeEditor::FindResult QomposeBufferWidget::doFindNext(
+QomposeEditor::FindResult BufferWidget::doFindNext(
 	const QomposeFindQuery *q)
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return QomposeEditor::NoDocument;
@@ -729,11 +730,11 @@ QomposeEditor::FindResult QomposeBufferWidget::doFindNext(
  * \param q The find query to execute.
  * \return The result of this find action.
  */
-QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(
+QomposeEditor::FindResult BufferWidget::doFindPrevious(
 	const QomposeFindQuery *q)
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return QomposeEditor::NoDocument;
@@ -749,11 +750,11 @@ QomposeEditor::FindResult QomposeBufferWidget::doFindPrevious(
  * \param q The replace query to execute.
  * \return The result of this replace action.
  */
-QomposeEditor::FindResult QomposeBufferWidget::doReplace(
+QomposeEditor::FindResult BufferWidget::doReplace(
 	const QomposeReplaceQuery *q)
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return QomposeEditor::NoDocument;
@@ -769,11 +770,11 @@ QomposeEditor::FindResult QomposeBufferWidget::doReplace(
  * \param q The replace query to execute.
  * \return The result of this "replace in selection" action.
  */
-QomposeEditor::FindResult QomposeBufferWidget::doReplaceSelection(
+QomposeEditor::FindResult BufferWidget::doReplaceSelection(
 	const QomposeReplaceQuery *q)
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return QomposeEditor::NoDocument;
@@ -789,11 +790,11 @@ QomposeEditor::FindResult QomposeBufferWidget::doReplaceSelection(
  * \param q The replace query to execute.
  * \return The result of this "replace all" action.
  */
-QomposeEditor::FindResult QomposeBufferWidget::doReplaceAll(
+QomposeEditor::FindResult BufferWidget::doReplaceAll(
 	const QomposeReplaceQuery *q)
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return QomposeEditor::NoDocument;
@@ -808,10 +809,10 @@ QomposeEditor::FindResult QomposeBufferWidget::doReplaceAll(
  *
  * \param l The line to move our current cursor to.
  */
-void QomposeBufferWidget::doGoTo(int l)
+void BufferWidget::doGoTo(int l)
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -825,7 +826,7 @@ void QomposeBufferWidget::doGoTo(int l)
  * the left of our current buffer (or the rightmost buffer, if the leftmost
  * one is currently selected).
  */
-void QomposeBufferWidget::doPreviousBuffer()
+void BufferWidget::doPreviousBuffer()
 { /* SLOT */
 
 	int i = tabWidget->currentIndex() - 1;
@@ -842,7 +843,7 @@ void QomposeBufferWidget::doPreviousBuffer()
  * right of our current buffer (or the leftmost buffer, if the rightmost one
  * is currently selected).
  */
-void QomposeBufferWidget::doNextBuffer()
+void BufferWidget::doNextBuffer()
 { /* SLOT */
 
 	int i = tabWidget->currentIndex() + 1;
@@ -859,7 +860,7 @@ void QomposeBufferWidget::doNextBuffer()
  * selected buffer to the left by one position. If the current buffer is
  * already the leftmost one, then no action is taken.
  */
-void QomposeBufferWidget::doMoveBufferLeft()
+void BufferWidget::doMoveBufferLeft()
 { /* SLOT */
 
 	int f = tabWidget->currentIndex();
@@ -878,7 +879,7 @@ void QomposeBufferWidget::doMoveBufferLeft()
  * selected buffer to the right by one position. If the current buffer is
  * already the rightmost one, then no action is taken.
  */
-void QomposeBufferWidget::doMoveBufferRight()
+void BufferWidget::doMoveBufferRight()
 { /* SLOT */
 
 	int f = tabWidget->currentIndex();
@@ -899,10 +900,10 @@ void QomposeBufferWidget::doMoveBufferRight()
  *
  * \param p The printer to write the current buffer's contents to.
  */
-void QomposeBufferWidget::doPrint(QPrinter *p)
+void BufferWidget::doPrint(QPrinter *p)
 { /* SLOT */
 
-	QomposeBuffer *buf = currentBuffer();
+	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -918,10 +919,10 @@ void QomposeBufferWidget::doPrint(QPrinter *p)
  *
  * \param i The index of the newly-active tab.
  */
-void QomposeBufferWidget::doTabChanged(int i)
+void BufferWidget::doTabChanged(int i)
 { /* SLOT */
 
-	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(tabWidget->widget(i));
+	Buffer *b = dynamic_cast<Buffer *>(tabWidget->widget(i));
 
 	if(b != NULL)
 	{
@@ -947,7 +948,7 @@ void QomposeBufferWidget::doTabChanged(int i)
  *
  * \param i The index of the tab being closed.
  */
-void QomposeBufferWidget::doTabCloseRequested(int i)
+void BufferWidget::doTabCloseRequested(int i)
 { /* SLOT */
 
 	tabWidget->setCurrentIndex(i);
@@ -961,18 +962,18 @@ void QomposeBufferWidget::doTabCloseRequested(int i)
  *
  * \param i The index of the tab which is about to be closed.
  */
-void QomposeBufferWidget::doTabClosing(int i)
+void BufferWidget::doTabClosing(int i)
 { /* SLOT */
 
 	QWidget *t = tabWidget->widget(i);
-	QomposeBuffer *buf = dynamic_cast<QomposeBuffer *>(t);
+	Buffer *buf = dynamic_cast<Buffer *>(t);
 
 	if(buf == NULL)
 		return;
 
 	if(buf->hasBeenSaved())
 	{
-		QomposeClosedBufferDescriptor desc = {
+		ClosedBufferDescriptor desc = {
 			buf->getFileDescriptor(),
 			buf->textCursor().position()
 		};
@@ -992,10 +993,10 @@ void QomposeBufferWidget::doTabClosing(int i)
  *
  * \param t The new title for this buffer.
  */
-void QomposeBufferWidget::doTabTitleChanged(const QString &t)
+void BufferWidget::doTabTitleChanged(const QString &t)
 { /* SLOT */
 
-	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(sender());
+	Buffer *b = dynamic_cast<Buffer *>(sender());
 
 	if(b != NULL)
 	{
@@ -1014,10 +1015,10 @@ void QomposeBufferWidget::doTabTitleChanged(const QString &t)
  *
  * \param p The new path for this buffer.
  */
-void QomposeBufferWidget::doTabPathChanged(const QString &p)
+void BufferWidget::doTabPathChanged(const QString &p)
 { /* SLOT */
 
-	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(sender());
+	Buffer *b = dynamic_cast<Buffer *>(sender());
 
 	if(b != NULL)
 	{
@@ -1035,10 +1036,10 @@ void QomposeBufferWidget::doTabPathChanged(const QString &p)
  * changed. The buffer whose cursor position changed is determined via the
  * sender() function.
  */
-void QomposeBufferWidget::doCursorPositionChanged()
+void BufferWidget::doCursorPositionChanged()
 { /* SLOT */
 
-	QomposeBuffer *b = dynamic_cast<QomposeBuffer *>(sender());
+	Buffer *b = dynamic_cast<Buffer *>(sender());
 
 	if(b != NULL)
 	{
@@ -1058,16 +1059,15 @@ void QomposeBufferWidget::doCursorPositionChanged()
  * \param d The file descriptor to open.
  * \return A pointer to the newly-opened buffer, or nullptr if none.
  */
-QomposeBuffer *QomposeBufferWidget::doOpenDescriptor(
-	const QomposeFileDescriptor &d)
+Buffer *BufferWidget::doOpenDescriptor(const FileDescriptor &d)
 { /* SLOT */
 
 	// If we only have one "Untitled" buffer, we'll replace it.
 
 	if(tabs.count() == 1)
 	{
-		QSet<QomposeBuffer *>::iterator i = tabs.begin();
-		QomposeBuffer *b = *i;
+		QSet<Buffer *>::iterator i = tabs.begin();
+		Buffer *b = *i;
 		int idx = tabWidget->indexOf(b);
 
 		if( (!b->hasBeenSaved()) && (!b->isModified()) )
@@ -1088,7 +1088,7 @@ QomposeBuffer *QomposeBufferWidget::doOpenDescriptor(
 		return nullptr;
 	}
 
-	QomposeBuffer *b = newBuffer();
+	Buffer *b = newBuffer();
 	b->open(d);
 
 	Q_EMIT pathOpened(d.fileName);
@@ -1103,11 +1103,11 @@ QomposeBuffer *QomposeBufferWidget::doOpenDescriptor(
  *
  * \param d The closed buffer descriptor to reopen.
  */
-void QomposeBufferWidget::doReopenBuffer(
-	const QomposeClosedBufferDescriptor &d)
+void BufferWidget::doReopenBuffer(
+	const ClosedBufferDescriptor &d)
 { /* SLOT */
 
-	QomposeBuffer *b = doOpenDescriptor(d.file);
+	Buffer *b = doOpenDescriptor(d.file);
 
 	if(b)
 	{
@@ -1117,5 +1117,7 @@ void QomposeBufferWidget::doReopenBuffer(
 
 		b->setTextCursor(curs);
 	}
+
+}
 
 }

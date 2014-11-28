@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeFileDialog.h"
+#include "FileDialog.h"
 
 #include <cstddef>
 #include <fstream>
@@ -31,7 +31,10 @@
 #include <unicode/ucsdet.h>
 
 #include "QomposeCommon/Defines.h"
-#include "QomposeCommon/dialogs/QomposeEncodingDialog.h"
+#include "QomposeCommon/dialogs/EncodingDialog.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new file dialog instance.
@@ -39,7 +42,7 @@
  * \param p The parent widget for our dialog.
  * \param f The window flags to use for our dialog.
  */
-QomposeFileDialog::QomposeFileDialog(QWidget *p, Qt::WindowFlags f)
+FileDialog::FileDialog(QWidget *p, Qt::WindowFlags f)
 	: QFileDialog(p, f)
 {
 }
@@ -47,7 +50,7 @@ QomposeFileDialog::QomposeFileDialog(QWidget *p, Qt::WindowFlags f)
 /*!
  * This is our default destructor, which cleans up & destroys our dialog.
  */
-QomposeFileDialog::~QomposeFileDialog()
+FileDialog::~FileDialog()
 {
 }
 
@@ -58,9 +61,9 @@ QomposeFileDialog::~QomposeFileDialog()
  *
  * \return A newly-created null file descriptor.
  */
-QomposeFileDescriptor QomposeFileDialog::getNullDescriptor()
+FileDescriptor FileDialog::getNullDescriptor()
 {
-	QomposeFileDescriptor desc = {
+	FileDescriptor desc = {
 		QString(),
 		QString()
 	};
@@ -76,19 +79,19 @@ QomposeFileDescriptor QomposeFileDialog::getNullDescriptor()
  * \param p The path to the file to create a descriptor for.
  * \return A file descriptor for the given path.
  */
-QomposeFileDescriptor QomposeFileDialog::getPathDescriptor(const QString &p)
+FileDescriptor FileDialog::getPathDescriptor(const QString &p)
 {
-	QomposeFileDescriptor desc = {
+	FileDescriptor desc = {
 		p,
-		QomposeFileDialog::detectTextCodec(p)
+		FileDialog::detectTextCodec(p)
 	};
 
 	if(desc.textCodec.isNull())
 	{
-		desc.textCodec = QomposeFileDialog::promptTextCodec(p);
+		desc.textCodec = FileDialog::promptTextCodec(p);
 
 		if(desc.textCodec.isNull())
-			return QomposeFileDialog::getNullDescriptor();
+			return FileDialog::getNullDescriptor();
 	}
 
 	return desc;
@@ -106,19 +109,19 @@ QomposeFileDescriptor QomposeFileDialog::getPathDescriptor(const QString &p)
  * \param o The set of extra options to use for the open dialog.
  * \return A valid file descriptor on "accept," or a null descriptor otherwise.
  */
-QomposeFileDescriptor QomposeFileDialog::getOpenFileName(QWidget *p,
+FileDescriptor FileDialog::getOpenFileName(QWidget *p,
 	const QString &c, const QString &d, const QString &f, QString *sf,
 	QFileDialog::Options o)
 {
 	QString fileName = QFileDialog::getOpenFileName(p, c, d, f, sf, o);
 
 	if(fileName.isNull())
-		return QomposeFileDialog::getNullDescriptor();
+		return FileDialog::getNullDescriptor();
 
-	if(!QomposeFileDialog::fileIsGood(fileName, p))
-		return QomposeFileDialog::getNullDescriptor();
+	if(!FileDialog::fileIsGood(fileName, p))
+		return FileDialog::getNullDescriptor();
 
-	return QomposeFileDialog::getPathDescriptor(fileName);
+	return FileDialog::getPathDescriptor(fileName);
 }
 
 /*!
@@ -133,21 +136,21 @@ QomposeFileDescriptor QomposeFileDialog::getOpenFileName(QWidget *p,
  * \param o The set of extra options to use for the open dialog.
  * \return A list of file descriptors on "accept," or an empty list otherwise.
  */
-QList<QomposeFileDescriptor> QomposeFileDialog::getOpenFileNames(QWidget *p,
+QList<FileDescriptor> FileDialog::getOpenFileNames(QWidget *p,
 	const QString &c, const QString &d, const QString &f, QString *sf,
 	QFileDialog::Options o)
 {
 	QStringList files = QFileDialog::getOpenFileNames(p, c, d, f, sf, o);
 
-	QList<QomposeFileDescriptor> ret;
+	QList<FileDescriptor> ret;
 
 	QStringList list = files;
 	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
 	{
-		if(!QomposeFileDialog::fileIsGood(*it, p))
+		if(!FileDialog::fileIsGood(*it, p))
 			continue;
 
-		QomposeFileDescriptor desc = QomposeFileDialog::getPathDescriptor(*it);
+		FileDescriptor desc = FileDialog::getPathDescriptor(*it);
 
 		if(desc.fileName.isNull())
 			continue;
@@ -167,7 +170,7 @@ QList<QomposeFileDescriptor> QomposeFileDialog::getOpenFileNames(QWidget *p,
  * \param p The parent widget for any prompts we display.
  * \return True if the file looks good, or false otherwise.
  */
-bool QomposeFileDialog::fileIsGood(const QString &f, QWidget *p)
+bool FileDialog::fileIsGood(const QString &f, QWidget *p)
 {
 	QFileInfo file(f);
 
@@ -201,7 +204,7 @@ bool QomposeFileDialog::fileIsGood(const QString &f, QWidget *p)
  * \param f The path to the file whose encoding will be detected.
  * \return The encoding the given file seems to be using.
  */
-QString QomposeFileDialog::detectTextCodec(const QString &f)
+QString FileDialog::detectTextCodec(const QString &f)
 {
 	// Create our charset detector instance.
 
@@ -286,12 +289,14 @@ QString QomposeFileDialog::detectTextCodec(const QString &f)
  * \param f The path to the file to prompt about.
  * \return The user-selected character encoding for the given file.
  */
-QString QomposeFileDialog::promptTextCodec(const QString &f)
+QString FileDialog::promptTextCodec(const QString &f)
 {
 	QFileInfo file(f);
 
 	QString message = QString("The character encoding for '%1' couldn't be auto-detected. "
 		"Which character encoding should be used to open it?").arg(file.fileName());
 
-	return QomposeEncodingDialog::promptEncoding(nullptr, "UTF-8", message);
+	return EncodingDialog::promptEncoding(nullptr, "UTF-8", message);
+}
+
 }

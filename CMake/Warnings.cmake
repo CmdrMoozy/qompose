@@ -42,9 +42,9 @@ function(qomposeEnableWarnings)
 			"${CMAKE_CXX_FLAGS_RELEASE} ${F_REL}"
 			CACHE INTERNAL "CMAKE_CXX_FLAGS_RELEASE")
 	elseif(CMAKE_CXX_COMPILER_ID MATCHES MSVC)
-		set(F_DBG "/W4 /WX /FIQomposeMSVCWarnings.h")
+		set(F_DBG "/W4 /WX /FIQomposeCommon/MSVCWarnings.h")
 
-		set(F_REL "/W4 /WX /FIQomposeMSVCWarnings.h")
+		set(F_REL "/W4 /WX /FIQomposeCommon/MSVCWarnings.h")
 
 		set(CMAKE_CXX_FLAGS_DEBUG
 			"${CMAKE_CXX_FLAGS_DEBUG} ${F_DBG}"

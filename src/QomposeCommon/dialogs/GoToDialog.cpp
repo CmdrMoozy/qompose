@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeGoToDialog.h"
+#include "GoToDialog.h"
 
 #include <QGridLayout>
 #include <QLabel>
@@ -28,6 +28,9 @@
 
 #include "QomposeCommon/Defines.h"
 
+namespace qompose
+{
+
 /*!
  * This is our default constructor, which initializes a new instance of our
  * "go to" dialog.
@@ -35,7 +38,7 @@
  * \param p The parent widget for our dialog.
  * \param f The window falgs to use for our dialog.
  */
-QomposeGoToDialog::QomposeGoToDialog(QWidget *p, Qt::WindowFlags f)
+GoToDialog::GoToDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f), selectedLine(0), layout(nullptr),
 		lineLabel(nullptr), lineTextEdit(nullptr),
 		buttonsWidget(nullptr), buttonsLayout(nullptr),
@@ -49,7 +52,7 @@ QomposeGoToDialog::QomposeGoToDialog(QWidget *p, Qt::WindowFlags f)
 /*!
  * This is our default destructor, which cleans up & destroys our dialog.
  */
-QomposeGoToDialog::~QomposeGoToDialog()
+GoToDialog::~GoToDialog()
 {
 }
 
@@ -59,7 +62,7 @@ QomposeGoToDialog::~QomposeGoToDialog()
  *
  * \return Our dialog's currently selected line.
  */
-int QomposeGoToDialog::getSelectedLine() const
+int GoToDialog::getSelectedLine() const
 {
 	return selectedLine;
 }
@@ -71,7 +74,7 @@ int QomposeGoToDialog::getSelectedLine() const
  *
  * \param e The event being handled.
  */
-void QomposeGoToDialog::showEvent(QShowEvent *e)
+void GoToDialog::showEvent(QShowEvent *e)
 {
 	// Setup our line text edit.
 
@@ -99,7 +102,7 @@ void QomposeGoToDialog::showEvent(QShowEvent *e)
  * This function initializes our dialog's GUI by creating our various
  * widgets and adding them to our layout.
  */
-void QomposeGoToDialog::initializeGUI()
+void GoToDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
 
@@ -147,7 +150,7 @@ void QomposeGoToDialog::initializeGUI()
  * If the currently selected line number is invalid (i.e., isn't an integer), then
  * we will show an error instead, and avoid closing the dialog.
  */
-void QomposeGoToDialog::doGoTo()
+void GoToDialog::doGoTo()
 { /* SLOT */
 
 	QString l  = lineTextEdit->text();
@@ -170,5 +173,7 @@ void QomposeGoToDialog::doGoTo()
 		lineTextEdit->setFocus();
 		lineTextEdit->selectAll();
 	}
+
+}
 
 }

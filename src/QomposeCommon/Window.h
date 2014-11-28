@@ -27,18 +27,19 @@
 class QCloseEvent;
 class QPrinter;
 
-class QomposeAboutDialog;
 class QomposePreferencesDialog;
-class QomposeBufferWidget;
 class QomposeSettings;
-class QomposeFindDialog;
-class QomposeReplaceDialog;
-class QomposeGoToDialog;
-class QomposeMainMenu;
 class QomposeStatusBar;
 
 namespace qompose
 {
+
+class BufferWidget;
+class AboutDialog;
+class FindDialog;
+class ReplaceDialog;
+class GoToDialog;
+class MainMenu;
 
 /*!
  * \brief This class implements one of our application's standard windows.
@@ -58,14 +59,14 @@ private:
 	QomposeSettings *settings;
 
 	QomposePreferencesDialog *preferencesDialog;
-	QomposeFindDialog *findDialog;
-	QomposeReplaceDialog *replaceDialog;
-	QomposeGoToDialog *goToDialog;
-	QomposeAboutDialog *aboutDialog;
+	FindDialog *findDialog;
+	ReplaceDialog *replaceDialog;
+	GoToDialog *goToDialog;
+	AboutDialog *aboutDialog;
 
-	QomposeMainMenu *mainMenu;
+	MainMenu *mainMenu;
 
-	QomposeBufferWidget *buffers;
+	BufferWidget *buffers;
 
 	QomposeStatusBar *statusBar;
 

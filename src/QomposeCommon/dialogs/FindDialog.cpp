@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeFindDialog.h"
+#include "FindDialog.h"
 
 #include <QGridLayout>
 #include <QLabel>
@@ -30,6 +30,9 @@
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/util/QomposeFindQuery.h"
 
+namespace qompose
+{
+
 /*!
  * This is our default constructor, which creates a new instance of our
  * find dialog.
@@ -37,7 +40,7 @@
  * \param p The parent widget to use for this dialog.
  * \param f The window flags to use for this dialog.
  */
-QomposeFindDialog::QomposeFindDialog(QWidget *p, Qt::WindowFlags f)
+FindDialog::FindDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f), query(new QomposeFindQuery(this)),
 		layout(nullptr), findLabel(nullptr), findTextEdit(nullptr),
 		optionsGroupBox(nullptr), optionsLayout(nullptr),
@@ -57,7 +60,7 @@ QomposeFindDialog::QomposeFindDialog(QWidget *p, Qt::WindowFlags f)
 /*!
  * This is our default destructor, which cleans up & destroys our dialog.
  */
-QomposeFindDialog::~QomposeFindDialog()
+FindDialog::~FindDialog()
 {
 }
 
@@ -67,7 +70,7 @@ QomposeFindDialog::~QomposeFindDialog()
  *
  * \return The find query containing our dialog's selected data.
  */
-const QomposeFindQuery *QomposeFindDialog::getQuery() const
+const QomposeFindQuery *FindDialog::getQuery() const
 {
 	return query;
 }
@@ -80,7 +83,7 @@ const QomposeFindQuery *QomposeFindDialog::getQuery() const
  *
  * \param e The event being handled.
  */
-void QomposeFindDialog::showEvent(QShowEvent *e)
+void FindDialog::showEvent(QShowEvent *e)
 {
 	// Setup our line text edit.
 
@@ -116,7 +119,7 @@ void QomposeFindDialog::showEvent(QShowEvent *e)
  * This function initializes our GUI by creating the various widgets we contain,
  * and adding them to our layout.
  */
-void QomposeFindDialog::initializeGUI()
+void FindDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
 
@@ -186,7 +189,7 @@ void QomposeFindDialog::initializeGUI()
  * contents to our find query object, and by alerting our callers that our dialog
  * has been accepted.
  */
-void QomposeFindDialog::doFind()
+void FindDialog::doFind()
 { /* SLOT */
 
 	// Set our query's properties according to our dialog state.
@@ -203,5 +206,7 @@ void QomposeFindDialog::doFind()
 	Q_EMIT accepted();
 
 	close();
+
+}
 
 }

@@ -16,17 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeMainMenu.h"
+#include "MainMenu.h"
 
 #include <QMenu>
 #include <QAction>
 
-#include "QomposeCommon/gui/QomposeBufferWidget.h"
+#include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/QomposeGUIUtils.h"
 #include "QomposeCommon/gui/menus/QomposeRecentMenu.h"
 #include "QomposeCommon/util/QomposeSettings.h"
 
-QomposeMainMenu::QomposeMainMenu(QomposeSettings *s, QWidget *p)
+namespace qompose
+{
+
+MainMenu::MainMenu(QomposeSettings *s, QWidget *p)
 	: QMenuBar(p), settings(s), fileMenu(nullptr), editMenu(nullptr),
 		searchMenu(nullptr), buffersMenu(nullptr), helpMenu(nullptr),
 		newAction(nullptr), openAction(nullptr), recentMenu(nullptr),
@@ -262,11 +265,11 @@ QomposeMainMenu::QomposeMainMenu(QomposeSettings *s, QWidget *p)
 	#endif
 }
 
-QomposeMainMenu::~QomposeMainMenu()
+MainMenu::~MainMenu()
 {
 }
 
-void QomposeMainMenu::connectBufferWidget(const QomposeBufferWidget *b)
+void MainMenu::connectBufferWidget(const BufferWidget *b)
 {
 	// Connect our recent menu actions.
 
@@ -308,9 +311,11 @@ void QomposeMainMenu::connectBufferWidget(const QomposeBufferWidget *b)
  *
  * \param p The path to the file that was opened.
  */
-void QomposeMainMenu::doFileOpened(const QString &p)
+void MainMenu::doFileOpened(const QString &p)
 { /* SLOT */
 
 	recentMenu->addPath(p);
+
+}
 
 }

@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_GO_TO_DIALOG_H
-#define INCLUDE_QOMPOSE_GO_TO_DIALOG_H
+#ifndef INCLUDE_QOMPOSECOMMON_DIALOGS_GO_TO_DIALOG_H
+#define INCLUDE_QOMPOSECOMMON_DIALOGS_GO_TO_DIALOG_H
 
 #include <QDialog>
 
@@ -28,46 +28,50 @@ class QWidget;
 class QPushButton;
 class QShowEvent;
 
+namespace qompose
+{
+
 /*!
  * \brief This class implements a dialog to pick a line to jump to.
  */
-class QomposeGoToDialog : public QDialog
+class GoToDialog : public QDialog
 {
 	Q_OBJECT
 
-	public:
-		QomposeGoToDialog(QWidget * = nullptr,
-			Qt::WindowFlags = nullptr);
-		virtual ~QomposeGoToDialog();
+public:
+	GoToDialog(QWidget * = nullptr, Qt::WindowFlags = nullptr);
+	virtual ~GoToDialog();
 
-		int getSelectedLine() const;
+	int getSelectedLine() const;
 
-	protected:
-		virtual void showEvent(QShowEvent *);
+protected:
+	virtual void showEvent(QShowEvent *);
 
-	private:
-		int selectedLine;
+private:
+	int selectedLine;
 
-		QGridLayout *layout;
+	QGridLayout *layout;
 
-		QLabel *lineLabel;
-		QLineEdit *lineTextEdit;
+	QLabel *lineLabel;
+	QLineEdit *lineTextEdit;
 
-		QWidget *buttonsWidget;
-		QGridLayout *buttonsLayout;
-		QPushButton *closeButton;
-		QPushButton *goToButton;
+	QWidget *buttonsWidget;
+	QGridLayout *buttonsLayout;
+	QPushButton *closeButton;
+	QPushButton *goToButton;
 
-		QomposeGoToDialog(const QomposeGoToDialog &);
-		QomposeGoToDialog &operator=(const QomposeGoToDialog &);
+	GoToDialog(const GoToDialog &);
+	GoToDialog &operator=(const GoToDialog &);
 
-		void initializeGUI();
+	void initializeGUI();
 
-	private Q_SLOTS:
-		void doGoTo();
+private Q_SLOTS:
+	void doGoTo();
 
-	Q_SIGNALS:
-		void accepted();
+Q_SIGNALS:
+	void accepted();
 };
+
+}
 
 #endif

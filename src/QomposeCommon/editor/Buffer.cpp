@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeBuffer.h"
+#include "Buffer.h"
 
 #include <QTextCodec>
 #include <QFile>
@@ -34,6 +34,9 @@
 #include "QomposeCommon/util/QomposeDocumentWriter.h"
 #include "QomposeCommon/util/QomposeSettings.h"
 
+namespace qompose
+{
+
 /*!
  * This is our default constructor, which creates a new instance of
  * our buffer widget.
@@ -41,7 +44,7 @@
  * \param s The settings instance to get our preferences from.
  * \param p The parent widget for our buffer widget.
  */
-QomposeBuffer::QomposeBuffer(QomposeSettings *s, QWidget *p)
+Buffer::Buffer(QomposeSettings *s, QWidget *p)
 	: QomposeEditor(p), settings(s), path(QString()), codec(QString())
 {
 	// Load our initial settings, and connect our settings object.
@@ -80,7 +83,7 @@ QomposeBuffer::QomposeBuffer(QomposeSettings *s, QWidget *p)
 /*!
  * This is our default destructor, which cleans up & destroys our widget.
  */
-QomposeBuffer::~QomposeBuffer()
+Buffer::~Buffer()
 {
 }
 
@@ -91,7 +94,7 @@ QomposeBuffer::~QomposeBuffer()
  * \param f The file descriptor we will attempt to open.
  * \return True on success, or false otherwise.
  */
-bool QomposeBuffer::open(const QomposeFileDescriptor &f)
+bool Buffer::open(const FileDescriptor &f)
 {
 	path = f.fileName;
 	codec = f.textCodec;
@@ -116,7 +119,7 @@ bool QomposeBuffer::open(const QomposeFileDescriptor &f)
  *
  * \return True on success, or false otherwise.
  */
-bool QomposeBuffer::revert()
+bool Buffer::revert()
 {
 	if(!hasBeenSaved())
 		return false;
@@ -158,7 +161,7 @@ bool QomposeBuffer::revert()
  * \param p The path to save our contents to.
  * \return True on success, or false otherwise.
  */
-bool QomposeBuffer::save(const QString &p)
+bool Buffer::save(const QString &p)
 {
 	if(p.isNull())
 	{
@@ -186,7 +189,7 @@ bool QomposeBuffer::save(const QString &p)
  *
  * \return Our buffer's human-readable title.
  */
-QString QomposeBuffer::getTitle() const
+QString Buffer::getTitle() const
 {
 	QString title;
 
@@ -212,7 +215,7 @@ QString QomposeBuffer::getTitle() const
  *
  * \return The path to this buffer's current file.
  */
-QString QomposeBuffer::getPath() const
+QString Buffer::getPath() const
 {
 	return path;
 }
@@ -224,7 +227,7 @@ QString QomposeBuffer::getPath() const
  *
  * \return The path to this buffer's current file's parent directory.
  */
-QString QomposeBuffer::getDirectory() const
+QString Buffer::getDirectory() const
 {
 	QString p = getPath();
 
@@ -243,7 +246,7 @@ QString QomposeBuffer::getDirectory() const
  *
  * \return The name of this buffer's current file.
  */
-QString QomposeBuffer::getFile() const
+QString Buffer::getFile() const
 {
 	QString p = getPath();
 
@@ -257,13 +260,13 @@ QString QomposeBuffer::getFile() const
 
 /*!
  * This function returns this buffer's current file, along with the file's
- * encoding, using a standard QomposeFileDescriptor.
+ * encoding, using a standard FileDescriptor.
  *
- * \return The buffer's current file, as a QomposeFileDescriptor.
+ * \return The buffer's current file, as a FileDescriptor.
  */
-QomposeFileDescriptor QomposeBuffer::getFileDescriptor() const
+FileDescriptor Buffer::getFileDescriptor() const
 {
-	QomposeFileDescriptor d = {
+	FileDescriptor d = {
 		path,
 		codec
 	};
@@ -275,7 +278,7 @@ QomposeFileDescriptor QomposeBuffer::getFileDescriptor() const
  * This function returns whether or not this buffer has ever been saved, or if
  * it is a brand-new document (possibly with unsaved changes).
  */
-bool QomposeBuffer::hasBeenSaved() const
+bool Buffer::hasBeenSaved() const
 {
 	return (!path.isNull());
 }
@@ -286,7 +289,7 @@ bool QomposeBuffer::hasBeenSaved() const
  *
  * \return True if our buffer has been modified, or false otherwise.
  */
-bool QomposeBuffer::isModified() const
+bool Buffer::isModified() const
 {
 	return document()->isModified();
 }
@@ -297,7 +300,7 @@ bool QomposeBuffer::isModified() const
  *
  * \param m The new modified status for our buffer.
  */
-void QomposeBuffer::setModified(bool m)
+void Buffer::setModified(bool m)
 {
 	document()->setModified(m);
 	Q_EMIT modificationChanged(m);
@@ -308,7 +311,7 @@ void QomposeBuffer::setModified(bool m)
  *
  * \param p The printer to print our contents to.
  */
-void QomposeBuffer::print(QPrinter *p)
+void Buffer::print(QPrinter *p)
 { /* SLOT */
 
 	document()->print(p);
@@ -322,7 +325,7 @@ void QomposeBuffer::print(QPrinter *p)
  * \param u Whether or not "undo" operations should be supported.
  * \return True on success, or false otherwise.
  */
-bool QomposeBuffer::read(bool u)
+bool Buffer::read(bool u)
 {
 	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
 
@@ -358,7 +361,7 @@ bool QomposeBuffer::read(bool u)
  *
  * \return True on success, or false otherwise.
  */
-bool QomposeBuffer::write()
+bool Buffer::write()
 {
 	// Get the right text codec for our encoding.
 
@@ -398,7 +401,7 @@ bool QomposeBuffer::write()
  *
  * \param c The new modification status - this is ignored.
  */
-void QomposeBuffer::doModificationChanged(bool QUNUSED(c))
+void Buffer::doModificationChanged(bool QUNUSED(c))
 { /* SLOT */
 
 	Q_EMIT titleChanged(getTitle());
@@ -412,7 +415,7 @@ void QomposeBuffer::doModificationChanged(bool QUNUSED(c))
  * \param k The setting key whose value was changed.
  * \param v The new value for this particular setting.
  */
-void QomposeBuffer::doSettingChanged(const QString &k, const QVariant &v)
+void Buffer::doSettingChanged(const QString &k, const QVariant &v)
 { /* SLOT */
 
 	if(k == "show-gutter")
@@ -437,5 +440,7 @@ void QomposeBuffer::doSettingChanged(const QString &k, const QVariant &v)
 		setGutterForeground(v.value<QColor>());
 	else if(k == "gutter-background")
 		setGutterBackground(v.value<QColor>());
+
+}
 
 }

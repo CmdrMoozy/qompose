@@ -10,22 +10,22 @@ set(QomposeCommon_SOURCES
 	Application.cpp
 	Application.h
 	Defines.h
-	QomposeTypes.h
+	Types.h
 	Window.cpp
 	Window.h
 
-	dialogs/QomposeAboutDialog.cpp
-	dialogs/QomposeAboutDialog.h
-	dialogs/QomposeEncodingDialog.cpp
-	dialogs/QomposeEncodingDialog.h
-	dialogs/QomposeFileDialog.cpp
-	dialogs/QomposeFileDialog.h
-	dialogs/QomposeFindDialog.cpp
-	dialogs/QomposeFindDialog.h
-	dialogs/QomposeGoToDialog.cpp
-	dialogs/QomposeGoToDialog.h
-	dialogs/QomposeReplaceDialog.cpp
-	dialogs/QomposeReplaceDialog.h
+	dialogs/AboutDialog.cpp
+	dialogs/AboutDialog.h
+	dialogs/EncodingDialog.cpp
+	dialogs/EncodingDialog.h
+	dialogs/FileDialog.cpp
+	dialogs/FileDialog.h
+	dialogs/FindDialog.cpp
+	dialogs/FindDialog.h
+	dialogs/GoToDialog.cpp
+	dialogs/GoToDialog.h
+	dialogs/ReplaceDialog.cpp
+	dialogs/ReplaceDialog.h
 
 	dialogs/preferences/QomposePreferencesDialog.cpp
 	dialogs/preferences/QomposePreferencesDialog.h
@@ -45,8 +45,8 @@ set(QomposeCommon_SOURCES
 	dialogs/preferences/widgets/QomposePreferencesWidget.cpp
 	dialogs/preferences/widgets/QomposePreferencesWidget.h
 
-	editor/QomposeBuffer.cpp
-	editor/QomposeBuffer.h
+	editor/Buffer.cpp
+	editor/Buffer.h
 	editor/QomposeDecoratedTextEdit.cpp
 	editor/QomposeDecoratedTextEdit.h
 	editor/QomposeEditor.cpp
@@ -54,8 +54,8 @@ set(QomposeCommon_SOURCES
 	editor/QomposeGutter.cpp
 	editor/QomposeGutter.h
 
-	gui/QomposeBufferWidget.cpp
-	gui/QomposeBufferWidget.h
+	gui/BufferWidget.cpp
+	gui/BufferWidget.h
 	gui/QomposeColorPickerButton.cpp
 	gui/QomposeColorPickerButton.h
 	gui/QomposeFontPickerButton.cpp
@@ -67,8 +67,8 @@ set(QomposeCommon_SOURCES
 	gui/QomposeStatusBar.cpp
 	gui/QomposeStatusBar.h
 
-	gui/menus/QomposeMainMenu.cpp
-	gui/menus/QomposeMainMenu.h
+	gui/menus/MainMenu.cpp
+	gui/menus/MainMenu.h
 	gui/menus/QomposeRecentMenu.cpp
 	gui/menus/QomposeRecentMenu.h
 

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeAboutDialog.h"
+#include "AboutDialog.h"
 
 #include <QGridLayout>
 #include <QTabWidget>
@@ -31,6 +31,9 @@
 
 #include "QomposeCommon/Defines.h"
 
+namespace qompose
+{
+
 /*!
  * This is our default constructor, which creates a new about dialog instance
  * and loads the contents from our resources into its UI.
@@ -38,7 +41,7 @@
  * \param p This dialog's parent widget.
  * \param f The window flags to use for this dialog.
  */
-QomposeAboutDialog::QomposeAboutDialog(QWidget *p, Qt::WindowFlags f)
+AboutDialog::AboutDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f), layout(nullptr), tabs(nullptr),
 		licenseTextEdit(nullptr), qomposeTab(nullptr),
 		qomposeTabLayout(nullptr), qomposeIconLabel(nullptr),
@@ -55,7 +58,7 @@ QomposeAboutDialog::QomposeAboutDialog(QWidget *p, Qt::WindowFlags f)
 /*!
  * This is our default destructor, which cleans up & destroys our dialog.
  */
-QomposeAboutDialog::~QomposeAboutDialog()
+AboutDialog::~AboutDialog()
 {
 }
 
@@ -63,7 +66,7 @@ QomposeAboutDialog::~QomposeAboutDialog()
  * This is a utility function which initializes our GUI elements and
  * adds them to our layout.
  */
-void QomposeAboutDialog::initializeGUI()
+void AboutDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
 
@@ -136,7 +139,7 @@ void QomposeAboutDialog::initializeGUI()
  * This is a utility function which loads the body of our license file,
  * and places its contents in our license text edit.
  */
-void QomposeAboutDialog::loadLicense()
+void AboutDialog::loadLicense()
 {
 	licenseTextEdit->clear();
 
@@ -149,4 +152,6 @@ void QomposeAboutDialog::loadLicense()
 	licenseTextEdit->setText(reader.readAll());
 
 	f.close();
+}
+
 }

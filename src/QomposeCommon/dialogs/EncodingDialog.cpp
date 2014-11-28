@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeEncodingDialog.h"
+#include "EncodingDialog.h"
 
 #include <QGridLayout>
 #include <QLabel>
@@ -29,6 +29,9 @@
 
 #include "QomposeCommon/Defines.h"
 
+namespace qompose
+{
+
 /*!
  * This is our default constructor, which creates a new instance of our
  * character encoding dialog.
@@ -39,8 +42,8 @@
  * \param m The message to prompt the user with.
  * \param t The window title for the dialog.
  */
-QomposeEncodingDialog::QomposeEncodingDialog(QWidget *p, Qt::WindowFlags f,
-	const QString &d, const QString &m, const QString &t)
+EncodingDialog::EncodingDialog(QWidget *p, Qt::WindowFlags f,
+		const QString &d, const QString &m, const QString &t)
 	: QDialog(p, f), encoding(QString()), layout(nullptr),
 		messageLabel(nullptr), encodingList(nullptr),
 		buttonsWidget(nullptr), buttonsLayout(nullptr),
@@ -92,7 +95,7 @@ QomposeEncodingDialog::QomposeEncodingDialog(QWidget *p, Qt::WindowFlags f,
 /*!
  * This is our default destructor, which cleans up & destroys our dialog.
  */
-QomposeEncodingDialog::~QomposeEncodingDialog()
+EncodingDialog::~EncodingDialog()
 {
 }
 
@@ -114,11 +117,11 @@ QomposeEncodingDialog::~QomposeEncodingDialog()
  * \param t The title of the dialog.
  * \return The selected character encoding.
  */
-QString QomposeEncodingDialog::promptEncoding(QWidget *p, const QString &d,
+QString EncodingDialog::promptEncoding(QWidget *p, const QString &d,
 	const QString &m, const QString &t)
 {
 
-	QomposeEncodingDialog dialog(p, nullptr, d, m, t);
+	EncodingDialog dialog(p, nullptr, d, m, t);
 	dialog.exec();
 	return dialog.getSelectedEncoding();
 
@@ -132,7 +135,7 @@ QString QomposeEncodingDialog::promptEncoding(QWidget *p, const QString &d,
  *
  * \return The currently selected character encoding.
  */
-QString QomposeEncodingDialog::getSelectedEncoding() const
+QString EncodingDialog::getSelectedEncoding() const
 {
 	return encoding;
 }
@@ -141,7 +144,7 @@ QString QomposeEncodingDialog::getSelectedEncoding() const
  * This function handles our select button being clicked by updating our
  * dialog's selected encoding, and then closes our dialog.
  */
-void QomposeEncodingDialog::doSelectClicked()
+void EncodingDialog::doSelectClicked()
 { /* SLOT */
 
 	QList<QListWidgetItem *> selected = encodingList->selectedItems();
@@ -159,10 +162,12 @@ void QomposeEncodingDialog::doSelectClicked()
  * This function handles our cancel button being clicked by clearing our
  * dialog's selected encoding, and then closes our dialog.
  */
-void QomposeEncodingDialog::doCancelClicked()
+void EncodingDialog::doCancelClicked()
 { /* SLOT */
 
 	encoding = QString();
 	done(0);
+
+}
 
 }

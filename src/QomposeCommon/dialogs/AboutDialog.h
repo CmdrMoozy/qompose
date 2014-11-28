@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_ABOUT_DIALOG_H
-#define INCLUDE_QOMPOSE_ABOUT_DIALOG_H
+#ifndef INCLUDE_QOMPOSECOMMON_DIALOGS_ABOUT_DIALOG_H
+#define INCLUDE_QOMPOSECOMMON_DIALOGS_ABOUT_DIALOG_H
 
 #include <QDialog>
 
@@ -28,36 +28,40 @@ class QPushButton;
 class QWidget;
 class QLabel;
 
+namespace qompose
+{
+
 /*!
  * \brief This class implements our "About" dialog.
  */
-class QomposeAboutDialog : public QDialog
+class AboutDialog : public QDialog
 {
-	public:
-		QomposeAboutDialog(QWidget * = nullptr,
-			Qt::WindowFlags = nullptr);
-		virtual ~QomposeAboutDialog();
+public:
+	AboutDialog(QWidget * = nullptr, Qt::WindowFlags = nullptr);
+	virtual ~AboutDialog();
 
-	private:
-		QGridLayout *layout;
-		QTabWidget *tabs;
+private:
+	QGridLayout *layout;
+	QTabWidget *tabs;
 
-		QTextEdit *licenseTextEdit;
+	QTextEdit *licenseTextEdit;
 
-		QWidget *qomposeTab;
-		QGridLayout *qomposeTabLayout;
-		QLabel *qomposeIconLabel;
-		QLabel *qomposeLabel;
-		QLabel *qomposeDescriptionLabel;
-		QTextEdit *qomposeTextEdit;
+	QWidget *qomposeTab;
+	QGridLayout *qomposeTabLayout;
+	QLabel *qomposeIconLabel;
+	QLabel *qomposeLabel;
+	QLabel *qomposeDescriptionLabel;
+	QTextEdit *qomposeTextEdit;
 
-		QPushButton *closeButton;
+	QPushButton *closeButton;
 
-		QomposeAboutDialog(const QomposeAboutDialog &);
-		QomposeAboutDialog &operator=(const QomposeAboutDialog &);
+	AboutDialog(const AboutDialog &);
+	AboutDialog &operator=(const AboutDialog &);
 
-		void initializeGUI();
-		void loadLicense();
+	void initializeGUI();
+	void loadLicense();
 };
+
+}
 
 #endif

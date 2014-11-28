@@ -28,15 +28,15 @@
 #include <QIcon>
 
 #include "QomposeCommon/Defines.h"
-#include "QomposeCommon/dialogs/QomposeAboutDialog.h"
-#include "QomposeCommon/dialogs/QomposeFindDialog.h"
-#include "QomposeCommon/dialogs/QomposeGoToDialog.h"
-#include "QomposeCommon/dialogs/QomposeReplaceDialog.h"
+#include "QomposeCommon/dialogs/AboutDialog.h"
+#include "QomposeCommon/dialogs/FindDialog.h"
+#include "QomposeCommon/dialogs/GoToDialog.h"
+#include "QomposeCommon/dialogs/ReplaceDialog.h"
 #include "QomposeCommon/dialogs/preferences/QomposePreferencesDialog.h"
-#include "QomposeCommon/gui/QomposeBufferWidget.h"
+#include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/QomposeGUIUtils.h"
 #include "QomposeCommon/gui/QomposeStatusBar.h"
-#include "QomposeCommon/gui/menus/QomposeMainMenu.h"
+#include "QomposeCommon/gui/menus/MainMenu.h"
 #include "QomposeCommon/util/QomposeFindQuery.h"
 #include "QomposeCommon/util/QomposeReplaceQuery.h"
 #include "QomposeCommon/util/QomposeSettings.h"
@@ -71,7 +71,7 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 
 	// Initialize our window.
 
-	buffers = new QomposeBufferWidget(settings, this);
+	buffers = new BufferWidget(settings, this);
 	buffers->doNew();
 	setCentralWidget(buffers);
 
@@ -138,13 +138,13 @@ void Window::initializeDialogs()
 
 	preferencesDialog = new QomposePreferencesDialog(settings, this);
 
-	findDialog = new QomposeFindDialog(this);
+	findDialog = new FindDialog(this);
 
-	replaceDialog = new QomposeReplaceDialog(this);
+	replaceDialog = new ReplaceDialog(this);
 
-	goToDialog = new QomposeGoToDialog(this);
+	goToDialog = new GoToDialog(this);
 
-	aboutDialog = new QomposeAboutDialog(this);
+	aboutDialog = new AboutDialog(this);
 
 	// Connect our dialog actions.
 
@@ -171,7 +171,7 @@ void Window::initializeMenus()
 {
 	// Create our main menu.
 
-	mainMenu = new QomposeMainMenu(settings, this);
+	mainMenu = new MainMenu(settings, this);
 
 	setMenuBar(mainMenu);
 

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeReplaceDialog.h"
+#include "ReplaceDialog.h"
 
 #include <QGridLayout>
 #include <QLabel>
@@ -29,6 +29,9 @@
 
 #include "QomposeCommon/util/QomposeReplaceQuery.h"
 
+namespace qompose
+{
+
 /*!
  * This is our default constructor, which creates a new instance of our
  * replace dialog.
@@ -36,7 +39,7 @@
  * \param p The parent widget to use for this dialog.
  * \param f The window flags to use for this dialog.
  */
-QomposeReplaceDialog::QomposeReplaceDialog(QWidget *p, Qt::WindowFlags f)
+ReplaceDialog::ReplaceDialog(QWidget *p, Qt::WindowFlags f)
 	: QDialog(p, f), query(new QomposeReplaceQuery(this)),
 		layout(nullptr), findLabel(nullptr), findTextEdit(nullptr),
 		replaceLabel(nullptr), replaceTextEdit(nullptr),
@@ -58,7 +61,7 @@ QomposeReplaceDialog::QomposeReplaceDialog(QWidget *p, Qt::WindowFlags f)
 /*!
  * This is our default destructor, which cleans up & destroys our dialog.
  */
-QomposeReplaceDialog::~QomposeReplaceDialog()
+ReplaceDialog::~ReplaceDialog()
 {
 }
 
@@ -68,7 +71,7 @@ QomposeReplaceDialog::~QomposeReplaceDialog()
  *
  * \return The replace query containing our dialog's selected data.
  */
-const QomposeReplaceQuery *QomposeReplaceDialog::getQuery() const
+const QomposeReplaceQuery *ReplaceDialog::getQuery() const
 {
 	return query;
 }
@@ -81,7 +84,7 @@ const QomposeReplaceQuery *QomposeReplaceDialog::getQuery() const
  *
  * \param e The event being handled.
  */
-void QomposeReplaceDialog::showEvent(QShowEvent *e)
+void ReplaceDialog::showEvent(QShowEvent *e)
 {
 	// Setup our line text edit.
 
@@ -119,7 +122,7 @@ void QomposeReplaceDialog::showEvent(QShowEvent *e)
  * This function initializes our GUI by creating the various widgets we contain,
  * and adding them to our layout.
  */
-void QomposeReplaceDialog::initializeGUI()
+void ReplaceDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
 
@@ -203,7 +206,7 @@ void QomposeReplaceDialog::initializeGUI()
  * This is a utility function which applies the currently selected options to
  * our dialog's internal replace query.
  */
-void QomposeReplaceDialog::applyValues()
+void ReplaceDialog::applyValues()
 {
 	query->setExpression(findTextEdit->text());
 	query->setReplaceValue(replaceTextEdit->text());
@@ -219,7 +222,7 @@ void QomposeReplaceDialog::applyValues()
  * dialog's options to our query, and then notifying any listeners that our
  * replace action has been triggered.
  */
-void QomposeReplaceDialog::doReplace()
+void ReplaceDialog::doReplace()
 { /* SLOT */
 
 	applyValues();
@@ -233,7 +236,7 @@ void QomposeReplaceDialog::doReplace()
  * options to our query, and then notifying any listeners that our find action
  * has been triggered.
  */
-void QomposeReplaceDialog::doFind()
+void ReplaceDialog::doFind()
 { /* SLOT */
 
 	applyValues();
@@ -247,7 +250,7 @@ void QomposeReplaceDialog::doFind()
  * our dialog's options to our query, closing our dialog and then notifying any
  * listeners that our "replace in selection" action has been triggered.
  */
-void QomposeReplaceDialog::doReplaceSelection()
+void ReplaceDialog::doReplaceSelection()
 { /* SLOT */
 
 	applyValues();
@@ -263,7 +266,7 @@ void QomposeReplaceDialog::doReplaceSelection()
  * options to our query, closing our dialog and then notifying any listeners that
  * our "replace all" action has been triggered.
  */
-void QomposeReplaceDialog::doReplaceAll()
+void ReplaceDialog::doReplaceAll()
 { /* SLOT */
 
 	applyValues();
@@ -271,5 +274,7 @@ void QomposeReplaceDialog::doReplaceAll()
 	close();
 
 	Q_EMIT replaceAllClicked();
+
+}
 
 }
