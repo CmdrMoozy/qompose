@@ -66,7 +66,8 @@ if(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 	add_definitions(-DQOMPOSE_DEBUG)
 endif()
 
-include_directories("src/QomposeCommon" ${CMAKE_BINARY_DIR})
+include_directories("src")
+include_directories("src/QomposeCommon")
 
 # Define the libraries Qompose uses.
 

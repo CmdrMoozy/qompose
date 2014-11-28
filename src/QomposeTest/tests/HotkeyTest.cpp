@@ -16,16 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeHotkeyTest.h"
+#include "HotkeyTest.h"
 
 #include <QKeyEvent>
 
 #include "util/QomposeHotkey.h"
 
+namespace qompose
+{
+namespace test
+{
+
 /*!
  * This is our default constructor, which creates a new insance of our test.
  */
-QomposeHotkeyTest::QomposeHotkeyTest()
+HotkeyTest::HotkeyTest()
 {
 }
 
@@ -33,7 +38,7 @@ QomposeHotkeyTest::QomposeHotkeyTest()
  * This is our default destructor, which cleans up an destroys this test
  * instance.
  */
-QomposeHotkeyTest::~QomposeHotkeyTest()
+HotkeyTest::~HotkeyTest()
 {
 }
 
@@ -41,7 +46,7 @@ QomposeHotkeyTest::~QomposeHotkeyTest()
  * We implement our superclass's test() function to perform our various tests
  * against the QomposeHotkey class.
  */
-void QomposeHotkeyTest::test()
+void HotkeyTest::test()
 {
 	testHotkeyConstruction();
 	testHotkeyCopying();
@@ -52,36 +57,36 @@ void QomposeHotkeyTest::test()
  * This function tests that the various QomposeHotkey constructors initialize
  * the resulting object's internal state properly.
  */
-void QomposeHotkeyTest::testHotkeyConstruction()
+void HotkeyTest::testHotkeyConstruction()
 {
 	QomposeHotkey a(Qt::Key_A);
 
-	QomposeTest::assertEquals(a.getKey(), Qt::Key_A);
-	QomposeTest::assertEquals(a.getKeyInteger(),
+	Test::assertEquals(a.getKey(), Qt::Key_A);
+	Test::assertEquals(a.getKeyInteger(),
 		static_cast<quint64>(Qt::Key_A));
-	QomposeTest::assertEquals(a.getRequiredModifiers(),
+	Test::assertEquals(a.getRequiredModifiers(),
 		Qt::KeyboardModifiers(Qt::NoModifier));
-	QomposeTest::assertEquals(a.getWhitelistedModifiers(),
+	Test::assertEquals(a.getWhitelistedModifiers(),
 		Qt::KeyboardModifiers(Qt::NoModifier));
 
 	QomposeHotkey b(Qt::Key_A, Qt::ControlModifier);
 
-	QomposeTest::assertEquals(b.getKey(), Qt::Key_A);
-	QomposeTest::assertEquals(b.getKeyInteger(),
+	Test::assertEquals(b.getKey(), Qt::Key_A);
+	Test::assertEquals(b.getKeyInteger(),
 		static_cast<quint64>(Qt::Key_A));
-	QomposeTest::assertEquals(b.getRequiredModifiers(),
+	Test::assertEquals(b.getRequiredModifiers(),
 		Qt::KeyboardModifiers(Qt::ControlModifier));
-	QomposeTest::assertEquals(b.getWhitelistedModifiers(),
+	Test::assertEquals(b.getWhitelistedModifiers(),
 		Qt::KeyboardModifiers(Qt::ControlModifier));
 
 	QomposeHotkey c(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
 
-	QomposeTest::assertEquals(c.getKey(), Qt::Key_A);
-	QomposeTest::assertEquals(c.getKeyInteger(),
+	Test::assertEquals(c.getKey(), Qt::Key_A);
+	Test::assertEquals(c.getKeyInteger(),
 		static_cast<quint64>(Qt::Key_A));
-	QomposeTest::assertEquals(c.getRequiredModifiers(),
+	Test::assertEquals(c.getRequiredModifiers(),
 		Qt::KeyboardModifiers(Qt::ControlModifier));
-	QomposeTest::assertEquals(c.getWhitelistedModifiers(),
+	Test::assertEquals(c.getWhitelistedModifiers(),
 		Qt::ControlModifier | Qt::ShiftModifier);
 }
 
@@ -89,24 +94,24 @@ void QomposeHotkeyTest::testHotkeyConstruction()
  * This function tests that the assignment operator, copy constructor, and
  * equivalence operator from the QomposeHotkey class work properly.
  */
-void QomposeHotkeyTest::testHotkeyCopying()
+void HotkeyTest::testHotkeyCopying()
 {
 	QomposeHotkey a(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
 	QomposeHotkey b(Qt::Key_B);
 
-	QomposeTest::assertTrue(!(a == b));
+	Test::assertTrue(!(a == b));
 
 	QomposeHotkey c(a);
 	b = a;
 
-	QomposeTest::assertTrue(a == b);
-	QomposeTest::assertTrue(a == c);
+	Test::assertTrue(a == b);
+	Test::assertTrue(a == c);
 }
 
 /*!
  * This function tests that QomposeHotkey's matching function works properly.
  */
-void QomposeHotkeyTest::testHotkeyMatching()
+void HotkeyTest::testHotkeyMatching()
 {
 	QomposeHotkey a(Qt::Key_Enter, nullptr,
 		~Qt::KeyboardModifiers(nullptr));
@@ -118,10 +123,10 @@ void QomposeHotkeyTest::testHotkeyMatching()
 		~Qt::KeyboardModifiers(nullptr));
 	QKeyEvent aeD(QKeyEvent::KeyPress, Qt::Key_A, nullptr);
 
-	QomposeTest::assertEquals(a.matches(&aeA), 0);
-	QomposeTest::assertEquals(a.matches(&aeB), 1);
-	QomposeTest::assertEquals(a.matches(&aeC), 32);
-	QomposeTest::assertEquals(a.matches(&aeD), -1);
+	Test::assertEquals(a.matches(&aeA), 0);
+	Test::assertEquals(a.matches(&aeB), 1);
+	Test::assertEquals(a.matches(&aeC), 32);
+	Test::assertEquals(a.matches(&aeD), -1);
 
 	QomposeHotkey b(Qt::Key_Home);
 
@@ -132,8 +137,11 @@ void QomposeHotkeyTest::testHotkeyMatching()
 		~Qt::KeyboardModifiers(nullptr));
 	QKeyEvent beD(QKeyEvent::KeyPress, Qt::Key_A, nullptr);
 
-	QomposeTest::assertEquals(b.matches(&beA), 0);
-	QomposeTest::assertEquals(b.matches(&beB), -1);
-	QomposeTest::assertEquals(b.matches(&beC), -1);
-	QomposeTest::assertEquals(b.matches(&beD), -1);
+	Test::assertEquals(b.matches(&beA), 0);
+	Test::assertEquals(b.matches(&beB), -1);
+	Test::assertEquals(b.matches(&beC), -1);
+	Test::assertEquals(b.matches(&beD), -1);
+}
+
+}
 }

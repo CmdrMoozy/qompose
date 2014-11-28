@@ -16,76 +16,83 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeTest.h"
+#include <QApplication>
 
-#include <cstdio>
+#include <iostream>
+#include <vector>
+#include <typeinfo>
+#include <algorithm>
+#include <string>
 
-#include "backward.hpp"
+#ifdef __GNUC__
+	#include <cxxabi.h>
+#endif
 
-/*!
- * This function returns, as a string, a rendered stack trace. This stack trace
- * is altered to exclude any items before this program's main() function, as
- * well as this function.
- *
- * \return A full, rendered stack trace.
- */
-std::string QomposeTest::getStackTrace()
+#include "QomposeTest/AssertionException.h"
+#include "QomposeTest/Test.h"
+#include "QomposeTest/tests/FontMetricsTest.h"
+#include "QomposeTest/tests/HotkeyTest.h"
+#include "QomposeTest/tests/HotkeyMapTest.h"
+
+int main(int argc, char **argv)
 {
-	// Get a stack trace.
+	QApplication app(argc, argv, false);
 
-	backward::StackTrace trace;
-	trace.load_here(100);
+	// Build the list of tests to run.
 
-	// Prepare our stack trace pretty-printer.
+	std::vector<qompose::test::Test *> tests;
+	std::vector<qompose::test::Test *>::iterator it;
 
-	backward::Printer p;
+	tests.push_back(new qompose::test::FontMetricsTest());
+	tests.push_back(new qompose::test::HotkeyTest());
+	tests.push_back(new qompose::test::HotkeyMapTest());
 
-	p.object = false;
-	p.color = false;
-	p.address = true;
+	// Execute each test.
 
-	// Prepare a memstream to write the trace to.
 
-	char *buf = NULL;
-	size_t buflen;
+	for(it = tests.begin(); it != tests.end(); ++it)
+	{
+		// Get this test object's type name.
 
-	FILE *stream = open_memstream(&buf, &buflen);
+		qompose::test::Test *test = *it;
 
-	// Print the stack trace to our buffer.
+		#ifdef __GNUC__
+			int status;
 
-	p.print(trace, stream);
+			char *t = abi::__cxa_demangle(typeid(*test).name(),
+				nullptr, nullptr, &status);
 
-	// Close the memory stream.
+			std::string type = std::string(t);
+			free(t);
+		#else
+			std::string type = std::string(typeid(*test).name());
+		#endif
 
-	fflush(stream);
-	fclose(stream);
+		// Try executing the test, catching all assertion exceptions.
 
-	// Convert to a C++ string, and free the buffer.
+		try
+		{
+			std::cout << type << "...\n";
+			test->test();
+		}
+		catch(const qompose::test::AssertionException &e)
+		{
+			std::cout << "ASSERTION FAILED: " << type
+				<< ": " << e.what() << "\n";
 
-	std::string ret(buf, buflen);
+			std::cout << e.getStackTrace();
+		}
+	}
 
-	free(buf);
-	buf = nullptr;
+	// Clean up the tests.
 
-	// Done!
+	while(!tests.empty())
+	{
+		qompose::test::Test *t = tests.back();
+		tests.pop_back();
 
-	return ret;
-}
+		delete t;
+	}
 
-/*!
- * This function asserts that the given boolean expression is true.
- *
- * \param expr The expression to tst for being true.
- */
-void QomposeTest::assertTrue(bool expr)
-{
-	if(!expr)
-		throw QomposeAssertionException("Expected true, got false");
-}
-
-/*!
- * This is our default destructor, which cleans up and destroys this object.
- */
-QomposeTest::~QomposeTest()
-{
+	return 0;
 }

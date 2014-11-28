@@ -16,29 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_HOTKEY_TEST_H
-#define INCLUDE_QOMPOSE_HOTKEY_TEST_H
+#ifndef INCLUDE_QOMPOSETEST_TESTS_FONT_METRICS_TEST_H
+#define INCLUDE_QOMPOSETEST_TESTS_FONT_METRICS_TEST_H
 
-#include "QomposeTest/QomposeTest.h"
+#include "QomposeTest/Test.h"
+
+namespace qompose
+{
+namespace test
+{
 
 /*!
- * \brief This class implements unit tests for our hotkey object.
+ * \brief This class defines unit tests for our font metrics class.
  */
-class QomposeHotkeyTest : public QomposeTest
+class FontMetricsTest : public Test
 {
-	public:
-		QomposeHotkeyTest();
-		virtual ~QomposeHotkeyTest();
+public:
+	FontMetricsTest() = default;
+	virtual ~FontMetricsTest() = default;
 
-		virtual void test();
+	virtual void test();
 
-	private:
-		QomposeHotkeyTest(const QomposeHotkeyTest &);
-		QomposeHotkeyTest &operator=(const QomposeHotkeyTest &);
-
-		void testHotkeyConstruction();
-		void testHotkeyCopying();
-		void testHotkeyMatching();
+private:
+	void testIsMonospaced();
+	void testGetColumnWidth();
 };
+
+}
+}
 
 #endif

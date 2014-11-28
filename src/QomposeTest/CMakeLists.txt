@@ -2,24 +2,22 @@ find_package(DWARF REQUIRED)
 
 set(QomposeTest_SOURCES
 
-	QomposeAssertionException.cpp
-	QomposeAssertionException.h
+	AssertionException.cpp
+	AssertionException.h
+	Test.cpp
+	Test.h
 	QomposeTest.cpp
-	QomposeTest.h
-	QomposeTestSuite.cpp
 
-	tests/QomposeFontMetricsTest.cpp
-	tests/QomposeFontMetricsTest.h
-	tests/QomposeHotkeyMapTest.cpp
-	tests/QomposeHotkeyMapTest.h
-	tests/QomposeHotkeyTest.cpp
-	tests/QomposeHotkeyTest.h
+	tests/FontMetricsTest.cpp
+	tests/FontMetricsTest.h
+	tests/HotkeyMapTest.cpp
+	tests/HotkeyMapTest.h
+	tests/HotkeyTest.cpp
+	tests/HotkeyTest.h
 
 )
 
 include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/backward-cpp")
-include_directories("${CMAKE_SOURCE_DIR}/src")
-
 add_definitions(-DBACKWARD_HAS_DW=1)
 
 add_executable(QomposeTest ${QomposeTest_SOURCES})

@@ -16,17 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeAssertionException.h"
+#include "AssertionException.h"
 
-#include "QomposeTest/QomposeTest.h"
+#include "QomposeTest/Test.h"
+
+namespace qompose
+{
+namespace test
+{
 
 /*!
  * This constructor creates a new assertion exception with an empty message.
  */
-QomposeAssertionException::QomposeAssertionException() noexcept
+AssertionException::AssertionException() noexcept
 	: message(""), trace("")
 {
-	trace = QomposeTest::getStackTrace();
+	trace = Test::getStackTrace();
 }
 
 /*!
@@ -34,11 +39,11 @@ QomposeAssertionException::QomposeAssertionException() noexcept
  *
  * \param w The exception message.
  */
-QomposeAssertionException::QomposeAssertionException(
-	const std::string &w) noexcept
+AssertionException::AssertionException(
+		const std::string &w) noexcept
 	: message(w), trace("")
 {
-	trace = QomposeTest::getStackTrace();
+	trace = Test::getStackTrace();
 }
 
 /*!
@@ -47,8 +52,8 @@ QomposeAssertionException::QomposeAssertionException(
  *
  * \param e The other exception to copy.
  */
-QomposeAssertionException::QomposeAssertionException(
-	const QomposeAssertionException &e) noexcept
+AssertionException::AssertionException(
+	const AssertionException &e) noexcept
 	: message(""), trace("")
 {
 	*this = e;
@@ -57,7 +62,7 @@ QomposeAssertionException::QomposeAssertionException(
 /*!
  * This is our default destructor, which cleans up and destroys this object.
  */
-QomposeAssertionException::~QomposeAssertionException() noexcept
+AssertionException::~AssertionException() noexcept
 {
 }
 
@@ -68,8 +73,9 @@ QomposeAssertionException::~QomposeAssertionException() noexcept
  * \param e The other exception to set ourself equal to.
  * \return A reference to this, for operator chanining.
  */
-QomposeAssertionException &QomposeAssertionException::operator=(
-	const QomposeAssertionException &e) noexcept
+AssertionException &
+		AssertionException::operator=(
+		const AssertionException &e) noexcept
 {
 	if(&e == this)
 		return *this;
@@ -85,7 +91,7 @@ QomposeAssertionException &QomposeAssertionException::operator=(
  *
  * \return This exception's message.
  */
-const char *QomposeAssertionException::what() const noexcept
+const char *AssertionException::what() const noexcept
 {
 	return message.c_str();
 }
@@ -96,7 +102,11 @@ const char *QomposeAssertionException::what() const noexcept
  *
  * \return This exception's stack trace.
  */
-const std::string &QomposeAssertionException::getStackTrace() const noexcept
+const std::string &AssertionException::getStackTrace()
+		const noexcept
 {
 	return trace;
+}
+
+}
 }

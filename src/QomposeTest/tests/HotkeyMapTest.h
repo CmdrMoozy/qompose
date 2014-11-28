@@ -16,34 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_ASSERTION_EXCEPTION_H
-#define INCLUDE_QOMPOSE_ASSERTION_EXCEPTION_H
+#ifndef INCLUDE_QOMPOSETEST_TESTS_HOTKEY_MAP_TEST_H
+#define INCLUDE_QOMPOSETEST_TESTS_HOTKEY_MAP_TEST_H
 
-#include <exception>
-#include <string>
+#include "QomposeTest/Test.h"
+
+namespace qompose
+{
+namespace test
+{
 
 /*!
- * \brief This class is an exception to be thrown on a test assertion failure.
+ * \brief This class implements tests for our hotkey map class.
  */
-class QomposeAssertionException : public std::exception
+class HotkeyMapTest : public Test
 {
-	public:
-		QomposeAssertionException() noexcept;
-		QomposeAssertionException(const std::string &w) noexcept;
-		QomposeAssertionException(
-			const QomposeAssertionException &e) noexcept;
-		virtual ~QomposeAssertionException() noexcept;
+public:
+	HotkeyMapTest();
+	virtual ~HotkeyMapTest();
 
-		QomposeAssertionException &operator=(
-			const QomposeAssertionException &e) noexcept;
-
-		virtual const char *what() const noexcept;
-
-		const std::string &getStackTrace() const noexcept;
-
-	private:
-		std::string message;
-		std::string trace;
+	virtual void test();
 };
+
+}
+}
 
 #endif

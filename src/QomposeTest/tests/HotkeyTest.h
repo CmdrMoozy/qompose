@@ -16,21 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_HOTKEY_MAP_TEST_H
-#define INCLUDE_QOMPOSE_HOTKEY_MAP_TEST_H
+#ifndef INCLUDE_QOMPOSETEST_TESTS_HOTKEY_TEST_H
+#define INCLUDE_QOMPOSETEST_TESTS_HOTKEY_TEST_H
 
-#include "QomposeTest/QomposeTest.h"
+#include "QomposeTest/Test.h"
+
+namespace qompose
+{
+namespace test
+{
 
 /*!
- * \brief This class implements tests for our hotkey map class.
+ * \brief This class implements unit tests for our hotkey object.
  */
-class QomposeHotkeyMapTest : public QomposeTest
+class HotkeyTest : public Test
 {
-	public:
-		QomposeHotkeyMapTest();
-		virtual ~QomposeHotkeyMapTest();
+public:
+	HotkeyTest();
+	virtual ~HotkeyTest();
 
-		virtual void test();
+	virtual void test();
+
+private:
+	HotkeyTest(const HotkeyTest &);
+	HotkeyTest &operator=(const HotkeyTest &);
+
+	void testHotkeyConstruction();
+	void testHotkeyCopying();
+	void testHotkeyMatching();
 };
+
+}
+}
 
 #endif

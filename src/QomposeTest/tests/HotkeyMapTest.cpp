@@ -16,16 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeHotkeyMapTest.h"
+#include "HotkeyMapTest.h"
 
 #include <QKeyEvent>
 
 #include "util/QomposeHotkeyMap.h"
 
+namespace qompose
+{
+namespace test
+{
+
 /*!
  * This is our default constructor, which creates a new insance of our test.
  */
-QomposeHotkeyMapTest::QomposeHotkeyMapTest()
+HotkeyMapTest::HotkeyMapTest()
 {
 }
 
@@ -33,7 +38,7 @@ QomposeHotkeyMapTest::QomposeHotkeyMapTest()
  * This is our default destructor, which cleans up an destroys this test
  * instance.
  */
-QomposeHotkeyMapTest::~QomposeHotkeyMapTest()
+HotkeyMapTest::~HotkeyMapTest()
 {
 }
 
@@ -42,7 +47,7 @@ QomposeHotkeyMapTest::~QomposeHotkeyMapTest()
  * QomposeHotkeyMap implementation. We'll setup a "typical" hotkey setup, and
  * then test a series of example QKeyEvents against it.
  */
-void QomposeHotkeyMapTest::test()
+void HotkeyMapTest::test()
 {
 	QomposeHotkeyMap<int *> hotkeys;
 
@@ -152,37 +157,40 @@ void QomposeHotkeyMapTest::test()
 	QKeyEvent ctrlAEvent(QKeyEvent::KeyPress, Qt::Key_A,
 		Qt::KeyboardModifiers(Qt::ControlModifier));
 
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&enterEvent), &doNewline);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&tabEvent), &doTab);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&backtabEvent), &decreaseSelectionIndent);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&homeEvent), &doMoveHome);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&selectHomeEvent), &doSelectHome);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&duplicateEvent), &duplicateLine);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&resetZoomEvent), &resetFontZoom);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&ctrlShiftLeftEvent), &doNoop);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&ctrlShiftRightEvent), &doNoop);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&ctrlInsertEvent), &doNoop);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&ctrkKEvent), &doNoop);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&shiftInsertEvent), &doNoop);
-	QomposeTest::assertEquals(*hotkeys.getHotkeyHandler(
+	Test::assertEquals(*hotkeys.getHotkeyHandler(
 		&shiftDeleteEvent), &doNoop);
 
-	QomposeTest::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
+	Test::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
 		&ctrlShiftTabEvent), nullptr);
-	QomposeTest::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
+	Test::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
 		&ctrlShiftHomeEvent), nullptr);
-	QomposeTest::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
+	Test::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
 		&ctrlAEvent), nullptr);
+}
+
+}
 }

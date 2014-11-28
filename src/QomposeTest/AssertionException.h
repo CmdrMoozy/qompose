@@ -16,25 +16,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_FONT_METRICS_TEST_H
-#define INCLUDE_QOMPOSE_FONT_METRICS_TEST_H
+#ifndef INCLUDE_QOMPOSETEST_ASSERTION_EXCEPTION_H
+#define INCLUDE_QOMPOSETEST_ASSERTION_EXCEPTION_H
 
-#include "QomposeTest/QomposeTest.h"
+#include <exception>
+#include <string>
+
+namespace qompose
+{
+namespace test
+{
 
 /*!
- * \brief This class defines unit tests for our font metrics class.
+ * \brief This should be thrown on a test assertion failure.
  */
-class QomposeFontMetricsTest : public QomposeTest
+class AssertionException : public std::exception
 {
-	public:
-		QomposeFontMetricsTest() = default;
-		virtual ~QomposeFontMetricsTest() = default;
+public:
+	AssertionException() noexcept;
+	AssertionException(const std::string &w) noexcept;
+	AssertionException(
+		const AssertionException &e) noexcept;
+	virtual ~AssertionException() noexcept;
 
-		virtual void test();
+	AssertionException &operator=(
+		const AssertionException &e) noexcept;
 
-	private:
-		void testIsMonospaced();
-		void testGetColumnWidth();
+	virtual const char *what() const noexcept;
+
+	const std::string &getStackTrace() const noexcept;
+
+private:
+	std::string message;
+	std::string trace;
 };
+
+}
+}
 
 #endif
