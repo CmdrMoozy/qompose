@@ -23,13 +23,13 @@
 #include <QPushButton>
 #include <QMessageBox>
 
-#include "dialogs/preferences/QomposePreferencesListModel.h"
-#include "dialogs/preferences/QomposePreferencesListView.h"
-#include "dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h"
-#include "dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h"
-#include "dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.h"
-#include "dialogs/preferences/widgets/QomposePreferencesScrollArea.h"
-#include "util/QomposeSettings.h"
+#include "QomposeCommon/dialogs/preferences/QomposePreferencesListModel.h"
+#include "QomposeCommon/dialogs/preferences/QomposePreferencesListView.h"
+#include "QomposeCommon/dialogs/preferences/widgets/QomposeEditorPreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/QomposeGeneralPreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/QomposeOpenSavePreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesScrollArea.h"
+#include "QomposeCommon/util/QomposeSettings.h"
 
 /*!
  * This is our default constructor, which creates a new instance of our

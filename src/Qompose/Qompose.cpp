@@ -18,9 +18,9 @@
 
 #include <QLocalSocket>
 
-#include "QomposeApplication.h"
-#include "QomposeDefines.h"
-#include "QomposeWindow.h"
+#include "QomposeCommon/Application.h"
+#include "QomposeCommon/Defines.h"
+#include "QomposeCommon/Window.h"
 
 /*!
  * This is our main function, which initializes our application.
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	Q_INIT_RESOURCE(data);
 	Q_INIT_RESOURCE(icons);
 
-	QomposeApplication app(argc, argv);
+	qompose::Application app(argc, argv);
 
 	QLocalSocket s;
 	s.connectToServer(QOMPOSE_GUID);
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
 	app.initializeLocalServer();
 
-	QomposeWindow w;
+	qompose::Window w;
 	w.show();
 
 	return app.exec();

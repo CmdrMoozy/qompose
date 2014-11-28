@@ -18,9 +18,9 @@
 
 #include "QomposePreferencesListModel.h"
 
-#include "QomposeDefines.h"
-#include "dialogs/preferences/widgets/QomposePreferencesScrollArea.h"
-#include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
+#include "QomposeCommon/Defines.h"
+#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesScrollArea.h"
+#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesWidget.h"
 
 /*!
  * This is our default constructor, which creates a new, empty preferences

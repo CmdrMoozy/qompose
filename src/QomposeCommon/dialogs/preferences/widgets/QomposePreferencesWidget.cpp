@@ -18,7 +18,7 @@
 
 #include "QomposePreferencesWidget.h"
 
-#include "util/QomposeSettings.h"
+#include "QomposeCommon/util/QomposeSettings.h"
 
 /*!
  * This is our default constructor, which creates a new, empty preferences

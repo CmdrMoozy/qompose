@@ -19,9 +19,9 @@
 #ifndef INCLUDE_QOMPOSE_BUFFER_H
 #define INCLUDE_QOMPOSE_BUFFER_H
 
-#include "editor/QomposeEditor.h"
+#include "QomposeCommon/editor/QomposeEditor.h"
 
-#include "QomposeTypes.h"
+#include "QomposeCommon/QomposeTypes.h"
 
 class QPrinter;
 

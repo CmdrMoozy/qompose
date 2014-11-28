@@ -46,7 +46,6 @@ string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
 # Define what Qt dependencies we have.
 
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(ICU COMPONENTS data uc i18n REQUIRED)
 find_package(Qt5Core REQUIRED)
@@ -67,7 +66,6 @@ if(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 endif()
 
 include_directories("src")
-include_directories("src/QomposeCommon")
 
 # Define the libraries Qompose uses.
 

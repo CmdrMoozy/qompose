@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeWindow.h"
+#include "Window.h"
 
 #include <QApplication>
 #include <QFile>
@@ -27,19 +27,22 @@
 #include <QPrintPreviewDialog>
 #include <QIcon>
 
-#include "QomposeDefines.h"
-#include "dialogs/QomposeAboutDialog.h"
-#include "dialogs/QomposeFindDialog.h"
-#include "dialogs/QomposeGoToDialog.h"
-#include "dialogs/QomposeReplaceDialog.h"
-#include "dialogs/preferences/QomposePreferencesDialog.h"
-#include "gui/QomposeBufferWidget.h"
-#include "gui/QomposeGUIUtils.h"
-#include "gui/QomposeStatusBar.h"
-#include "gui/menus/QomposeMainMenu.h"
-#include "util/QomposeFindQuery.h"
-#include "util/QomposeReplaceQuery.h"
-#include "util/QomposeSettings.h"
+#include "QomposeCommon/Defines.h"
+#include "QomposeCommon/dialogs/QomposeAboutDialog.h"
+#include "QomposeCommon/dialogs/QomposeFindDialog.h"
+#include "QomposeCommon/dialogs/QomposeGoToDialog.h"
+#include "QomposeCommon/dialogs/QomposeReplaceDialog.h"
+#include "QomposeCommon/dialogs/preferences/QomposePreferencesDialog.h"
+#include "QomposeCommon/gui/QomposeBufferWidget.h"
+#include "QomposeCommon/gui/QomposeGUIUtils.h"
+#include "QomposeCommon/gui/QomposeStatusBar.h"
+#include "QomposeCommon/gui/menus/QomposeMainMenu.h"
+#include "QomposeCommon/util/QomposeFindQuery.h"
+#include "QomposeCommon/util/QomposeReplaceQuery.h"
+#include "QomposeCommon/util/QomposeSettings.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new Qompose window, and
@@ -48,7 +51,7 @@
  * \param p Our parent widget, if any.
  * \param f The Qt window flags to use for this window.
  */
-QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
+Window::Window(QWidget *p, Qt::WindowFlags f)
 	: QMainWindow(p, f), settings(nullptr), preferencesDialog(nullptr),
 		findDialog(nullptr), replaceDialog(nullptr),
 		goToDialog(nullptr), aboutDialog(nullptr), mainMenu(nullptr),
@@ -93,7 +96,7 @@ QomposeWindow::QomposeWindow(QWidget *p, Qt::WindowFlags f)
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposeWindow::~QomposeWindow()
+Window::~Window()
 {
 }
 
@@ -104,7 +107,7 @@ QomposeWindow::~QomposeWindow()
  *
  * \param e The event being handled.
  */
-void QomposeWindow::closeEvent(QCloseEvent *e)
+void Window::closeEvent(QCloseEvent *e)
 {
 	if(buffers->prepareCloseParent())
 	{
@@ -129,7 +132,7 @@ void QomposeWindow::closeEvent(QCloseEvent *e)
 /*!
  * This function initializes our dialog objects.
  */
-void QomposeWindow::initializeDialogs()
+void Window::initializeDialogs()
 {
 	// Create our dialog objects.
 
@@ -164,7 +167,7 @@ void QomposeWindow::initializeDialogs()
  * called AFTER initializeActions, as we need actions to be initialized before
  * we can add them to menus.
  */
-void QomposeWindow::initializeMenus()
+void Window::initializeMenus()
 {
 	// Create our main menu.
 
@@ -199,7 +202,7 @@ void QomposeWindow::initializeMenus()
  * and applies their values to our UI. Additionally, we connect the settings
  * object to our slots, so we can listen for settings changes.
  */
-void QomposeWindow::applyExistingSettings()
+void Window::applyExistingSettings()
 {
 	// Load our initial settings, and connect our settings object.
 
@@ -236,7 +239,7 @@ void QomposeWindow::applyExistingSettings()
  *
  * \param r The find result to process.
  */
-void QomposeWindow::handleFindResult(QomposeEditor::FindResult r)
+void Window::handleFindResult(QomposeEditor::FindResult r)
 {
 	// Deal with the find result.
 
@@ -278,7 +281,7 @@ void QomposeWindow::handleFindResult(QomposeEditor::FindResult r)
  *
  * \param p The new path for the current tab.
  */
-void QomposeWindow::doTabPathChanged(const QString &p)
+void Window::doTabPathChanged(const QString &p)
 { /* SLOT */
 
 	statusBar->setCurrentTabPath(p);
@@ -292,7 +295,7 @@ void QomposeWindow::doTabPathChanged(const QString &p)
  * \param l The new cursor line number.
  * \param c The new cursor column number.
  */
-void QomposeWindow::doCursorPositionChanged(int l, int c)
+void Window::doCursorPositionChanged(int l, int c)
 { /* SLOT */
 
 	statusBar->setLine(l);
@@ -304,7 +307,7 @@ void QomposeWindow::doCursorPositionChanged(int l, int c)
  * This function handles the case when whatever find/replace operation was
  * being executed has wrapped to the opposite side of the document.
  */
-void QomposeWindow::doSearchWrapped()
+void Window::doSearchWrapped()
 { /* SLOT */
 
 	statusBar->displayNotification(tr("Search wrapped around buffer."));
@@ -317,7 +320,7 @@ void QomposeWindow::doSearchWrapped()
  * visible).
  *
  */
-void QomposeWindow::doPreferencesDialog()
+void Window::doPreferencesDialog()
 { /* SLOT */
 
 	if(!preferencesDialog->isVisible())
@@ -333,7 +336,7 @@ void QomposeWindow::doPreferencesDialog()
  * standard print dialog and, if it is accepted, printing our current buffer
  * using the printer object it configures.
  */
-void QomposeWindow::doPrint()
+void Window::doPrint()
 { /* SLOT */
 
 	if(!buffers->hasCurrentBuffer())
@@ -357,7 +360,7 @@ void QomposeWindow::doPrint()
  * This slot handles our "print preview" action being triggered by displaying
  * a standard print preview dialog using our buffers' standard print slot.
  */
-void QomposeWindow::doPrintPreview()
+void Window::doPrintPreview()
 { /* SLOT */
 
 	if(!buffers->hasCurrentBuffer())
@@ -385,7 +388,7 @@ void QomposeWindow::doPrintPreview()
  * dialog, if our replace dialog isn't already open (they are mutually
  * exclusive).
  */
-void QomposeWindow::doFindDialog()
+void Window::doFindDialog()
 { /* SLOT */
 
 	if(!replaceDialog->isVisible())
@@ -400,7 +403,7 @@ void QomposeWindow::doFindDialog()
  * find query from the find dialog, telling our buffers widget to execute the
  * query, and then dealing with the result.
  */
-void QomposeWindow::doFindNext()
+void Window::doFindNext()
 { /* SLOT */
 
 	handleFindResult(buffers->doFindNext(findDialog->getQuery()));
@@ -412,7 +415,7 @@ void QomposeWindow::doFindNext()
  * find query from the find dialog, telling our buffers widget to execute the
  * query, and then dealing with the result.
  */
-void QomposeWindow::doFindPrevious()
+void Window::doFindPrevious()
 { /* SLOT */
 
 	handleFindResult(buffers->doFindPrevious(findDialog->getQuery()));
@@ -424,7 +427,7 @@ void QomposeWindow::doFindPrevious()
  * replace dialog, if our find dialog isn't already open (they are mutually
  * exclusive).
  */
-void QomposeWindow::doReplaceDialog()
+void Window::doReplaceDialog()
 { /* SLOT */
 
 	if(!findDialog->isVisible())
@@ -439,7 +442,7 @@ void QomposeWindow::doReplaceDialog()
  * replace query from the replace dialog, telling our buffers widget to execute
  * the query, and then dealing with the result.
  */
-void QomposeWindow::doReplace()
+void Window::doReplace()
 { /* SLOT */
 
 	handleFindResult(buffers->doReplace(replaceDialog->getQuery()));
@@ -454,7 +457,7 @@ void QomposeWindow::doReplace()
  * buffers widget to execute the query as a "find next" operation, and then
  * we deal with the result.
  */
-void QomposeWindow::doReplaceFind()
+void Window::doReplaceFind()
 { /* SLOT */
 
 	handleFindResult(buffers->doFindNext(replaceDialog->getQuery()));
@@ -466,7 +469,7 @@ void QomposeWindow::doReplaceFind()
  * current replace query from the replace dialog, telling our buffers widget
  * to execute the query, and then dealing with the result.
  */
-void QomposeWindow::doReplaceSelection()
+void Window::doReplaceSelection()
 { /* SLOT */
 
 	handleFindResult(buffers->doReplaceSelection(
@@ -479,7 +482,7 @@ void QomposeWindow::doReplaceSelection()
  * replace query from the replace dialog, telling our buffers widget to
  * execute the query, and then dealing with the result.
  */
-void QomposeWindow::doReplaceAll()
+void Window::doReplaceAll()
 { /* SLOT */
 
 	handleFindResult(buffers->doReplaceAll(replaceDialog->getQuery()));
@@ -490,7 +493,7 @@ void QomposeWindow::doReplaceAll()
  * This function handles our "go to" dialog being accepted by telling our
  * buffers widget to perform the "go to" operation.
  */
-void QomposeWindow::doGoToAccepted()
+void Window::doGoToAccepted()
 { /* SLOT */
 
 	buffers->doGoTo(goToDialog->getSelectedLine());
@@ -501,7 +504,7 @@ void QomposeWindow::doGoToAccepted()
 	/*!
 	 * This function performs some action to help with debugging.
 	 */
-	void QomposeWindow::doDebug()
+	void Window::doDebug()
 	{ /* SLOT */
 
 
@@ -516,10 +519,12 @@ void QomposeWindow::doGoToAccepted()
  * \param k The setting key that was changed.
  * \param v The new value for the given setting.
  */
-void QomposeWindow::doSettingChanged(const QString &k, const QVariant &v)
+void Window::doSettingChanged(const QString &k, const QVariant &v)
 { /* SLOT */
 
 	if(k == "show-status-bar")
 		statusBar->setVisible(v.toBool());
+
+}
 
 }

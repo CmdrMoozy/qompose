@@ -38,9 +38,9 @@
 #include <QFontMetrics>
 #include <QRegExp>
 
-#include "util/QomposeFindQuery.h"
-#include "util/QomposeHotkey.h"
-#include "util/QomposeReplaceQuery.h"
+#include "QomposeCommon/util/QomposeFindQuery.h"
+#include "QomposeCommon/util/QomposeHotkey.h"
+#include "QomposeCommon/util/QomposeReplaceQuery.h"
 
 #define CALL_HOTKEY_FUNCTION(obj,fn) ((obj).*(fn))
 

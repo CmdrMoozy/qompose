@@ -24,8 +24,8 @@
 #include <QFileInfo>
 #include <QVariant>
 
-#include "gui/QomposeGUIUtils.h"
-#include "util/QomposeSettings.h"
+#include "QomposeCommon/gui/QomposeGUIUtils.h"
+#include "QomposeCommon/util/QomposeSettings.h"
 
 /*!
  * This is our default constructor, which creates a new instance of our

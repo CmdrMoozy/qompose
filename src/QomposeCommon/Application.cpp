@@ -16,12 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeApplication.h"
+#include "Application.h"
 
 #include <QLocalServer>
 
-#include "QomposeDefines.h"
-#include "QomposeWindow.h"
+#include "QomposeCommon/Defines.h"
+#include "QomposeCommon/Window.h"
+
+namespace qompose
+{
 
 /*!
  * Initializes a new QomposeApplication instance.
@@ -29,9 +32,9 @@
  * \param ac The number of command-line arguments.
  * \param av The command-line arguments.
  */
-QomposeApplication::QomposeApplication(int &ac, char **av)
+Application::Application(int &ac, char **av)
 	: QApplication(ac, av), sappServer(nullptr),
-		windows(QList<QomposeWindow *>())
+		windows(QList<Window *>())
 {
 }
 
@@ -39,7 +42,7 @@ QomposeApplication::QomposeApplication(int &ac, char **av)
  * This is our default destructor, which cleans up our local "single
  * application server," and destroys all of our open window objects.
  */
-QomposeApplication::~QomposeApplication()
+Application::~Application()
 {
 	if(sappServer != nullptr)
 	{
@@ -49,7 +52,7 @@ QomposeApplication::~QomposeApplication()
 
 	while(windows.length() > 0)
 	{
-		QomposeWindow *w = windows.takeFirst();
+		Window *w = windows.takeFirst();
 		delete w;
 	}
 }
@@ -60,7 +63,7 @@ QomposeApplication::~QomposeApplication()
  * application is running at a time. Duplicate instances will be handled by
  * notifying the original process.
  */
-void QomposeApplication::initializeLocalServer()
+void Application::initializeLocalServer()
 {
 	if(sappServer != nullptr)
 	{
@@ -93,11 +96,13 @@ void QomposeApplication::initializeLocalServer()
  * This slot handles a duplicate instance of our application being started by
  * simply opening a new window on the existing instance instead.
  */
-void QomposeApplication::doDuplicateInstanceDetected()
+void Application::doDuplicateInstanceDetected()
 { /* SLOT */
 
-	QomposeWindow *w = new QomposeWindow();
+	Window *w = new Window();
 	windows.append(w);
 	w->show();
+
+}
 
 }

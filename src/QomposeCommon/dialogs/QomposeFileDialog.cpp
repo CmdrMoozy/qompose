@@ -30,8 +30,8 @@
 
 #include <unicode/ucsdet.h>
 
-#include "QomposeDefines.h"
-#include "dialogs/QomposeEncodingDialog.h"
+#include "QomposeCommon/Defines.h"
+#include "QomposeCommon/dialogs/QomposeEncodingDialog.h"
 
 /*!
  * This is our default constructor, which creates a new file dialog instance.

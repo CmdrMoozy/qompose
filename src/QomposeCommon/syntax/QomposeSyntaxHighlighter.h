@@ -23,7 +23,7 @@
 
 #include <QTextCharFormat>
 
-#include "syntax/QomposeLexer.h"
+#include "QomposeCommon/syntax/QomposeLexer.h"
 
 class QObject;
 class QTextDocument;

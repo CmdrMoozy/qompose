@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QFrame>
 
-#include "gui/QomposeNotificationLabel.h"
+#include "QomposeCommon/gui/QomposeNotificationLabel.h"
 
 /*!
  * This is our default constructor, which creates a new instance of our status

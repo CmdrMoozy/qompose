@@ -27,7 +27,7 @@
 #include <QTextCodec>
 #include <QListWidgetItem>
 
-#include "QomposeDefines.h"
+#include "QomposeCommon/Defines.h"
 
 /*!
  * This is our default constructor, which creates a new instance of our

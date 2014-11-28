@@ -20,7 +20,7 @@
 
 #include <QPaintEvent>
 
-#include "editor/QomposeDecoratedTextEdit.h"
+#include "QomposeCommon/editor/QomposeDecoratedTextEdit.h"
 
 /*!
  * This is our default constructor, which creates a new gutter for the given

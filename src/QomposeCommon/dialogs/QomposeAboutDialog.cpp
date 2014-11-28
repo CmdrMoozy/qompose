@@ -29,7 +29,7 @@
 #include <QWidget>
 #include <QPixmap>
 
-#include "QomposeDefines.h"
+#include "QomposeCommon/Defines.h"
 
 /*!
  * This is our default constructor, which creates a new about dialog instance

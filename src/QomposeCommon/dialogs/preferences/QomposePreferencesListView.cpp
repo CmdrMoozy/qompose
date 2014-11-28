@@ -18,10 +18,8 @@
 
 #include "QomposePreferencesListView.h"
 
-
-
-#include "dialogs/preferences/QomposePreferencesListModel.h"
-#include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/QomposePreferencesListModel.h"
+#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesWidget.h"
 
 /*!
  * This is our default constructor, which creates a new preferences list view.

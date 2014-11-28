@@ -18,7 +18,7 @@
 
 #include "FontMetricsTest.h"
 
-#include "util/QomposeFontMetrics.h"
+#include "QomposeCommon/util/QomposeFontMetrics.h"
 
 #include <QFont>
 

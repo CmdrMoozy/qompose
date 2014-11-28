@@ -7,12 +7,12 @@ set(QomposeCommon_RESOURCES
 
 set(QomposeCommon_SOURCES
 
-	QomposeApplication.cpp
-	QomposeApplication.h
-	QomposeDefines.h
+	Application.cpp
+	Application.h
+	Defines.h
 	QomposeTypes.h
-	QomposeWindow.cpp
-	QomposeWindow.h
+	Window.cpp
+	Window.h
 
 	dialogs/QomposeAboutDialog.cpp
 	dialogs/QomposeAboutDialog.h

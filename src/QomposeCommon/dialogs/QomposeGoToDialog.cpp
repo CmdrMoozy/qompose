@@ -26,7 +26,7 @@
 #include <QShowEvent>
 #include <QMessageBox>
 
-#include "QomposeDefines.h"
+#include "QomposeCommon/Defines.h"
 
 /*!
  * This is our default constructor, which initializes a new instance of our

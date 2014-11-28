@@ -27,7 +27,7 @@
 #include <QPushButton>
 #include <QShowEvent>
 
-#include "util/QomposeReplaceQuery.h"
+#include "QomposeCommon/util/QomposeReplaceQuery.h"
 
 /*!
  * This is our default constructor, which creates a new instance of our

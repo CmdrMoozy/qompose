@@ -19,7 +19,7 @@
 #ifndef INCLUDE_QOMPOSE_REPLACE_QUERY_H
 #define INCLUDE_QOMPOSE_REPLACE_QUERY_H
 
-#include "util/QomposeFindQuery.h"
+#include "QomposeCommon/util/QomposeFindQuery.h"
 
 #include <QString>
 

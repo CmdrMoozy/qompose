@@ -23,8 +23,8 @@
 #include <QSet>
 #include <QStack>
 
-#include "QomposeTypes.h"
-#include "editor/QomposeEditor.h"
+#include "QomposeCommon/QomposeTypes.h"
+#include "QomposeCommon/editor/QomposeEditor.h"
 
 class QGridLayout;
 class QTabWidget;

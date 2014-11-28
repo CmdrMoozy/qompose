@@ -19,7 +19,7 @@
 #ifndef INCLUDE_QOMPOSE_OPEN_SAVE_PREFERENCES_WIDGET_H
 #define INCLUDE_QOMPOSE_OPEN_SAVE_PREFERENCES_WIDGET_H
 
-#include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesWidget.h"
 
 class QGridLayout;
 class QGroupBox;

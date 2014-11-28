@@ -25,7 +25,7 @@
 #include <QMultiHash>
 #include <QList>
 
-#include "util/QomposeHotkey.h"
+#include "QomposeCommon/util/QomposeHotkey.h"
 
 /*!
  * \brief This class implements a mapping of hotkeys to handlers.

@@ -25,7 +25,7 @@
 #include <QPainter>
 #include <QRect>
 
-#include "QomposeDefines.h"
+#include "QomposeCommon/Defines.h"
 
 /*!
  * This is one of our constructors, which intializes a new color picker

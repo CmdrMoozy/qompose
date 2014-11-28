@@ -23,7 +23,7 @@
 #include <QString>
 #include <QList>
 
-#include "QomposeTypes.h"
+#include "QomposeCommon/QomposeTypes.h"
 
 /*!
  * \brief This class extends QFileDialog with character encoding detection.

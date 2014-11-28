@@ -22,7 +22,7 @@
 #include <QTextDocument>
 #include <QList>
 
-#include "util/QomposeSettings.h"
+#include "QomposeCommon/util/QomposeSettings.h"
 
 QomposeSyntaxHighlighter::QomposeSyntaxHighlighter(
 	QomposeSettings *s, QObject *p)

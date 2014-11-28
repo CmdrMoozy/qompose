@@ -24,10 +24,10 @@
 #include <QCheckBox>
 #include <QSpinBox>
 
-#include "gui/QomposeColorPickerButton.h"
-#include "gui/QomposeFontPickerButton.h"
-#include "gui/QomposeGUIUtils.h"
-#include "util/QomposeSettings.h"
+#include "QomposeCommon/gui/QomposeColorPickerButton.h"
+#include "QomposeCommon/gui/QomposeFontPickerButton.h"
+#include "QomposeCommon/gui/QomposeGUIUtils.h"
+#include "QomposeCommon/util/QomposeSettings.h"
 
 /*!
  * This is our default constructor, which creates a new instance of our

@@ -19,8 +19,8 @@
 #ifndef INCLUDE_QOMPOSE_EDITOR_H
 #define INCLUDE_QOMPOSE_EDITOR_H
 
-#include "editor/QomposeDecoratedTextEdit.h"
-#include "util/QomposeHotkeyMap.h"
+#include "QomposeCommon/editor/QomposeDecoratedTextEdit.h"
+#include "QomposeCommon/util/QomposeHotkeyMap.h"
 
 #include <QSize>
 

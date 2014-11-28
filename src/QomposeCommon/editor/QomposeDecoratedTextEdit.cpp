@@ -21,8 +21,8 @@
 #include <QPainter>
 #include <QTextBlock>
 
-#include "editor/QomposeGutter.h"
-#include "util/QomposeFontMetrics.h"
+#include "QomposeCommon/editor/QomposeGutter.h"
+#include "QomposeCommon/util/QomposeFontMetrics.h"
 
 /*!
  * This is our default constructor, which creates a new decorated text exit.

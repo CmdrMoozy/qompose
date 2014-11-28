@@ -16,37 +16,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_APPLICATION_H
-#define INCLUDE_QOMPOSE_APPLICATION_H
+#ifndef INCLUDE_QOMPOSECOMMON_APPLICATION_H
+#define INCLUDE_QOMPOSECOMMON_APPLICATION_H
 
 #include <QApplication>
 #include <QList>
 
 class QLocalServer;
-class QomposeWindow;
+
+namespace qompose
+{
+
+class Window;
 
 /*!
  * \brief This class extends QApplication, allowing only one instance to exist.
  */
-class QomposeApplication : public QApplication
+class Application : public QApplication
 {
 	Q_OBJECT
 
-	public:
-		QomposeApplication(int &, char **);
-		virtual ~QomposeApplication();
+public:
+	Application(int &, char **);
+	virtual ~Application();
 
-		void initializeLocalServer();
+	void initializeLocalServer();
 
-	private:
-		QLocalServer *sappServer;
-		QList<QomposeWindow *> windows;
+private:
+	QLocalServer *sappServer;
+	QList<Window *> windows;
 
-		QomposeApplication(const QomposeApplication &);
-		QomposeApplication &operator=(const QomposeApplication &);
+	Application(const Application &);
+	Application &operator=(const Application &);
 
-	private Q_SLOTS:
-		void doDuplicateInstanceDetected();
+private Q_SLOTS:
+	void doDuplicateInstanceDetected();
 };
+
+}
 
 #endif

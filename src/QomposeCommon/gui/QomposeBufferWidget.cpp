@@ -27,11 +27,11 @@
 #include <QPrinter>
 #include <QFileInfo>
 
-#include "dialogs/QomposeFileDialog.h"
-#include "editor/QomposeBuffer.h"
-#include "util/QomposeFindQuery.h"
-#include "util/QomposeReplaceQuery.h"
-#include "util/QomposeSettings.h"
+#include "QomposeCommon/dialogs/QomposeFileDialog.h"
+#include "QomposeCommon/editor/QomposeBuffer.h"
+#include "QomposeCommon/util/QomposeFindQuery.h"
+#include "QomposeCommon/util/QomposeReplaceQuery.h"
+#include "QomposeCommon/util/QomposeSettings.h"
 
 /*!
  * This is our default constructor, which creates a new instance of our buffers

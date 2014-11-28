@@ -30,9 +30,9 @@
 #include <QTextBlock>
 #include <QDir>
 
-#include "QomposeDefines.h"
-#include "util/QomposeDocumentWriter.h"
-#include "util/QomposeSettings.h"
+#include "QomposeCommon/Defines.h"
+#include "QomposeCommon/util/QomposeDocumentWriter.h"
+#include "QomposeCommon/util/QomposeSettings.h"
 
 /*!
  * This is our default constructor, which creates a new instance of

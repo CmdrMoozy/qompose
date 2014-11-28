@@ -27,8 +27,8 @@
 #include <QPushButton>
 #include <QShowEvent>
 
-#include "QomposeDefines.h"
-#include "util/QomposeFindQuery.h"
+#include "QomposeCommon/Defines.h"
+#include "QomposeCommon/util/QomposeFindQuery.h"
 
 /*!
  * This is our default constructor, which creates a new instance of our

@@ -20,7 +20,7 @@
 
 #include <QKeyEvent>
 
-#include "util/QomposeHotkeyMap.h"
+#include "QomposeCommon/util/QomposeHotkeyMap.h"
 
 namespace qompose
 {

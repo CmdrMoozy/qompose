@@ -19,7 +19,7 @@
 #ifndef INCLUDE_QOMPOSE_EDITOR_PREFERENCES_WIDGET_H
 #define INCLUDE_QOMPOSE_EDITOR_PREFERENCES_WIDGET_H
 
-#include "dialogs/preferences/widgets/QomposePreferencesWidget.h"
+#include "QomposeCommon/dialogs/preferences/widgets/QomposePreferencesWidget.h"
 
 class QGroupBox;
 class QGridLayout;

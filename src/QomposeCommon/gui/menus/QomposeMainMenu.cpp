@@ -21,10 +21,10 @@
 #include <QMenu>
 #include <QAction>
 
-#include "gui/QomposeBufferWidget.h"
-#include "gui/QomposeGUIUtils.h"
-#include "gui/menus/QomposeRecentMenu.h"
-#include "util/QomposeSettings.h"
+#include "QomposeCommon/gui/QomposeBufferWidget.h"
+#include "QomposeCommon/gui/QomposeGUIUtils.h"
+#include "QomposeCommon/gui/menus/QomposeRecentMenu.h"
+#include "QomposeCommon/util/QomposeSettings.h"
 
 QomposeMainMenu::QomposeMainMenu(QomposeSettings *s, QWidget *p)
 	: QMenuBar(p), settings(s), fileMenu(nullptr), editMenu(nullptr),
