@@ -24,7 +24,7 @@
 #include <QStack>
 
 #include "QomposeCommon/Types.h"
-#include "QomposeCommon/editor/QomposeEditor.h"
+#include "QomposeCommon/editor/Editor.h"
 
 class QGridLayout;
 class QTabWidget;
@@ -98,16 +98,11 @@ public Q_SLOTS:
 	void doDeselect();
 	void doIncreaseIndent();
 	void doDecreaseIndent();
-	QomposeEditor::FindResult doFindNext(
-		const QomposeFindQuery *);
-	QomposeEditor::FindResult doFindPrevious(
-		const QomposeFindQuery *);
-	QomposeEditor::FindResult doReplace(
-		const QomposeReplaceQuery *);
-	QomposeEditor::FindResult doReplaceSelection(
-		const QomposeReplaceQuery *);
-	QomposeEditor::FindResult doReplaceAll(
-		const QomposeReplaceQuery *);
+	Editor::FindResult doFindNext(const QomposeFindQuery *);
+	Editor::FindResult doFindPrevious(const QomposeFindQuery *);
+	Editor::FindResult doReplace(const QomposeReplaceQuery *);
+	Editor::FindResult doReplaceSelection(const QomposeReplaceQuery *);
+	Editor::FindResult doReplaceAll(const QomposeReplaceQuery *);
 	void doGoTo(int);
 	void doPreviousBuffer();
 	void doNextBuffer();

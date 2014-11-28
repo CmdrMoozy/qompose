@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeSyntaxHighlighter.h"
+#include "SyntaxHighlighter.h"
 
 #include <QObject>
 #include <QTextDocument>
@@ -24,47 +24,48 @@
 
 #include "QomposeCommon/util/QomposeSettings.h"
 
-QomposeSyntaxHighlighter::QomposeSyntaxHighlighter(
-	QomposeSettings *s, QObject *p)
+namespace qompose
+{
+
+SyntaxHighlighter::SyntaxHighlighter(QomposeSettings *s, QObject *p)
 	: QSyntaxHighlighter(p), settings(s), lexer(nullptr)
 {
 }
 
-QomposeSyntaxHighlighter::QomposeSyntaxHighlighter(
-	QomposeSettings *s, QTextDocument *p)
+SyntaxHighlighter::SyntaxHighlighter(QomposeSettings *s, QTextDocument *p)
 	: QSyntaxHighlighter(p), settings(s), lexer(nullptr)
 {
 }
 
-QomposeSyntaxHighlighter::~QomposeSyntaxHighlighter()
+SyntaxHighlighter::~SyntaxHighlighter()
 {
 }
 
-QomposeSettings *QomposeSyntaxHighlighter::getSettings() const
+QomposeSettings *SyntaxHighlighter::getSettings() const
 {
 	return settings;
 }
 
-void QomposeSyntaxHighlighter::setSettings(QomposeSettings *s)
+void SyntaxHighlighter::setSettings(QomposeSettings *s)
 {
 	settings = s;
 
 	rehighlight();
 }
 
-QomposeLexer *QomposeSyntaxHighlighter::getLexer() const
+Lexer *SyntaxHighlighter::getLexer() const
 {
 	return lexer;
 }
 
-void QomposeSyntaxHighlighter::setLexer(QomposeLexer *l)
+void SyntaxHighlighter::setLexer(Lexer *l)
 {
 	lexer = l;
 
 	rehighlight();
 }
 
-void QomposeSyntaxHighlighter::highlightBlock(const QString &t)
+void SyntaxHighlighter::highlightBlock(const QString &t)
 {
 	if(lexer == NULL)
 	{
@@ -77,8 +78,8 @@ void QomposeSyntaxHighlighter::highlightBlock(const QString &t)
 	}
 
 	int state = -1;
-	QList<QomposeLexerToken> tokens = lexer->lexBlock(&state, t,
-		previousBlockState());
+	QList<LexerToken> tokens = lexer->lexBlock(
+		&state, t, previousBlockState());
 
 	for(int i = 0; i < tokens.size(); ++i)
 	{
@@ -90,12 +91,13 @@ void QomposeSyntaxHighlighter::highlightBlock(const QString &t)
 		setCurrentBlockState(state);
 }
 
-QTextCharFormat QomposeSyntaxHighlighter::getFormatFor(
-	const QomposeLexerToken &t)
+QTextCharFormat SyntaxHighlighter::getFormatFor(const LexerToken &t)
 {
-	QString key = QomposeLexer::getSettingKey(t.token);
+	QString key = Lexer::getSettingKey(t.token);
 
 	// TODO - Actually retrieve the proper format for this token from our settings instance.
 
 	return QTextCharFormat();
+}
+
 }

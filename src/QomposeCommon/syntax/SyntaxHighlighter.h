@@ -16,45 +16,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_SYNTAX_HIGHLIGHTER_H
-#define INCLUDE_QOMPOSE_SYNTAX_HIGHLIGHTER_H
+#ifndef INCLUDE_QOMPOSECOMMON_SYNTAX_SYNTAX_HIGHLIGHTER_H
+#define INCLUDE_QOMPOSECOMMON_SYNTAX_SYNTAX_HIGHLIGHTER_H
 
 #include <QSyntaxHighlighter>
 
 #include <QTextCharFormat>
 
-#include "QomposeCommon/syntax/QomposeLexer.h"
+#include "QomposeCommon/syntax/Lexer.h"
 
 class QObject;
 class QTextDocument;
 
 class QomposeSettings;
 
-class QomposeSyntaxHighlighter : public QSyntaxHighlighter
+namespace qompose
 {
-	public:
-		QomposeSyntaxHighlighter(QomposeSettings *, QObject *);
-		QomposeSyntaxHighlighter(QomposeSettings *, QTextDocument *);
-		virtual ~QomposeSyntaxHighlighter();
 
-		QomposeSettings *getSettings() const;
-		void setSettings(QomposeSettings *);
+class SyntaxHighlighter : public QSyntaxHighlighter
+{
+public:
+	SyntaxHighlighter(QomposeSettings *, QObject *);
+	SyntaxHighlighter(QomposeSettings *, QTextDocument *);
+	virtual ~SyntaxHighlighter();
 
-		QomposeLexer *getLexer() const;
-		void setLexer(QomposeLexer *);
+	QomposeSettings *getSettings() const;
+	void setSettings(QomposeSettings *);
 
-	protected:
-		virtual void highlightBlock(const QString &);
+	Lexer *getLexer() const;
+	void setLexer(Lexer *);
 
-	private:
-		QomposeSettings *settings;
-		QomposeLexer *lexer;
+protected:
+	virtual void highlightBlock(const QString &);
 
-		QomposeSyntaxHighlighter(const QomposeSyntaxHighlighter &);
-		QomposeSyntaxHighlighter &operator=(
-			const QomposeSyntaxHighlighter &);
+private:
+	QomposeSettings *settings;
+	Lexer *lexer;
 
-		QTextCharFormat getFormatFor(const QomposeLexerToken &);
+	SyntaxHighlighter(const SyntaxHighlighter &);
+	SyntaxHighlighter &operator=(const SyntaxHighlighter &);
+
+	QTextCharFormat getFormatFor(const LexerToken &);
 };
+
+}
 
 #endif

@@ -22,7 +22,7 @@
 #include <QMainWindow>
 #include <QIcon>
 
-#include "QomposeCommon/editor/QomposeEditor.h"
+#include "QomposeCommon/editor/Editor.h"
 
 class QCloseEvent;
 class QPrinter;
@@ -77,7 +77,7 @@ private:
 	void initializeMenus();
 	void applyExistingSettings();
 
-	void handleFindResult(QomposeEditor::FindResult);
+	void handleFindResult(Editor::FindResult);
 
 private Q_SLOTS:
 	void doTabPathChanged(const QString &);

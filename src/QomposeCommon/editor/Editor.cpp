@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeEditor.h"
+#include "Editor.h"
 
 #include <cstddef>
 #include <utility>
@@ -44,14 +44,17 @@
 
 #define CALL_HOTKEY_FUNCTION(obj,fn) ((obj).*(fn))
 
+namespace qompose
+{
+
 /*!
- * This function initializes a new editor widget, using the given parent widget.
+ * This function initializes a new editor widget, using the given parent
+ * widget.
  *
  * \param p Our parent widget.
  */
-QomposeEditor::QomposeEditor(QWidget *p)
-	: QomposeDecoratedTextEdit(p),
-		hotkeys(QomposeHotkeyMap<HotkeyFunction>())
+Editor::Editor(QWidget *p)
+	: DecoratedTextEdit(p), hotkeys()
 {
 	initializeHotkeys();
 }
@@ -59,7 +62,7 @@ QomposeEditor::QomposeEditor(QWidget *p)
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposeEditor::~QomposeEditor()
+Editor::~Editor()
 {
 }
 
@@ -110,99 +113,100 @@ QomposeEditor::~QomposeEditor()
  *
  * \param e The event being handled.
  */
-void QomposeEditor::keyPressEvent(QKeyEvent *e)
+void Editor::keyPressEvent(QKeyEvent *e)
 {
 	const HotkeyFunction *handler = hotkeys.getHotkeyHandler(e);
 
 	if(handler != nullptr)
 		CALL_HOTKEY_FUNCTION(*this, *handler)();
 	else
-		QomposeDecoratedTextEdit::keyPressEvent(e);
+		DecoratedTextEdit::keyPressEvent(e);
 }
 
 /*!
- * This function initializes our hotkeys map, which is used by our keyPressEvent
- * handler to decide what action to take when a given hotkey is pressed.
+ * This function initializes our hotkeys map, which is used by our
+ * keyPressEvent handler to decide what action to take when a given hotkey is
+ * pressed.
  */
-void QomposeEditor::initializeHotkeys()
+void Editor::initializeHotkeys()
 {
 	// Enter
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Return, nullptr,
-		~Qt::KeyboardModifiers(nullptr)), &QomposeEditor::doNewline);
+		~Qt::KeyboardModifiers(nullptr)), &Editor::doNewline);
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Enter, nullptr,
-		~Qt::KeyboardModifiers(nullptr)), &QomposeEditor::doNewline);
+		~Qt::KeyboardModifiers(nullptr)), &Editor::doNewline);
 
 	// Tab
 
-	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Tab), &QomposeEditor::doTab);
+	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Tab), &Editor::doTab);
 
 	// Shift + Tab
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Tab, Qt::ShiftModifier),
-		&QomposeEditor::decreaseSelectionIndent);
+		&Editor::decreaseSelectionIndent);
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Backtab, Qt::ShiftModifier),
-		&QomposeEditor::decreaseSelectionIndent);
+		&Editor::decreaseSelectionIndent);
 
 	// Home
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Home),
-		&QomposeEditor::doMoveHome);
+		&Editor::doMoveHome);
 
 	// Shift + Home
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Home, Qt::ShiftModifier),
-		&QomposeEditor::doSelectHome);
+		&Editor::doSelectHome);
 
 	// Ctrl+D
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_D, Qt::ControlModifier),
-		&QomposeEditor::duplicateLine);
+		&Editor::duplicateLine);
 
 	// Ctrl+(Zero)
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_0, Qt::ControlModifier),
-		&QomposeEditor::resetFontZoom);
+		&Editor::resetFontZoom);
 
 	// Ctrl+Shift+Left
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Left, Qt::ControlModifier |
-		Qt::ShiftModifier), &QomposeEditor::doNoop);
+		Qt::ShiftModifier), &Editor::doNoop);
 
 	// Ctrl+Shift+Right
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Right, Qt::ControlModifier |
-		Qt::ShiftModifier), &QomposeEditor::doNoop);
+		Qt::ShiftModifier), &Editor::doNoop);
 
 	// Ctrl+Insert
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Insert, Qt::ControlModifier),
-		&QomposeEditor::doNoop);
+		&Editor::doNoop);
 
 	// Ctrl+K
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_K, Qt::ControlModifier),
-		&QomposeEditor::doNoop);
+		&Editor::doNoop);
 
 	// Shift+Insert
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Insert, Qt::ShiftModifier),
-		&QomposeEditor::doNoop);
+		&Editor::doNoop);
 
 	// Shift+Delete
 
 	hotkeys.addHotkey(QomposeHotkey(Qt::Key_Delete, Qt::ShiftModifier),
-		&QomposeEditor::doNoop);
+		&Editor::doNoop);
 }
 
 /*!
- * This function is a "no-op". It is used for hotkeys we recognize, but which we
- * do not take any action for (e.g., if we are capturing one of our superclass's
- * hotkeys in order to intentionally ignore it).
+ * This function is a "no-op". It is used for hotkeys we recognize, but which
+ * we do not take any action for (e.g., if we are capturing one of our
+ * superclass's hotkeys in order to intentionally ignore it).
  */
-void QomposeEditor::doNoop()
+void Editor::doNoop()
 {
 }
 
@@ -210,7 +214,7 @@ void QomposeEditor::doNoop()
  * This function inserts a new line at the current text cursor position,
  * optionally preserving the current line's leading whitespace (i.e., indent).
  */
-void QomposeEditor::doNewline()
+void Editor::doNewline()
 {
 	// Compute the text to insert to preserve the previous line's indent.
 
@@ -242,7 +246,7 @@ void QomposeEditor::doNewline()
  * of the current selection (if applicable), or by simply inserting a single
  * tab character otherwise.
  */
-void QomposeEditor::doTab()
+void Editor::doTab()
 {
 	QTextCursor curs = textCursor();
 
@@ -261,7 +265,7 @@ void QomposeEditor::doTab()
  * This is a simple utility function which moves the cursor to the beginning of
  * the current line. This is equivalent to calling doHome(true).
  */
-void QomposeEditor::doMoveHome()
+void Editor::doMoveHome()
 {
 	doHome(true);
 }
@@ -271,22 +275,23 @@ void QomposeEditor::doMoveHome()
  * the current line, without moving the anchor - i.e., selecting. This is
  * equivalent to calling doHome(false).
  */
-void QomposeEditor::doSelectHome()
+void Editor::doSelectHome()
 {
 	doHome(false);
 }
 
 /*!
- * This function executes a given find query, using the given predefined direction. Note
- * that we do not inspect the direction properties of the given query - it is assumed that
- * our caller has resolved these into a single direction, based upon whether this is a
- * "find next" or a "find previous" operation, and whether or not the query is reversed.
+ * This function executes a given find query, using the given predefined
+ * direction. Note that we do not inspect the direction properties of the given
+ * query - it is assumed that our caller has resolved these into a single
+ * direction, based upon whether this is a "find next" or a "find previous"
+ * operation, and whether or not the query is reversed.
  *
  * \param f True means we should go forward, false means backward.
  * \param q The query to execute.
  * \return The results of executing this find query.
  */
-QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *q)
+Editor::FindResult Editor::doFind(bool f, const QomposeFindQuery *q)
 {
 	// Prepare our find flags.
 
@@ -362,21 +367,21 @@ QomposeEditor::FindResult QomposeEditor::doFind(bool f, const QomposeFindQuery *
 }
 
 /*!
- * This is a utility function which will replace ever match of the given replace
- * query from the given start position until the given end position.
+ * This is a utility function which will replace ever match of the given
+ * replace query from the given start position until the given end position.
  *
- * If the start position is omitted, then we will simply use the starting position
- * from the current cursor (the smaller of its anchor and position).
+ * If the start position is omitted, then we will simply use the starting
+ * position from the current cursor (the smaller of its anchor and position).
  *
- * If the end position is omitted, then we will simply continue until the end of
- * the document.
+ * If the end position is omitted, then we will simply continue until the end
+ * of the document.
  *
  * \param q The replace query to execute.
  * \param start The cursor position to start searching from.
  * \param end The cursor position to stop searching at.
  * \return The result of this replacement's find operation.
  */
-QomposeEditor::FindResult QomposeEditor::doBatchReplace(
+Editor::FindResult Editor::doBatchReplace(
 	const QomposeReplaceQuery *q, int start, int end)
 {
 	// If we weren't given a start position, use the current cursor.
@@ -387,7 +392,7 @@ QomposeEditor::FindResult QomposeEditor::doBatchReplace(
 		start = qMin(curs.anchor(), curs.position());
 	}
 
-	// Create a new query with "replace in selection"-compatible properties.
+	// Create a query with "replace in selection"-compatible properties.
 
 	QomposeReplaceQuery query;
 
@@ -410,12 +415,12 @@ QomposeEditor::FindResult QomposeEditor::doBatchReplace(
 	// Replace each match we find after our start position.
 
 	curs = textCursor();
-	QomposeEditor::FindResult r = findNext(&query);
+	Editor::FindResult r = findNext(&query);
 	bool found = false;
 
 	curs.beginEditBlock();
 
-	while(r == QomposeEditor::Found)
+	while(r == Editor::Found)
 	{
 		// Make sure this match is good to go.
 
@@ -452,31 +457,31 @@ QomposeEditor::FindResult QomposeEditor::doBatchReplace(
 	// Return an appropriate find result.
 
 	if(found)
-		return QomposeEditor::Found;
+		return Editor::Found;
 	else
 		return r;
 }
 
-void QomposeEditor::undo()
+void Editor::undo()
 { /* SLOT */
 
-	QomposeDecoratedTextEdit::undo();
+	DecoratedTextEdit::undo();
 
 }
 
-void QomposeEditor::redo()
+void Editor::redo()
 { /* SLOT */
 
-	QomposeDecoratedTextEdit::redo();
+	DecoratedTextEdit::redo();
 
 }
 
 /*!
- * This slot duplicates the current line. The new line is inserted below the current
- * line, without altering our cursor position. Note that this entire operation is a single
- * "edit block," for undo/redo operations.
+ * This slot duplicates the current line. The new line is inserted below the
+ * current line, without altering our cursor position. Note that this entire
+ * operation is a single "edit block," for undo/redo operations.
  */
-void QomposeEditor::duplicateLine()
+void Editor::duplicateLine()
 { /* SLOT */
 
 	// Save our cursor's initial state.
@@ -516,7 +521,7 @@ void QomposeEditor::duplicateLine()
  * discarding the "anchor" portion of the current cursor, leaving its actual
  * "position" where it was.
  */
-void QomposeEditor::deselect()
+void Editor::deselect()
 { /* SLOT */
 
 	QTextCursor curs = textCursor();
@@ -536,7 +541,7 @@ void QomposeEditor::deselect()
  * Also note that this operation is done in a single "edit block," for
  * undo/redo actions.
  */
-void QomposeEditor::increaseSelectionIndent()
+void Editor::increaseSelectionIndent()
 { /* SLOT */
 
 	QTextCursor curs = textCursor();
@@ -611,7 +616,7 @@ void QomposeEditor::increaseSelectionIndent()
  * Also note that this operation is done in a single "edit block," for
  * undo/redo actions.
  */
-void QomposeEditor::decreaseSelectionIndent()
+void Editor::decreaseSelectionIndent()
 { /* SLOT */
 
 	QTextCursor curs = textCursor();
@@ -734,7 +739,7 @@ void QomposeEditor::decreaseSelectionIndent()
  *
  * \param moveAnchor Whether or not the cursor's anchor should be moved.
  */
-void QomposeEditor::doHome(bool moveAnchor)
+void Editor::doHome(bool moveAnchor)
 {
 	// Get the characters between the current cursor and the start-of-line.
 
@@ -825,7 +830,7 @@ void QomposeEditor::doHome(bool moveAnchor)
  * \param q The query to execute.
  * \return The result of the find query's execution.
  */
-QomposeEditor::FindResult QomposeEditor::findNext(const QomposeFindQuery *q)
+Editor::FindResult Editor::findNext(const QomposeFindQuery *q)
 { /* SLOT */
 
 	bool forward = true;
@@ -844,7 +849,7 @@ QomposeEditor::FindResult QomposeEditor::findNext(const QomposeFindQuery *q)
  * \param q The query to execute.
  * \return The result of the find query's execution.
  */
-QomposeEditor::FindResult QomposeEditor::findPrevious(const QomposeFindQuery *q)
+Editor::FindResult Editor::findPrevious(const QomposeFindQuery *q)
 { /* SLOT */
 
 	bool forward = false;
@@ -859,13 +864,13 @@ QomposeEditor::FindResult QomposeEditor::findPrevious(const QomposeFindQuery *q)
 /*!
  * This slot performs a single replace operation. We will replace the very next
  * match of the given query with the query's replace value. Note that we will
- * begin searching at the start of the current cursor's selection (or its position,
- * if it has no selection).
+ * begin searching at the start of the current cursor's selection (or its
+ * position, if it has no selection).
  *
  * \param q The replace query to execute.
  * \return The result of this replacement's find operation.
  */
-QomposeEditor::FindResult QomposeEditor::replace(const QomposeReplaceQuery *q)
+Editor::FindResult Editor::replace(const QomposeReplaceQuery *q)
 { /* SLOT */
 
 	// Reset our cursor's position.
@@ -879,11 +884,11 @@ QomposeEditor::FindResult QomposeEditor::replace(const QomposeReplaceQuery *q)
 
 	// Try to find the next match.
 
-	QomposeEditor::FindResult r = findNext(q);
+	Editor::FindResult r = findNext(q);
 
 	// If we got a match, replace it with our replace value.
 
-	if(r == QomposeEditor::Found)
+	if(r == Editor::Found)
 	{
 		curs = textCursor();
 
@@ -913,23 +918,23 @@ QomposeEditor::FindResult QomposeEditor::replace(const QomposeReplaceQuery *q)
 }
 
 /*!
- * This slot performs a "replace in selection" operation. We will replace every single
- * match of the given query in our editor's current selection. If we do not have any
- * selection, then we will return NoMatches instead.
+ * This slot performs a "replace in selection" operation. We will replace every
+ * single match of the given query in our editor's current selection. If we do
+ * not have any selection, then we will return NoMatches instead.
  *
- * Note that we will return Found if at least one match is replaced, or NoMatches
- * otherwise.
+ * Note that we will return Found if at least one match is replaced, or
+ * NoMatches otherwise.
  *
  * \param q The replace query to execute.
  * \return The result of this replacement's find operation.
  */
-QomposeEditor::FindResult QomposeEditor::replaceSelection(const QomposeReplaceQuery *q)
+Editor::FindResult Editor::replaceSelection(const QomposeReplaceQuery *q)
 { /* SLOT */
 
 	QTextCursor curs = textCursor();
 
 	if(!curs.hasSelection())
-		return QomposeEditor::NoMatches;
+		return Editor::NoMatches;
 
 	int start = qMin(curs.anchor(), curs.position());
 	int end = qMax(curs.anchor(), curs.position());
@@ -939,16 +944,16 @@ QomposeEditor::FindResult QomposeEditor::replaceSelection(const QomposeReplaceQu
 }
 
 /*!
- * This slot performs a "replace all" operation. We will replace every single match
- * of the given query in our editor's document.
+ * This slot performs a "replace all" operation. We will replace every single
+ * match of the given query in our editor's document.
  *
- * Note that we will return Found if at least one match is replaced, or NoMatches
- * otherwise.
+ * Note that we will return Found if at least one match is replaced, or
+ * NoMatches otherwise.
  *
  * \param q The replace query to execute.
  * \return The result of this replacement's find operation.
  */
-QomposeEditor::FindResult QomposeEditor::replaceAll(const QomposeReplaceQuery *q)
+Editor::FindResult Editor::replaceAll(const QomposeReplaceQuery *q)
 { /* SLOT */
 
 	return doBatchReplace(q, 0);
@@ -956,18 +961,18 @@ QomposeEditor::FindResult QomposeEditor::replaceAll(const QomposeReplaceQuery *q
 }
 
 /*!
- * This function will move our cursor to the very beginning of the given line number.
- * Note that the resulting cursor will be at the very beginning of the block (i.e., line),
- * and it will have no selection.
+ * This function will move our cursor to the very beginning of the given line
+ * number. Note that the resulting cursor will be at the very beginning of the
+ * block (i.e., line), and it will have no selection.
  *
- * Line numbers less than 1 will result in the cursor being positioned at the very
- * beginning of the document, and line numbers larger than our document's last line
- * will result in the cursor being positioned at the beginning of the very last line
- * in the document.
+ * Line numbers less than 1 will result in the cursor being positioned at the
+ * very beginning of the document, and line numbers larger than our document's
+ * last line will result in the cursor being positioned at the beginning of the
+ * very last line in the document.
  *
  * \param l The destination line number.
  */
-void QomposeEditor::goToLine(int l)
+void Editor::goToLine(int l)
 { /* SLOT */
 
 	l = qMax(l, 1);
@@ -975,8 +980,11 @@ void QomposeEditor::goToLine(int l)
 	QTextCursor curs = textCursor();
 
 	curs.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-	curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, qMax(l - 1, 0));
+	curs.movePosition(QTextCursor::NextBlock,
+		QTextCursor::MoveAnchor, qMax(l - 1, 0));
 
 	setTextCursor(curs);
+
+}
 
 }

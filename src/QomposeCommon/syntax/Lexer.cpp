@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeLexer.h"
+#include "Lexer.h"
+
+namespace qompose
+{
 
 /*!
  * This function returns the QomposeSettings key corresponding to the
@@ -25,7 +28,7 @@
  * \param t The token to get a setting key for.
  * \return The setting key for the given token.
  */
-QString QomposeLexer::getSettingKey(Token t)
+QString Lexer::getSettingKey(Token t)
 {
 	switch(t)
 	{
@@ -57,7 +60,7 @@ QString QomposeLexer::getSettingKey(Token t)
  *
  * \param p This object's parent object.
  */
-QomposeLexer::QomposeLexer(QObject *p)
+Lexer::Lexer(QObject *p)
 	: QObject(p)
 {
 }
@@ -65,6 +68,8 @@ QomposeLexer::QomposeLexer(QObject *p)
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposeLexer::~QomposeLexer()
+Lexer::~Lexer()
 {
+}
+
 }

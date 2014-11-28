@@ -19,7 +19,7 @@
 #ifndef INCLUDE_QOMPOSECOMMON_EDITOR_BUFFER_H
 #define INCLUDE_QOMPOSECOMMON_EDITOR_BUFFER_H
 
-#include "QomposeCommon/editor/QomposeEditor.h"
+#include "QomposeCommon/editor/Editor.h"
 
 #include "QomposeCommon/Types.h"
 
@@ -33,7 +33,7 @@ namespace qompose
 /*!
  * \brief This class provides high-level buffer functionality for editors.
  */
-class Buffer : public QomposeEditor
+class Buffer : public Editor
 {
 	Q_OBJECT
 

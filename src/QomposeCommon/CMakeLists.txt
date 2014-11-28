@@ -47,12 +47,12 @@ set(QomposeCommon_SOURCES
 
 	editor/Buffer.cpp
 	editor/Buffer.h
-	editor/QomposeDecoratedTextEdit.cpp
-	editor/QomposeDecoratedTextEdit.h
-	editor/QomposeEditor.cpp
-	editor/QomposeEditor.h
-	editor/QomposeGutter.cpp
-	editor/QomposeGutter.h
+	editor/DecoratedTextEdit.cpp
+	editor/DecoratedTextEdit.h
+	editor/Editor.cpp
+	editor/Editor.h
+	editor/Gutter.cpp
+	editor/Gutter.h
 
 	gui/BufferWidget.cpp
 	gui/BufferWidget.h
@@ -72,10 +72,10 @@ set(QomposeCommon_SOURCES
 	gui/menus/QomposeRecentMenu.cpp
 	gui/menus/QomposeRecentMenu.h
 
-	syntax/QomposeLexer.cpp
-	syntax/QomposeLexer.h
-	syntax/QomposeSyntaxHighlighter.cpp
-	syntax/QomposeSyntaxHighlighter.h
+	syntax/Lexer.cpp
+	syntax/Lexer.h
+	syntax/SyntaxHighlighter.cpp
+	syntax/SyntaxHighlighter.h
 
 	util/QomposeDocumentWriter.cpp
 	util/QomposeDocumentWriter.h

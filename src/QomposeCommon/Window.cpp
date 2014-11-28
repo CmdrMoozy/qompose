@@ -239,19 +239,19 @@ void Window::applyExistingSettings()
  *
  * \param r The find result to process.
  */
-void Window::handleFindResult(QomposeEditor::FindResult r)
+void Window::handleFindResult(Editor::FindResult r)
 {
 	// Deal with the find result.
 
 	switch(r)
 	{
-		case QomposeEditor::BadRegularExpression:
+		case Editor::BadRegularExpression:
 			QMessageBox::critical(this, tr("Invalid Regular Expression"),
 				tr("The regular expression you were trying to find was invalid."),
 				QMessageBox::Ok, QMessageBox::Ok);
 			break;
 
-		case QomposeEditor::NoMatches:
+		case Editor::NoMatches:
 			QMessageBox::information(this, tr("No Matches Found"),
 				tr("No more matches could be found."),
 				QMessageBox::Ok, QMessageBox::Ok);

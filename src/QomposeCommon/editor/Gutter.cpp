@@ -16,11 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "QomposeGutter.h"
+#include "Gutter.h"
 
 #include <QPaintEvent>
 
-#include "QomposeCommon/editor/QomposeDecoratedTextEdit.h"
+#include "QomposeCommon/editor/DecoratedTextEdit.h"
+
+namespace qompose
+{
 
 /*!
  * This is our default constructor, which creates a new gutter for the given
@@ -28,7 +31,7 @@
  *
  * \param e The editor this gutter is attached to.
  */
-QomposeGutter::QomposeGutter(QomposeDecoratedTextEdit *e)
+Gutter::Gutter(DecoratedTextEdit *e)
 	: QWidget(e, nullptr), editor(e)
 {
 }
@@ -36,7 +39,7 @@ QomposeGutter::QomposeGutter(QomposeDecoratedTextEdit *e)
 /*!
  * This is our default destructor, which cleans up & destroys our object.
  */
-QomposeGutter::~QomposeGutter()
+Gutter::~Gutter()
 {
 }
 
@@ -45,7 +48,7 @@ QomposeGutter::~QomposeGutter()
  *
  * \param e The editor we should attach ourself to.
  */
-void QomposeGutter::setEditor(QomposeDecoratedTextEdit *e)
+void Gutter::setEditor(DecoratedTextEdit *e)
 {
 	editor = e;
 }
@@ -55,7 +58,7 @@ void QomposeGutter::setEditor(QomposeDecoratedTextEdit *e)
  *
  * \return The gutter's width.
  */
-int QomposeGutter::width() const
+int Gutter::width() const
 {
 	return (editor == nullptr) ? 0 : editor->gutterWidth();
 }
@@ -66,7 +69,7 @@ int QomposeGutter::width() const
  *
  * \return The size hint for this gutter.
  */
-QSize QomposeGutter::sizeHint() const
+QSize Gutter::sizeHint() const
 {
 	int w = (editor == NULL) ? 0 : editor->gutterWidth();
 	return QSize(w, 0);
@@ -79,8 +82,10 @@ QSize QomposeGutter::sizeHint() const
  *
  * \param e The paint event being handled.
  */
-void QomposeGutter::paintEvent(QPaintEvent *e)
+void Gutter::paintEvent(QPaintEvent *e)
 {
 	if(editor != NULL)
 		editor->gutterPaintEvent(e);
+}
+
 }

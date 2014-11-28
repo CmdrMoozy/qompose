@@ -16,38 +16,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSE_GUTTER_H
-#define INCLUDE_QOMPOSE_GUTTER_H
+#ifndef INCLUDE_QOMPOSECOMMON_EDITOR_GUTTER_H
+#define INCLUDE_QOMPOSECOMMON_EDITOR_GUTTER_H
 
 #include <QWidget>
 #include <QSize>
 
 class QPaintEvent;
 
-class QomposeDecoratedTextEdit;
+namespace qompose
+{
+
+class DecoratedTextEdit;
 
 /*!
  * \brief This class implements our gutter widget.
  */
-class QomposeGutter : public QWidget
+class Gutter : public QWidget
 {
-	public:
-		QomposeGutter(QomposeDecoratedTextEdit *e);
-		virtual ~QomposeGutter();
+public:
+	Gutter(DecoratedTextEdit *e);
+	virtual ~Gutter();
 
-		void setEditor(QomposeDecoratedTextEdit *e);
+	void setEditor(DecoratedTextEdit *e);
 
-		virtual int width() const;
-		virtual QSize sizeHint() const;
+	virtual int width() const;
+	virtual QSize sizeHint() const;
 
-	protected:
-		virtual void paintEvent(QPaintEvent *e);
+protected:
+	virtual void paintEvent(QPaintEvent *e);
 
-	private:
-		QomposeDecoratedTextEdit *editor;
+private:
+	DecoratedTextEdit *editor;
 
-		QomposeGutter(const QomposeGutter &);
-		QomposeGutter &operator=(const QomposeGutter &);
+	Gutter(const Gutter &);
+	Gutter &operator=(const Gutter &);
 };
+
+}
 
 #endif

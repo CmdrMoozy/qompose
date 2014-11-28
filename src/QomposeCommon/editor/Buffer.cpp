@@ -45,7 +45,7 @@ namespace qompose
  * \param p The parent widget for our buffer widget.
  */
 Buffer::Buffer(QomposeSettings *s, QWidget *p)
-	: QomposeEditor(p), settings(s), path(QString()), codec(QString())
+	: Editor(p), settings(s), path(QString()), codec(QString())
 {
 	// Load our initial settings, and connect our settings object.
 

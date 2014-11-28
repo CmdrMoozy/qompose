@@ -710,14 +710,13 @@ void BufferWidget::doDecreaseIndent()
  * \param q The find query to execute.
  * \return The result of this find action.
  */
-QomposeEditor::FindResult BufferWidget::doFindNext(
-	const QomposeFindQuery *q)
+Editor::FindResult BufferWidget::doFindNext(const QomposeFindQuery *q)
 { /* SLOT */
 
 	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
-		return QomposeEditor::NoDocument;
+		return Editor::NoDocument;
 
 	return buf->findNext(q);
 
@@ -730,14 +729,13 @@ QomposeEditor::FindResult BufferWidget::doFindNext(
  * \param q The find query to execute.
  * \return The result of this find action.
  */
-QomposeEditor::FindResult BufferWidget::doFindPrevious(
-	const QomposeFindQuery *q)
+Editor::FindResult BufferWidget::doFindPrevious(const QomposeFindQuery *q)
 { /* SLOT */
 
 	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
-		return QomposeEditor::NoDocument;
+		return Editor::NoDocument;
 
 	return buf->findPrevious(q);
 
@@ -750,14 +748,13 @@ QomposeEditor::FindResult BufferWidget::doFindPrevious(
  * \param q The replace query to execute.
  * \return The result of this replace action.
  */
-QomposeEditor::FindResult BufferWidget::doReplace(
-	const QomposeReplaceQuery *q)
+Editor::FindResult BufferWidget::doReplace(const QomposeReplaceQuery *q)
 { /* SLOT */
 
 	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
-		return QomposeEditor::NoDocument;
+		return Editor::NoDocument;
 
 	return buf->replace(q);
 
@@ -770,14 +767,14 @@ QomposeEditor::FindResult BufferWidget::doReplace(
  * \param q The replace query to execute.
  * \return The result of this "replace in selection" action.
  */
-QomposeEditor::FindResult BufferWidget::doReplaceSelection(
+Editor::FindResult BufferWidget::doReplaceSelection(
 	const QomposeReplaceQuery *q)
 { /* SLOT */
 
 	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
-		return QomposeEditor::NoDocument;
+		return Editor::NoDocument;
 
 	return buf->replaceSelection(q);
 
@@ -790,14 +787,13 @@ QomposeEditor::FindResult BufferWidget::doReplaceSelection(
  * \param q The replace query to execute.
  * \return The result of this "replace all" action.
  */
-QomposeEditor::FindResult BufferWidget::doReplaceAll(
-	const QomposeReplaceQuery *q)
+Editor::FindResult BufferWidget::doReplaceAll(const QomposeReplaceQuery *q)
 { /* SLOT */
 
 	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
-		return QomposeEditor::NoDocument;
+		return Editor::NoDocument;
 
 	return buf->replaceAll(q);
 
