@@ -33,6 +33,7 @@
 #include "QomposeCommon/dialogs/GoToDialog.h"
 #include "QomposeCommon/dialogs/ReplaceDialog.h"
 #include "QomposeCommon/dialogs/preferences/PreferencesDialog.h"
+#include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/GUIUtils.h"
 #include "QomposeCommon/gui/StatusBar.h"
@@ -63,12 +64,6 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 
 	setWindowIcon(QIcon(":/icons/qompose.png"));
 
-	#ifdef QOMPOSE_DEBUG
-		setWindowTitle(tr("Qompose [DEBUG]"));
-	#else
-		setWindowTitle(tr("Qompose"));
-	#endif
-
 	// Initialize our window.
 
 	buffers = new BufferWidget(settings, this);
@@ -91,6 +86,10 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 	// Apply any existing settings values to our UI.
 
 	applyExistingSettings();
+
+	// Update our window title initially.
+
+	doUpdateWindowTitle();
 }
 
 /*!
@@ -276,6 +275,42 @@ void Window::handleFindResult(Editor::FindResult r)
 }
 
 /*!
+ * This slot updates our window title. This slot should be connected to any
+ * actions which might alter the window title - the current buffer changing,
+ * certain settings changing, etc.
+ */
+void Window::doUpdateWindowTitle()
+{ /* SLOT */
+
+	QString title("Qompose");
+
+	bool showFile = settings->getSetting("show-file-in-title").toBool();
+
+	if(showFile)
+	{
+		Buffer *buf = buffers->currentBuffer();
+
+		if(buf != nullptr)
+		{
+			QString file = buf->getFile();
+
+			if(file.length() == 0)
+				file = "Untitled";
+
+			title += " - ";
+			title += file;
+		}
+	}
+
+	#ifdef QOMPOSE_DEBUG
+		title += " [DEBUG]";
+	#endif
+
+	setWindowTitle(title);
+
+}
+
+/*!
  * This slot handles one of our tab's paths being changed by updating that
  * tab's path label.
  *
@@ -284,6 +319,7 @@ void Window::handleFindResult(Editor::FindResult r)
 void Window::doTabPathChanged(const QString &p)
 { /* SLOT */
 
+	doUpdateWindowTitle();
 	statusBar->setCurrentTabPath(p);
 
 }
@@ -522,7 +558,9 @@ void Window::doGoToAccepted()
 void Window::doSettingChanged(const QString &k, const QVariant &v)
 { /* SLOT */
 
-	if(k == "show-status-bar")
+	if(k == "show-file-in-title")
+		doUpdateWindowTitle();
+	else if(k == "show-status-bar")
 		statusBar->setVisible(v.toBool());
 
 }

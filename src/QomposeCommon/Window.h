@@ -79,6 +79,7 @@ private:
 	void handleFindResult(Editor::FindResult);
 
 private Q_SLOTS:
+	void doUpdateWindowTitle();
 	void doTabPathChanged(const QString &);
 	void doCursorPositionChanged(int, int);
 	void doSearchWrapped();
