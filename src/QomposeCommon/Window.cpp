@@ -178,17 +178,28 @@ void Window::initializeMenus()
 
 	mainMenu->connectBufferWidget(buffers);
 
-	QObject::connect( mainMenu, SIGNAL( printTriggered(bool)        ), this,        SLOT( doPrint()             ) );
-	QObject::connect( mainMenu, SIGNAL( printPreviewTriggered(bool) ), this,        SLOT( doPrintPreview()      ) );
-	QObject::connect( mainMenu, SIGNAL( exitTriggered(bool)         ), this,        SLOT( close()               ) );
-	QObject::connect( mainMenu, SIGNAL( preferencesTriggered(bool)  ), this,        SLOT( doPreferencesDialog() ) );
-	QObject::connect( mainMenu, SIGNAL( findTriggered(bool)         ), this,        SLOT( doFindDialog()        ) );
-	QObject::connect( mainMenu, SIGNAL( findNextTriggered(bool)     ), this,        SLOT( doFindNext()          ) );
-	QObject::connect( mainMenu, SIGNAL( findPreviousTriggered(bool) ), this,        SLOT( doFindPrevious()      ) );
-	QObject::connect( mainMenu, SIGNAL( replaceTriggered(bool)      ), this,        SLOT( doReplaceDialog()     ) );
-	QObject::connect( mainMenu, SIGNAL( goToTriggered(bool)         ), goToDialog,  SLOT( show()                ) );
-	QObject::connect( mainMenu, SIGNAL( aboutQomposeTriggered(bool) ), aboutDialog, SLOT( show()                ) );
-	QObject::connect( mainMenu, SIGNAL( aboutQtTriggered(bool)      ), qApp,        SLOT( aboutQt()             ) );
+	QObject::connect(mainMenu, SIGNAL(printTriggered(bool)),
+		this, SLOT(doPrint()));
+	QObject::connect(mainMenu, SIGNAL(printPreviewTriggered(bool)),
+		this, SLOT(doPrintPreview()));
+	QObject::connect(mainMenu, SIGNAL(exitTriggered(bool)),
+		this, SLOT(close()));
+	QObject::connect(mainMenu, SIGNAL(preferencesTriggered(bool)),
+		this, SLOT(doPreferencesDialog()));
+	QObject::connect(mainMenu, SIGNAL(findTriggered(bool)),
+		this, SLOT(doFindDialog()));
+	QObject::connect(mainMenu, SIGNAL(findNextTriggered(bool)),
+		this, SLOT(doFindNext()));
+	QObject::connect(mainMenu, SIGNAL(findPreviousTriggered(bool)),
+		this, SLOT(doFindPrevious()));
+	QObject::connect(mainMenu, SIGNAL(replaceTriggered(bool)),
+		this, SLOT(doReplaceDialog()));
+	QObject::connect(mainMenu, SIGNAL(goToTriggered(bool)),
+		goToDialog, SLOT(show()));
+	QObject::connect(mainMenu, SIGNAL(aboutQomposeTriggered(bool)),
+		aboutDialog, SLOT(show()));
+	QObject::connect(mainMenu, SIGNAL(aboutQtTriggered(bool)),
+		qApp, SLOT(aboutQt()));
 
 	#ifdef QOMPOSE_DEBUG
 		QObject::connect(mainMenu, SIGNAL(debugTriggered(bool)),
@@ -205,7 +216,8 @@ void Window::applyExistingSettings()
 {
 	// Load our initial settings, and connect our settings object.
 
-	statusBar->setVisible(settings->getSetting("show-status-bar").toBool());
+	statusBar->setVisible
+		(settings->getSetting("show-status-bar").toBool());
 
 	QObject::connect(settings, SIGNAL(settingChanged(
 		const QString &, const QVariant &)), this,
@@ -245,9 +257,11 @@ void Window::handleFindResult(Editor::FindResult r)
 	switch(r)
 	{
 		case Editor::BadRegularExpression:
-			QMessageBox::critical(this, tr("Invalid Regular Expression"),
-				tr("The regular expression you were trying to find was invalid."),
-				QMessageBox::Ok, QMessageBox::Ok);
+			QMessageBox::critical(this,
+				tr("Invalid Regular Expression"),
+				tr("The regular expression you were trying "
+				"to find was invalid."), QMessageBox::Ok,
+				QMessageBox::Ok);
 			break;
 
 		case Editor::NoMatches:
@@ -402,8 +416,8 @@ void Window::doPrintPreview()
 	if(!buffers->hasCurrentBuffer())
 	{
 		QMessageBox::warning(this, tr("Nothing To Preview"),
-			tr("No buffers are open; there is nothing to preview!"),
-			QMessageBox::Ok, QMessageBox::Ok);
+			tr("No buffers are open; there is nothing to "
+			"preview!"), QMessageBox::Ok, QMessageBox::Ok);
 
 		return;
 	}
