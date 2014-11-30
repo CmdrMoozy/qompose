@@ -25,31 +25,38 @@
 #include <QFont>
 #include <QColor>
 
+namespace
+{
+
+typedef QPair<QString, QVariant> SettingPair;
+
+}
+
 namespace qompose
 {
 
 // Load our default settings values into our static defaults list.
 
-const QList< QPair<QString, QVariant> > Settings::defaults
-	= (QList< QPair<QString, QVariant> >())
-		<< QPair<QString, QVariant>( "show-status-bar",            true                  )
-		<< QPair<QString, QVariant>( "recent-list-size",           10                    )
-		<< QPair<QString, QVariant>( "recent-list",                QStringList()         )
-		<< QPair<QString, QVariant>( "window-save-attributes",     true                  )
-		<< QPair<QString, QVariant>( "show-gutter",                true                  )
-		<< QPair<QString, QVariant>( "save-strip-trailing-spaces", true                  )
-		<< QPair<QString, QVariant>( "editor-font",                QFont("Courier", 11)  )
-		<< QPair<QString, QVariant>( "editor-tab-width",           8                     )
-		<< QPair<QString, QVariant>( "editor-wrap-guide-visible",  true                  )
-		<< QPair<QString, QVariant>( "editor-wrap-guide-width",    90                    )
-		<< QPair<QString, QVariant>( "editor-wrap-guide-color",    QColor(127, 127, 127) )
-		<< QPair<QString, QVariant>( "editor-foreground",          QColor(255, 255, 255) )
-		<< QPair<QString, QVariant>( "editor-background",          QColor(39, 40, 34)    )
-		<< QPair<QString, QVariant>( "editor-current-line",        QColor(70, 72, 61)    )
-		<< QPair<QString, QVariant>( "gutter-foreground",          QColor(Qt::white)     )
-		<< QPair<QString, QVariant>( "gutter-background",          QColor(Qt::black)     )
-		<< QPair<QString, QVariant>( "window-geometry",            QByteArray()          )
-		<< QPair<QString, QVariant>( "window-state",               QByteArray()          );
+const QList< QPair<QString, QVariant> > Settings::defaults =
+	(QList< QPair<QString, QVariant> >())
+	<< SettingPair("show-status-bar", true)
+	<< SettingPair("recent-list-size", 10)
+	<< SettingPair("recent-list", QStringList())
+	<< SettingPair("window-save-attributes", true)
+	<< SettingPair("show-gutter", true)
+	<< SettingPair("save-strip-trailing-spaces", true)
+	<< SettingPair("editor-font", QFont("Courier", 11))
+	<< SettingPair("editor-tab-width", 8)
+	<< SettingPair("editor-wrap-guide-visible", true)
+	<< SettingPair("editor-wrap-guide-width", 90)
+	<< SettingPair("editor-wrap-guide-color", QColor(127, 127, 127))
+	<< SettingPair("editor-foreground", QColor(255, 255, 255))
+	<< SettingPair("editor-background", QColor(39, 40, 34))
+	<< SettingPair("editor-current-line", QColor(70, 72, 61))
+	<< SettingPair("gutter-foreground", QColor(Qt::white))
+	<< SettingPair("gutter-background", QColor(Qt::black))
+	<< SettingPair("window-geometry", QByteArray())
+	<< SettingPair("window-state", QByteArray());
 
 /*!
  * This function initializes a new settings instance, with the given parent.
@@ -81,7 +88,8 @@ Settings::~Settings()
 }
 
 /*!
- * This function returns the total number of settings keys our object is storing.
+ * This function returns the total number of settings keys our object is
+ * storing.
  *
  * \return The total number of settings keys.
  */
@@ -91,8 +99,8 @@ int Settings::count() const
 }
 
 /*!
- * This function resets ALL of our settings to their default values. Any existing
- * data will be overwritten.
+ * This function resets ALL of our settings to their default values. Any
+ * existing data will be overwritten.
  */
 void Settings::resetDefaults()
 {
@@ -155,8 +163,9 @@ QVariant Settings::getSetting(const QString &k) const
 }
 
 /*!
- * This function initializes default values, for settings which have no value set
- * for them already. Existing values will NOT be overwritten - unlike resetDefaults().
+ * This function initializes default values, for settings which have no value
+ * set for them already. Existing values will NOT be overwritten - unlike
+ * resetDefaults().
  */
 void Settings::initializeDefaults()
 {
