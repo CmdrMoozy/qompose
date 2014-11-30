@@ -40,8 +40,8 @@ namespace qompose
 GeneralPreferencesWidget::GeneralPreferencesWidget(Settings *s,
 		QWidget *p, Qt::WindowFlags f)
 	: PreferencesWidget(s, p, f), layout(nullptr),
-		statusBarCheckBox(nullptr), recentListSizeLabel(nullptr),
-		recentListSizeSpinBox(nullptr),
+		showFileInTitleCheckBox(nullptr), statusBarCheckBox(nullptr),
+		recentListSizeLabel(nullptr), recentListSizeSpinBox(nullptr),
 		saveWindowAttribsCheckBox(nullptr)
 {
 	setPreferencesIcon(GUIUtils::getIconFromTheme("preferences-other"));
@@ -63,6 +63,11 @@ GeneralPreferencesWidget::~GeneralPreferencesWidget()
  */
 void GeneralPreferencesWidget::apply()
 {
+	// Show File In Title
+
+	getSettings()->setSetting("show-file-in-title", QVariant(
+		showFileInTitleCheckBox->checkState() == Qt::Checked));
+
 	// Show Status Bar
 
 	getSettings()->setSetting("show-status-bar", QVariant(
@@ -86,6 +91,14 @@ void GeneralPreferencesWidget::apply()
  */
 void GeneralPreferencesWidget::discardChanges()
 {
+	// Show File In Title
+
+	bool showFileInTitle = getSettings()->getSetting(
+		"show-file-in-title").toBool();
+
+	showFileInTitleCheckBox->setCheckState(showFileInTitle ?
+		Qt::Checked : Qt::Unchecked);
+
 	// Show Status Bar
 
 	bool showStatusBar = getSettings()->getSetting(
@@ -116,6 +129,9 @@ void GeneralPreferencesWidget::initializeGUI()
 {
 	layout = new QGridLayout(this);
 
+	showFileInTitleCheckBox = new QCheckBox(
+		tr("Show Filename in Window Title"), this);
+
 	statusBarCheckBox = new QCheckBox(tr("Show Status Bar"), this);
 
 	recentListSizeLabel = new QLabel(
@@ -125,15 +141,17 @@ void GeneralPreferencesWidget::initializeGUI()
 	recentListSizeSpinBox->setMinimum(0);
 	recentListSizeSpinBox->setMaximum(50);
 
-	saveWindowAttribsCheckBox = new QCheckBox(tr("Save Window Attributes on Exit"), this);
+	saveWindowAttribsCheckBox = new QCheckBox(
+		tr("Save Window Attributes on Exit"), this);
 
-	layout->addWidget(statusBarCheckBox, 0, 0, 1, 1, nullptr);
-	layout->addWidget(recentListSizeLabel, 1, 0, 1, 1, nullptr);
-	layout->addWidget(recentListSizeSpinBox, 1, 1, 1, 1, nullptr);
-	layout->addWidget(saveWindowAttribsCheckBox, 2, 0, 1, 1, nullptr);
+	layout->addWidget(showFileInTitleCheckBox, 0, 0, 1, 1, nullptr);
+	layout->addWidget(statusBarCheckBox, 1, 0, 1, 1, nullptr);
+	layout->addWidget(recentListSizeLabel, 2, 0, 1, 1, nullptr);
+	layout->addWidget(recentListSizeSpinBox, 2, 1, 1, 1, nullptr);
+	layout->addWidget(saveWindowAttribsCheckBox, 3, 0, 1, 1, nullptr);
 
 	layout->setColumnStretch(0, 1);
-	layout->setRowStretch(3, 1);
+	layout->setRowStretch(4, 1);
 
 	setLayout(layout);
 }

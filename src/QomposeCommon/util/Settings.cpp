@@ -39,6 +39,7 @@ namespace qompose
 
 const QList< QPair<QString, QVariant> > Settings::defaults =
 	(QList< QPair<QString, QVariant> >())
+	<< SettingPair("show-file-in-title", true)
 	<< SettingPair("show-status-bar", true)
 	<< SettingPair("recent-list-size", 10)
 	<< SettingPair("recent-list", QStringList())

@@ -46,6 +46,7 @@ public:
 
 private:
 	QGridLayout *layout;
+	QCheckBox *showFileInTitleCheckBox;
 	QCheckBox *statusBarCheckBox;
 	QLabel *recentListSizeLabel;
 	QSpinBox *recentListSizeSpinBox;
