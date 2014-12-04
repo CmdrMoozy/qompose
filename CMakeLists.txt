@@ -29,6 +29,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
 # Allow for custom Qt prefixes, for e.g. developer builds.
 
 if(CUSTOM_QT_DIR)
+	message(STATUS "Using custom Qt prefix: ${CUSTOM_QT_DIR}")
 	set(CMAKE_PREFIX_PATH ${CUSTOM_QT_DIR} ${CMAKE_PREFIX_PATH})
 	set(QT_ROOT_DIR ${CUSTOM_QT_DIR})
 	set(QT_QMAKE_EXECUTABLE ${CUSTOM_QT_DIR}/bin/qmake)
