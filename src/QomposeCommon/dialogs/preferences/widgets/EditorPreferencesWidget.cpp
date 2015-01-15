@@ -45,8 +45,8 @@ EditorPreferencesWidget::EditorPreferencesWidget(Settings *s,
 	: PreferencesWidget(s, p, f), layout(nullptr),
 		generalGroupBox(nullptr), generalLayout(nullptr),
 		showGutterCheckBox(nullptr), editorFontLabel(nullptr),
-		editorFontButton(nullptr), tabWidthLabel(nullptr),
-		tabWidthSpinBox(nullptr), lineWrapGuideGroupBox(nullptr),
+		editorFontButton(nullptr), indentationWidthLabel(nullptr),
+		indentationWidthSpinBox(nullptr), lineWrapGuideGroupBox(nullptr),
 		lineWrapGuideLayout(nullptr), lineWrapGuideCheckBox(nullptr),
 		lineWrapGuideWidthLabel(nullptr),
 		lineWrapGuideWidthSpinBox(nullptr),
@@ -89,10 +89,10 @@ void EditorPreferencesWidget::apply()
 	getSettings()->setSetting("editor-font", QVariant(
 		editorFontButton->getSelectedFont()));
 
-	// Tab Width
+	// Indentation Width
 
-	getSettings()->setSetting("editor-tab-width", QVariant(
-		tabWidthSpinBox->value()));
+	getSettings()->setSetting("editor-indentation-width", QVariant(
+		indentationWidthSpinBox->value()));
 
 	// Wrap Guide Visible
 
@@ -155,10 +155,10 @@ void EditorPreferencesWidget::discardChanges()
 	editorFontButton->setSelectedFont(getSettings()->getSetting(
 		"editor-font").value<QFont>());
 
-	// Tab Width
+	// Indentation Width
 
-	tabWidthSpinBox->setValue(getSettings()->getSetting(
-		"editor-tab-width").toInt());
+	indentationWidthSpinBox->setValue(getSettings()->getSetting(
+		"editor-indentation-width").toInt());
 
 	// Wrap Guide Visible
 
@@ -223,17 +223,17 @@ void EditorPreferencesWidget::initializeGUI()
 
 	editorFontButton = new FontPickerButton(generalGroupBox);
 
-	tabWidthLabel = new QLabel(tr("Tab Width"), generalGroupBox, nullptr);
+	indentationWidthLabel = new QLabel(tr("Indentation Width"), generalGroupBox, nullptr);
 
-	tabWidthSpinBox = new QSpinBox(generalGroupBox);
-	tabWidthSpinBox->setMinimum(2);
-	tabWidthSpinBox->setMaximum(24);
+	indentationWidthSpinBox = new QSpinBox(generalGroupBox);
+	indentationWidthSpinBox->setMinimum(2);
+	indentationWidthSpinBox->setMaximum(24);
 
 	generalLayout->addWidget(showGutterCheckBox, 0, 0, 1, 1, nullptr);
 	generalLayout->addWidget(editorFontLabel, 1, 0, 1, 1, nullptr);
 	generalLayout->addWidget(editorFontButton, 1, 1, 1, 1, nullptr);
-	generalLayout->addWidget(tabWidthLabel, 2, 0, 1, 1, nullptr);
-	generalLayout->addWidget(tabWidthSpinBox, 2, 1, 1, 1, nullptr);
+	generalLayout->addWidget(indentationWidthLabel, 2, 0, 1, 1, nullptr);
+	generalLayout->addWidget(indentationWidthSpinBox, 2, 1, 1, 1, nullptr);
 
 	generalLayout->setRowStretch(3, 1);
 	generalLayout->setColumnStretch(0, 1);

@@ -47,7 +47,7 @@ const QList< QPair<QString, QVariant> > Settings::defaults =
 	<< SettingPair("show-gutter", true)
 	<< SettingPair("save-strip-trailing-spaces", true)
 	<< SettingPair("editor-font", QFont("Courier", 11))
-	<< SettingPair("editor-tab-width", 8)
+	<< SettingPair("editor-indentation-width", 8)
 	<< SettingPair("editor-wrap-guide-visible", true)
 	<< SettingPair("editor-wrap-guide-width", 90)
 	<< SettingPair("editor-wrap-guide-color", QColor(127, 127, 127))

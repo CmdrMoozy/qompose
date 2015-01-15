@@ -51,7 +51,7 @@ Buffer::Buffer(Settings *s, QWidget *p)
 
 	setGutterVisible(settings->getSetting("show-gutter").toBool());
 	setFont(settings->getSetting("editor-font").value<QFont>());
-	setTabWidthSpaces(settings->getSetting("editor-tab-width").toInt());
+	setTabWidthSpaces(settings->getSetting("editor-indentation-width").toInt());
 	setWrapGuideVisible(settings->getSetting(
 		"editor-wrap-guide-visible").toBool());
 	setWrapGuideColumnWidth(settings->getSetting(
@@ -422,7 +422,7 @@ void Buffer::doSettingChanged(const QString &k, const QVariant &v)
 		setGutterVisible(v.toBool());
 	else if(k == "editor-font")
 		setFont(v.value<QFont>());
-	else if(k == "editor-tab-width")
+	else if(k == "editor-indentation-width")
 		setTabWidthSpaces(v.toInt());
 	else if(k == "editor-wrap-guide-visible")
 		setWrapGuideVisible(v.toBool());

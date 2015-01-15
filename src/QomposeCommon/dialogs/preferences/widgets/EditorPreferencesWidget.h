@@ -55,8 +55,8 @@ private:
 	QCheckBox *showGutterCheckBox;
 	QLabel *editorFontLabel;
 	FontPickerButton *editorFontButton;
-	QLabel *tabWidthLabel;
-	QSpinBox *tabWidthSpinBox;
+	QLabel *indentationWidthLabel;
+	QSpinBox *indentationWidthSpinBox;
 
 	QGroupBox *lineWrapGuideGroupBox;
 	QGridLayout *lineWrapGuideLayout;
