@@ -38,7 +38,8 @@ DecoratedTextEdit::DecoratedTextEdit(QWidget *p)
           currentFont(QFont("Courier")),
           originalFontSize(11.0),
           currentFontZoom(1),
-          tabWidth(8),
+          indentationWidth(8),
+          indentationMode(IndentationMode::Tabs),
           wrapGuideVisible(false),
           wrapGuideWidth(0),
           wrapGuideColor(QColor(255, 255, 255)),
@@ -152,7 +153,7 @@ void DecoratedTextEdit::setFont(const QFont &f)
 
 	// Make sure our tab width is still the same (in spaces).
 
-	setTabWidthSpaces(tabWidth);
+	setIndentationWidth(indentationWidth);
 
 	// Update our line wrap guide, since it depends on our font.
 
@@ -216,7 +217,7 @@ void DecoratedTextEdit::setFontZoom(int z)
 
 	// Reset our tab width.
 
-	setTabWidthSpaces(tabWidth);
+	setIndentationWidth(indentationWidth);
 }
 
 /*!
@@ -236,9 +237,9 @@ void DecoratedTextEdit::resetFontZoom()
  *
  * \return The editor's tab width.
  */
-int DecoratedTextEdit::tabWidthSpaces() const
+int DecoratedTextEdit::getIndentationWidth() const
 {
-	return tabWidth;
+	return indentationWidth;
 }
 
 /*!
@@ -247,16 +248,54 @@ int DecoratedTextEdit::tabWidthSpaces() const
  *
  * \param w The new tab width to use.
  */
-void DecoratedTextEdit::setTabWidthSpaces(int w)
+void DecoratedTextEdit::setIndentationWidth(int w)
 {
-	tabWidth = qAbs(w);
+	indentationWidth = qAbs(w);
 
 	FontMetrics metrics(currentFont);
-	qreal tabw = metrics.getColumnWidthF(tabWidth);
+	qreal tabw = metrics.getColumnWidthF(indentationWidth);
 
 	QTextOption opt = document()->defaultTextOption();
 	opt.setTabStop(tabw);
 	document()->setDefaultTextOption(opt);
+}
+
+/*!
+ * This function returns the indentation mode this editor is currently using.
+ *
+ * \return Our current indentation mode.
+ */
+IndentationMode DecoratedTextEdit::getIndentationMode() const
+{
+	return indentationMode;
+}
+
+/*!
+ * This function sets the indentation mode this editor should use, given a
+ * string representatino of an IndentationMode value.
+ *
+ * \param mode The new indentation mode.
+ */
+void DecoratedTextEdit::setIndentationMode(const QString &mode)
+{
+	IndentationMode m = IndentationMode::Tabs;
+
+	if(mode == "tabs")
+		m = IndentationMode::Tabs;
+	else if(mode == "spaces")
+		m = IndentationMode::Spaces;
+
+	setIndentationMode(m);
+}
+
+/*!
+ * This function sets the indentation mode this editor should use.
+ *
+ * \param mode The new indentation mode.
+ */
+void DecoratedTextEdit::setIndentationMode(IndentationMode mode)
+{
+	indentationMode = mode;
 }
 
 /*!
@@ -643,6 +682,25 @@ void DecoratedTextEdit::mouseReleaseEvent(QMouseEvent *e)
 	// Do our superclass's normal mouse action.
 
 	QPlainTextEdit::mouseReleaseEvent(e);
+}
+
+/*!
+ * This function returns a string which contains a single indentation for this
+ * editor. This depends on the indentation mode and width.
+ *
+ * \return A single indentation string for this editor.
+ */
+QString DecoratedTextEdit::getIndentString() const
+{
+	switch(getIndentationMode())
+	{
+	case IndentationMode::Spaces:
+		return QString(" ").repeated(getIndentationWidth());
+
+	case IndentationMode::Tabs:
+	default:
+		return QString("\t");
+	}
 }
 
 /*!

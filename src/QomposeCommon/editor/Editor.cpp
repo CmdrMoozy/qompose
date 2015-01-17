@@ -67,7 +67,9 @@ Editor::~Editor()
 /*!
  * We implement the following hotkeys:
  *
- * Custom hotkeys implemented by TextEdit:
+ * Custom hotkeys implemented by this class:
+ *      Backspace        Deletes the character to the left of the cursor.
+ *      Delete           Deletes the character to the right of the cursor.
  * 	Return           Move to a new line, maintaining indent.
  * 	Enter            Move to a new line, maintaining indent.
  * 	Tab              Increase indent on selection.
@@ -81,8 +83,6 @@ Editor::~Editor()
  *      Ctrl+(Zero)      Reset text zoom to default level.
  *
  * Inherited from QPlainTextEdit:
- * 	Backspace        Deletes the character to the left of the cursor.
- * 	Delete           Deletes the character to the right of the cursor.
  * 	Ctrl+C           Copy selected text to clipboard.
  * 	Ctrl+V           Paste clipboard into text edit.
  * 	Ctrl+X           Deletes selected text + copies to clipboard.
@@ -101,7 +101,7 @@ Editor::~Editor()
  * 	Ctrl+End         Moves the cursor to the end of the document.
  * 	Alt+Wheel        Scrolls the page horizontally.
  *
- * Inherited, but ignored by TextEdit:
+ * Inherited, but ignored by this class:
  *      Ctrl+Shift+Left  Select to beginning of line.
  *      Ctrl+Shift+Right Select to end of line.
  * 	Ctrl+Insert      Copy selected text to clipboard.
@@ -128,6 +128,18 @@ void Editor::keyPressEvent(QKeyEvent *e)
  */
 void Editor::initializeHotkeys()
 {
+	// Backspace
+
+	hotkeys.addHotkey(Hotkey(Qt::Key_Backspace, nullptr,
+	                         ~Qt::KeyboardModifiers(nullptr)),
+	                  &Editor::doBackspace);
+
+	// Delete
+
+	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, nullptr,
+	                         ~Qt::KeyboardModifiers(nullptr)),
+	                  &Editor::doDelete);
+
 	// Enter
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Return, nullptr,
@@ -212,6 +224,60 @@ void Editor::doNoop()
 }
 
 /*!
+ * This function implements the standard "backspace" key action.
+ */
+void Editor::doBackspace()
+{
+	QTextCursor curs = textCursor();
+	int originalPosition = curs.position();
+
+	if((getIndentationMode() == IndentationMode::Spaces) &&
+	   (!curs.hasSelection()))
+	{
+		curs.movePosition(QTextCursor::StartOfBlock,
+		                  QTextCursor::KeepAnchor, 1);
+		QString selectedText = curs.selectedText();
+		curs.setPosition(originalPosition, QTextCursor::MoveAnchor);
+
+		if(selectedText.length() % getIndentationWidth() == 0)
+		{
+			bool onlySpaces = true;
+
+			for(int i = 0; i < selectedText.length(); ++i)
+			{
+				if(selectedText[i] != ' ')
+				{
+					onlySpaces = false;
+					break;
+				}
+			}
+
+			if(onlySpaces)
+			{
+				curs.movePosition(QTextCursor::Left,
+				                  QTextCursor::KeepAnchor,
+				                  getIndentationWidth() - 1);
+				curs.removeSelectedText();
+			}
+		}
+	}
+
+	curs.deletePreviousChar();
+
+	setTextCursor(curs);
+}
+
+/*!
+ * This function implements the standard "delete" key action.
+ */
+void Editor::doDelete()
+{
+	QTextCursor curs = textCursor();
+	curs.deleteChar();
+	setTextCursor(curs);
+}
+
+/*!
  * This function inserts a new line at the current text cursor position,
  * optionally preserving the current line's leading whitespace (i.e., indent).
  */
@@ -254,7 +320,7 @@ void Editor::doTab()
 
 	if(!curs.hasSelection())
 	{
-		curs.insertText("\t");
+		curs.insertText(getIndentString());
 		setTextCursor(curs);
 	}
 	else
@@ -471,12 +537,12 @@ Editor::FindResult Editor::doBatchReplace(const ReplaceQuery *q, int start,
 }
 
 void Editor::undo()
-{ /* SLOT */
+{
 	DecoratedTextEdit::undo();
 }
 
 void Editor::redo()
-{ /* SLOT */
+{
 	DecoratedTextEdit::redo();
 }
 
@@ -486,8 +552,7 @@ void Editor::redo()
  * operation is a single "edit block," for undo/redo operations.
  */
 void Editor::duplicateLine()
-{ /* SLOT */
-
+{
 	// Save our cursor's initial state.
 
 	QTextCursor curs = textCursor();
@@ -525,8 +590,7 @@ void Editor::duplicateLine()
  * "position" where it was.
  */
 void Editor::deselect()
-{ /* SLOT */
-
+{
 	QTextCursor curs = textCursor();
 	curs.setPosition(curs.position(), QTextCursor::MoveAnchor);
 	setTextCursor(curs);
@@ -544,8 +608,7 @@ void Editor::deselect()
  * undo/redo actions.
  */
 void Editor::increaseSelectionIndent()
-{ /* SLOT */
-
+{
 	QTextCursor curs = textCursor();
 
 	if(!curs.hasSelection())
@@ -578,7 +641,7 @@ void Editor::increaseSelectionIndent()
 		curs.movePosition(QTextCursor::StartOfBlock,
 		                  QTextCursor::MoveAnchor);
 
-		curs.insertText("\t");
+		curs.insertText(getIndentString());
 
 		curs.movePosition(QTextCursor::NextBlock,
 		                  QTextCursor::MoveAnchor);
@@ -618,8 +681,7 @@ void Editor::increaseSelectionIndent()
  * undo/redo actions.
  */
 void Editor::decreaseSelectionIndent()
-{ /* SLOT */
-
+{
 	QTextCursor curs = textCursor();
 
 	if(!curs.hasSelection())
@@ -662,9 +724,9 @@ void Editor::decreaseSelectionIndent()
 			curs.deleteChar();
 			foundIndent = true;
 		}
-		else if(text.startsWith(QString(tabWidthSpaces(), ' ')))
+		else if(text.startsWith(QString(getIndentationWidth(), ' ')))
 		{
-			for(int j = 0; j < tabWidthSpaces(); ++j)
+			for(int j = 0; j < getIndentationWidth(); ++j)
 			{
 				curs.deleteChar();
 				foundIndent = true;
@@ -686,7 +748,7 @@ void Editor::decreaseSelectionIndent()
 			curs.movePosition(QTextCursor::StartOfBlock,
 			                  QTextCursor::MoveAnchor);
 
-			for(int j = 0; j < tabWidthSpaces(); ++j)
+			for(int j = 0; j < getIndentationWidth(); ++j)
 			{
 				QChar c = curs.block().text().at(0);
 

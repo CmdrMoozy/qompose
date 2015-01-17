@@ -72,6 +72,8 @@ private:
 
 	void doNoop();
 
+	void doBackspace();
+	void doDelete();
 	void doNewline();
 	void doTab();
 	void doMoveHome();

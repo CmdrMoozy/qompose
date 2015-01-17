@@ -21,6 +21,8 @@
 
 #include <QPlainTextEdit>
 
+#include "QomposeCommon/Types.h"
+
 namespace qompose
 {
 class Gutter;
@@ -54,8 +56,12 @@ public:
 	void setFontZoom(int);
 	void resetFontZoom();
 
-	int tabWidthSpaces() const;
-	void setTabWidthSpaces(int);
+	int getIndentationWidth() const;
+	void setIndentationWidth(int);
+
+	IndentationMode getIndentationMode() const;
+	void setIndentationMode(const QString &);
+	void setIndentationMode(IndentationMode);
 
 	bool isWrapGuideVisible() const;
 	void setWrapGuideVisible(bool);
@@ -87,6 +93,8 @@ protected:
 	virtual void wheelEvent(QWheelEvent *);
 	virtual void mouseReleaseEvent(QMouseEvent *);
 
+	QString getIndentString() const;
+
 private:
 	Gutter *gutter;
 	bool gutterVisible;
@@ -95,7 +103,8 @@ private:
 	qreal originalFontSize;
 	int currentFontZoom;
 
-	int tabWidth;
+	int indentationWidth;
+	IndentationMode indentationMode;
 
 	bool wrapGuideVisible;
 	int wrapGuideWidth;
