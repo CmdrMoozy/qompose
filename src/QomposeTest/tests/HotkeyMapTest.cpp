@@ -26,7 +26,6 @@ namespace qompose
 {
 namespace test
 {
-
 /*!
  * This is our default constructor, which creates a new insance of our test.
  */
@@ -62,8 +61,9 @@ void HotkeyMapTest::test()
 
 	// Enter
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Enter, nullptr,
-		~Qt::KeyboardModifiers(nullptr)), &doNewline);
+	hotkeys.addHotkey(
+	        Hotkey(Qt::Key_Enter, nullptr, ~Qt::KeyboardModifiers(nullptr)),
+	        &doNewline);
 
 	// Tab
 
@@ -72,125 +72,117 @@ void HotkeyMapTest::test()
 	// Shift + Tab
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier),
-		&decreaseSelectionIndent);
+	                  &decreaseSelectionIndent);
 
 	// Home
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Home),
-		&doMoveHome);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Home), &doMoveHome);
 
 	// Shift + Home
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier),
-		&doSelectHome);
+	                  &doSelectHome);
 
 	// Ctrl+D
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier),
-		&duplicateLine);
+	                  &duplicateLine);
 
 	// Ctrl+(Zero)
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_0, Qt::ControlModifier),
-		&resetFontZoom);
+	                  &resetFontZoom);
 
 	// Ctrl+Shift+Left
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Left, Qt::ControlModifier |
-		Qt::ShiftModifier), &doNoop);
+	hotkeys.addHotkey(
+	        Hotkey(Qt::Key_Left, Qt::ControlModifier | Qt::ShiftModifier),
+	        &doNoop);
 
 	// Ctrl+Shift+Right
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Right, Qt::ControlModifier |
-		Qt::ShiftModifier), &doNoop);
+	hotkeys.addHotkey(
+	        Hotkey(Qt::Key_Right, Qt::ControlModifier | Qt::ShiftModifier),
+	        &doNoop);
 
 	// Ctrl+Insert
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier),
-		&doNoop);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier), &doNoop);
 
 	// Ctrl+K
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier),
-		&doNoop);
+	hotkeys.addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier), &doNoop);
 
 	// Shift+Insert
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier),
-		&doNoop);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier), &doNoop);
 
 	// Shift+Delete
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier),
-		&doNoop);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier), &doNoop);
 
 	// Test a series of example QKeyEvents against this hotkey mapping.
 
 	QKeyEvent enterEvent(QKeyEvent::KeyPress, Qt::Key_Enter, nullptr);
 	QKeyEvent tabEvent(QKeyEvent::KeyPress, Qt::Key_Tab, nullptr);
 	QKeyEvent backtabEvent(QKeyEvent::KeyPress, Qt::Key_Tab,
-		Qt::KeyboardModifiers(Qt::ShiftModifier));
+	                       Qt::KeyboardModifiers(Qt::ShiftModifier));
 	QKeyEvent homeEvent(QKeyEvent::KeyPress, Qt::Key_Home, nullptr);
 	QKeyEvent selectHomeEvent(QKeyEvent::KeyPress, Qt::Key_Home,
-		Qt::KeyboardModifiers(Qt::ShiftModifier));
+	                          Qt::KeyboardModifiers(Qt::ShiftModifier));
 	QKeyEvent duplicateEvent(QKeyEvent::KeyPress, Qt::Key_D,
-		Qt::KeyboardModifiers(Qt::ControlModifier));
+	                         Qt::KeyboardModifiers(Qt::ControlModifier));
 	QKeyEvent resetZoomEvent(QKeyEvent::KeyPress, Qt::Key_0,
-		Qt::KeyboardModifiers(Qt::ControlModifier));
+	                         Qt::KeyboardModifiers(Qt::ControlModifier));
 	QKeyEvent ctrlShiftLeftEvent(QKeyEvent::KeyPress, Qt::Key_Left,
-		Qt::ControlModifier | Qt::ShiftModifier);
+	                             Qt::ControlModifier | Qt::ShiftModifier);
 	QKeyEvent ctrlShiftRightEvent(QKeyEvent::KeyPress, Qt::Key_Right,
-		Qt::ControlModifier | Qt::ShiftModifier);
+	                              Qt::ControlModifier | Qt::ShiftModifier);
 	QKeyEvent ctrlInsertEvent(QKeyEvent::KeyPress, Qt::Key_Insert,
-		Qt::KeyboardModifiers(Qt::ControlModifier));
+	                          Qt::KeyboardModifiers(Qt::ControlModifier));
 	QKeyEvent ctrkKEvent(QKeyEvent::KeyPress, Qt::Key_K,
-		Qt::KeyboardModifiers(Qt::ControlModifier));
+	                     Qt::KeyboardModifiers(Qt::ControlModifier));
 	QKeyEvent shiftInsertEvent(QKeyEvent::KeyPress, Qt::Key_Insert,
-		Qt::KeyboardModifiers(Qt::ShiftModifier));
+	                           Qt::KeyboardModifiers(Qt::ShiftModifier));
 	QKeyEvent shiftDeleteEvent(QKeyEvent::KeyPress, Qt::Key_Delete,
-		Qt::KeyboardModifiers(Qt::ShiftModifier));
+	                           Qt::KeyboardModifiers(Qt::ShiftModifier));
 
 	QKeyEvent ctrlShiftTabEvent(QKeyEvent::KeyPress, Qt::Key_Tab,
-		Qt::ControlModifier | Qt::ShiftModifier);
+	                            Qt::ControlModifier | Qt::ShiftModifier);
 	QKeyEvent ctrlShiftHomeEvent(QKeyEvent::KeyPress, Qt::Key_Home,
-		Qt::ControlModifier | Qt::ShiftModifier);
+	                             Qt::ControlModifier | Qt::ShiftModifier);
 	QKeyEvent ctrlAEvent(QKeyEvent::KeyPress, Qt::Key_A,
-		Qt::KeyboardModifiers(Qt::ControlModifier));
+	                     Qt::KeyboardModifiers(Qt::ControlModifier));
 
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&enterEvent), &doNewline);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&tabEvent), &doTab);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&backtabEvent), &decreaseSelectionIndent);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&homeEvent), &doMoveHome);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&selectHomeEvent), &doSelectHome);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&duplicateEvent), &duplicateLine);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&resetZoomEvent), &resetFontZoom);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&ctrlShiftLeftEvent), &doNoop);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&ctrlShiftRightEvent), &doNoop);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&ctrlInsertEvent), &doNoop);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&ctrkKEvent), &doNoop);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&shiftInsertEvent), &doNoop);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(
-		&shiftDeleteEvent), &doNoop);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&enterEvent), &doNewline);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&tabEvent), &doTab);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&backtabEvent),
+	                   &decreaseSelectionIndent);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&homeEvent), &doMoveHome);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&selectHomeEvent),
+	                   &doSelectHome);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&duplicateEvent),
+	                   &duplicateLine);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&resetZoomEvent),
+	                   &resetFontZoom);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&ctrlShiftLeftEvent),
+	                   &doNoop);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&ctrlShiftRightEvent),
+	                   &doNoop);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&ctrlInsertEvent),
+	                   &doNoop);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&ctrkKEvent), &doNoop);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&shiftInsertEvent),
+	                   &doNoop);
+	Test::assertEquals(*hotkeys.getHotkeyHandler(&shiftDeleteEvent),
+	                   &doNoop);
 
-	Test::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
-		&ctrlShiftTabEvent), nullptr);
-	Test::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
-		&ctrlShiftHomeEvent), nullptr);
-	Test::assertEquals<int * const *>(hotkeys.getHotkeyHandler(
-		&ctrlAEvent), nullptr);
+	Test::assertEquals<int *const *>(
+	        hotkeys.getHotkeyHandler(&ctrlShiftTabEvent), nullptr);
+	Test::assertEquals<int *const *>(
+	        hotkeys.getHotkeyHandler(&ctrlShiftHomeEvent), nullptr);
+	Test::assertEquals<int *const *>(hotkeys.getHotkeyHandler(&ctrlAEvent),
+	                                 nullptr);
 }
-
 }
 }

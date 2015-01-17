@@ -27,7 +27,6 @@ class QIcon;
 
 namespace qompose
 {
-
 /*!
  * \brief This class implements a QPushButton for selecting a font.
  *
@@ -39,15 +38,14 @@ namespace qompose
  */
 class FontPickerButton : public QPushButton
 {
-
 	Q_OBJECT
 
 public:
 	FontPickerButton(QWidget *p = nullptr, const QFont &iF = QFont());
 	FontPickerButton(const QString &t, QWidget *p = nullptr,
-		const QFont &iF = QFont());
-	FontPickerButton(const QIcon &i, const QString &t,
-		QWidget *p = nullptr, const QFont &iF = QFont());
+	                 const QFont &iF = QFont());
+	FontPickerButton(const QIcon &i, const QString &t, QWidget *p = nullptr,
+	                 const QFont &iF = QFont());
 	virtual ~FontPickerButton();
 
 	const QFont &getSelectedFont() const;
@@ -63,9 +61,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void selectedFontChanged(const QFont &);
-
 };
-
 }
 
 #endif

@@ -25,7 +25,7 @@
 #include <string>
 
 #ifdef __GNUC__
-	#include <cxxabi.h>
+#include <cxxabi.h>
 #endif
 
 #include "QomposeTest/AssertionException.h"
@@ -49,24 +49,23 @@ int main(int argc, char **argv)
 
 	// Execute each test.
 
-
 	for(it = tests.begin(); it != tests.end(); ++it)
 	{
 		// Get this test object's type name.
 
 		qompose::test::Test *test = *it;
 
-		#ifdef __GNUC__
-			int status;
+#ifdef __GNUC__
+		int status;
 
-			char *t = abi::__cxa_demangle(typeid(*test).name(),
-				nullptr, nullptr, &status);
+		char *t = abi::__cxa_demangle(typeid(*test).name(), nullptr,
+		                              nullptr, &status);
 
-			std::string type = std::string(t);
-			free(t);
-		#else
-			std::string type = std::string(typeid(*test).name());
-		#endif
+		std::string type = std::string(t);
+		free(t);
+#else
+		std::string type = std::string(typeid(*test).name());
+#endif
 
 		// Try executing the test, catching all assertion exceptions.
 
@@ -77,8 +76,8 @@ int main(int argc, char **argv)
 		}
 		catch(const qompose::test::AssertionException &e)
 		{
-			std::cout << "ASSERTION FAILED: " << type
-				<< ": " << e.what() << "\n";
+			std::cout << "ASSERTION FAILED: " << type << ": "
+			          << e.what() << "\n";
 
 			std::cout << e.getStackTrace();
 		}

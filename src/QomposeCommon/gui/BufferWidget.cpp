@@ -35,7 +35,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new instance of our buffers
  * tab widget.
@@ -44,8 +43,12 @@ namespace qompose
  * \param p The parent widget to use for this widget.
  */
 BufferWidget::BufferWidget(Settings *s, QWidget *p)
-	: QWidget(p, nullptr), settings(s), layout(nullptr),
-		tabWidget(nullptr), tabs(), closedTabs()
+        : QWidget(p, nullptr),
+          settings(s),
+          layout(nullptr),
+          tabWidget(nullptr),
+          tabs(),
+          closedTabs()
 {
 	layout = new QGridLayout(this);
 
@@ -57,10 +60,10 @@ BufferWidget::BufferWidget(Settings *s, QWidget *p)
 	layout->addWidget(tabWidget, 0, 0, 1, 1, nullptr);
 	setLayout(layout);
 
-	QObject::connect(tabWidget, SIGNAL(currentChanged(int)),
-		this, SLOT(doTabChanged(int)));
-	QObject::connect(tabWidget, SIGNAL(tabCloseRequested(int)),
-		this, SLOT(doTabCloseRequested(int)));
+	QObject::connect(tabWidget, SIGNAL(currentChanged(int)), this,
+	                 SLOT(doTabChanged(int)));
+	QObject::connect(tabWidget, SIGNAL(tabCloseRequested(int)), this,
+	                 SLOT(doTabCloseRequested(int)));
 }
 
 /*!
@@ -151,27 +154,28 @@ bool BufferWidget::prepareCloseParent()
 		if(buf->isModified())
 		{
 			QMessageBox::StandardButton b = QMessageBox::question(
-				this, tr("Qompose - Unsaved Changes"),
-				tr("Save changes before closing?"),
-				QMessageBox::Yes | QMessageBox::No |
-				QMessageBox::Cancel, QMessageBox::Yes);
+			        this, tr("Qompose - Unsaved Changes"),
+			        tr("Save changes before closing?"),
+			        QMessageBox::Yes | QMessageBox::No |
+			                QMessageBox::Cancel,
+			        QMessageBox::Yes);
 
 			switch(b)
 			{
-				case QMessageBox::Yes:
-					doSave();
+			case QMessageBox::Yes:
+				doSave();
 
-					if(buf->isModified())
-						return false;
-
-					break;
-
-				case QMessageBox::No:
-					continue;
-
-				case QMessageBox::Cancel:
-				default:
+				if(buf->isModified())
 					return false;
+
+				break;
+
+			case QMessageBox::No:
+				continue;
+
+			case QMessageBox::Cancel:
+			default:
+				return false;
 			};
 		}
 	}
@@ -214,14 +218,14 @@ Buffer *BufferWidget::newBuffer()
 {
 	Buffer *b = new Buffer(settings, tabWidget);
 
-	QObject::connect(b, SIGNAL(titleChanged(const QString &)),
-		this, SLOT(doTabTitleChanged(const QString &)));
-	QObject::connect(b, SIGNAL(pathChanged(const QString &)),
-		this, SLOT(doTabPathChanged(const QString &)));
-	QObject::connect(b, SIGNAL(cursorPositionChanged()),
-		this, SLOT(doCursorPositionChanged()));
-	QObject::connect(b, SIGNAL(searchWrapped()),
-		this, SIGNAL(searchWrapped()));
+	QObject::connect(b, SIGNAL(titleChanged(const QString &)), this,
+	                 SLOT(doTabTitleChanged(const QString &)));
+	QObject::connect(b, SIGNAL(pathChanged(const QString &)), this,
+	                 SLOT(doTabPathChanged(const QString &)));
+	QObject::connect(b, SIGNAL(cursorPositionChanged()), this,
+	                 SLOT(doCursorPositionChanged()));
+	QObject::connect(b, SIGNAL(searchWrapped()), this,
+	                 SIGNAL(searchWrapped()));
 
 	int i = tabWidget->addTab(b, b->getTitle());
 	tabWidget->setCurrentIndex(i);
@@ -342,9 +346,7 @@ QString BufferWidget::getDefaultDirectory() const
  */
 void BufferWidget::doNew()
 { /* SLOT */
-
 	newBuffer();
-
 }
 
 /*!
@@ -357,14 +359,13 @@ void BufferWidget::doOpen()
 
 	// Open the one or more selected files.
 
-	QList<FileDescriptor> files = FileDialog::getOpenFileNames(this,
-		tr("Open Files"), getDefaultDirectory());
+	QList<FileDescriptor> files = FileDialog::getOpenFileNames(
+	        this, tr("Open Files"), getDefaultDirectory());
 
 	for(int i = 0; i < files.size(); ++i)
 	{
 		doOpenDescriptor(files.at(i));
 	}
-
 }
 
 /*!
@@ -382,7 +383,6 @@ void BufferWidget::doOpenPath(const QString &p)
 		return;
 
 	doOpenDescriptor(desc);
-
 }
 
 /*!
@@ -395,7 +395,6 @@ void BufferWidget::doReopen()
 
 	if(!closedTabs.empty())
 		doReopenBuffer(closedTabs.pop());
-
 }
 
 /*!
@@ -411,7 +410,6 @@ void BufferWidget::doRevert()
 		return;
 
 	buf->revert();
-
 }
 
 /*!
@@ -429,7 +427,6 @@ void BufferWidget::doRevertAll()
 		if(buf != NULL)
 			buf->revert();
 	}
-
 }
 
 /*!
@@ -449,7 +446,6 @@ void BufferWidget::doSave()
 		buf->save();
 	else
 		doSaveAs();
-
 }
 
 /*!
@@ -479,13 +475,12 @@ void BufferWidget::doSaveAs()
 	}
 
 	QString p = QFileDialog::getSaveFileName(this, tr("Save File"), path,
-		QString(), nullptr, nullptr);
+	                                         QString(), nullptr, nullptr);
 
 	if(p.length() <= 0)
 		return;
 
 	buf->save(p);
-
 }
 
 /*!
@@ -504,29 +499,30 @@ void BufferWidget::doClose()
 	if(buf->isModified())
 	{
 		QMessageBox::StandardButton b = QMessageBox::question(
-			this, tr("Qompose - Unsaved Changes"),
-			tr("Save changes to this buffer before closing?"),
-			QMessageBox::Yes | QMessageBox::No |
-			QMessageBox::Cancel, QMessageBox::Yes);
+		        this, tr("Qompose - Unsaved Changes"),
+		        tr("Save changes to this buffer before closing?"),
+		        QMessageBox::Yes | QMessageBox::No |
+		                QMessageBox::Cancel,
+		        QMessageBox::Yes);
 
 		switch(b)
 		{
-			case QMessageBox::Yes:
-				doSave();
+		case QMessageBox::Yes:
+			doSave();
 
-				if(!buf->isModified())
-					remove = true;
-
-				break;
-
-			case QMessageBox::No:
+			if(!buf->isModified())
 				remove = true;
-				break;
 
-			case QMessageBox::Cancel:
-			default:
-				return;
-				break;
+			break;
+
+		case QMessageBox::No:
+			remove = true;
+			break;
+
+		case QMessageBox::Cancel:
+		default:
+			return;
+			break;
 		};
 	}
 	else
@@ -540,7 +536,6 @@ void BufferWidget::doClose()
 
 		removeCurrentBuffer();
 	}
-
 }
 
 /*!
@@ -556,7 +551,6 @@ void BufferWidget::doUndo()
 		return;
 
 	buf->undo();
-
 }
 
 /*!
@@ -572,7 +566,6 @@ void BufferWidget::doRedo()
 		return;
 
 	buf->redo();
-
 }
 
 /*!
@@ -588,7 +581,6 @@ void BufferWidget::doCut()
 		return;
 
 	buf->cut();
-
 }
 
 /*!
@@ -604,7 +596,6 @@ void BufferWidget::doCopy()
 		return;
 
 	buf->copy();
-
 }
 
 /*!
@@ -620,7 +611,6 @@ void BufferWidget::doPaste()
 		return;
 
 	buf->paste();
-
 }
 
 /*!
@@ -636,7 +626,6 @@ void BufferWidget::doDuplicateLine()
 		return;
 
 	buf->duplicateLine();
-
 }
 
 /*!
@@ -652,7 +641,6 @@ void BufferWidget::doSelectAll()
 		return;
 
 	buf->selectAll();
-
 }
 
 /*!
@@ -668,7 +656,6 @@ void BufferWidget::doDeselect()
 		return;
 
 	buf->deselect();
-
 }
 
 /*!
@@ -684,7 +671,6 @@ void BufferWidget::doIncreaseIndent()
 		return;
 
 	buf->increaseSelectionIndent();
-
 }
 
 /*!
@@ -700,7 +686,6 @@ void BufferWidget::doDecreaseIndent()
 		return;
 
 	buf->decreaseSelectionIndent();
-
 }
 
 /*!
@@ -719,7 +704,6 @@ Editor::FindResult BufferWidget::doFindNext(const FindQuery *q)
 		return Editor::NoDocument;
 
 	return buf->findNext(q);
-
 }
 
 /*!
@@ -738,7 +722,6 @@ Editor::FindResult BufferWidget::doFindPrevious(const FindQuery *q)
 		return Editor::NoDocument;
 
 	return buf->findPrevious(q);
-
 }
 
 /*!
@@ -757,7 +740,6 @@ Editor::FindResult BufferWidget::doReplace(const ReplaceQuery *q)
 		return Editor::NoDocument;
 
 	return buf->replace(q);
-
 }
 
 /*!
@@ -776,7 +758,6 @@ Editor::FindResult BufferWidget::doReplaceSelection(const ReplaceQuery *q)
 		return Editor::NoDocument;
 
 	return buf->replaceSelection(q);
-
 }
 
 /*!
@@ -795,7 +776,6 @@ Editor::FindResult BufferWidget::doReplaceAll(const ReplaceQuery *q)
 		return Editor::NoDocument;
 
 	return buf->replaceAll(q);
-
 }
 
 /*!
@@ -813,7 +793,6 @@ void BufferWidget::doGoTo(int l)
 		return;
 
 	buf->goToLine(l);
-
 }
 
 /*!
@@ -830,7 +809,6 @@ void BufferWidget::doPreviousBuffer()
 		i = tabWidget->count() - 1;
 
 	tabWidget->setCurrentIndex(i);
-
 }
 
 /*!
@@ -847,7 +825,6 @@ void BufferWidget::doNextBuffer()
 		i = 0;
 
 	tabWidget->setCurrentIndex(i);
-
 }
 
 /*!
@@ -866,7 +843,6 @@ void BufferWidget::doMoveBufferLeft()
 
 	moveBuffer(f, t);
 	tabWidget->setCurrentIndex(t);
-
 }
 
 /*!
@@ -885,7 +861,6 @@ void BufferWidget::doMoveBufferRight()
 
 	moveBuffer(f, t);
 	tabWidget->setCurrentIndex(t);
-
 }
 
 /*!
@@ -904,7 +879,6 @@ void BufferWidget::doPrint(QPrinter *p)
 		return;
 
 	buf->print(p);
-
 }
 
 /*!
@@ -927,14 +901,13 @@ void BufferWidget::doTabChanged(int i)
 
 		Q_EMIT pathChanged(b->getPath());
 		Q_EMIT cursorPositionChanged(curs.blockNumber() + 1,
-			curs.positionInBlock() + 1);
+		                             curs.positionInBlock() + 1);
 	}
 	else
 	{
 		Q_EMIT pathChanged("");
 		Q_EMIT cursorPositionChanged(1, 1);
 	}
-
 }
 
 /*!
@@ -948,7 +921,6 @@ void BufferWidget::doTabCloseRequested(int i)
 
 	tabWidget->setCurrentIndex(i);
 	doClose();
-
 }
 
 /*!
@@ -968,17 +940,14 @@ void BufferWidget::doTabClosing(int i)
 
 	if(buf->hasBeenSaved())
 	{
-		ClosedBufferDescriptor desc = {
-			buf->getFileDescriptor(),
-			buf->textCursor().position()
-		};
+		ClosedBufferDescriptor desc = {buf->getFileDescriptor(),
+		                               buf->textCursor().position()};
 
 		closedTabs.push(desc);
 
 		while(closedTabs.count() > 20)
 			closedTabs.remove(0);
 	}
-
 }
 
 /*!
@@ -1000,7 +969,6 @@ void BufferWidget::doTabTitleChanged(const QString &t)
 		if(i != -1)
 			tabWidget->setTabText(i, t);
 	}
-
 }
 
 /*!
@@ -1022,7 +990,6 @@ void BufferWidget::doTabPathChanged(const QString &p)
 			Q_EMIT pathChanged(p);
 		}
 	}
-
 }
 
 /*!
@@ -1041,10 +1008,9 @@ void BufferWidget::doCursorPositionChanged()
 		if(b == currentBuffer())
 		{
 			Q_EMIT cursorPositionChanged(b->getCurrentLine(),
-				b->getCurrentColumn());
+			                             b->getCurrentColumn());
 		}
 	}
-
 }
 
 /*!
@@ -1065,7 +1031,7 @@ Buffer *BufferWidget::doOpenDescriptor(const FileDescriptor &d)
 		Buffer *b = *i;
 		int idx = tabWidget->indexOf(b);
 
-		if( (!b->hasBeenSaved()) && (!b->isModified()) )
+		if((!b->hasBeenSaved()) && (!b->isModified()))
 		{
 			tabWidget->removeTab(idx);
 			delete b;
@@ -1089,7 +1055,6 @@ Buffer *BufferWidget::doOpenDescriptor(const FileDescriptor &d)
 	Q_EMIT pathOpened(d.fileName);
 
 	return b;
-
 }
 
 /*!
@@ -1098,8 +1063,7 @@ Buffer *BufferWidget::doOpenDescriptor(const FileDescriptor &d)
  *
  * \param d The closed buffer descriptor to reopen.
  */
-void BufferWidget::doReopenBuffer(
-	const ClosedBufferDescriptor &d)
+void BufferWidget::doReopenBuffer(const ClosedBufferDescriptor &d)
 { /* SLOT */
 
 	Buffer *b = doOpenDescriptor(d.file);
@@ -1112,7 +1076,5 @@ void BufferWidget::doReopenBuffer(
 
 		b->setTextCursor(curs);
 	}
-
 }
-
 }

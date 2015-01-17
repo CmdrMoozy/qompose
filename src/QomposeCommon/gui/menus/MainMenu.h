@@ -26,7 +26,6 @@ class QAction;
 
 namespace qompose
 {
-
 class BufferWidget;
 class Settings;
 class RecentMenu;
@@ -101,9 +100,9 @@ private:
 	QAction *aboutQomposeAction;
 	QAction *aboutQtAction;
 
-	#ifdef QOMPOSE_DEBUG
-		QAction *debugAction;
-	#endif
+#ifdef QOMPOSE_DEBUG
+	QAction *debugAction;
+#endif
 
 	MainMenu(const MainMenu &);
 	MainMenu &operator=(const MainMenu &);
@@ -124,11 +123,10 @@ Q_SIGNALS:
 	void aboutQomposeTriggered(bool);
 	void aboutQtTriggered(bool);
 
-	#ifdef QOMPOSE_DEBUG
-		void debugTriggered(bool);
-	#endif
+#ifdef QOMPOSE_DEBUG
+	void debugTriggered(bool);
+#endif
 };
-
 }
 
 #endif

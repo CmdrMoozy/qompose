@@ -25,15 +25,13 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new scroll area with the
  * given widget.
  *
  * \param p The widget this scroll area will be displaying.
  */
-PreferencesScrollArea::PreferencesScrollArea(QWidget *p)
-	: QScrollArea(p)
+PreferencesScrollArea::PreferencesScrollArea(QWidget *p) : QScrollArea(p)
 {
 	setWidgetResizable(true);
 
@@ -73,7 +71,7 @@ void PreferencesScrollArea::setWidget(QWidget *w)
  */
 bool PreferencesScrollArea::eventFilter(QObject *o, QEvent *e)
 {
-	if( (o == widget()) && (e->type() == QEvent::Resize) )
+	if((o == widget()) && (e->type() == QEvent::Resize))
 	{
 		resizeFixedHorizontal();
 		return true;
@@ -127,5 +125,4 @@ void PreferencesScrollArea::resizeFixedHorizontal()
 
 	setMinimumWidth(ww + sw);
 }
-
 }

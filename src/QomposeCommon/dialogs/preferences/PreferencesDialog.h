@@ -29,7 +29,6 @@ class QPushButton;
 
 namespace qompose
 {
-
 class Settings;
 class GeneralPreferencesWidget;
 class EditorPreferencesWidget;
@@ -46,7 +45,7 @@ class PreferencesDialog : public QDialog
 
 public:
 	PreferencesDialog(Settings *, QWidget * = nullptr,
-		Qt::WindowFlags = nullptr);
+	                  Qt::WindowFlags = nullptr);
 	virtual ~PreferencesDialog();
 
 	void discardChanges();
@@ -83,7 +82,6 @@ private Q_SLOTS:
 	void doApply();
 	void doDefaults();
 };
-
 }
 
 #endif

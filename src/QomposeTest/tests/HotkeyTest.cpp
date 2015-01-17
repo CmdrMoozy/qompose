@@ -26,7 +26,6 @@ namespace qompose
 {
 namespace test
 {
-
 /*!
  * This is our default constructor, which creates a new insance of our test.
  */
@@ -62,32 +61,29 @@ void HotkeyTest::testHotkeyConstruction()
 	Hotkey a(Qt::Key_A);
 
 	Test::assertEquals(a.getKey(), Qt::Key_A);
-	Test::assertEquals(a.getKeyInteger(),
-		static_cast<quint64>(Qt::Key_A));
+	Test::assertEquals(a.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
 	Test::assertEquals(a.getRequiredModifiers(),
-		Qt::KeyboardModifiers(Qt::NoModifier));
+	                   Qt::KeyboardModifiers(Qt::NoModifier));
 	Test::assertEquals(a.getWhitelistedModifiers(),
-		Qt::KeyboardModifiers(Qt::NoModifier));
+	                   Qt::KeyboardModifiers(Qt::NoModifier));
 
 	Hotkey b(Qt::Key_A, Qt::ControlModifier);
 
 	Test::assertEquals(b.getKey(), Qt::Key_A);
-	Test::assertEquals(b.getKeyInteger(),
-		static_cast<quint64>(Qt::Key_A));
+	Test::assertEquals(b.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
 	Test::assertEquals(b.getRequiredModifiers(),
-		Qt::KeyboardModifiers(Qt::ControlModifier));
+	                   Qt::KeyboardModifiers(Qt::ControlModifier));
 	Test::assertEquals(b.getWhitelistedModifiers(),
-		Qt::KeyboardModifiers(Qt::ControlModifier));
+	                   Qt::KeyboardModifiers(Qt::ControlModifier));
 
 	Hotkey c(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
 
 	Test::assertEquals(c.getKey(), Qt::Key_A);
-	Test::assertEquals(c.getKeyInteger(),
-		static_cast<quint64>(Qt::Key_A));
+	Test::assertEquals(c.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
 	Test::assertEquals(c.getRequiredModifiers(),
-		Qt::KeyboardModifiers(Qt::ControlModifier));
+	                   Qt::KeyboardModifiers(Qt::ControlModifier));
 	Test::assertEquals(c.getWhitelistedModifiers(),
-		Qt::ControlModifier | Qt::ShiftModifier);
+	                   Qt::ControlModifier | Qt::ShiftModifier);
 }
 
 /*!
@@ -113,14 +109,13 @@ void HotkeyTest::testHotkeyCopying()
  */
 void HotkeyTest::testHotkeyMatching()
 {
-	Hotkey a(Qt::Key_Enter, nullptr,
-		~Qt::KeyboardModifiers(nullptr));
+	Hotkey a(Qt::Key_Enter, nullptr, ~Qt::KeyboardModifiers(nullptr));
 
 	QKeyEvent aeA(QKeyEvent::KeyPress, Qt::Key_Enter, nullptr);
 	QKeyEvent aeB(QKeyEvent::KeyPress, Qt::Key_Enter,
-		Qt::KeyboardModifiers(Qt::ShiftModifier));
+	              Qt::KeyboardModifiers(Qt::ShiftModifier));
 	QKeyEvent aeC(QKeyEvent::KeyPress, Qt::Key_Enter,
-		~Qt::KeyboardModifiers(nullptr));
+	              ~Qt::KeyboardModifiers(nullptr));
 	QKeyEvent aeD(QKeyEvent::KeyPress, Qt::Key_A, nullptr);
 
 	Test::assertEquals(a.matches(&aeA), 0);
@@ -132,9 +127,9 @@ void HotkeyTest::testHotkeyMatching()
 
 	QKeyEvent beA(QKeyEvent::KeyPress, Qt::Key_Home, nullptr);
 	QKeyEvent beB(QKeyEvent::KeyPress, Qt::Key_Home,
-		Qt::KeyboardModifiers(Qt::ShiftModifier));
+	              Qt::KeyboardModifiers(Qt::ShiftModifier));
 	QKeyEvent beC(QKeyEvent::KeyPress, Qt::Key_Home,
-		~Qt::KeyboardModifiers(nullptr));
+	              ~Qt::KeyboardModifiers(nullptr));
 	QKeyEvent beD(QKeyEvent::KeyPress, Qt::Key_A, nullptr);
 
 	Test::assertEquals(b.matches(&beA), 0);
@@ -142,6 +137,5 @@ void HotkeyTest::testHotkeyMatching()
 	Test::assertEquals(b.matches(&beC), -1);
 	Test::assertEquals(b.matches(&beD), -1);
 }
-
 }
 }

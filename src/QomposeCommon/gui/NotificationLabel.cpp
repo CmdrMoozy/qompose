@@ -25,7 +25,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new instance of our
  * notification label.
@@ -34,7 +33,7 @@ namespace qompose
  * \param f The window flags for this label.
  */
 NotificationLabel::NotificationLabel(QWidget *p, Qt::WindowFlags f)
-	: QLabel(p, f), defaultColor(QColor())
+        : QLabel(p, f), defaultColor(QColor())
 {
 	defaultColor = getTextColor();
 }
@@ -95,8 +94,8 @@ void NotificationLabel::displayNotification(const QString &n, bool c, int d)
 		d = qRound(duration);
 	}
 
-	QPropertyAnimation *anim = new QPropertyAnimation(
-		this, "textColor", this);
+	QPropertyAnimation *anim =
+	        new QPropertyAnimation(this, "textColor", this);
 
 	QColor transparent(defaultColor);
 	transparent.setAlpha(0);
@@ -120,5 +119,4 @@ void NotificationLabel::displayNotification(const QString &n, bool c, int d)
 
 	anim->start(QAbstractAnimation::DeleteWhenStopped);
 }
-
 }

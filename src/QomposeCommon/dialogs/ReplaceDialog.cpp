@@ -31,7 +31,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new instance of our
  * replace dialog.
@@ -40,16 +39,27 @@ namespace qompose
  * \param f The window flags to use for this dialog.
  */
 ReplaceDialog::ReplaceDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f), query(new ReplaceQuery(this)),
-		layout(nullptr), findLabel(nullptr), findTextEdit(nullptr),
-		replaceLabel(nullptr), replaceTextEdit(nullptr),
-		optionsGroupBox(nullptr), optionsLayout(nullptr),
-		wrapCheckBox(nullptr), wholeWordsCheckBox(nullptr),
-		caseSensitiveCheckBox(nullptr), reverseCheckBox(nullptr),
-		regexCheckBox(nullptr), buttonsWidget(nullptr),
-		buttonsLayout(nullptr), replaceButton(nullptr),
-		findButton(nullptr), replaceSelButton(nullptr),
-		replaceAllButton(nullptr), closeButton(nullptr)
+        : QDialog(p, f),
+          query(new ReplaceQuery(this)),
+          layout(nullptr),
+          findLabel(nullptr),
+          findTextEdit(nullptr),
+          replaceLabel(nullptr),
+          replaceTextEdit(nullptr),
+          optionsGroupBox(nullptr),
+          optionsLayout(nullptr),
+          wrapCheckBox(nullptr),
+          wholeWordsCheckBox(nullptr),
+          caseSensitiveCheckBox(nullptr),
+          reverseCheckBox(nullptr),
+          regexCheckBox(nullptr),
+          buttonsWidget(nullptr),
+          buttonsLayout(nullptr),
+          replaceButton(nullptr),
+          findButton(nullptr),
+          replaceSelButton(nullptr),
+          replaceAllButton(nullptr),
+          closeButton(nullptr)
 {
 	setWindowTitle(tr("Replace"));
 
@@ -94,20 +104,20 @@ void ReplaceDialog::showEvent(QShowEvent *e)
 
 	replaceTextEdit->setText(query->getReplaceValue());
 
-	wrapCheckBox->setCheckState(query->isWrapping() ?
-		Qt::Checked : Qt::Unchecked);
+	wrapCheckBox->setCheckState(query->isWrapping() ? Qt::Checked
+	                                                : Qt::Unchecked);
 
-	wholeWordsCheckBox->setCheckState(query->isWholeWords() ?
-		Qt::Checked : Qt::Unchecked);
+	wholeWordsCheckBox->setCheckState(
+	        query->isWholeWords() ? Qt::Checked : Qt::Unchecked);
 
-	caseSensitiveCheckBox->setCheckState(query->isCaseSensitive() ?
-		Qt::Checked : Qt::Unchecked);
+	caseSensitiveCheckBox->setCheckState(
+	        query->isCaseSensitive() ? Qt::Checked : Qt::Unchecked);
 
-	reverseCheckBox->setCheckState(query->isReversed() ?
-		Qt::Checked : Qt::Unchecked);
+	reverseCheckBox->setCheckState(query->isReversed() ? Qt::Checked
+	                                                   : Qt::Unchecked);
 
-	regexCheckBox->setCheckState(query->isRegularExpression() ?
-		Qt::Checked : Qt::Unchecked);
+	regexCheckBox->setCheckState(
+	        query->isRegularExpression() ? Qt::Checked : Qt::Unchecked);
 
 	// Bring our dialog to the front.
 
@@ -141,16 +151,21 @@ void ReplaceDialog::initializeGUI()
 	optionsGroupBox = new QGroupBox(tr("Options"), this);
 	optionsLayout = new QGridLayout(optionsGroupBox);
 
-	wrapCheckBox = new QCheckBox(tr("Wrap around document?"), optionsGroupBox);
+	wrapCheckBox =
+	        new QCheckBox(tr("Wrap around document?"), optionsGroupBox);
 	wrapCheckBox->setCheckState(Qt::Checked);
 
-	wholeWordsCheckBox = new QCheckBox(tr("Find whole words only?"), optionsGroupBox);
+	wholeWordsCheckBox =
+	        new QCheckBox(tr("Find whole words only?"), optionsGroupBox);
 
-	caseSensitiveCheckBox = new QCheckBox(tr("Case sensitive?"), optionsGroupBox);
+	caseSensitiveCheckBox =
+	        new QCheckBox(tr("Case sensitive?"), optionsGroupBox);
 
-	reverseCheckBox = new QCheckBox(tr("Reverse search direction?"), optionsGroupBox);
+	reverseCheckBox =
+	        new QCheckBox(tr("Reverse search direction?"), optionsGroupBox);
 
-	regexCheckBox = new QCheckBox(tr("Regular expression search?"), optionsGroupBox);
+	regexCheckBox = new QCheckBox(tr("Regular expression search?"),
+	                              optionsGroupBox);
 
 	optionsLayout->addWidget(wrapCheckBox, 0, 0, 1, 1, nullptr);
 	optionsLayout->addWidget(wholeWordsCheckBox, 1, 0, 1, 1, nullptr);
@@ -169,7 +184,8 @@ void ReplaceDialog::initializeGUI()
 
 	findButton = new QPushButton(tr("&Find"), buttonsWidget);
 
-	replaceSelButton = new QPushButton(tr("Replace in &Selection"), buttonsWidget);
+	replaceSelButton =
+	        new QPushButton(tr("Replace in &Selection"), buttonsWidget);
 
 	replaceAllButton = new QPushButton(tr("Replace &All"), buttonsWidget);
 
@@ -195,11 +211,16 @@ void ReplaceDialog::initializeGUI()
 	layout->setColumnStretch(1, 1);
 	setLayout(layout);
 
-	QObject::connect( replaceButton,    SIGNAL( clicked(bool) ), this, SLOT( doReplace()          ) );
-	QObject::connect( findButton,       SIGNAL( clicked(bool) ), this, SLOT( doFind()             ) );
-	QObject::connect( replaceSelButton, SIGNAL( clicked(bool) ), this, SLOT( doReplaceSelection() ) );
-	QObject::connect( replaceAllButton, SIGNAL( clicked(bool) ), this, SLOT( doReplaceAll()       ) );
-	QObject::connect( closeButton,      SIGNAL( clicked(bool) ), this, SLOT( close()              ) );
+	QObject::connect(replaceButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(doReplace()));
+	QObject::connect(findButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(doFind()));
+	QObject::connect(replaceSelButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(doReplaceSelection()));
+	QObject::connect(replaceAllButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(doReplaceAll()));
+	QObject::connect(closeButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(close()));
 }
 
 /*!
@@ -212,7 +233,8 @@ void ReplaceDialog::applyValues()
 	query->setReplaceValue(replaceTextEdit->text());
 	query->setWrapping(wrapCheckBox->checkState() == Qt::Checked);
 	query->setWholeWords(wholeWordsCheckBox->checkState() == Qt::Checked);
-	query->setCaseSensitive(caseSensitiveCheckBox->checkState() == Qt::Checked);
+	query->setCaseSensitive(caseSensitiveCheckBox->checkState() ==
+	                        Qt::Checked);
 	query->setReversed(reverseCheckBox->checkState() == Qt::Checked);
 	query->setRegularExpression(regexCheckBox->checkState() == Qt::Checked);
 }
@@ -228,7 +250,6 @@ void ReplaceDialog::doReplace()
 	applyValues();
 
 	Q_EMIT replaceClicked();
-
 }
 
 /*!
@@ -242,7 +263,6 @@ void ReplaceDialog::doFind()
 	applyValues();
 
 	Q_EMIT findClicked();
-
 }
 
 /*!
@@ -258,12 +278,13 @@ void ReplaceDialog::doReplaceSelection()
 	close();
 
 	Q_EMIT replaceSelectionClicked();
-
 }
 
 /*!
- * This slot handles our "replace all" button being clicked by applying our dialog's
- * options to our query, closing our dialog and then notifying any listeners that
+ * This slot handles our "replace all" button being clicked by applying our
+ * dialog's
+ * options to our query, closing our dialog and then notifying any listeners
+ * that
  * our "replace all" action has been triggered.
  */
 void ReplaceDialog::doReplaceAll()
@@ -274,7 +295,5 @@ void ReplaceDialog::doReplaceAll()
 	close();
 
 	Q_EMIT replaceAllClicked();
-
 }
-
 }

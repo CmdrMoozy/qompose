@@ -20,7 +20,6 @@
 
 namespace qompose
 {
-
 /*!
  * This function returns the QomposeSettings key corresponding to the
  * style information for the given token.
@@ -32,26 +31,26 @@ QString Lexer::getSettingKey(Token t)
 {
 	switch(t)
 	{
-		case PreprocessorToken:
-			return "token-preprocessor";
+	case PreprocessorToken:
+		return "token-preprocessor";
 
-		case CommentToken:
-			return "token-comment";
+	case CommentToken:
+		return "token-comment";
 
-		case StringToken:
-			return "token-string";
+	case StringToken:
+		return "token-string";
 
-		case KeywordToken:
-			return "token-keyword";
+	case KeywordToken:
+		return "token-keyword";
 
-		case OperatorToken:
-			return "token-operator";
+	case OperatorToken:
+		return "token-operator";
 
-		case NumberToken:
-			return "token-number";
+	case NumberToken:
+		return "token-number";
 
-		default:
-			return QString();
+	default:
+		return QString();
 	};
 }
 
@@ -60,8 +59,7 @@ QString Lexer::getSettingKey(Token t)
  *
  * \param p This object's parent object.
  */
-Lexer::Lexer(QObject *p)
-	: QObject(p)
+Lexer::Lexer(QObject *p) : QObject(p)
 {
 }
 
@@ -71,5 +69,4 @@ Lexer::Lexer(QObject *p)
 Lexer::~Lexer()
 {
 }
-
 }

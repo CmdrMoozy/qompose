@@ -44,7 +44,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new Qompose window, and
  * initializes its contents.
@@ -53,10 +52,16 @@ namespace qompose
  * \param f The Qt window flags to use for this window.
  */
 Window::Window(QWidget *p, Qt::WindowFlags f)
-	: QMainWindow(p, f), settings(nullptr), preferencesDialog(nullptr),
-		findDialog(nullptr), replaceDialog(nullptr),
-		goToDialog(nullptr), aboutDialog(nullptr), mainMenu(nullptr),
-		buffers(nullptr), statusBar(nullptr)
+        : QMainWindow(p, f),
+          settings(nullptr),
+          preferencesDialog(nullptr),
+          findDialog(nullptr),
+          replaceDialog(nullptr),
+          goToDialog(nullptr),
+          aboutDialog(nullptr),
+          mainMenu(nullptr),
+          buffers(nullptr),
+          statusBar(nullptr)
 {
 	settings = new Settings(this);
 
@@ -76,12 +81,12 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 	initializeDialogs();
 	initializeMenus();
 
-	QObject::connect( buffers, SIGNAL( pathChanged(const QString &) ),
-		this, SLOT( doTabPathChanged(const QString &) ) );
-	QObject::connect( buffers, SIGNAL( cursorPositionChanged(int, int) ),
-		this, SLOT( doCursorPositionChanged(int, int) ) );
-	QObject::connect( buffers, SIGNAL( searchWrapped() ),
-		this, SLOT( doSearchWrapped() ) );
+	QObject::connect(buffers, SIGNAL(pathChanged(const QString &)), this,
+	                 SLOT(doTabPathChanged(const QString &)));
+	QObject::connect(buffers, SIGNAL(cursorPositionChanged(int, int)), this,
+	                 SLOT(doCursorPositionChanged(int, int)));
+	QObject::connect(buffers, SIGNAL(searchWrapped()), this,
+	                 SLOT(doSearchWrapped()));
 
 	// Apply any existing settings values to our UI.
 
@@ -112,11 +117,11 @@ void Window::closeEvent(QCloseEvent *e)
 	{
 		// Save our window geometry and state.
 
-		settings->setSetting("window-geometry", QVariant(
-			saveGeometry()));
+		settings->setSetting("window-geometry",
+		                     QVariant(saveGeometry()));
 
-		settings->setSetting("window-state", QVariant(
-			saveState(QOMPOSE_VERSION_MAJ)));
+		settings->setSetting("window-state",
+		                     QVariant(saveState(QOMPOSE_VERSION_MAJ)));
 
 		// Close the window.
 
@@ -147,18 +152,18 @@ void Window::initializeDialogs()
 
 	// Connect our dialog actions.
 
-	QObject::connect(findDialog, SIGNAL(accepted()),
-		this, SLOT(doFindNext()));
-	QObject::connect(replaceDialog, SIGNAL(replaceClicked()),
-		this, SLOT(doReplace()));
-	QObject::connect(replaceDialog, SIGNAL(findClicked()),
-		this, SLOT(doReplaceFind()));
-	QObject::connect(replaceDialog, SIGNAL(replaceSelectionClicked()),
-		this, SLOT(doReplaceSelection()));
-	QObject::connect(replaceDialog, SIGNAL(replaceAllClicked()),
-		this, SLOT(doReplaceAll()));
-	QObject::connect(goToDialog, SIGNAL(accepted()),
-		this, SLOT(doGoToAccepted()));
+	QObject::connect(findDialog, SIGNAL(accepted()), this,
+	                 SLOT(doFindNext()));
+	QObject::connect(replaceDialog, SIGNAL(replaceClicked()), this,
+	                 SLOT(doReplace()));
+	QObject::connect(replaceDialog, SIGNAL(findClicked()), this,
+	                 SLOT(doReplaceFind()));
+	QObject::connect(replaceDialog, SIGNAL(replaceSelectionClicked()), this,
+	                 SLOT(doReplaceSelection()));
+	QObject::connect(replaceDialog, SIGNAL(replaceAllClicked()), this,
+	                 SLOT(doReplaceAll()));
+	QObject::connect(goToDialog, SIGNAL(accepted()), this,
+	                 SLOT(doGoToAccepted()));
 }
 
 /*!
@@ -178,33 +183,33 @@ void Window::initializeMenus()
 
 	mainMenu->connectBufferWidget(buffers);
 
-	QObject::connect(mainMenu, SIGNAL(printTriggered(bool)),
-		this, SLOT(doPrint()));
-	QObject::connect(mainMenu, SIGNAL(printPreviewTriggered(bool)),
-		this, SLOT(doPrintPreview()));
-	QObject::connect(mainMenu, SIGNAL(exitTriggered(bool)),
-		this, SLOT(close()));
-	QObject::connect(mainMenu, SIGNAL(preferencesTriggered(bool)),
-		this, SLOT(doPreferencesDialog()));
-	QObject::connect(mainMenu, SIGNAL(findTriggered(bool)),
-		this, SLOT(doFindDialog()));
-	QObject::connect(mainMenu, SIGNAL(findNextTriggered(bool)),
-		this, SLOT(doFindNext()));
-	QObject::connect(mainMenu, SIGNAL(findPreviousTriggered(bool)),
-		this, SLOT(doFindPrevious()));
-	QObject::connect(mainMenu, SIGNAL(replaceTriggered(bool)),
-		this, SLOT(doReplaceDialog()));
-	QObject::connect(mainMenu, SIGNAL(goToTriggered(bool)),
-		goToDialog, SLOT(show()));
+	QObject::connect(mainMenu, SIGNAL(printTriggered(bool)), this,
+	                 SLOT(doPrint()));
+	QObject::connect(mainMenu, SIGNAL(printPreviewTriggered(bool)), this,
+	                 SLOT(doPrintPreview()));
+	QObject::connect(mainMenu, SIGNAL(exitTriggered(bool)), this,
+	                 SLOT(close()));
+	QObject::connect(mainMenu, SIGNAL(preferencesTriggered(bool)), this,
+	                 SLOT(doPreferencesDialog()));
+	QObject::connect(mainMenu, SIGNAL(findTriggered(bool)), this,
+	                 SLOT(doFindDialog()));
+	QObject::connect(mainMenu, SIGNAL(findNextTriggered(bool)), this,
+	                 SLOT(doFindNext()));
+	QObject::connect(mainMenu, SIGNAL(findPreviousTriggered(bool)), this,
+	                 SLOT(doFindPrevious()));
+	QObject::connect(mainMenu, SIGNAL(replaceTriggered(bool)), this,
+	                 SLOT(doReplaceDialog()));
+	QObject::connect(mainMenu, SIGNAL(goToTriggered(bool)), goToDialog,
+	                 SLOT(show()));
 	QObject::connect(mainMenu, SIGNAL(aboutQomposeTriggered(bool)),
-		aboutDialog, SLOT(show()));
-	QObject::connect(mainMenu, SIGNAL(aboutQtTriggered(bool)),
-		qApp, SLOT(aboutQt()));
+	                 aboutDialog, SLOT(show()));
+	QObject::connect(mainMenu, SIGNAL(aboutQtTriggered(bool)), qApp,
+	                 SLOT(aboutQt()));
 
-	#ifdef QOMPOSE_DEBUG
-		QObject::connect(mainMenu, SIGNAL(debugTriggered(bool)),
-			this, SLOT(doDebug()));
-	#endif
+#ifdef QOMPOSE_DEBUG
+	QObject::connect(mainMenu, SIGNAL(debugTriggered(bool)), this,
+	                 SLOT(doDebug()));
+#endif
 }
 
 /*!
@@ -216,30 +221,30 @@ void Window::applyExistingSettings()
 {
 	// Load our initial settings, and connect our settings object.
 
-	statusBar->setVisible
-		(settings->getSetting("show-status-bar").toBool());
+	statusBar->setVisible(settings->getSetting("show-status-bar").toBool());
 
-	QObject::connect(settings, SIGNAL(settingChanged(
-		const QString &, const QVariant &)), this,
-		SLOT(doSettingChanged(const QString &, const QVariant &)));
+	QObject::connect(
+	        settings,
+	        SIGNAL(settingChanged(const QString &, const QVariant &)), this,
+	        SLOT(doSettingChanged(const QString &, const QVariant &)));
 
 	// Restore our window's geometry and state.
 
-	QByteArray winGeometry = settings->getSetting("window-geometry")
-		.toByteArray();
+	QByteArray winGeometry =
+	        settings->getSetting("window-geometry").toByteArray();
 
 	if(!winGeometry.isNull())
 		if(!restoreGeometry(winGeometry))
 			settings->setSetting("window-geometry",
-				QVariant(QByteArray()));
+			                     QVariant(QByteArray()));
 
-	QByteArray winState = settings->getSetting("window-state")
-		.toByteArray();
+	QByteArray winState =
+	        settings->getSetting("window-state").toByteArray();
 
 	if(!winState.isNull())
 		if(!restoreState(winState, QOMPOSE_VERSION_MAJ))
 			settings->setSetting("window-state",
-				QVariant(QByteArray()));
+			                     QVariant(QByteArray()));
 }
 
 /*!
@@ -256,21 +261,22 @@ void Window::handleFindResult(Editor::FindResult r)
 
 	switch(r)
 	{
-		case Editor::BadRegularExpression:
-			QMessageBox::critical(this,
-				tr("Invalid Regular Expression"),
-				tr("The regular expression you were trying "
-				"to find was invalid."), QMessageBox::Ok,
-				QMessageBox::Ok);
-			break;
+	case Editor::BadRegularExpression:
+		QMessageBox::critical(
+		        this, tr("Invalid Regular Expression"),
+		        tr("The regular expression you were trying "
+		           "to find was invalid."),
+		        QMessageBox::Ok, QMessageBox::Ok);
+		break;
 
-		case Editor::NoMatches:
-			QMessageBox::information(this, tr("No Matches Found"),
-				tr("No more matches could be found."),
-				QMessageBox::Ok, QMessageBox::Ok);
-			break;
+	case Editor::NoMatches:
+		QMessageBox::information(this, tr("No Matches Found"),
+		                         tr("No more matches could be found."),
+		                         QMessageBox::Ok, QMessageBox::Ok);
+		break;
 
-		default: break;
+	default:
+		break;
 	};
 
 	// Re-focus the dialog that generated this result, if any.
@@ -316,12 +322,11 @@ void Window::doUpdateWindowTitle()
 		}
 	}
 
-	#ifdef QOMPOSE_DEBUG
-		title += " [DEBUG]";
-	#endif
+#ifdef QOMPOSE_DEBUG
+	title += " [DEBUG]";
+#endif
 
 	setWindowTitle(title);
-
 }
 
 /*!
@@ -335,7 +340,6 @@ void Window::doTabPathChanged(const QString &p)
 
 	doUpdateWindowTitle();
 	statusBar->setCurrentTabPath(p);
-
 }
 
 /*!
@@ -350,7 +354,6 @@ void Window::doCursorPositionChanged(int l, int c)
 
 	statusBar->setLine(l);
 	statusBar->setColumn(c);
-
 }
 
 /*!
@@ -361,7 +364,6 @@ void Window::doSearchWrapped()
 { /* SLOT */
 
 	statusBar->displayNotification(tr("Search wrapped around buffer."));
-
 }
 
 /*!
@@ -378,7 +380,6 @@ void Window::doPreferencesDialog()
 		preferencesDialog->discardChanges();
 		preferencesDialog->show();
 	}
-
 }
 
 /*!
@@ -391,9 +392,10 @@ void Window::doPrint()
 
 	if(!buffers->hasCurrentBuffer())
 	{
-		QMessageBox::warning(this, tr("Nothing To Print"),
-			tr("No buffers are open; there is nothing to print!"),
-			QMessageBox::Ok, QMessageBox::Ok);
+		QMessageBox::warning(
+		        this, tr("Nothing To Print"),
+		        tr("No buffers are open; there is nothing to print!"),
+		        QMessageBox::Ok, QMessageBox::Ok);
 
 		return;
 	}
@@ -403,7 +405,6 @@ void Window::doPrint()
 
 	if(dialog.exec() == QDialog::Accepted)
 		buffers->doPrint(&printer);
-
 }
 
 /*!
@@ -415,22 +416,23 @@ void Window::doPrintPreview()
 
 	if(!buffers->hasCurrentBuffer())
 	{
-		QMessageBox::warning(this, tr("Nothing To Preview"),
-			tr("No buffers are open; there is nothing to "
-			"preview!"), QMessageBox::Ok, QMessageBox::Ok);
+		QMessageBox::warning(
+		        this, tr("Nothing To Preview"),
+		        tr("No buffers are open; there is nothing to "
+		           "preview!"),
+		        QMessageBox::Ok, QMessageBox::Ok);
 
 		return;
 	}
 
 	QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this, nullptr);
 
-	QObject::connect( dialog, SIGNAL( paintRequested(QPrinter *) ),
-		buffers, SLOT( doPrint(QPrinter *) ) );
+	QObject::connect(dialog, SIGNAL(paintRequested(QPrinter *)), buffers,
+	                 SLOT(doPrint(QPrinter *)));
 
 	dialog->exec();
 
 	delete dialog;
-
 }
 
 /*!
@@ -445,7 +447,6 @@ void Window::doFindDialog()
 	{
 		findDialog->show();
 	}
-
 }
 
 /*!
@@ -457,7 +458,6 @@ void Window::doFindNext()
 { /* SLOT */
 
 	handleFindResult(buffers->doFindNext(findDialog->getQuery()));
-
 }
 
 /*!
@@ -469,7 +469,6 @@ void Window::doFindPrevious()
 { /* SLOT */
 
 	handleFindResult(buffers->doFindPrevious(findDialog->getQuery()));
-
 }
 
 /*!
@@ -484,7 +483,6 @@ void Window::doReplaceDialog()
 	{
 		replaceDialog->show();
 	}
-
 }
 
 /*!
@@ -496,7 +494,6 @@ void Window::doReplace()
 { /* SLOT */
 
 	handleFindResult(buffers->doReplace(replaceDialog->getQuery()));
-
 }
 
 /*!
@@ -511,7 +508,6 @@ void Window::doReplaceFind()
 { /* SLOT */
 
 	handleFindResult(buffers->doFindNext(replaceDialog->getQuery()));
-
 }
 
 /*!
@@ -522,9 +518,8 @@ void Window::doReplaceFind()
 void Window::doReplaceSelection()
 { /* SLOT */
 
-	handleFindResult(buffers->doReplaceSelection(
-		replaceDialog->getQuery()));
-
+	handleFindResult(
+	        buffers->doReplaceSelection(replaceDialog->getQuery()));
 }
 
 /*!
@@ -536,7 +531,6 @@ void Window::doReplaceAll()
 { /* SLOT */
 
 	handleFindResult(buffers->doReplaceAll(replaceDialog->getQuery()));
-
 }
 
 /*!
@@ -547,19 +541,15 @@ void Window::doGoToAccepted()
 { /* SLOT */
 
 	buffers->doGoTo(goToDialog->getSelectedLine());
-
 }
 
 #ifdef QOMPOSE_DEBUG
-	/*!
-	 * This function performs some action to help with debugging.
-	 */
-	void Window::doDebug()
-	{ /* SLOT */
-
-
-
-	}
+/*!
+ * This function performs some action to help with debugging.
+ */
+void Window::doDebug()
+{ /* SLOT */
+}
 #endif
 
 /*!
@@ -576,7 +566,5 @@ void Window::doSettingChanged(const QString &k, const QVariant &v)
 		doUpdateWindowTitle();
 	else if(k == "show-status-bar")
 		statusBar->setVisible(v.toBool());
-
 }
-
 }

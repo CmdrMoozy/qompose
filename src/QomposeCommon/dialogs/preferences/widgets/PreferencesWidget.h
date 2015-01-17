@@ -25,7 +25,6 @@
 
 namespace qompose
 {
-
 class Settings;
 
 /*!
@@ -35,7 +34,7 @@ class PreferencesWidget : public QWidget
 {
 public:
 	PreferencesWidget(Settings *s, QWidget *p = nullptr,
-		Qt::WindowFlags f = nullptr);
+	                  Qt::WindowFlags f = nullptr);
 	virtual ~PreferencesWidget();
 
 	QIcon getPreferencesIcon() const;
@@ -71,7 +70,6 @@ private:
 	PreferencesWidget(const PreferencesWidget &);
 	PreferencesWidget &operator=(const PreferencesWidget &);
 };
-
 }
 
 #endif

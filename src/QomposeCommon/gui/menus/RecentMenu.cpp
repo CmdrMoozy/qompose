@@ -29,7 +29,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new instance of our
  * class. Our capacity and our contents will be automatically loaded from
@@ -39,8 +38,12 @@ namespace qompose
  * \param p This menu's parent object.
  */
 RecentMenu::RecentMenu(Settings *s, QObject *p)
-	: QObject(p), settings(s), capacity(0), menu(nullptr),
-		menuActions(QList<QAction *>()), recentList(QQueue<QString>())
+        : QObject(p),
+          settings(s),
+          capacity(0),
+          menu(nullptr),
+          menuActions(QList<QAction *>()),
+          recentList(QQueue<QString>())
 {
 	// Initialize our menu.
 
@@ -193,8 +196,8 @@ void RecentMenu::updateActionsListSize()
 
 		menu->addAction(a);
 
-		QObject::connect(a, SIGNAL( triggered(bool) ),
-			this, SLOT( doActionClicked() ) );
+		QObject::connect(a, SIGNAL(triggered(bool)), this,
+		                 SLOT(doActionClicked()));
 
 		menuActions.append(a);
 	}
@@ -244,8 +247,8 @@ void RecentMenu::renderListContents()
 		int j = recentList.count() - 1 - i;
 		QFileInfo f(recentList.at(i));
 
-		menuActions.at(j)->setText(QString("%1. %2")
-			.arg(j + 1).arg(f.fileName()));
+		menuActions.at(j)->setText(
+		        QString("%1. %2").arg(j + 1).arg(f.fileName()));
 	}
 }
 
@@ -314,12 +317,12 @@ void RecentMenu::doActionClicked()
 	int i = recentList.count() - 1 - j;
 
 	Q_EMIT recentClicked(recentList.at(i));
-
 }
 
 /*!
  * This slot handles a settings value being changed by, if it's a setting we
- * care about (namely, the recent-list-size and recent-list settings), then we will
+ * care about (namely, the recent-list-size and recent-list settings), then we
+ *will
  * update our internal state to match that setting's new value.
  *
  * \param k The key of the setting that was changed.
@@ -341,7 +344,5 @@ void RecentMenu::doSettingChanged(const QString &k, const QVariant &v)
 		if(v.canConvert(QMetaType::QStringList))
 			setListContents(v.toStringList());
 	}
-
 }
-
 }

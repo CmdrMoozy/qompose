@@ -25,7 +25,6 @@ namespace qompose
 {
 namespace test
 {
-
 /*!
  * \brief This class implements tests for our hotkey map class.
  */
@@ -37,7 +36,6 @@ public:
 
 	virtual void test();
 };
-
 }
 }
 

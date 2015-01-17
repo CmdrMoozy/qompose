@@ -26,7 +26,6 @@ namespace qompose
 {
 namespace test
 {
-
 /*!
  * \brief This should be thrown on a test assertion failure.
  */
@@ -35,12 +34,10 @@ class AssertionException : public std::exception
 public:
 	AssertionException() noexcept;
 	AssertionException(const std::string &w) noexcept;
-	AssertionException(
-		const AssertionException &e) noexcept;
+	AssertionException(const AssertionException &e) noexcept;
 	virtual ~AssertionException() noexcept;
 
-	AssertionException &operator=(
-		const AssertionException &e) noexcept;
+	AssertionException &operator=(const AssertionException &e) noexcept;
 
 	virtual const char *what() const noexcept;
 
@@ -50,7 +47,6 @@ private:
 	std::string message;
 	std::string trace;
 };
-
 }
 }
 

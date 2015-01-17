@@ -27,7 +27,6 @@
 
 namespace qompose
 {
-
 /*!
  * \brief This class extends QFileDialog with character encoding detection.
  */
@@ -40,23 +39,23 @@ public:
 	static FileDescriptor getNullDescriptor();
 	static FileDescriptor getPathDescriptor(const QString &);
 
-	static FileDescriptor getOpenFileName(
-		QWidget * = nullptr, const QString & = QString(),
-		const QString & = QString(),
-		const QString & = QString(), QString * = nullptr,
-		QFileDialog::Options = nullptr);
-	static QList<FileDescriptor> getOpenFileNames(
-		QWidget * = nullptr, const QString & = QString(),
-		const QString & = QString(),
-		const QString & = QString(), QString * = nullptr,
-		QFileDialog::Options = nullptr);
+	static FileDescriptor getOpenFileName(QWidget * = nullptr,
+	                                      const QString & = QString(),
+	                                      const QString & = QString(),
+	                                      const QString & = QString(),
+	                                      QString * = nullptr,
+	                                      QFileDialog::Options = nullptr);
+	static QList<FileDescriptor>
+	getOpenFileNames(QWidget * = nullptr, const QString & = QString(),
+	                 const QString & = QString(),
+	                 const QString & = QString(), QString * = nullptr,
+	                 QFileDialog::Options = nullptr);
 
 private:
 	static bool fileIsGood(const QString &, QWidget * = nullptr);
 	static QString detectTextCodec(const QString &);
 	static QString promptTextCodec(const QString &);
 };
-
 }
 
 #endif

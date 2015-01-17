@@ -22,7 +22,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new, empty preferences
  * widget.
@@ -31,9 +30,8 @@ namespace qompose
  * \param p This widget's parent widget.
  * \param f The window flags to use for this widget.
  */
-PreferencesWidget::PreferencesWidget(Settings *s,
-		QWidget *p, Qt::WindowFlags f)
-	: QWidget(p, f), settings(s), icon(QIcon()), title(QString())
+PreferencesWidget::PreferencesWidget(Settings *s, QWidget *p, Qt::WindowFlags f)
+        : QWidget(p, f), settings(s), icon(QIcon()), title(QString())
 {
 }
 
@@ -99,5 +97,4 @@ Settings *PreferencesWidget::getSettings() const
 {
 	return settings;
 }
-
 }

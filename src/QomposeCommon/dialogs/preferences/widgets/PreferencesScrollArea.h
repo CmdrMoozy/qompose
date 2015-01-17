@@ -26,7 +26,6 @@ class QEvent;
 
 namespace qompose
 {
-
 /*!
  * \brief This class implements a scroll area for a preferences widget.
  */
@@ -45,7 +44,6 @@ protected:
 private:
 	void resizeFixedHorizontal();
 };
-
 }
 
 #endif

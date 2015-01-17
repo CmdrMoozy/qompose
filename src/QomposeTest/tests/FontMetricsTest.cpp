@@ -26,7 +26,6 @@ namespace qompose
 {
 namespace test
 {
-
 /*!
  * This function executes all of the tests this class defines.
  */
@@ -70,6 +69,5 @@ void FontMetricsTest::testGetColumnWidth()
 
 	Test::assertEquals(720.0, metrics.getColumnWidthF(80));
 }
-
 }
 }

@@ -30,7 +30,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which initializes a new instance of our
  * "go to" dialog.
@@ -39,10 +38,15 @@ namespace qompose
  * \param f The window falgs to use for our dialog.
  */
 GoToDialog::GoToDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f), selectedLine(0), layout(nullptr),
-		lineLabel(nullptr), lineTextEdit(nullptr),
-		buttonsWidget(nullptr), buttonsLayout(nullptr),
-		closeButton(nullptr), goToButton(nullptr)
+        : QDialog(p, f),
+          selectedLine(0),
+          layout(nullptr),
+          lineLabel(nullptr),
+          lineTextEdit(nullptr),
+          buttonsWidget(nullptr),
+          buttonsLayout(nullptr),
+          closeButton(nullptr),
+          goToButton(nullptr)
 {
 	setWindowTitle(tr("Go To Line"));
 
@@ -68,8 +72,10 @@ int GoToDialog::getSelectedLine() const
 }
 
 /*!
- * This function handles our dialog being shown by resetting our dialog's contents,
- * setting focus on the correct dialog elements, and by raising our dialog to the
+ * This function handles our dialog being shown by resetting our dialog's
+ *contents,
+ * setting focus on the correct dialog elements, and by raising our dialog to
+ *the
  * front.
  *
  * \param e The event being handled.
@@ -138,8 +144,10 @@ void GoToDialog::initializeGUI()
 
 	// Connect our actions.
 
-	QObject::connect( goToButton,  SIGNAL( clicked(bool) ), this, SLOT( doGoTo() ) );
-	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close()  ) );
+	QObject::connect(goToButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(doGoTo()));
+	QObject::connect(closeButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(close()));
 }
 
 /*!
@@ -147,13 +155,14 @@ void GoToDialog::initializeGUI()
  * and then emitting a signal letting our callers know that our dialog has been
  * accepted.
  *
- * If the currently selected line number is invalid (i.e., isn't an integer), then
+ * If the currently selected line number is invalid (i.e., isn't an integer),
+ *then
  * we will show an error instead, and avoid closing the dialog.
  */
 void GoToDialog::doGoTo()
 { /* SLOT */
 
-	QString l  = lineTextEdit->text();
+	QString l = lineTextEdit->text();
 
 	bool ok = false;
 	int lint = l.trimmed().toInt(&ok, 10);
@@ -166,14 +175,13 @@ void GoToDialog::doGoTo()
 	}
 	else
 	{
-		QMessageBox::critical(this, tr("Invalid Line Number"),
-			tr("The line number you entered was invalid."),
-			QMessageBox::Ok, QMessageBox::Ok);
+		QMessageBox::critical(
+		        this, tr("Invalid Line Number"),
+		        tr("The line number you entered was invalid."),
+		        QMessageBox::Ok, QMessageBox::Ok);
 
 		lineTextEdit->setFocus();
 		lineTextEdit->selectAll();
 	}
-
 }
-
 }

@@ -27,7 +27,6 @@
 
 namespace qompose
 {
-
 class PreferencesWidget;
 class PreferencesScrollArea;
 
@@ -40,12 +39,11 @@ public:
 	PreferencesListModel(QObject *p = nullptr);
 	virtual ~PreferencesListModel();
 
-	virtual int rowCount(
-		const QModelIndex &p = QModelIndex()) const;
+	virtual int rowCount(const QModelIndex &p = QModelIndex()) const;
 	virtual QVariant data(const QModelIndex &i,
-		int r = Qt::DisplayRole) const;
+	                      int r = Qt::DisplayRole) const;
 	virtual QVariant headerData(int s, Qt::Orientation o,
-		int r = Qt::DisplayRole) const;
+	                            int r = Qt::DisplayRole) const;
 
 	PreferencesWidget *widgetAt(int i) const;
 	PreferencesScrollArea *scrollWidgetAt(int i) const;
@@ -56,7 +54,6 @@ private:
 	QList<PreferencesWidget *> widgets;
 	QList<PreferencesScrollArea *> scrollWidgets;
 };
-
 }
 
 #endif

@@ -27,37 +27,34 @@
 
 namespace
 {
-
 typedef QPair<QString, QVariant> SettingPair;
-
 }
 
 namespace qompose
 {
-
 // Load our default settings values into our static defaults list.
 
-const QList< QPair<QString, QVariant> > Settings::defaults =
-	(QList< QPair<QString, QVariant> >())
-	<< SettingPair("show-file-in-title", true)
-	<< SettingPair("show-status-bar", true)
-	<< SettingPair("recent-list-size", 10)
-	<< SettingPair("recent-list", QStringList())
-	<< SettingPair("window-save-attributes", true)
-	<< SettingPair("show-gutter", true)
-	<< SettingPair("save-strip-trailing-spaces", true)
-	<< SettingPair("editor-font", QFont("Courier", 11))
-	<< SettingPair("editor-indentation-width", 8)
-	<< SettingPair("editor-wrap-guide-visible", true)
-	<< SettingPair("editor-wrap-guide-width", 90)
-	<< SettingPair("editor-wrap-guide-color", QColor(127, 127, 127))
-	<< SettingPair("editor-foreground", QColor(255, 255, 255))
-	<< SettingPair("editor-background", QColor(39, 40, 34))
-	<< SettingPair("editor-current-line", QColor(70, 72, 61))
-	<< SettingPair("gutter-foreground", QColor(Qt::white))
-	<< SettingPair("gutter-background", QColor(Qt::black))
-	<< SettingPair("window-geometry", QByteArray())
-	<< SettingPair("window-state", QByteArray());
+const QList<QPair<QString, QVariant>> Settings::defaults =
+        (QList<QPair<QString, QVariant>>())
+        << SettingPair("show-file-in-title", true)
+        << SettingPair("show-status-bar", true)
+        << SettingPair("recent-list-size", 10)
+        << SettingPair("recent-list", QStringList())
+        << SettingPair("window-save-attributes", true)
+        << SettingPair("show-gutter", true)
+        << SettingPair("save-strip-trailing-spaces", true)
+        << SettingPair("editor-font", QFont("Courier", 11))
+        << SettingPair("editor-indentation-width", 8)
+        << SettingPair("editor-wrap-guide-visible", true)
+        << SettingPair("editor-wrap-guide-width", 90)
+        << SettingPair("editor-wrap-guide-color", QColor(127, 127, 127))
+        << SettingPair("editor-foreground", QColor(255, 255, 255))
+        << SettingPair("editor-background", QColor(39, 40, 34))
+        << SettingPair("editor-current-line", QColor(70, 72, 61))
+        << SettingPair("gutter-foreground", QColor(Qt::white))
+        << SettingPair("gutter-background", QColor(Qt::black))
+        << SettingPair("window-geometry", QByteArray())
+        << SettingPair("window-state", QByteArray());
 
 /*!
  * This function initializes a new settings instance, with the given parent.
@@ -66,16 +63,15 @@ const QList< QPair<QString, QVariant> > Settings::defaults =
  *
  * \param p Our parent object.
  */
-Settings::Settings(QObject *p)
-	: QObject(p), settings(nullptr)
+Settings::Settings(QObject *p) : QObject(p), settings(nullptr)
 {
-	#ifdef QOMPOSE_DEBUG
-		settings = new QSettings(QSettings::UserScope,
-			"Qompose", "QomposeDebug", this);
-	#else
-		settings = new QSettings(QSettings::UserScope,
-			"Qompose", "Qompose", this);
-	#endif
+#ifdef QOMPOSE_DEBUG
+	settings = new QSettings(QSettings::UserScope, "Qompose",
+	                         "QomposeDebug", this);
+#else
+	settings =
+	        new QSettings(QSettings::UserScope, "Qompose", "Qompose", this);
+#endif
 
 	initializeDefaults();
 }
@@ -174,10 +170,8 @@ void Settings::initializeDefaults()
 	{
 		if(!containsSetting(defaults.at(i).first))
 		{
-			setSetting(defaults.at(i).first,
-				defaults.at(i).second);
+			setSetting(defaults.at(i).first, defaults.at(i).second);
 		}
 	}
 }
-
 }

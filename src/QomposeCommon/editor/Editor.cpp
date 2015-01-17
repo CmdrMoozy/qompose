@@ -42,19 +42,17 @@
 #include "QomposeCommon/util/Hotkey.h"
 #include "QomposeCommon/util/ReplaceQuery.h"
 
-#define CALL_HOTKEY_FUNCTION(obj,fn) ((obj).*(fn))
+#define CALL_HOTKEY_FUNCTION(obj, fn) ((obj).*(fn))
 
 namespace qompose
 {
-
 /*!
  * This function initializes a new editor widget, using the given parent
  * widget.
  *
  * \param p Our parent widget.
  */
-Editor::Editor(QWidget *p)
-	: DecoratedTextEdit(p), hotkeys()
+Editor::Editor(QWidget *p) : DecoratedTextEdit(p), hotkeys()
 {
 	initializeHotkeys();
 }
@@ -118,7 +116,7 @@ void Editor::keyPressEvent(QKeyEvent *e)
 	const HotkeyFunction *handler = hotkeys.getHotkeyHandler(e);
 
 	if(handler != nullptr)
-		CALL_HOTKEY_FUNCTION(*this, *handler)();
+		CALL_HOTKEY_FUNCTION (*this, *handler)();
 	else
 		DecoratedTextEdit::keyPressEvent(e);
 }
@@ -133,10 +131,12 @@ void Editor::initializeHotkeys()
 	// Enter
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Return, nullptr,
-		~Qt::KeyboardModifiers(nullptr)), &Editor::doNewline);
+	                         ~Qt::KeyboardModifiers(nullptr)),
+	                  &Editor::doNewline);
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Enter, nullptr,
-		~Qt::KeyboardModifiers(nullptr)), &Editor::doNewline);
+	hotkeys.addHotkey(
+	        Hotkey(Qt::Key_Enter, nullptr, ~Qt::KeyboardModifiers(nullptr)),
+	        &Editor::doNewline);
 
 	// Tab
 
@@ -145,60 +145,61 @@ void Editor::initializeHotkeys()
 	// Shift + Tab
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier),
-		&Editor::decreaseSelectionIndent);
+	                  &Editor::decreaseSelectionIndent);
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Backtab, Qt::ShiftModifier),
-		&Editor::decreaseSelectionIndent);
+	                  &Editor::decreaseSelectionIndent);
 
 	// Home
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Home),
-		&Editor::doMoveHome);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Home), &Editor::doMoveHome);
 
 	// Shift + Home
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier),
-		&Editor::doSelectHome);
+	                  &Editor::doSelectHome);
 
 	// Ctrl+D
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier),
-		&Editor::duplicateLine);
+	                  &Editor::duplicateLine);
 
 	// Ctrl+(Zero)
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_0, Qt::ControlModifier),
-		&Editor::resetFontZoom);
+	                  &Editor::resetFontZoom);
 
 	// Ctrl+Shift+Left
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Left, Qt::ControlModifier |
-		Qt::ShiftModifier), &Editor::doNoop);
+	hotkeys.addHotkey(
+	        Hotkey(Qt::Key_Left, Qt::ControlModifier | Qt::ShiftModifier),
+	        &Editor::doNoop);
 
 	// Ctrl+Shift+Right
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Right, Qt::ControlModifier |
-		Qt::ShiftModifier), &Editor::doNoop);
+	hotkeys.addHotkey(
+	        Hotkey(Qt::Key_Right, Qt::ControlModifier | Qt::ShiftModifier),
+	        &Editor::doNoop);
 
 	// Ctrl+Insert
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier),
-		&Editor::doNoop);
+	                  &Editor::doNoop);
 
 	// Ctrl+K
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier),
-		&Editor::doNoop);
+	                  &Editor::doNoop);
 
 	// Shift+Insert
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier),
-		&Editor::doNoop);
+	                  &Editor::doNoop);
 
 	// Shift+Delete
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier),
-		&Editor::doNoop);
+	                  &Editor::doNoop);
 }
 
 /*!
@@ -230,7 +231,8 @@ void Editor::doNewline()
 	QString line = l.selectedText();
 
 	line.replace(QRegExp("^([ \\t]*)\\S.*$", Qt::CaseSensitive,
-		QRegExp::RegExp2), "\\1");
+	                     QRegExp::RegExp2),
+	             "\\1");
 
 	insert.append(line);
 
@@ -307,7 +309,8 @@ Editor::FindResult Editor::doFind(bool f, const FindQuery *q)
 	QTextCursor restart = textCursor();
 
 	if(f)
-		restart.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+		restart.movePosition(QTextCursor::Start,
+		                     QTextCursor::MoveAnchor);
 	else
 		restart.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
 
@@ -315,7 +318,8 @@ Editor::FindResult Editor::doFind(bool f, const FindQuery *q)
 
 	if(q->isRegularExpression())
 	{
-		QRegExp regex(q->getExpression(), Qt::CaseSensitive, QRegExp::RegExp2);
+		QRegExp regex(q->getExpression(), Qt::CaseSensitive,
+		              QRegExp::RegExp2);
 
 		if(!regex.isValid())
 			return BadRegularExpression;
@@ -343,13 +347,15 @@ Editor::FindResult Editor::doFind(bool f, const FindQuery *q)
 	{
 		QString expression = q->getExpression();
 
-		QTextCursor found = document()->find(expression, current, flags);
+		QTextCursor found =
+		        document()->find(expression, current, flags);
 
 		if(found.isNull())
 		{
 			if(q->isWrapping())
 			{
-				found = document()->find(expression, restart, flags);
+				found = document()->find(expression, restart,
+				                         flags);
 
 				if(!found.isNull())
 					Q_EMIT searchWrapped();
@@ -381,8 +387,8 @@ Editor::FindResult Editor::doFind(bool f, const FindQuery *q)
  * \param end The cursor position to stop searching at.
  * \return The result of this replacement's find operation.
  */
-Editor::FindResult Editor::doBatchReplace(
-	const ReplaceQuery *q, int start, int end)
+Editor::FindResult Editor::doBatchReplace(const ReplaceQuery *q, int start,
+                                          int end)
 {
 	// If we weren't given a start position, use the current cursor.
 
@@ -424,7 +430,8 @@ Editor::FindResult Editor::doBatchReplace(
 	{
 		// Make sure this match is good to go.
 
-		int finda = textCursor().anchor(), findp = textCursor().position();
+		int finda = textCursor().anchor(),
+		    findp = textCursor().position();
 
 		if(end >= 0)
 			if(qMax(finda, findp) > end)
@@ -442,8 +449,9 @@ Editor::FindResult Editor::doBatchReplace(
 		curs.insertText(query.getReplaceValue());
 
 		curs.setPosition(anchor, QTextCursor::MoveAnchor);
-		curs.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
-			query.getReplaceValue().length());
+		curs.movePosition(QTextCursor::NextCharacter,
+		                  QTextCursor::KeepAnchor,
+		                  query.getReplaceValue().length());
 
 		// Find the next match!
 
@@ -464,16 +472,12 @@ Editor::FindResult Editor::doBatchReplace(
 
 void Editor::undo()
 { /* SLOT */
-
 	DecoratedTextEdit::undo();
-
 }
 
 void Editor::redo()
 { /* SLOT */
-
 	DecoratedTextEdit::redo();
-
 }
 
 /*!
@@ -513,7 +517,6 @@ void Editor::duplicateLine()
 	// Done.
 
 	setTextCursor(curs);
-
 }
 
 /*!
@@ -527,7 +530,6 @@ void Editor::deselect()
 	QTextCursor curs = textCursor();
 	curs.setPosition(curs.position(), QTextCursor::MoveAnchor);
 	setTextCursor(curs);
-
 }
 
 /*!
@@ -574,12 +576,12 @@ void Editor::increaseSelectionIndent()
 	for(int i = 0; i <= blockdiff; ++i)
 	{
 		curs.movePosition(QTextCursor::StartOfBlock,
-			QTextCursor::MoveAnchor);
+		                  QTextCursor::MoveAnchor);
 
 		curs.insertText("\t");
 
 		curs.movePosition(QTextCursor::NextBlock,
-			QTextCursor::MoveAnchor);
+		                  QTextCursor::MoveAnchor);
 	}
 
 	curs.endEditBlock();
@@ -592,13 +594,12 @@ void Editor::increaseSelectionIndent()
 	while(curs.block().blockNumber() < eblock)
 	{
 		curs.movePosition(QTextCursor::NextBlock,
-			QTextCursor::KeepAnchor);
+		                  QTextCursor::KeepAnchor);
 	}
 
 	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
 	setTextCursor(curs);
-
 }
 
 /*!
@@ -652,7 +653,7 @@ void Editor::decreaseSelectionIndent()
 	for(int i = 0; i <= blockdiff; ++i)
 	{
 		curs.movePosition(QTextCursor::StartOfBlock,
-			QTextCursor::MoveAnchor);
+		                  QTextCursor::MoveAnchor);
 
 		QString text = curs.block().text();
 
@@ -671,7 +672,7 @@ void Editor::decreaseSelectionIndent()
 		}
 
 		curs.movePosition(QTextCursor::NextBlock,
-			QTextCursor::MoveAnchor);
+		                  QTextCursor::MoveAnchor);
 	}
 
 	if(!foundIndent)
@@ -683,7 +684,7 @@ void Editor::decreaseSelectionIndent()
 		for(int i = 0; i <= (eblock - sblock); ++i)
 		{
 			curs.movePosition(QTextCursor::StartOfBlock,
-				QTextCursor::MoveAnchor);
+			                  QTextCursor::MoveAnchor);
 
 			for(int j = 0; j < tabWidthSpaces(); ++j)
 			{
@@ -692,14 +693,14 @@ void Editor::decreaseSelectionIndent()
 				if(!c.isSpace())
 					break;
 
-				if( (j > 0) && (c == '\t') )
+				if((j > 0) && (c == '\t'))
 					break;
 
 				curs.deleteChar();
 			}
 
 			curs.movePosition(QTextCursor::NextBlock,
-				QTextCursor::MoveAnchor);
+			                  QTextCursor::MoveAnchor);
 		}
 	}
 
@@ -712,13 +713,12 @@ void Editor::decreaseSelectionIndent()
 	while(curs.block().blockNumber() < eblock)
 	{
 		curs.movePosition(QTextCursor::NextBlock,
-			QTextCursor::KeepAnchor);
+		                  QTextCursor::KeepAnchor);
 	}
 
 	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
 	setTextCursor(curs);
-
 }
 
 /*!
@@ -749,9 +749,11 @@ void Editor::doHome(bool moveAnchor)
 		QTextCursor l = textCursor();
 
 		if(l.hasSelection())
-			l.setPosition(l.selectionStart(), QTextCursor::MoveAnchor);
+			l.setPosition(l.selectionStart(),
+			              QTextCursor::MoveAnchor);
 
-		l.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+		l.movePosition(QTextCursor::StartOfLine,
+		               QTextCursor::KeepAnchor);
 
 		line = l.selectedText();
 	}
@@ -777,46 +779,49 @@ void Editor::doHome(bool moveAnchor)
 
 	if(trimmed == line)
 	{
-		// There is only whitespace in front of us - move to the start-of-line.
+		// There is only whitespace in front of us - move to the
+		// start-of-line.
 
 		QTextCursor curs = textCursor();
 
 		if(moveAnchor)
 		{
 			curs.movePosition(QTextCursor::StartOfLine,
-				QTextCursor::MoveAnchor);
+			                  QTextCursor::MoveAnchor);
 		}
 		else
 		{
 			curs.movePosition(QTextCursor::StartOfLine,
-				QTextCursor::KeepAnchor);
+			                  QTextCursor::KeepAnchor);
 		}
 
 		setTextCursor(curs);
 	}
 	else
 	{
-		// There is non-whitespace in front - move to the end of the whitespace.
+		// There is non-whitespace in front - move to the end of the
+		// whitespace.
 
 		QTextCursor curs = textCursor();
 
 		int eos = qMax(curs.selectionStart(), curs.selectionEnd());
 
-		curs.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+		curs.movePosition(QTextCursor::StartOfLine,
+		                  QTextCursor::MoveAnchor);
 
 		int sol = curs.position();
 
 		if(moveAnchor)
 		{
 			curs.setPosition(sol + trimmed.length(),
-				QTextCursor::MoveAnchor);
+			                 QTextCursor::MoveAnchor);
 		}
 		else
 		{
 			curs.setPosition(eos, QTextCursor::MoveAnchor);
 
 			curs.setPosition(sol + trimmed.length(),
-				QTextCursor::KeepAnchor);
+			                 QTextCursor::KeepAnchor);
 		}
 
 		setTextCursor(curs);
@@ -839,7 +844,6 @@ Editor::FindResult Editor::findNext(const FindQuery *q)
 		forward = false;
 
 	return doFind(forward, q);
-
 }
 
 /*!
@@ -858,7 +862,6 @@ Editor::FindResult Editor::findPrevious(const FindQuery *q)
 		forward = true;
 
 	return doFind(forward, q);
-
 }
 
 /*!
@@ -878,7 +881,7 @@ Editor::FindResult Editor::replace(const ReplaceQuery *q)
 	QTextCursor curs = textCursor();
 
 	curs.setPosition(qMin(curs.anchor(), curs.position()),
-		QTextCursor::MoveAnchor);
+	                 QTextCursor::MoveAnchor);
 
 	setTextCursor(curs);
 
@@ -903,7 +906,7 @@ Editor::FindResult Editor::replace(const ReplaceQuery *q)
 
 			curs.setPosition(anchor, QTextCursor::MoveAnchor);
 			curs.movePosition(QTextCursor::NextCharacter,
-				QTextCursor::KeepAnchor, length);
+			                  QTextCursor::KeepAnchor, length);
 
 			curs.endEditBlock();
 
@@ -914,7 +917,6 @@ Editor::FindResult Editor::replace(const ReplaceQuery *q)
 	// Done!
 
 	return r;
-
 }
 
 /*!
@@ -940,7 +942,6 @@ Editor::FindResult Editor::replaceSelection(const ReplaceQuery *q)
 	int end = qMax(curs.anchor(), curs.position());
 
 	return doBatchReplace(q, start, end);
-
 }
 
 /*!
@@ -957,7 +958,6 @@ Editor::FindResult Editor::replaceAll(const ReplaceQuery *q)
 { /* SLOT */
 
 	return doBatchReplace(q, 0);
-
 }
 
 /*!
@@ -980,11 +980,9 @@ void Editor::goToLine(int l)
 	QTextCursor curs = textCursor();
 
 	curs.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-	curs.movePosition(QTextCursor::NextBlock,
-		QTextCursor::MoveAnchor, qMax(l - 1, 0));
+	curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor,
+	                  qMax(l - 1, 0));
 
 	setTextCursor(curs);
-
 }
-
 }

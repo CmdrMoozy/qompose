@@ -27,7 +27,6 @@ namespace qompose
 {
 namespace test
 {
-
 /*!
  * \brief This class implements a generic unit test superclass.
  */
@@ -53,7 +52,7 @@ public:
 	{
 		if(!comp(a, b))
 			throw AssertionException(
-				"Expected equality, got inequality");
+			        "Expected equality, got inequality");
 	}
 
 	/*!
@@ -63,10 +62,10 @@ public:
 	 * \param a The first item to compare.
 	 * \param b The second item to compare.
 	 */
-	template <typename T>
-	static void assertEquals(const T &a, const T &b)
+	template <typename T> static void assertEquals(const T &a, const T &b)
 	{
-		struct comparator {
+		struct comparator
+		{
 			bool operator()(const T &ca, const T &cb)
 			{
 				return ca == cb;
@@ -80,7 +79,6 @@ public:
 
 	virtual void test() = 0;
 };
-
 }
 }
 

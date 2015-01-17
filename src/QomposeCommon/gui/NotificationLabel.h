@@ -24,7 +24,6 @@
 
 namespace qompose
 {
-
 /*!
  * \brief This class implements a Label suitable for status bar notifications.
  */
@@ -34,7 +33,7 @@ class NotificationLabel : public QLabel
 	Q_PROPERTY(QColor textColor READ getTextColor WRITE setTextColor)
 
 public:
-	NotificationLabel(QWidget * = nullptr, Qt::WindowFlags  = nullptr);
+	NotificationLabel(QWidget * = nullptr, Qt::WindowFlags = nullptr);
 	virtual ~NotificationLabel();
 
 	QColor getTextColor() const;
@@ -45,7 +44,6 @@ public:
 private:
 	QColor defaultColor;
 };
-
 }
 
 #endif

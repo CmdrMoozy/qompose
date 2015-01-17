@@ -22,7 +22,6 @@
 
 namespace qompose
 {
-
 /*!
  * This constructor creates a new hotkey instance which matches the given key,
  * while not requiring (or allowing) any modifiers.
@@ -30,8 +29,9 @@ namespace qompose
  * \param k The key this hotkey should match.
  */
 Hotkey::Hotkey(Qt::Key k)
-	: key(k), rModifiers(Qt::KeyboardModifiers(Qt::NoModifier)),
-		wlModifiers(Qt::KeyboardModifiers(Qt::NoModifier))
+        : key(k),
+          rModifiers(Qt::KeyboardModifiers(Qt::NoModifier)),
+          wlModifiers(Qt::KeyboardModifiers(Qt::NoModifier))
 {
 }
 
@@ -43,7 +43,7 @@ Hotkey::Hotkey(Qt::Key k)
  * \param rm The modifiers required for this hotkey to match.
  */
 Hotkey::Hotkey(Qt::Key k, Qt::KeyboardModifiers rm)
-	: key(k), rModifiers(rm), wlModifiers(rm)
+        : key(k), rModifiers(rm), wlModifiers(rm)
 {
 	key = k;
 	rModifiers = rm;
@@ -63,9 +63,8 @@ Hotkey::Hotkey(Qt::Key k, Qt::KeyboardModifiers rm)
  * \param rm The modifiers required for this hotkey to match.
  * \param wlm Additional modifiers which are allowed when matching this hotkey.
  */
-Hotkey::Hotkey(Qt::Key k, Qt::KeyboardModifiers rm,
-	Qt::KeyboardModifiers wlm)
-	: key(k), rModifiers(rm), wlModifiers(wlm | rm)
+Hotkey::Hotkey(Qt::Key k, Qt::KeyboardModifiers rm, Qt::KeyboardModifiers wlm)
+        : key(k), rModifiers(rm), wlModifiers(wlm | rm)
 {
 }
 
@@ -76,9 +75,9 @@ Hotkey::Hotkey(Qt::Key k, Qt::KeyboardModifiers rm,
  * \param o The other hotkey to create a copy of.
  */
 Hotkey::Hotkey(const Hotkey &o)
-	: key(Qt::Key_Escape),
-		rModifiers(Qt::KeyboardModifiers(Qt::NoModifier)),
-		wlModifiers(Qt::KeyboardModifiers(Qt::NoModifier))
+        : key(Qt::Key_Escape),
+          rModifiers(Qt::KeyboardModifiers(Qt::NoModifier)),
+          wlModifiers(Qt::KeyboardModifiers(Qt::NoModifier))
 {
 	*this = o;
 }
@@ -120,9 +119,8 @@ Hotkey &Hotkey::operator=(const Hotkey &o)
  */
 bool Hotkey::operator==(const Hotkey &o) const
 {
-	return (key == o.key) &&
-		(rModifiers == o.rModifiers) &&
-		(wlModifiers == o.wlModifiers);
+	return (key == o.key) && (rModifiers == o.rModifiers) &&
+	       (wlModifiers == o.wlModifiers);
 }
 
 /*!
@@ -240,11 +238,10 @@ int Hotkey::opop(quint64 v)
 	v -= (v >> 1) & Q_UINT64_C(0x5555555555555555);
 
 	v = (v & Q_UINT64_C(0x3333333333333333)) +
-		((v >> 2) & Q_UINT64_C(0x3333333333333333));
+	    ((v >> 2) & Q_UINT64_C(0x3333333333333333));
 
 	v = (v + (v >> 4)) & Q_UINT64_C(0x0F0F0F0F0F0F0F0F);
 
 	return (v * Q_UINT64_C(0x0101010101010101)) >> 56;
 }
-
 }

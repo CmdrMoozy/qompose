@@ -23,7 +23,6 @@
 
 namespace qompose
 {
-
 /*!
  * \brief This class provides some various font metric utility functions.
  */
@@ -44,7 +43,6 @@ public:
 private:
 	QFont font;
 };
-
 }
 
 #endif

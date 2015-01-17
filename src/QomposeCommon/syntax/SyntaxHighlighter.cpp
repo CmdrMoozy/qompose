@@ -26,14 +26,13 @@
 
 namespace qompose
 {
-
 SyntaxHighlighter::SyntaxHighlighter(Settings *s, QObject *p)
-	: QSyntaxHighlighter(p), settings(s), lexer(nullptr)
+        : QSyntaxHighlighter(p), settings(s), lexer(nullptr)
 {
 }
 
 SyntaxHighlighter::SyntaxHighlighter(Settings *s, QTextDocument *p)
-	: QSyntaxHighlighter(p), settings(s), lexer(nullptr)
+        : QSyntaxHighlighter(p), settings(s), lexer(nullptr)
 {
 }
 
@@ -69,22 +68,22 @@ void SyntaxHighlighter::highlightBlock(const QString &t)
 {
 	if(lexer == NULL)
 	{
-		#ifdef QOMPOSE_DEBUG
-			qDebug("QomposeSyntaxHighlighter: Refusing to "
-				"highlight with no valid lexer.");
-		#endif
+#ifdef QOMPOSE_DEBUG
+		qDebug("QomposeSyntaxHighlighter: Refusing to "
+		       "highlight with no valid lexer.");
+#endif
 
 		return;
 	}
 
 	int state = -1;
-	QList<LexerToken> tokens = lexer->lexBlock(
-		&state, t, previousBlockState());
+	QList<LexerToken> tokens =
+	        lexer->lexBlock(&state, t, previousBlockState());
 
 	for(int i = 0; i < tokens.size(); ++i)
 	{
 		setFormat(tokens.at(i).start, tokens.at(i).count,
-			getFormatFor(tokens.at(i)));
+		          getFormatFor(tokens.at(i)));
 	}
 
 	if(state != currentBlockState())
@@ -95,9 +94,9 @@ QTextCharFormat SyntaxHighlighter::getFormatFor(const LexerToken &t)
 {
 	QString key = Lexer::getSettingKey(t.token);
 
-	// TODO - Actually retrieve the proper format for this token from our settings instance.
+	// TODO - Actually retrieve the proper format for this token from our
+	// settings instance.
 
 	return QTextCharFormat();
 }
-
 }

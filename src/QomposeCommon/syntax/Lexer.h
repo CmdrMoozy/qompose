@@ -24,7 +24,6 @@
 
 namespace qompose
 {
-
 // Forward declarations.
 
 struct LexerToken;
@@ -66,8 +65,7 @@ public:
 	Lexer(QObject * = nullptr);
 	virtual ~Lexer();
 
-	virtual QList<LexerToken> lexBlock(
-		int *, const QString &, int ) = 0;
+	virtual QList<LexerToken> lexBlock(int *, const QString &, int) = 0;
 };
 
 /*!
@@ -83,7 +81,6 @@ struct LexerToken
 	int count;
 	Lexer::Token token;
 };
-
 }
 
 #endif

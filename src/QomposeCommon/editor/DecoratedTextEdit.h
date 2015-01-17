@@ -23,7 +23,6 @@
 
 namespace qompose
 {
-
 class Gutter;
 
 /*!
@@ -122,7 +121,6 @@ private Q_SLOTS:
 	void updateGutterWidth();
 	void updateGutter(const QRect &, int);
 };
-
 }
 
 #endif

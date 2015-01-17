@@ -29,7 +29,6 @@ class QSpinBox;
 
 namespace qompose
 {
-
 class ColorPickerButton;
 class FontPickerButton;
 class Settings;
@@ -41,7 +40,7 @@ class EditorPreferencesWidget : public PreferencesWidget
 {
 public:
 	EditorPreferencesWidget(Settings *s, QWidget *p = nullptr,
-		Qt::WindowFlags f = nullptr);
+	                        Qt::WindowFlags f = nullptr);
 	virtual ~EditorPreferencesWidget();
 
 	virtual void apply();
@@ -84,7 +83,6 @@ private:
 
 	void initializeGUI();
 };
-
 }
 
 #endif

@@ -30,7 +30,6 @@ class QTextDocument;
 
 namespace qompose
 {
-
 class Settings;
 
 class SyntaxHighlighter : public QSyntaxHighlighter
@@ -58,7 +57,6 @@ private:
 
 	QTextCharFormat getFormatFor(const LexerToken &);
 };
-
 }
 
 #endif

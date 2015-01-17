@@ -26,7 +26,6 @@ class QLabel;
 
 namespace qompose
 {
-
 class NotificationLabel;
 
 /*!
@@ -59,7 +58,6 @@ private:
 	StatusBar(const StatusBar &);
 	StatusBar &operator=(const StatusBar &);
 };
-
 }
 
 #endif

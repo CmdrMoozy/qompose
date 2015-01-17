@@ -32,7 +32,6 @@ class QPrinter;
 
 namespace qompose
 {
-
 class FindQuery;
 class ReplaceQuery;
 class Buffer;
@@ -129,7 +128,6 @@ Q_SIGNALS:
 	void cursorPositionChanged(int, int);
 	void searchWrapped();
 };
-
 }
 
 #endif

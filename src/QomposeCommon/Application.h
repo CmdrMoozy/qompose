@@ -26,7 +26,6 @@ class QLocalServer;
 
 namespace qompose
 {
-
 class Window;
 
 /*!
@@ -52,7 +51,6 @@ private:
 private Q_SLOTS:
 	void doDuplicateInstanceDetected();
 };
-
 }
 
 #endif

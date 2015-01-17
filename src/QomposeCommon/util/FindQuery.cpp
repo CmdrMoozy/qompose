@@ -20,7 +20,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new find query object
  * with the default option values.
@@ -28,8 +27,13 @@ namespace qompose
  * \param p This object's parent object.
  */
 FindQuery::FindQuery(QObject *p)
-	: QObject(p), expression(""), wrap(true), wholeWords(false),
-		caseSensitive(false), reverse(false), regex(false)
+        : QObject(p),
+          expression(""),
+          wrap(true),
+          wholeWords(false),
+          caseSensitive(false),
+          reverse(false),
+          regex(false)
 {
 }
 
@@ -203,5 +207,4 @@ QTextDocument::FindFlags FindQuery::getFindFlags(bool r) const
 
 	return f;
 }
-
 }

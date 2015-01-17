@@ -28,7 +28,6 @@ class QTextDocument;
 
 namespace qompose
 {
-
 /*!
  * \brief This class encapsulates code to write QDocuments to QIODevices.
  */
@@ -57,7 +56,6 @@ private:
 
 	QString trimWhitespace(const QString &) const;
 };
-
 }
 
 #endif

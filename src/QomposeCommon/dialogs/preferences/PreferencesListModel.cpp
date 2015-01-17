@@ -24,7 +24,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new, empty preferences
  * list model.
@@ -32,8 +31,7 @@ namespace qompose
  * \param p The parent object for this new model.
  */
 PreferencesListModel::PreferencesListModel(QObject *p)
-	: QAbstractListModel(p),
-		widgets(), scrollWidgets()
+        : QAbstractListModel(p), widgets(), scrollWidgets()
 {
 }
 
@@ -74,24 +72,24 @@ QVariant PreferencesListModel::data(const QModelIndex &i, int r) const
 {
 	int idx = i.row();
 
-	if( (idx < 0) || (idx >= widgets.count()) )
+	if((idx < 0) || (idx >= widgets.count()))
 		return QVariant(QVariant::Invalid);
 
 	PreferencesWidget *widget = widgets.at(idx);
 
 	switch(r)
 	{
-		case Qt::DisplayRole:
-			return widget->getPreferencesTitle();
-			break;
+	case Qt::DisplayRole:
+		return widget->getPreferencesTitle();
+		break;
 
-		case Qt::DecorationRole:
-			return widget->getPreferencesIcon();
-			break;
+	case Qt::DecorationRole:
+		return widget->getPreferencesIcon();
+		break;
 
-		default:
-			return QVariant(QVariant::Invalid);
-			break;
+	default:
+		return QVariant(QVariant::Invalid);
+		break;
 	};
 }
 
@@ -105,7 +103,8 @@ QVariant PreferencesListModel::data(const QModelIndex &i, int r) const
  * \return An invalid QVariant, since we do not store any header data.
  */
 QVariant PreferencesListModel::headerData(int QUNUSED(s),
-	Qt::Orientation QUNUSED(o), int QUNUSED(r)) const
+                                          Qt::Orientation QUNUSED(o),
+                                          int QUNUSED(r)) const
 {
 	return QVariant(QVariant::Invalid);
 }
@@ -120,7 +119,7 @@ QVariant PreferencesListModel::headerData(int QUNUSED(s),
  */
 PreferencesWidget *PreferencesListModel::widgetAt(int i) const
 {
-	if( (i < 0) || (i >= rowCount()) )
+	if((i < 0) || (i >= rowCount()))
 		return NULL;
 
 	return widgets.at(i);
@@ -136,7 +135,7 @@ PreferencesWidget *PreferencesListModel::widgetAt(int i) const
  */
 PreferencesScrollArea *PreferencesListModel::scrollWidgetAt(int i) const
 {
-	if( (i < 0) || (i >= rowCount()) )
+	if((i < 0) || (i >= rowCount()))
 		return NULL;
 
 	return scrollWidgets.at(i);
@@ -162,5 +161,4 @@ void PreferencesListModel::addPreferencesWidget(PreferencesWidget *w)
 
 	scrollWidgets.append(sw);
 }
-
 }

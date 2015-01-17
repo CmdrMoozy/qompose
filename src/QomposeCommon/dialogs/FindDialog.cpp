@@ -32,7 +32,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new instance of our
  * find dialog.
@@ -41,14 +40,22 @@ namespace qompose
  * \param f The window flags to use for this dialog.
  */
 FindDialog::FindDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f), query(new FindQuery(this)),
-		layout(nullptr), findLabel(nullptr), findTextEdit(nullptr),
-		optionsGroupBox(nullptr), optionsLayout(nullptr),
-		wrapCheckBox(nullptr), wholeWordsCheckBox(nullptr),
-		caseSensitiveCheckBox(nullptr), reverseCheckBox(nullptr),
-		regexCheckBox(nullptr), buttonsWidget(nullptr),
-		buttonsLayout(nullptr), findButton(nullptr),
-		closeButton(nullptr)
+        : QDialog(p, f),
+          query(new FindQuery(this)),
+          layout(nullptr),
+          findLabel(nullptr),
+          findTextEdit(nullptr),
+          optionsGroupBox(nullptr),
+          optionsLayout(nullptr),
+          wrapCheckBox(nullptr),
+          wholeWordsCheckBox(nullptr),
+          caseSensitiveCheckBox(nullptr),
+          reverseCheckBox(nullptr),
+          regexCheckBox(nullptr),
+          buttonsWidget(nullptr),
+          buttonsLayout(nullptr),
+          findButton(nullptr),
+          closeButton(nullptr)
 {
 	setWindowTitle(tr("Find"));
 
@@ -91,20 +98,20 @@ void FindDialog::showEvent(QShowEvent *e)
 	findTextEdit->setText(query->getExpression());
 	findTextEdit->selectAll();
 
-	wrapCheckBox->setCheckState(query->isWrapping() ?
-		Qt::Checked : Qt::Unchecked);
+	wrapCheckBox->setCheckState(query->isWrapping() ? Qt::Checked
+	                                                : Qt::Unchecked);
 
-	wholeWordsCheckBox->setCheckState(query->isWholeWords() ?
-		Qt::Checked : Qt::Unchecked);
+	wholeWordsCheckBox->setCheckState(
+	        query->isWholeWords() ? Qt::Checked : Qt::Unchecked);
 
-	caseSensitiveCheckBox->setCheckState(query->isCaseSensitive() ?
-		Qt::Checked : Qt::Unchecked);
+	caseSensitiveCheckBox->setCheckState(
+	        query->isCaseSensitive() ? Qt::Checked : Qt::Unchecked);
 
-	reverseCheckBox->setCheckState(query->isReversed() ?
-		Qt::Checked : Qt::Unchecked);
+	reverseCheckBox->setCheckState(query->isReversed() ? Qt::Checked
+	                                                   : Qt::Unchecked);
 
-	regexCheckBox->setCheckState(query->isRegularExpression() ?
-		Qt::Checked : Qt::Unchecked);
+	regexCheckBox->setCheckState(
+	        query->isRegularExpression() ? Qt::Checked : Qt::Unchecked);
 
 	// Bring our dialog to the front.
 
@@ -134,16 +141,21 @@ void FindDialog::initializeGUI()
 	optionsGroupBox = new QGroupBox(tr("Options"), this);
 	optionsLayout = new QGridLayout(optionsGroupBox);
 
-	wrapCheckBox = new QCheckBox(tr("Wrap around document?"), optionsGroupBox);
+	wrapCheckBox =
+	        new QCheckBox(tr("Wrap around document?"), optionsGroupBox);
 	wrapCheckBox->setCheckState(Qt::Checked);
 
-	wholeWordsCheckBox = new QCheckBox(tr("Find whole words only?"), optionsGroupBox);
+	wholeWordsCheckBox =
+	        new QCheckBox(tr("Find whole words only?"), optionsGroupBox);
 
-	caseSensitiveCheckBox = new QCheckBox(tr("Case sensitive?"), optionsGroupBox);
+	caseSensitiveCheckBox =
+	        new QCheckBox(tr("Case sensitive?"), optionsGroupBox);
 
-	reverseCheckBox = new QCheckBox(tr("Reverse search direction?"), optionsGroupBox);
+	reverseCheckBox =
+	        new QCheckBox(tr("Reverse search direction?"), optionsGroupBox);
 
-	regexCheckBox = new QCheckBox(tr("Regular expression search?"), optionsGroupBox);
+	regexCheckBox = new QCheckBox(tr("Regular expression search?"),
+	                              optionsGroupBox);
 
 	optionsLayout->addWidget(wrapCheckBox, 0, 0, 1, 1, nullptr);
 	optionsLayout->addWidget(wholeWordsCheckBox, 1, 0, 1, 1, nullptr);
@@ -180,13 +192,17 @@ void FindDialog::initializeGUI()
 
 	// Connect our button actions.
 
-	QObject::connect( findButton,  SIGNAL( clicked(bool) ), this, SLOT( doFind() ) );
-	QObject::connect( closeButton, SIGNAL( clicked(bool) ), this, SLOT( close()  ) );
+	QObject::connect(findButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(doFind()));
+	QObject::connect(closeButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(close()));
 }
 
 /*!
- * This function handles our "find" button being clicked by applying our dialog's
- * contents to our find query object, and by alerting our callers that our dialog
+ * This function handles our "find" button being clicked by applying our
+ * dialog's
+ * contents to our find query object, and by alerting our callers that our
+ * dialog
  * has been accepted.
  */
 void FindDialog::doFind()
@@ -197,7 +213,8 @@ void FindDialog::doFind()
 	query->setExpression(findTextEdit->text());
 	query->setWrapping(wrapCheckBox->checkState() == Qt::Checked);
 	query->setWholeWords(wholeWordsCheckBox->checkState() == Qt::Checked);
-	query->setCaseSensitive(caseSensitiveCheckBox->checkState() == Qt::Checked);
+	query->setCaseSensitive(caseSensitiveCheckBox->checkState() ==
+	                        Qt::Checked);
 	query->setReversed(reverseCheckBox->checkState() == Qt::Checked);
 	query->setRegularExpression(regexCheckBox->checkState() == Qt::Checked);
 
@@ -206,7 +223,5 @@ void FindDialog::doFind()
 	Q_EMIT accepted();
 
 	close();
-
 }
-
 }

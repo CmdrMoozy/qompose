@@ -30,7 +30,6 @@ class QLabel;
 
 namespace qompose
 {
-
 /*!
  * \brief This class implements our "About" dialog.
  */
@@ -61,7 +60,6 @@ private:
 	void initializeGUI();
 	void loadLicense();
 };
-
 }
 
 #endif

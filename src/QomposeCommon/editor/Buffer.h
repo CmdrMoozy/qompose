@@ -27,7 +27,6 @@ class QPrinter;
 
 namespace qompose
 {
-
 class Settings;
 
 /*!
@@ -78,7 +77,6 @@ Q_SIGNALS:
 	void titleChanged(const QString &);
 	void pathChanged(const QString &);
 };
-
 }
 
 #endif

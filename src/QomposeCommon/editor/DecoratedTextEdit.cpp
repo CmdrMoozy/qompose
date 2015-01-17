@@ -26,20 +26,25 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new decorated text exit.
  *
  * \param p Our parent widget.
  */
 DecoratedTextEdit::DecoratedTextEdit(QWidget *p)
-	: QPlainTextEdit(p), gutter(nullptr), gutterVisible(false),
-		currentFont(QFont("Courier")), originalFontSize(11.0),
-		currentFontZoom(1), tabWidth(8), wrapGuideVisible(false),
-		wrapGuideWidth(0), wrapGuideColor(QColor(255, 255, 255)),
-		currentLineHighlight(QColor(128, 128, 128)),
-		gutterForeground(QColor(255, 255, 255)),
-		gutterBackground(QColor(0, 0, 0))
+        : QPlainTextEdit(p),
+          gutter(nullptr),
+          gutterVisible(false),
+          currentFont(QFont("Courier")),
+          originalFontSize(11.0),
+          currentFontZoom(1),
+          tabWidth(8),
+          wrapGuideVisible(false),
+          wrapGuideWidth(0),
+          wrapGuideColor(QColor(255, 255, 255)),
+          currentLineHighlight(QColor(128, 128, 128)),
+          gutterForeground(QColor(255, 255, 255)),
+          gutterBackground(QColor(0, 0, 0))
 {
 	// Set our editor's default font.
 
@@ -53,12 +58,12 @@ DecoratedTextEdit::DecoratedTextEdit(QWidget *p)
 	setGutterForeground(QColor(255, 255, 255));
 	setGutterBackground(QColor(0, 0, 0));
 
-	QObject::connect(this, SIGNAL(blockCountChanged(int)),
-		this, SLOT(updateGutterWidth()));
-	QObject::connect(this, SIGNAL(updateRequest(const QRect &, int)),
-		this, SLOT(updateGutter(const QRect &, int)));
-	QObject::connect(this, SIGNAL(cursorPositionChanged()),
-		this, SLOT(highlightCurrentLine()));
+	QObject::connect(this, SIGNAL(blockCountChanged(int)), this,
+	                 SLOT(updateGutterWidth()));
+	QObject::connect(this, SIGNAL(updateRequest(const QRect &, int)), this,
+	                 SLOT(updateGutter(const QRect &, int)));
+	QObject::connect(this, SIGNAL(cursorPositionChanged()), this,
+	                 SLOT(highlightCurrentLine()));
 
 	// Set some of our widget's default properties.
 
@@ -507,21 +512,21 @@ void DecoratedTextEdit::paintEvent(QPaintEvent *e)
 	QPainter painter(viewport());
 	FontMetrics metrics(currentFont);
 
-	// Draw our offset and margin lines, if debugging is enabled.
+// Draw our offset and margin lines, if debugging is enabled.
 
 #ifdef QOMPOSE_DEBUG
 	painter.setPen(QPen(QColor(255, 0, 0)));
 
 	painter.drawLine(contentOffset().x(), eventRect.top(),
-		contentOffset().x(), eventRect.bottom());
+	                 contentOffset().x(), eventRect.bottom());
 
 	painter.setPen(QPen(QColor(0, 255, 0)));
 
 	painter.drawLine(document()->documentMargin(), eventRect.top(),
-		document()->documentMargin(), eventRect.bottom());
+	                 document()->documentMargin(), eventRect.bottom());
 #endif
 
-	// Draw lines at each character column, if debugging is enabled.
+// Draw lines at each character column, if debugging is enabled.
 
 #ifdef QOMPOSE_DEBUG
 	painter.setPen(QPen(QColor(0, 0, 0)));
@@ -533,8 +538,8 @@ void DecoratedTextEdit::paintEvent(QPaintEvent *e)
 		coff += contentOffset().x();
 		coff += document()->documentMargin();
 
-		painter.drawLine(coff, eventRect.top(),
-			coff, eventRect.bottom());
+		painter.drawLine(coff, eventRect.top(), coff,
+		                 eventRect.bottom());
 	}
 #endif
 
@@ -545,8 +550,8 @@ void DecoratedTextEdit::paintEvent(QPaintEvent *e)
 		qreal offset = wrapGuideOffset();
 
 		painter.setPen(QPen(getWrapGuideColor()));
-		painter.drawLine(offset, eventRect.top(),
-			offset, eventRect.bottom());
+		painter.drawLine(offset, eventRect.top(), offset,
+		                 eventRect.bottom());
 	}
 }
 
@@ -585,8 +590,8 @@ void DecoratedTextEdit::resizeEvent(QResizeEvent *e)
 	QPlainTextEdit::resizeEvent(e);
 
 	QRect cr = contentsRect();
-	gutter->setGeometry(QRect(cr.left(), cr.top(),
-		gutterWidth(), cr.height()));
+	gutter->setGeometry(
+	        QRect(cr.left(), cr.top(), gutterWidth(), cr.height()));
 }
 
 /*!
@@ -621,7 +626,6 @@ void DecoratedTextEdit::wheelEvent(QWheelEvent *e)
 
 		QPlainTextEdit::wheelEvent(e);
 	}
-
 }
 
 /*!
@@ -658,27 +662,26 @@ void DecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 
 	QTextBlock block = firstVisibleBlock();
 	int blockNumber = block.blockNumber();
-	int top = static_cast<int>(blockBoundingGeometry(block)
-		.translated(contentOffset()).top());
+	int top = static_cast<int>(
+	        blockBoundingGeometry(block).translated(contentOffset()).top());
 	int bottom = top + static_cast<int>(blockBoundingRect(block).height());
 
 	while(block.isValid() && top <= e->rect().bottom())
 	{
 		if(block.isVisible() && bottom >= e->rect().top())
 		{
-			QString number =
-				QString::number(blockNumber + 1);
+			QString number = QString::number(blockNumber + 1);
 
 			painter.setPen(gutterForeground);
 			painter.drawText(0, top, gutter->width(),
-				fontMetrics().height(),
-				Qt::AlignCenter, number);
+			                 fontMetrics().height(),
+			                 Qt::AlignCenter, number);
 		}
 
 		block = block.next();
 		top = bottom;
-		bottom = top + static_cast<int>(
-			blockBoundingRect(block).height());
+		bottom = top +
+		         static_cast<int>(blockBoundingRect(block).height());
 		blockNumber++;
 	}
 }
@@ -739,7 +742,6 @@ void DecoratedTextEdit::fullUpdate()
 	viewport()->update();
 
 	highlightCurrentLine();
-
 }
 
 /*!
@@ -754,7 +756,6 @@ void DecoratedTextEdit::fullRepaint()
 	viewport()->repaint();
 
 	highlightCurrentLine();
-
 }
 
 /*!
@@ -774,7 +775,6 @@ void DecoratedTextEdit::highlightCurrentLine()
 
 	es.append(selection);
 	setExtraSelections(es);
-
 }
 
 /*!
@@ -785,7 +785,6 @@ void DecoratedTextEdit::updateGutterWidth()
 { /* SLOT */
 
 	setViewportMargins(gutterWidth(), 0, 0, 0);
-
 }
 
 /*!
@@ -805,7 +804,5 @@ void DecoratedTextEdit::updateGutter(const QRect &r, int dy)
 
 	if(r.contains(viewport()->rect()))
 		updateGutterWidth();
-
 }
-
 }

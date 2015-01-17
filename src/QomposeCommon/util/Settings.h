@@ -28,7 +28,6 @@ class QString;
 
 namespace qompose
 {
-
 /*!
  * \brief This class uses QSettings to provide persistent settings for Qompose.
  */
@@ -61,7 +60,6 @@ private:
 Q_SIGNALS:
 	void settingChanged(const QString &, const QVariant &);
 };
-
 }
 
 #endif

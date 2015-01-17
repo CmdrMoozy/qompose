@@ -26,7 +26,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new instance of our status
  * bar widget.
@@ -34,9 +33,13 @@ namespace qompose
  * \param p Our status bar's parent widget.
  */
 StatusBar::StatusBar(QWidget *p)
-	: QStatusBar(p), statusWidget(nullptr), statusLayout(nullptr),
-		notificationLabel(nullptr), tabPathLabel(nullptr),
-		lineLabel(nullptr), columnLabel(nullptr)
+        : QStatusBar(p),
+          statusWidget(nullptr),
+          statusLayout(nullptr),
+          notificationLabel(nullptr),
+          tabPathLabel(nullptr),
+          lineLabel(nullptr),
+          columnLabel(nullptr)
 {
 	statusWidget = new QWidget(this, nullptr);
 
@@ -98,7 +101,7 @@ void StatusBar::setCurrentTabPath(const QString &p)
 
 	if(l > 0)
 		tabPathLabel->setFrameStyle(QFrame::StyledPanel |
-			QFrame::Plain);
+		                            QFrame::Plain);
 	else
 		tabPathLabel->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
 
@@ -124,5 +127,4 @@ void StatusBar::setColumn(int c)
 {
 	columnLabel->setText(QString("C %1").arg(c));
 }
-
 }

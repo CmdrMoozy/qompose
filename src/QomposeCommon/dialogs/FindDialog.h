@@ -32,7 +32,6 @@ class QShowEvent;
 
 namespace qompose
 {
-
 class FindQuery;
 
 /*!
@@ -83,7 +82,6 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void accepted();
 };
-
 }
 
 #endif

@@ -23,14 +23,12 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new preferences list view.
  *
  * \param p The parent widget to use for this widget.
  */
-PreferencesListView::PreferencesListView(QWidget *p)
-	: QListView(p)
+PreferencesListView::PreferencesListView(QWidget *p) : QListView(p)
 {
 	setIconSize(QSize(30, 30));
 	setSpacing(5);
@@ -69,5 +67,4 @@ void PreferencesListView::setModel(QAbstractItemModel *m)
 {
 	QListView::setModel(m);
 }
-
 }

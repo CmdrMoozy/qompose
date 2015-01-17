@@ -25,7 +25,6 @@
 
 namespace qompose
 {
-
 /*!
  * Initializes a new QomposeApplication instance.
  *
@@ -33,8 +32,7 @@ namespace qompose
  * \param av The command-line arguments.
  */
 Application::Application(int &ac, char **av)
-	: QApplication(ac, av), sappServer(nullptr),
-		windows(QList<Window *>())
+        : QApplication(ac, av), sappServer(nullptr), windows(QList<Window *>())
 {
 }
 
@@ -88,8 +86,8 @@ void Application::initializeLocalServer()
 			qApp->quit();
 	}
 
-	QObject::connect(sappServer, SIGNAL(newConnection()),
-		this, SLOT(doDuplicateInstanceDetected()));
+	QObject::connect(sappServer, SIGNAL(newConnection()), this,
+	                 SLOT(doDuplicateInstanceDetected()));
 }
 
 /*!
@@ -102,7 +100,5 @@ void Application::doDuplicateInstanceDetected()
 	Window *w = new Window();
 	windows.append(w);
 	w->show();
-
 }
-
 }

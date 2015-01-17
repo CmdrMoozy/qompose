@@ -26,7 +26,6 @@ namespace qompose
 {
 namespace test
 {
-
 /*!
  * This function returns, as a string, a rendered stack trace. This stack trace
  * is altered to exclude any items before this program's main() function, as
@@ -94,6 +93,5 @@ void Test::assertTrue(bool expr)
 Test::~Test()
 {
 }
-
 }
 }

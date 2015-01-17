@@ -24,7 +24,6 @@
 
 namespace qompose
 {
-
 /*!
  * \brief This class provides various GUI-related utility functions.
  */
@@ -33,7 +32,6 @@ class GUIUtils
 public:
 	static QIcon getIconFromTheme(const QString &n);
 };
-
 }
 
 #endif

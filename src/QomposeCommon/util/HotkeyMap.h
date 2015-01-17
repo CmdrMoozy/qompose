@@ -29,7 +29,6 @@
 
 namespace qompose
 {
-
 /*!
  * \brief This class implements a mapping of hotkeys to handlers.
  *
@@ -57,16 +56,14 @@ namespace qompose
  * Then we'll return the value for the Ctrl + S hotkey, even though both of the
  * hotkeys are matches.
  */
-template <typename F>
-class HotkeyMap
+template <typename F> class HotkeyMap
 {
 public:
 	/*!
 	 * This is our default constructor, which creates a new hotkey
 	 * map instance.
 	 */
-	HotkeyMap()
-		: hotkeys(HotkeyHash())
+	HotkeyMap() : hotkeys(HotkeyHash())
 	{
 	}
 
@@ -114,7 +111,7 @@ public:
 
 		if(insert)
 			hotkeys.insertMulti(h.getKeyInteger(),
-				HotkeyPair(h, f));
+			                    HotkeyPair(h, f));
 
 		// Done! Return whether or not a new item was inserted.
 
@@ -139,16 +136,14 @@ public:
 
 		typename HotkeyHash::const_iterator it;
 
-		for(it = hotkeys.constBegin();
-			it != hotkeys.constEnd(); ++it)
+		for(it = hotkeys.constBegin(); it != hotkeys.constEnd(); ++it)
 		{
 			int match = it.value().first.matches(e);
 
 			if(match == -1)
 				continue;
 
-			if( (match < matchQuality) ||
-				(matchQuality == -1) )
+			if((match < matchQuality) || (matchQuality == -1))
 			{
 				handler = &it.value().second;
 				matchQuality = match;
@@ -166,7 +161,6 @@ private:
 
 	HotkeyHash hotkeys;
 };
-
 }
 
 #endif

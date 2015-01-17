@@ -33,7 +33,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new about dialog instance
  * and loads the contents from our resources into its UI.
@@ -42,11 +41,17 @@ namespace qompose
  * \param f The window flags to use for this dialog.
  */
 AboutDialog::AboutDialog(QWidget *p, Qt::WindowFlags f)
-	: QDialog(p, f), layout(nullptr), tabs(nullptr),
-		licenseTextEdit(nullptr), qomposeTab(nullptr),
-		qomposeTabLayout(nullptr), qomposeIconLabel(nullptr),
-		qomposeLabel(nullptr), qomposeDescriptionLabel(nullptr),
-		qomposeTextEdit(nullptr), closeButton(nullptr)
+        : QDialog(p, f),
+          layout(nullptr),
+          tabs(nullptr),
+          licenseTextEdit(nullptr),
+          qomposeTab(nullptr),
+          qomposeTabLayout(nullptr),
+          qomposeIconLabel(nullptr),
+          qomposeLabel(nullptr),
+          qomposeDescriptionLabel(nullptr),
+          qomposeTextEdit(nullptr),
+          closeButton(nullptr)
 {
 	setWindowTitle(tr("About Qompose"));
 
@@ -83,8 +88,10 @@ void AboutDialog::initializeGUI()
 	qomposeIconLabel->resize(32, 32);
 
 	qomposeLabel = new QLabel(QString("Qompose %1.%2.%3")
-		.arg(QOMPOSE_VERSION_MAJ).arg(QOMPOSE_VERSION_MIN)
-		.arg(QOMPOSE_VERSION_BUG), qomposeTab, nullptr);
+	                                  .arg(QOMPOSE_VERSION_MAJ)
+	                                  .arg(QOMPOSE_VERSION_MIN)
+	                                  .arg(QOMPOSE_VERSION_BUG),
+	                          qomposeTab, nullptr);
 
 	QFont largeFont = qomposeLabel->font();
 	largeFont.setPointSize(24);
@@ -92,7 +99,8 @@ void AboutDialog::initializeGUI()
 	qomposeLabel->setFont(largeFont);
 
 	qomposeDescriptionLabel = new QLabel(tr("A simple programmer's "
-		"text editor."), qomposeTab, nullptr);
+	                                        "text editor."),
+	                                     qomposeTab, nullptr);
 
 	qomposeTextEdit = new QTextEdit(qomposeTab);
 	qomposeTextEdit->setLineWrapMode(QTextEdit::NoWrap);
@@ -100,8 +108,8 @@ void AboutDialog::initializeGUI()
 
 	qomposeTabLayout->addWidget(qomposeIconLabel, 0, 0, 2, 1, nullptr);
 	qomposeTabLayout->addWidget(qomposeLabel, 0, 1, 1, 1, nullptr);
-	qomposeTabLayout->addWidget(
-		qomposeDescriptionLabel, 1, 1, 1, 1, nullptr);
+	qomposeTabLayout->addWidget(qomposeDescriptionLabel, 1, 1, 1, 1,
+	                            nullptr);
 	qomposeTabLayout->addWidget(qomposeTextEdit, 2, 0, 1, 3, nullptr);
 	qomposeTabLayout->setColumnStretch(1, 1);
 	qomposeTabLayout->setRowStretch(2, 1);
@@ -131,8 +139,8 @@ void AboutDialog::initializeGUI()
 	layout->setRowStretch(0, 1);
 	setLayout(layout);
 
-	QObject::connect(closeButton, SIGNAL(clicked(bool)),
-		this, SLOT(close()));
+	QObject::connect(closeButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(close()));
 }
 
 /*!
@@ -153,5 +161,4 @@ void AboutDialog::loadLicense()
 
 	f.close();
 }
-
 }

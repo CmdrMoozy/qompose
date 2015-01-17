@@ -21,7 +21,6 @@
 
 namespace qompose
 {
-
 /*!
  * \brief This structure stores a filename and its detected character encoding.
  */
@@ -30,18 +29,16 @@ struct FileDescriptor
 	QString fileName;
 	QString textCodec;
 
-	FileDescriptor()
-		: fileName(), textCodec()
+	FileDescriptor() : fileName(), textCodec()
 	{
 	}
 
 	FileDescriptor(const QString &f, const QString &c)
-		: fileName(f), textCodec(c)
+	        : fileName(f), textCodec(c)
 	{
 	}
 
-	FileDescriptor(const FileDescriptor &o)
-		: fileName(), textCodec()
+	FileDescriptor(const FileDescriptor &o) : fileName(), textCodec()
 	{
 		*this = o;
 	}
@@ -66,18 +63,17 @@ struct ClosedBufferDescriptor
 	FileDescriptor file;
 	int cursorPosition;
 
-	ClosedBufferDescriptor()
-		: file(), cursorPosition(0)
+	ClosedBufferDescriptor() : file(), cursorPosition(0)
 	{
 	}
 
 	ClosedBufferDescriptor(FileDescriptor f, int c)
-		: file(f), cursorPosition(c)
+	        : file(f), cursorPosition(c)
 	{
 	}
 
 	ClosedBufferDescriptor(const ClosedBufferDescriptor &o)
-		: file(), cursorPosition(0)
+	        : file(), cursorPosition(0)
 	{
 		*this = o;
 	}
@@ -93,7 +89,6 @@ struct ClosedBufferDescriptor
 		return *this;
 	}
 };
-
 }
 
 #endif

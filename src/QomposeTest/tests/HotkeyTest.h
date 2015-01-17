@@ -25,7 +25,6 @@ namespace qompose
 {
 namespace test
 {
-
 /*!
  * \brief This class implements unit tests for our hotkey object.
  */
@@ -45,7 +44,6 @@ private:
 	void testHotkeyCopying();
 	void testHotkeyMatching();
 };
-
 }
 }
 

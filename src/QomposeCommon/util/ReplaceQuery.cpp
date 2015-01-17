@@ -20,14 +20,12 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new replace query.
  *
  * \param p The parent object for this replace query.
  */
-ReplaceQuery::ReplaceQuery(QObject *p)
-	: FindQuery(p), replaceValue("")
+ReplaceQuery::ReplaceQuery(QObject *p) : FindQuery(p), replaceValue("")
 {
 }
 
@@ -59,5 +57,4 @@ void ReplaceQuery::setReplaceValue(const QString &v)
 {
 	replaceValue = v;
 }
-
 }

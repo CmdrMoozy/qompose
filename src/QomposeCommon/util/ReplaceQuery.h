@@ -25,7 +25,6 @@
 
 namespace qompose
 {
-
 /*!
  * \brief This class extends our find query object by adding replace details.
  */
@@ -41,7 +40,6 @@ public:
 private:
 	QString replaceValue;
 };
-
 }
 
 #endif

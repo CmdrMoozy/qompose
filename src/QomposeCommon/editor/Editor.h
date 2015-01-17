@@ -32,7 +32,6 @@ class QMouseEvent;
 
 namespace qompose
 {
-
 class FindQuery;
 class ReplaceQuery;
 
@@ -79,8 +78,8 @@ private:
 	void doSelectHome();
 
 	FindResult doFind(bool forward, const FindQuery *q);
-	FindResult doBatchReplace(const ReplaceQuery *q,
-		int start = -1, int end = -1);
+	FindResult doBatchReplace(const ReplaceQuery *q, int start = -1,
+	                          int end = -1);
 
 public Q_SLOTS:
 	virtual void undo();
@@ -100,7 +99,6 @@ public Q_SLOTS:
 Q_SIGNALS:
 	void searchWrapped();
 };
-
 }
 
 #endif

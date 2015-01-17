@@ -30,7 +30,6 @@ class QShowEvent;
 
 namespace qompose
 {
-
 /*!
  * \brief This class implements a dialog to pick a line to jump to.
  */
@@ -71,7 +70,6 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void accepted();
 };
-
 }
 
 #endif

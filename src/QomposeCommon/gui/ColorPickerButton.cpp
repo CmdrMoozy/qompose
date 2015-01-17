@@ -29,7 +29,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is one of our constructors, which intializes a new color picker
  * object with the given parameters.
@@ -38,7 +37,7 @@ namespace qompose
  * \param iC Our initial color.
  */
 ColorPickerButton::ColorPickerButton(QWidget *p, const QColor &iC)
-	: QPushButton("", p), selectedColor(QColor())
+        : QPushButton("", p), selectedColor(QColor())
 {
 	setSelectedColor(iC);
 	setMinimumSize(75, minimumHeight());
@@ -54,9 +53,9 @@ ColorPickerButton::ColorPickerButton(QWidget *p, const QColor &iC)
  * \param p Our parent widget.
  * \param iC Our initial color.
  */
-ColorPickerButton::ColorPickerButton(const QString &QUNUSED(t),
-		QWidget *p, const QColor &iC)
-	: QPushButton("", p), selectedColor(QColor())
+ColorPickerButton::ColorPickerButton(const QString &QUNUSED(t), QWidget *p,
+                                     const QColor &iC)
+        : QPushButton("", p), selectedColor(QColor())
 {
 	setSelectedColor(iC);
 	setMinimumSize(75, minimumHeight());
@@ -74,8 +73,9 @@ ColorPickerButton::ColorPickerButton(const QString &QUNUSED(t),
  * \param iC Our initial color.
  */
 ColorPickerButton::ColorPickerButton(const QIcon &QUNUSED(i),
-		const QString &QUNUSED(t), QWidget *p, const QColor &iC)
-	: QPushButton("", p), selectedColor(QColor())
+                                     const QString &QUNUSED(t), QWidget *p,
+                                     const QColor &iC)
+        : QPushButton("", p), selectedColor(QColor())
 {
 	setSelectedColor(iC);
 	setMinimumSize(75, minimumHeight());
@@ -134,15 +134,15 @@ void ColorPickerButton::paintEvent(QPaintEvent *e)
 
 	QRect r = rect();
 
-	#ifdef _WIN32
-		r.adjust(5, 5, -5, -7);
-	#else
-		#ifdef __APPLE__
-			r.adjust(9, 7, -9, -10);
-		#else
-			r.adjust(4, 4, -4, -5);
-		#endif
-	#endif
+#ifdef _WIN32
+	r.adjust(5, 5, -5, -7);
+#else
+#ifdef __APPLE__
+	r.adjust(9, 7, -9, -10);
+#else
+	r.adjust(4, 4, -4, -5);
+#endif
+#endif
 
 	// Fill our rectangle.
 	painter.fillRect(r, getSelectedColor());
@@ -182,7 +182,8 @@ void ColorPickerButton::doClicked()
 { /* SLOT */
 
 	QColor c = QColorDialog::getColor(getSelectedColor(), this,
-		tr("Select a Color"), QColorDialog::DontUseNativeDialog);
+	                                  tr("Select a Color"),
+	                                  QColorDialog::DontUseNativeDialog);
 
 	if(c.isValid())
 	{
@@ -192,7 +193,5 @@ void ColorPickerButton::doClicked()
 		setSelectedColor(c);
 		Q_EMIT selectedColorChanged(getSelectedColor());
 	}
-
 }
-
 }

@@ -22,7 +22,6 @@
 
 namespace qompose
 {
-
 /*!
  * This function will return the icon for the given standard name. We try to
  * use an icon from the operating system's icon theme, but failing that, we
@@ -53,5 +52,4 @@ QIcon GUIUtils::getIconFromTheme(const QString &n)
 
 	return QIcon::fromTheme(n, defaultIcon);
 }
-
 }

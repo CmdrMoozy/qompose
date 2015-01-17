@@ -35,15 +35,13 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new file dialog instance.
  *
  * \param p The parent widget for our dialog.
  * \param f The window flags to use for our dialog.
  */
-FileDialog::FileDialog(QWidget *p, Qt::WindowFlags f)
-	: QFileDialog(p, f)
+FileDialog::FileDialog(QWidget *p, Qt::WindowFlags f) : QFileDialog(p, f)
 {
 }
 
@@ -63,10 +61,7 @@ FileDialog::~FileDialog()
  */
 FileDescriptor FileDialog::getNullDescriptor()
 {
-	FileDescriptor desc = {
-		QString(),
-		QString()
-	};
+	FileDescriptor desc = {QString(), QString()};
 
 	return desc;
 }
@@ -81,10 +76,7 @@ FileDescriptor FileDialog::getNullDescriptor()
  */
 FileDescriptor FileDialog::getPathDescriptor(const QString &p)
 {
-	FileDescriptor desc = {
-		p,
-		FileDialog::detectTextCodec(p)
-	};
+	FileDescriptor desc = {p, FileDialog::detectTextCodec(p)};
 
 	if(desc.textCodec.isNull())
 	{
@@ -109,9 +101,9 @@ FileDescriptor FileDialog::getPathDescriptor(const QString &p)
  * \param o The set of extra options to use for the open dialog.
  * \return A valid file descriptor on "accept," or a null descriptor otherwise.
  */
-FileDescriptor FileDialog::getOpenFileName(QWidget *p,
-	const QString &c, const QString &d, const QString &f, QString *sf,
-	QFileDialog::Options o)
+FileDescriptor FileDialog::getOpenFileName(QWidget *p, const QString &c,
+                                           const QString &d, const QString &f,
+                                           QString *sf, QFileDialog::Options o)
 {
 	QString fileName = QFileDialog::getOpenFileName(p, c, d, f, sf, o);
 
@@ -136,9 +128,11 @@ FileDescriptor FileDialog::getOpenFileName(QWidget *p,
  * \param o The set of extra options to use for the open dialog.
  * \return A list of file descriptors on "accept," or an empty list otherwise.
  */
-QList<FileDescriptor> FileDialog::getOpenFileNames(QWidget *p,
-	const QString &c, const QString &d, const QString &f, QString *sf,
-	QFileDialog::Options o)
+QList<FileDescriptor> FileDialog::getOpenFileNames(QWidget *p, const QString &c,
+                                                   const QString &d,
+                                                   const QString &f,
+                                                   QString *sf,
+                                                   QFileDialog::Options o)
 {
 	QStringList files = QFileDialog::getOpenFileNames(p, c, d, f, sf, o);
 
@@ -174,17 +168,18 @@ bool FileDialog::fileIsGood(const QString &f, QWidget *p)
 {
 	QFileInfo file(f);
 
-	if( (!file.exists()) || (!file.isReadable()) )
+	if((!file.exists()) || (!file.isReadable()))
 		return false;
 
 	if(file.size() > (5 * QMEGABYTE))
 	{
-		QString text = QString("The file '%1' is relatively large. Do you really want to open it?")
-			.arg(file.fileName());
+		QString text =
+		        QString("The file '%1' is relatively large. Do you "
+		                "really want to open it?").arg(file.fileName());
 
-		QMessageBox::StandardButton result = QMessageBox::question(p,
-			"Qompose - Large File", text, QMessageBox::Yes | QMessageBox::No,
-			QMessageBox::No);
+		QMessageBox::StandardButton result = QMessageBox::question(
+		        p, "Qompose - Large File", text,
+		        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
 		if(result != QMessageBox::Yes)
 			return false;
@@ -198,7 +193,8 @@ bool FileDialog::fileIsGood(const QString &f, QWidget *p)
  * The character encoding will be returned as a string which can be used with
  * QTextCodec's codecForName function.
  *
- * If the character encoding cannot be determined, or if some other error occurs,
+ * If the character encoding cannot be determined, or if some other error
+ *occurs,
  * then we will return a null QString instead.
  *
  * \param f The path to the file whose encoding will be detected.
@@ -211,10 +207,10 @@ QString FileDialog::detectTextCodec(const QString &f)
 	UErrorCode err = U_ZERO_ERROR;
 
 	std::shared_ptr<UCharsetDetector> detector(ucsdet_open(&err),
-		[](UCharsetDetector *p)
-		{
-			ucsdet_close(p);
-		});
+	                                           [](UCharsetDetector *p)
+	                                           {
+		ucsdet_close(p);
+	});
 
 	if(U_FAILURE(err))
 		return QString();
@@ -223,7 +219,7 @@ QString FileDialog::detectTextCodec(const QString &f)
 
 	std::ifstream fs(f.toStdString().c_str());
 	std::shared_ptr<char> buf(new char[1024], [](char *p)
-	{
+	                          {
 		delete[] p;
 	});
 
@@ -251,7 +247,7 @@ QString FileDialog::detectTextCodec(const QString &f)
 	if(U_FAILURE(err))
 		return QString();
 
-	const char *csn  = ucsdet_getName(cs, &err);
+	const char *csn = ucsdet_getName(cs, &err);
 
 	if(U_FAILURE(err))
 		return QString();
@@ -283,7 +279,8 @@ QString FileDialog::detectTextCodec(const QString &f)
 }
 
 /*!
- * This is a utility function which prompts the user to select a character encoding,
+ * This is a utility function which prompts the user to select a character
+ *encoding,
  * in the case where the proper encoding couldn't be autodetected for a file.
  *
  * \param f The path to the file to prompt about.
@@ -293,10 +290,12 @@ QString FileDialog::promptTextCodec(const QString &f)
 {
 	QFileInfo file(f);
 
-	QString message = QString("The character encoding for '%1' couldn't be auto-detected. "
-		"Which character encoding should be used to open it?").arg(file.fileName());
+	QString message =
+	        QString("The character encoding for '%1' couldn't be "
+	                "auto-detected. "
+	                "Which character encoding should be used to open it?")
+	                .arg(file.fileName());
 
 	return EncodingDialog::promptEncoding(nullptr, "UTF-8", message);
 }
-
 }

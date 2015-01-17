@@ -36,7 +36,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new instance of
  * our buffer widget.
@@ -45,39 +44,40 @@ namespace qompose
  * \param p The parent widget for our buffer widget.
  */
 Buffer::Buffer(Settings *s, QWidget *p)
-	: Editor(p), settings(s), path(QString()), codec(QString())
+        : Editor(p), settings(s), path(QString()), codec(QString())
 {
 	// Load our initial settings, and connect our settings object.
 
 	setGutterVisible(settings->getSetting("show-gutter").toBool());
 	setFont(settings->getSetting("editor-font").value<QFont>());
-	setTabWidthSpaces(settings->getSetting("editor-indentation-width").toInt());
-	setWrapGuideVisible(settings->getSetting(
-		"editor-wrap-guide-visible").toBool());
-	setWrapGuideColumnWidth(settings->getSetting(
-		"editor-wrap-guide-width").toInt());
-	setWrapGuideColor(settings->getSetting(
-		"editor-wrap-guide-color").value<QColor>());
-	setEditorForeground(settings->getSetting(
-		"editor-foreground").value<QColor>());
-	setEditorBackground(settings->getSetting(
-		"editor-background").value<QColor>());
-	setCurrentLineColor(settings->getSetting(
-		"editor-current-line").value<QColor>());
-	setGutterForeground(settings->getSetting(
-		"gutter-foreground").value<QColor>());
-	setGutterBackground(settings->getSetting(
-		"gutter-background").value<QColor>());
+	setTabWidthSpaces(
+	        settings->getSetting("editor-indentation-width").toInt());
+	setWrapGuideVisible(
+	        settings->getSetting("editor-wrap-guide-visible").toBool());
+	setWrapGuideColumnWidth(
+	        settings->getSetting("editor-wrap-guide-width").toInt());
+	setWrapGuideColor(settings->getSetting("editor-wrap-guide-color")
+	                          .value<QColor>());
+	setEditorForeground(
+	        settings->getSetting("editor-foreground").value<QColor>());
+	setEditorBackground(
+	        settings->getSetting("editor-background").value<QColor>());
+	setCurrentLineColor(
+	        settings->getSetting("editor-current-line").value<QColor>());
+	setGutterForeground(
+	        settings->getSetting("gutter-foreground").value<QColor>());
+	setGutterBackground(
+	        settings->getSetting("gutter-background").value<QColor>());
 
-	QObject::connect(settings,
-		SIGNAL(settingChanged(const QString &, const QVariant &)),
-		this,
-		SLOT(doSettingChanged(const QString &, const QVariant &)));
+	QObject::connect(
+	        settings,
+	        SIGNAL(settingChanged(const QString &, const QVariant &)), this,
+	        SLOT(doSettingChanged(const QString &, const QVariant &)));
 
 	// Connect other various signals.
 
-	QObject::connect( this, SIGNAL( modificationChanged(bool) ),
-		this, SLOT( doModificationChanged(bool) ) );
+	QObject::connect(this, SIGNAL(modificationChanged(bool)), this,
+	                 SLOT(doModificationChanged(bool)));
 }
 
 /*!
@@ -132,8 +132,7 @@ bool Buffer::revert()
 	if(r)
 	{
 		QTextCursor endCurs = textCursor();
-		endCurs.movePosition(
-			QTextCursor::End, QTextCursor::MoveAnchor);
+		endCurs.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
 
 		int endPos = endCurs.position();
 
@@ -143,8 +142,8 @@ bool Buffer::revert()
 		}
 		else
 		{
-			curs.setPosition(
-				QTextCursor::End, QTextCursor::MoveAnchor);
+			curs.setPosition(QTextCursor::End,
+			                 QTextCursor::MoveAnchor);
 		}
 
 		setTextCursor(curs);
@@ -266,10 +265,7 @@ QString Buffer::getFile() const
  */
 FileDescriptor Buffer::getFileDescriptor() const
 {
-	FileDescriptor d = {
-		path,
-		codec
-	};
+	FileDescriptor d = {path, codec};
 
 	return d;
 }
@@ -313,9 +309,7 @@ void Buffer::setModified(bool m)
  */
 void Buffer::print(QPrinter *p)
 { /* SLOT */
-
 	document()->print(p);
-
 }
 
 /*!
@@ -382,8 +376,8 @@ bool Buffer::write()
 	DocumentWriter writer(&file);
 
 	writer.setCodec(c);
-	writer.setWhitespaceTrimmed(settings->getSetting(
-		"save-strip-trailing-spaces").toBool());
+	writer.setWhitespaceTrimmed(
+	        settings->getSetting("save-strip-trailing-spaces").toBool());
 
 	bool r = writer.write(document());
 
@@ -405,7 +399,6 @@ void Buffer::doModificationChanged(bool QUNUSED(c))
 { /* SLOT */
 
 	Q_EMIT titleChanged(getTitle());
-
 }
 
 /*!
@@ -440,7 +433,5 @@ void Buffer::doSettingChanged(const QString &k, const QVariant &v)
 		setGutterForeground(v.value<QColor>());
 	else if(k == "gutter-background")
 		setGutterBackground(v.value<QColor>());
-
 }
-
 }

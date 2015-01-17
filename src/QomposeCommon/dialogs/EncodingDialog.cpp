@@ -31,7 +31,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new instance of our
  * character encoding dialog.
@@ -42,12 +41,17 @@ namespace qompose
  * \param m The message to prompt the user with.
  * \param t The window title for the dialog.
  */
-EncodingDialog::EncodingDialog(QWidget *p, Qt::WindowFlags f,
-		const QString &d, const QString &m, const QString &t)
-	: QDialog(p, f), encoding(QString()), layout(nullptr),
-		messageLabel(nullptr), encodingList(nullptr),
-		buttonsWidget(nullptr), buttonsLayout(nullptr),
-		selectButton(nullptr), cancelButton(nullptr)
+EncodingDialog::EncodingDialog(QWidget *p, Qt::WindowFlags f, const QString &d,
+                               const QString &m, const QString &t)
+        : QDialog(p, f),
+          encoding(QString()),
+          layout(nullptr),
+          messageLabel(nullptr),
+          encodingList(nullptr),
+          buttonsWidget(nullptr),
+          buttonsLayout(nullptr),
+          selectButton(nullptr),
+          cancelButton(nullptr)
 {
 	layout = new QGridLayout(this);
 
@@ -61,7 +65,7 @@ EncodingDialog::EncodingDialog(QWidget *p, Qt::WindowFlags f,
 		encodingList->addItem(QString(codecs.at(i)));
 
 	QList<QListWidgetItem *> defaultEncoding =
-		encodingList->findItems(d, Qt::MatchExactly);
+	        encodingList->findItems(d, Qt::MatchExactly);
 
 	if(defaultEncoding.size() == 1)
 		encodingList->setCurrentItem(defaultEncoding.first());
@@ -83,10 +87,10 @@ EncodingDialog::EncodingDialog(QWidget *p, Qt::WindowFlags f,
 	layout->addWidget(buttonsWidget, 2, 0, 1, 1, nullptr);
 	setLayout(layout);
 
-	QObject::connect(selectButton, SIGNAL(clicked(bool)),
-		this, SLOT(doSelectClicked()));
-	QObject::connect(cancelButton, SIGNAL(clicked(bool)),
-		this, SLOT(doCancelClicked()));
+	QObject::connect(selectButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(doSelectClicked()));
+	QObject::connect(cancelButton, SIGNAL(clicked(bool)), this,
+	                 SLOT(doCancelClicked()));
 
 	setModal(true);
 	setWindowTitle(t);
@@ -118,13 +122,11 @@ EncodingDialog::~EncodingDialog()
  * \return The selected character encoding.
  */
 QString EncodingDialog::promptEncoding(QWidget *p, const QString &d,
-	const QString &m, const QString &t)
+                                       const QString &m, const QString &t)
 {
-
 	EncodingDialog dialog(p, nullptr, d, m, t);
 	dialog.exec();
 	return dialog.getSelectedEncoding();
-
 }
 
 /*!
@@ -155,7 +157,6 @@ void EncodingDialog::doSelectClicked()
 		encoding = QString();
 
 	done(0);
-
 }
 
 /*!
@@ -167,7 +168,5 @@ void EncodingDialog::doCancelClicked()
 
 	encoding = QString();
 	done(0);
-
 }
-
 }

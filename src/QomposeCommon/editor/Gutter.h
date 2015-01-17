@@ -26,7 +26,6 @@ class QPaintEvent;
 
 namespace qompose
 {
-
 class DecoratedTextEdit;
 
 /*!
@@ -52,7 +51,6 @@ private:
 	Gutter(const Gutter &);
 	Gutter &operator=(const Gutter &);
 };
-
 }
 
 #endif

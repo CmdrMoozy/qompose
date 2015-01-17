@@ -26,7 +26,6 @@ class QAbstractItemModel;
 
 namespace qompose
 {
-
 class PreferencesListModel;
 
 /*!
@@ -43,7 +42,6 @@ public:
 private:
 	virtual void setModel(QAbstractItemModel *m);
 };
-
 }
 
 #endif

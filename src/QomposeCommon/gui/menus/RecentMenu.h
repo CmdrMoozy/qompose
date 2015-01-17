@@ -30,7 +30,6 @@ class QAction;
 
 namespace qompose
 {
-
 class Settings;
 
 /*!
@@ -75,7 +74,6 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void recentClicked(const QString &);
 };
-
 }
 
 #endif

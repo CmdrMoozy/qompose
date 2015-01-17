@@ -29,7 +29,6 @@ class QPrinter;
 
 namespace qompose
 {
-
 class PreferencesDialog;
 class BufferWidget;
 class AboutDialog;
@@ -97,13 +96,12 @@ private Q_SLOTS:
 	void doReplaceAll();
 	void doGoToAccepted();
 
-	#ifdef QOMPOSE_DEBUG
-		void doDebug();
-	#endif
+#ifdef QOMPOSE_DEBUG
+	void doDebug();
+#endif
 
 	void doSettingChanged(const QString &, const QVariant &);
 };
-
 }
 
 #endif

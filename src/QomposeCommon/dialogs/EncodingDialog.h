@@ -29,7 +29,6 @@ class QPushButton;
 
 namespace qompose
 {
-
 /*!
  * \brief This class implements a simple text selection encoding dialog.
  */
@@ -38,17 +37,18 @@ class EncodingDialog : public QDialog
 	Q_OBJECT
 
 public:
-	EncodingDialog(QWidget * = nullptr,
-		Qt::WindowFlags = nullptr, const QString & = "UTF-8",
-		const QString & =
-		tr("Which character encoding should be used?"),
-		const QString & = tr("Select Character Encoding"));
+	EncodingDialog(QWidget * = nullptr, Qt::WindowFlags = nullptr,
+	               const QString & = "UTF-8",
+	               const QString & =
+	                       tr("Which character encoding should be used?"),
+	               const QString & = tr("Select Character Encoding"));
 	virtual ~EncodingDialog();
 
-	static QString promptEncoding(QWidget * = nullptr,
-		const QString & = "UTF-8", const QString & =
-		tr("Which character encoding should be used?"),
-		const QString & = tr("Select Character Encoding"));
+	static QString
+	promptEncoding(QWidget * = nullptr, const QString & = "UTF-8",
+	               const QString & =
+	                       tr("Which character encoding should be used?"),
+	               const QString & = tr("Select Character Encoding"));
 
 	QString getSelectedEncoding() const;
 
@@ -71,7 +71,6 @@ private Q_SLOTS:
 	void doSelectClicked();
 	void doCancelClicked();
 };
-
 }
 
 #endif

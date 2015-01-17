@@ -24,7 +24,6 @@
 
 namespace qompose
 {
-
 /*!
  * This is one of our constructors, which intializes a new font picker
  * object with the given parameters.
@@ -33,7 +32,7 @@ namespace qompose
  * \param iF Our initial font.
  */
 FontPickerButton::FontPickerButton(QWidget *p, const QFont &iF)
-	: QPushButton(tr("Select a Font"), p), selectedFont(QFont())
+        : QPushButton(tr("Select a Font"), p), selectedFont(QFont())
 {
 	setSelectedFont(iF);
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
@@ -47,9 +46,9 @@ FontPickerButton::FontPickerButton(QWidget *p, const QFont &iF)
  * \param p Our parent widget.
  * \param iF Our initial font.
  */
-FontPickerButton::FontPickerButton(const QString &t,
-	QWidget *p, const QFont &iF)
-	: QPushButton(t, p), selectedFont(QFont())
+FontPickerButton::FontPickerButton(const QString &t, QWidget *p,
+                                   const QFont &iF)
+        : QPushButton(t, p), selectedFont(QFont())
 {
 	setSelectedFont(iF);
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
@@ -64,9 +63,9 @@ FontPickerButton::FontPickerButton(const QString &t,
  * \param p Our parent widget.
  * \param iF Our initial font.
  */
-FontPickerButton::FontPickerButton(const QIcon &i,
-	const QString &t, QWidget *p, const QFont &iF)
-	: QPushButton(i, t, p), selectedFont(QFont())
+FontPickerButton::FontPickerButton(const QIcon &i, const QString &t, QWidget *p,
+                                   const QFont &iF)
+        : QPushButton(i, t, p), selectedFont(QFont())
 {
 	setSelectedFont(iF);
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
@@ -134,11 +133,10 @@ void FontPickerButton::setFont(const QFont &f)
 void FontPickerButton::doClicked()
 { /* SLOT */
 	bool ok;
-	setSelectedFont(QFontDialog::getFont(&ok,
-		getSelectedFont(), this, tr("Select a Font"), nullptr));
+	setSelectedFont(QFontDialog::getFont(&ok, getSelectedFont(), this,
+	                                     tr("Select a Font"), nullptr));
 
 	if(ok)
 		Q_EMIT selectedFontChanged(getSelectedFont());
 }
-
 }

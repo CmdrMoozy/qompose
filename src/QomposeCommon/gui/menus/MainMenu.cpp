@@ -28,28 +28,51 @@
 
 namespace qompose
 {
-
 MainMenu::MainMenu(Settings *s, QWidget *p)
-	: QMenuBar(p), settings(s), fileMenu(nullptr), editMenu(nullptr),
-		searchMenu(nullptr), buffersMenu(nullptr), helpMenu(nullptr),
-		newAction(nullptr), openAction(nullptr), recentMenu(nullptr),
-		reopenAction(nullptr), revertAction(nullptr),
-		revertAllAction(nullptr), saveAction(nullptr),
-		saveAsAction(nullptr), printAction(nullptr),
-		printPreviewAction(nullptr), closeAction(nullptr),
-		exitAction(nullptr), undoAction(nullptr), redoAction(nullptr),
-		cutAction(nullptr), copyAction(nullptr), pasteAction(nullptr),
-		duplicateLineAction(nullptr), selectAllAction(nullptr),
-		deselectAction(nullptr), increaseIndentAction(nullptr),
-		decreaseIndentAction(nullptr), preferencesAction(nullptr),
-		findAction(nullptr), findNextAction(nullptr),
-		findPreviousAction(nullptr), replaceAction(nullptr),
-		goToAction(nullptr), previousBufferAction(nullptr),
-		nextBufferAction(nullptr), moveBufferLeftAction(nullptr),
-		moveBufferRightAction(nullptr), aboutQomposeAction(nullptr),
-		aboutQtAction(nullptr)
+        : QMenuBar(p),
+          settings(s),
+          fileMenu(nullptr),
+          editMenu(nullptr),
+          searchMenu(nullptr),
+          buffersMenu(nullptr),
+          helpMenu(nullptr),
+          newAction(nullptr),
+          openAction(nullptr),
+          recentMenu(nullptr),
+          reopenAction(nullptr),
+          revertAction(nullptr),
+          revertAllAction(nullptr),
+          saveAction(nullptr),
+          saveAsAction(nullptr),
+          printAction(nullptr),
+          printPreviewAction(nullptr),
+          closeAction(nullptr),
+          exitAction(nullptr),
+          undoAction(nullptr),
+          redoAction(nullptr),
+          cutAction(nullptr),
+          copyAction(nullptr),
+          pasteAction(nullptr),
+          duplicateLineAction(nullptr),
+          selectAllAction(nullptr),
+          deselectAction(nullptr),
+          increaseIndentAction(nullptr),
+          decreaseIndentAction(nullptr),
+          preferencesAction(nullptr),
+          findAction(nullptr),
+          findNextAction(nullptr),
+          findPreviousAction(nullptr),
+          replaceAction(nullptr),
+          goToAction(nullptr),
+          previousBufferAction(nullptr),
+          nextBufferAction(nullptr),
+          moveBufferLeftAction(nullptr),
+          moveBufferRightAction(nullptr),
+          aboutQomposeAction(nullptr),
+          aboutQtAction(nullptr)
 #ifdef QOMPOSE_DEBUG
-		, debugAction(nullptr)
+          ,
+          debugAction(nullptr)
 #endif
 {
 	// Initialize our actions.
@@ -89,7 +112,8 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	printAction->setIcon(GUIUtils::getIconFromTheme("document-print"));
 
 	printPreviewAction = new QAction(tr("Print Pre&view..."), this);
-	printPreviewAction->setIcon(GUIUtils::getIconFromTheme("document-print-preview"));
+	printPreviewAction->setIcon(
+	        GUIUtils::getIconFromTheme("document-print-preview"));
 
 	closeAction = new QAction(tr("Clos&e"), this);
 	closeAction->setShortcut(Qt::CTRL + Qt::Key_W);
@@ -128,12 +152,15 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	deselectAction = new QAction(tr("Dese&lect"), this);
 	deselectAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
 
-	increaseIndentAction = new QAction(tr("&Increase Selection Indent"), this);
+	increaseIndentAction =
+	        new QAction(tr("&Increase Selection Indent"), this);
 
-	decreaseIndentAction = new QAction(tr("&Decrease Selection Indent"), this);
+	decreaseIndentAction =
+	        new QAction(tr("&Decrease Selection Indent"), this);
 
 	preferencesAction = new QAction(tr("Pre&ferences..."), this);
-	preferencesAction->setIcon(GUIUtils::getIconFromTheme("preferences-other"));
+	preferencesAction->setIcon(
+	        GUIUtils::getIconFromTheme("preferences-other"));
 
 	findAction = new QAction(tr("&Find..."), this);
 	findAction->setShortcut(Qt::CTRL + Qt::Key_F);
@@ -156,7 +183,8 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	previousBufferAction = new QAction(tr("&Previous Buffer"), this);
 	previousBufferAction->setShortcut(Qt::ALT + Qt::Key_Left);
-	previousBufferAction->setIcon(GUIUtils::getIconFromTheme("go-previous"));
+	previousBufferAction->setIcon(
+	        GUIUtils::getIconFromTheme("go-previous"));
 
 	nextBufferAction = new QAction(tr("&Next Buffer"), this);
 	nextBufferAction->setShortcut(Qt::ALT + Qt::Key_Right);
@@ -164,7 +192,8 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	moveBufferLeftAction = new QAction(tr("Move Buffer &Left"), this);
 	moveBufferLeftAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Left);
-	moveBufferLeftAction->setIcon(GUIUtils::getIconFromTheme("go-previous"));
+	moveBufferLeftAction->setIcon(
+	        GUIUtils::getIconFromTheme("go-previous"));
 
 	moveBufferRightAction = new QAction(tr("Move Buffer &Right"), this);
 	moveBufferRightAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Right);
@@ -176,9 +205,9 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	aboutQtAction = new QAction(tr("About &Qt..."), this);
 	aboutQtAction->setIcon(GUIUtils::getIconFromTheme("help-about"));
 
-	#ifdef QOMPOSE_DEBUG
-		debugAction = new QAction(tr("Debugging..."), this);
-	#endif
+#ifdef QOMPOSE_DEBUG
+	debugAction = new QAction(tr("Debugging..."), this);
+#endif
 
 	// Add these actions to our menu bar.
 
@@ -234,10 +263,10 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	helpMenu->addAction(aboutQomposeAction);
 	helpMenu->addAction(aboutQtAction);
 
-	#ifdef QOMPOSE_DEBUG
-		helpMenu->addSeparator();
-		helpMenu->addAction(debugAction);
-	#endif
+#ifdef QOMPOSE_DEBUG
+	helpMenu->addSeparator();
+	helpMenu->addAction(debugAction);
+#endif
 
 	addMenu(fileMenu);
 	addMenu(editMenu);
@@ -247,22 +276,33 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	// Connect certain signals.
 
-	QObject::connect( printAction,        SIGNAL( triggered(bool) ), this, SIGNAL( printTriggered(bool)        ) );
-	QObject::connect( printPreviewAction, SIGNAL( triggered(bool) ), this, SIGNAL( printPreviewTriggered(bool) ) );
-	QObject::connect( exitAction,         SIGNAL( triggered(bool) ), this, SIGNAL( exitTriggered(bool)         ) );
-	QObject::connect( preferencesAction,  SIGNAL( triggered(bool) ), this, SIGNAL( preferencesTriggered(bool)  ) );
-	QObject::connect( findAction,         SIGNAL( triggered(bool) ), this, SIGNAL( findTriggered(bool)         ) );
-	QObject::connect( findNextAction,     SIGNAL( triggered(bool) ), this, SIGNAL( findNextTriggered(bool)     ) );
-	QObject::connect( findPreviousAction, SIGNAL( triggered(bool) ), this, SIGNAL( findPreviousTriggered(bool) ) );
-	QObject::connect( replaceAction,      SIGNAL( triggered(bool) ), this, SIGNAL( replaceTriggered(bool)      ) );
-	QObject::connect( goToAction,         SIGNAL( triggered(bool) ), this, SIGNAL( goToTriggered(bool)         ) );
-	QObject::connect( aboutQomposeAction, SIGNAL( triggered(bool) ), this, SIGNAL( aboutQomposeTriggered(bool) ) );
-	QObject::connect( aboutQtAction,      SIGNAL( triggered(bool) ), this, SIGNAL( aboutQtTriggered(bool)      ) );
+	QObject::connect(printAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(printTriggered(bool)));
+	QObject::connect(printPreviewAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(printPreviewTriggered(bool)));
+	QObject::connect(exitAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(exitTriggered(bool)));
+	QObject::connect(preferencesAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(preferencesTriggered(bool)));
+	QObject::connect(findAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(findTriggered(bool)));
+	QObject::connect(findNextAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(findNextTriggered(bool)));
+	QObject::connect(findPreviousAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(findPreviousTriggered(bool)));
+	QObject::connect(replaceAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(replaceTriggered(bool)));
+	QObject::connect(goToAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(goToTriggered(bool)));
+	QObject::connect(aboutQomposeAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(aboutQomposeTriggered(bool)));
+	QObject::connect(aboutQtAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(aboutQtTriggered(bool)));
 
-	#ifdef QOMPOSE_DEBUG
-		QObject::connect(debugAction, SIGNAL(triggered(bool)),
-			this, SIGNAL(debugTriggered(bool)));
-	#endif
+#ifdef QOMPOSE_DEBUG
+	QObject::connect(debugAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(debugTriggered(bool)));
+#endif
 }
 
 MainMenu::~MainMenu()
@@ -273,36 +313,56 @@ void MainMenu::connectBufferWidget(const BufferWidget *b)
 {
 	// Connect our recent menu actions.
 
-	QObject::connect( b, SIGNAL( pathOpened(const QString &) ),
-		this, SLOT( doFileOpened(const QString &) ) );
+	QObject::connect(b, SIGNAL(pathOpened(const QString &)), this,
+	                 SLOT(doFileOpened(const QString &)));
 
-	QObject::connect( recentMenu, SIGNAL( recentClicked(const QString &) ),
-		b, SLOT( doOpenPath(const QString &) ) );
+	QObject::connect(recentMenu, SIGNAL(recentClicked(const QString &)), b,
+	                 SLOT(doOpenPath(const QString &)));
 
 	// Connect the rest of our actions.
 
-	QObject::connect( newAction,             SIGNAL( triggered(bool) ), b, SLOT( doNew()             ) );
-	QObject::connect( openAction,            SIGNAL( triggered(bool) ), b, SLOT( doOpen()            ) );
-	QObject::connect( reopenAction,          SIGNAL( triggered(bool) ), b, SLOT( doReopen()          ) );
-	QObject::connect( revertAction,          SIGNAL( triggered(bool) ), b, SLOT( doRevert()          ) );
-	QObject::connect( revertAllAction,       SIGNAL( triggered(bool) ), b, SLOT( doRevertAll()       ) );
-	QObject::connect( saveAction,            SIGNAL( triggered(bool) ), b, SLOT( doSave()            ) );
-	QObject::connect( saveAsAction,          SIGNAL( triggered(bool) ), b, SLOT( doSaveAs()          ) );
-	QObject::connect( closeAction,           SIGNAL( triggered(bool) ), b, SLOT( doClose()           ) );
-	QObject::connect( undoAction,            SIGNAL( triggered(bool) ), b, SLOT( doUndo()            ) );
-	QObject::connect( redoAction,            SIGNAL( triggered(bool) ), b, SLOT( doRedo()            ) );
-	QObject::connect( cutAction,             SIGNAL( triggered(bool) ), b, SLOT( doCut()             ) );
-	QObject::connect( copyAction,            SIGNAL( triggered(bool) ), b, SLOT( doCopy()            ) );
-	QObject::connect( pasteAction,           SIGNAL( triggered(bool) ), b, SLOT( doPaste()           ) );
-	QObject::connect( duplicateLineAction,   SIGNAL( triggered(bool) ), b, SLOT( doDuplicateLine()   ) );
-	QObject::connect( selectAllAction,       SIGNAL( triggered(bool) ), b, SLOT( doSelectAll()       ) );
-	QObject::connect( deselectAction,        SIGNAL( triggered(bool) ), b, SLOT( doDeselect()        ) );
-	QObject::connect( increaseIndentAction,  SIGNAL( triggered(bool) ), b, SLOT( doIncreaseIndent()  ) );
-	QObject::connect( decreaseIndentAction,  SIGNAL( triggered(bool) ), b, SLOT( doDecreaseIndent()  ) );
-	QObject::connect( previousBufferAction,  SIGNAL( triggered(bool) ), b, SLOT( doPreviousBuffer()  ) );
-	QObject::connect( nextBufferAction,      SIGNAL( triggered(bool) ), b, SLOT( doNextBuffer()      ) );
-	QObject::connect( moveBufferLeftAction,  SIGNAL( triggered(bool) ), b, SLOT( doMoveBufferLeft()  ) );
-	QObject::connect( moveBufferRightAction, SIGNAL( triggered(bool) ), b, SLOT( doMoveBufferRight() ) );
+	QObject::connect(newAction, SIGNAL(triggered(bool)), b, SLOT(doNew()));
+	QObject::connect(openAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doOpen()));
+	QObject::connect(reopenAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doReopen()));
+	QObject::connect(revertAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doRevert()));
+	QObject::connect(revertAllAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doRevertAll()));
+	QObject::connect(saveAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doSave()));
+	QObject::connect(saveAsAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doSaveAs()));
+	QObject::connect(closeAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doClose()));
+	QObject::connect(undoAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doUndo()));
+	QObject::connect(redoAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doRedo()));
+	QObject::connect(cutAction, SIGNAL(triggered(bool)), b, SLOT(doCut()));
+	QObject::connect(copyAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doCopy()));
+	QObject::connect(pasteAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doPaste()));
+	QObject::connect(duplicateLineAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doDuplicateLine()));
+	QObject::connect(selectAllAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doSelectAll()));
+	QObject::connect(deselectAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doDeselect()));
+	QObject::connect(increaseIndentAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doIncreaseIndent()));
+	QObject::connect(decreaseIndentAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doDecreaseIndent()));
+	QObject::connect(previousBufferAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doPreviousBuffer()));
+	QObject::connect(nextBufferAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doNextBuffer()));
+	QObject::connect(moveBufferLeftAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doMoveBufferLeft()));
+	QObject::connect(moveBufferRightAction, SIGNAL(triggered(bool)), b,
+	                 SLOT(doMoveBufferRight()));
 }
 
 /*!
@@ -313,9 +373,6 @@ void MainMenu::connectBufferWidget(const BufferWidget *b)
  */
 void MainMenu::doFileOpened(const QString &p)
 { /* SLOT */
-
 	recentMenu->addPath(p);
-
 }
-
 }

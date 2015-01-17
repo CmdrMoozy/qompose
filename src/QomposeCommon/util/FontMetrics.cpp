@@ -23,15 +23,13 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new instance of our font
  * metrics class.
  *
  * \param f The font we will be examining.
  */
-FontMetrics::FontMetrics(const QFont &f)
-	: font(f)
+FontMetrics::FontMetrics(const QFont &f) : font(f)
 {
 }
 
@@ -104,5 +102,4 @@ qreal FontMetrics::getColumnWidthF(int columns) const
 
 	return (metrics.averageCharWidth() * static_cast<qreal>(columns));
 }
-
 }

@@ -27,7 +27,6 @@ class QCheckBox;
 
 namespace qompose
 {
-
 class Settings;
 
 /*!
@@ -37,7 +36,7 @@ class OpenSavePreferencesWidget : public PreferencesWidget
 {
 public:
 	OpenSavePreferencesWidget(Settings *s, QWidget *p = nullptr,
-		Qt::WindowFlags f = nullptr);
+	                          Qt::WindowFlags f = nullptr);
 	virtual ~OpenSavePreferencesWidget();
 
 	virtual void apply();
@@ -51,12 +50,10 @@ private:
 	QCheckBox *stripTrailingSpacesCheckBox;
 
 	OpenSavePreferencesWidget(const OpenSavePreferencesWidget &);
-	OpenSavePreferencesWidget &operator=(
-		const OpenSavePreferencesWidget &);
+	OpenSavePreferencesWidget &operator=(const OpenSavePreferencesWidget &);
 
 	void initializeGUI();
 };
-
 }
 
 #endif

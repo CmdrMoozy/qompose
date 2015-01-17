@@ -24,15 +24,13 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new gutter for the given
  * editor object.
  *
  * \param e The editor this gutter is attached to.
  */
-Gutter::Gutter(DecoratedTextEdit *e)
-	: QWidget(e, nullptr), editor(e)
+Gutter::Gutter(DecoratedTextEdit *e) : QWidget(e, nullptr), editor(e)
 {
 }
 
@@ -87,5 +85,4 @@ void Gutter::paintEvent(QPaintEvent *e)
 	if(editor != NULL)
 		editor->gutterPaintEvent(e);
 }
-
 }

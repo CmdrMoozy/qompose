@@ -26,7 +26,6 @@
 
 namespace qompose
 {
-
 /*!
  * \brief This class encapsulates the options and expression of a find query.
  */
@@ -65,7 +64,6 @@ private:
 	bool reverse;
 	bool regex;
 };
-
 }
 
 #endif

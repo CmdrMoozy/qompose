@@ -30,9 +30,9 @@
  * Define a GUID to uniquely identify our application.
  */
 #ifdef QOMPOSE_DEBUG
-	#define QOMPOSE_GUID ("cc0c9103-5fc0-45d3-ab0e-694d566f3e8d")
+#define QOMPOSE_GUID ("cc0c9103-5fc0-45d3-ab0e-694d566f3e8d")
 #else
-	#define QOMPOSE_GUID ("32e11710-e79f-4a3a-ba31-2ff06f1f86a0")
+#define QOMPOSE_GUID ("32e11710-e79f-4a3a-ba31-2ff06f1f86a0")
 #endif
 
 /*
@@ -46,11 +46,11 @@
  * very intentionally NOT referencing said variable.
  */
 #ifndef QLUNUSED
-	#ifdef _WIN32
-		#define QLUNUSED(x) x;
-	#else
-		#define QLUNUSED(x)
-	#endif
+#ifdef _WIN32
+#define QLUNUSED(x) x;
+#else
+#define QLUNUSED(x)
+#endif
 #endif
 
 /*
@@ -59,11 +59,11 @@
  * Note that this only does anything significant for GNU compilers.
  */
 #ifndef QUNUSED
-	#if defined(__GNUC__)
-		#define QUNUSED(x) UNUSED_ ## x __attribute__((unused))
-	#else
-		#define QUNUSED(x)
-	#endif
+#if defined(__GNUC__)
+#define QUNUSED(x) UNUSED_##x __attribute__((unused))
+#else
+#define QUNUSED(x)
+#endif
 #endif
 
 #endif

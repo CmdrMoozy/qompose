@@ -28,7 +28,6 @@ class QSpinBox;
 
 namespace qompose
 {
-
 class Settings;
 
 /*!
@@ -38,7 +37,7 @@ class GeneralPreferencesWidget : public PreferencesWidget
 {
 public:
 	GeneralPreferencesWidget(Settings *s, QWidget *p = nullptr,
-		Qt::WindowFlags f = nullptr);
+	                         Qt::WindowFlags f = nullptr);
 	virtual ~GeneralPreferencesWidget();
 
 	virtual void apply();
@@ -57,7 +56,6 @@ private:
 
 	void initializeGUI();
 };
-
 }
 
 #endif

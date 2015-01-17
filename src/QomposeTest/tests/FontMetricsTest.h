@@ -25,7 +25,6 @@ namespace qompose
 {
 namespace test
 {
-
 /*!
  * \brief This class defines unit tests for our font metrics class.
  */
@@ -41,7 +40,6 @@ private:
 	void testIsMonospaced();
 	void testGetColumnWidth();
 };
-
 }
 }
 

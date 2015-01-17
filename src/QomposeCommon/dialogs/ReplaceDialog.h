@@ -32,7 +32,6 @@ class QShowEvent;
 
 namespace qompose
 {
-
 class ReplaceQuery;
 
 /*!
@@ -96,7 +95,6 @@ Q_SIGNALS:
 	void replaceSelectionClicked();
 	void replaceAllClicked();
 };
-
 }
 
 #endif

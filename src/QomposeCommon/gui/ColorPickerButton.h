@@ -28,7 +28,6 @@ class QPaintEvent;
 
 namespace qompose
 {
-
 /*!
  * \brief This class implements a QPushButton for selecting a color.
  *
@@ -43,9 +42,9 @@ class ColorPickerButton : public QPushButton
 public:
 	ColorPickerButton(QWidget *p = nullptr, const QColor &iC = Qt::black);
 	ColorPickerButton(const QString &t, QWidget *p = nullptr,
-		const QColor &iC = Qt::black);
+	                  const QColor &iC = Qt::black);
 	ColorPickerButton(const QIcon &i, const QString &t,
-		QWidget *p = nullptr, const QColor &iC = Qt::black);
+	                  QWidget *p = nullptr, const QColor &iC = Qt::black);
 	virtual ~ColorPickerButton();
 
 	const QColor &getSelectedColor() const;
@@ -66,7 +65,6 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void selectedColorChanged(const QColor &);
 };
-
 }
 
 #endif

@@ -26,14 +26,12 @@
 
 namespace qompose
 {
-
 /*!
  * This is our default constructor, which creates a new document writer
  * instance. Before writing any documents, one will need to set the QIODevice
  * with setDevice().
  */
-DocumentWriter::DocumentWriter()
-	: whitespaceTrimmed(false), stream()
+DocumentWriter::DocumentWriter() : whitespaceTrimmed(false), stream()
 {
 }
 
@@ -44,7 +42,7 @@ DocumentWriter::DocumentWriter()
  * \param d The device to write to.
  */
 DocumentWriter::DocumentWriter(QIODevice *d)
-	: whitespaceTrimmed(false), stream()
+        : whitespaceTrimmed(false), stream()
 {
 	setDevice(d);
 }
@@ -138,7 +136,7 @@ bool DocumentWriter::write(const QTextDocument *d)
 	// Make sure our device is good for writing.
 
 	if(!getDevice()->isWritable() &&
-		!getDevice()->open(QIODevice::WriteOnly))
+	   !getDevice()->open(QIODevice::WriteOnly))
 	{
 		return false;
 	}
@@ -174,13 +172,13 @@ QString DocumentWriter::trimWhitespace(const QString &s) const
 {
 	QString result("");
 
-	QStringList lines = s.split(QRegExp("\n|(\r\n)|\r"),
-		QString::KeepEmptyParts);
+	QStringList lines =
+	        s.split(QRegExp("\n|(\r\n)|\r"), QString::KeepEmptyParts);
 
 	for(int i = 0; i < lines.size(); ++i)
 	{
 		int n = lines.at(i).size() - 1;
-		while( (n >= 0) && lines.at(i).at(n).isSpace() )
+		while((n >= 0) && lines.at(i).at(n).isSpace())
 			--n;
 
 		result.append(lines.at(i).left(n + 1));
@@ -191,5 +189,4 @@ QString DocumentWriter::trimWhitespace(const QString &s) const
 
 	return result;
 }
-
 }

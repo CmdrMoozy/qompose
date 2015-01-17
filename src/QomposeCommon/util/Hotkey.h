@@ -25,7 +25,6 @@ class QKeyEvent;
 
 namespace qompose
 {
-
 /*!
  * \brief This class denotes a single hotkey Key/Modifiers combination.
  *
@@ -63,7 +62,6 @@ private:
 
 	static int opop(quint64 v);
 };
-
 }
 
 #endif

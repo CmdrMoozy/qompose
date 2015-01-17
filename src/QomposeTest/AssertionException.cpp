@@ -24,12 +24,10 @@ namespace qompose
 {
 namespace test
 {
-
 /*!
  * This constructor creates a new assertion exception with an empty message.
  */
-AssertionException::AssertionException() noexcept
-	: message(""), trace("")
+AssertionException::AssertionException() noexcept : message(""), trace("")
 {
 	trace = Test::getStackTrace();
 }
@@ -39,9 +37,9 @@ AssertionException::AssertionException() noexcept
  *
  * \param w The exception message.
  */
-AssertionException::AssertionException(
-		const std::string &w) noexcept
-	: message(w), trace("")
+AssertionException::AssertionException(const std::string &w) noexcept
+        : message(w),
+          trace("")
 {
 	trace = Test::getStackTrace();
 }
@@ -52,9 +50,9 @@ AssertionException::AssertionException(
  *
  * \param e The other exception to copy.
  */
-AssertionException::AssertionException(
-	const AssertionException &e) noexcept
-	: message(""), trace("")
+AssertionException::AssertionException(const AssertionException &e) noexcept
+        : message(""),
+          trace("")
 {
 	*this = e;
 }
@@ -73,9 +71,8 @@ AssertionException::~AssertionException() noexcept
  * \param e The other exception to set ourself equal to.
  * \return A reference to this, for operator chanining.
  */
-AssertionException &
-		AssertionException::operator=(
-		const AssertionException &e) noexcept
+AssertionException &AssertionException::
+operator=(const AssertionException &e) noexcept
 {
 	if(&e == this)
 		return *this;
@@ -102,11 +99,9 @@ const char *AssertionException::what() const noexcept
  *
  * \return This exception's stack trace.
  */
-const std::string &AssertionException::getStackTrace()
-		const noexcept
+const std::string &AssertionException::getStackTrace() const noexcept
 {
 	return trace;
 }
-
 }
 }
