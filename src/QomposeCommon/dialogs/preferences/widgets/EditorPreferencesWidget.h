@@ -26,6 +26,8 @@ class QGridLayout;
 class QCheckBox;
 class QLabel;
 class QSpinBox;
+class QButtonGroup;
+class QRadioButton;
 
 namespace qompose
 {
@@ -56,6 +58,10 @@ private:
 	FontPickerButton *editorFontButton;
 	QLabel *indentationWidthLabel;
 	QSpinBox *indentationWidthSpinBox;
+	QLabel *indentationModeLabel;
+	QButtonGroup *indentationModeButtonGroup;
+	QRadioButton *indentationModeTabsRadioButton;
+	QRadioButton *indentationModeSpacesRadioButton;
 
 	QGroupBox *lineWrapGuideGroupBox;
 	QGridLayout *lineWrapGuideLayout;
@@ -82,6 +88,9 @@ private:
 	EditorPreferencesWidget &operator=(const EditorPreferencesWidget &);
 
 	void initializeGUI();
+
+	QString getSelectedIndentationMode() const;
+	void setSelectedIndentaionMode(const QString &);
 };
 }
 

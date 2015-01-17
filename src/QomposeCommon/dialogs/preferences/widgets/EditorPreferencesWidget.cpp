@@ -23,6 +23,8 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QSpinBox>
+#include <QRadioButton>
+#include <QButtonGroup>
 
 #include "QomposeCommon/gui/ColorPickerButton.h"
 #include "QomposeCommon/gui/FontPickerButton.h"
@@ -50,6 +52,10 @@ EditorPreferencesWidget::EditorPreferencesWidget(Settings *s, QWidget *p,
           editorFontButton(nullptr),
           indentationWidthLabel(nullptr),
           indentationWidthSpinBox(nullptr),
+          indentationModeLabel(nullptr),
+          indentationModeButtonGroup(nullptr),
+          indentationModeTabsRadioButton(nullptr),
+          indentationModeSpacesRadioButton(nullptr),
           lineWrapGuideGroupBox(nullptr),
           lineWrapGuideLayout(nullptr),
           lineWrapGuideCheckBox(nullptr),
@@ -105,6 +111,11 @@ void EditorPreferencesWidget::apply()
 
 	getSettings()->setSetting("editor-indentation-width",
 	                          QVariant(indentationWidthSpinBox->value()));
+
+	// Indentation Mode
+
+	getSettings()->setSetting("editor-indentation-mode",
+	                          QVariant(getSelectedIndentationMode()));
 
 	// Wrap Guide Visible
 
@@ -174,6 +185,13 @@ void EditorPreferencesWidget::discardChanges()
 	indentationWidthSpinBox->setValue(
 	        getSettings()->getSetting("editor-indentation-width").toInt());
 
+	// Indentation Mode
+
+	setSelectedIndentaionMode(
+	        getSettings()
+	                ->getSetting("editor-indentation-mode")
+	                .value<QString>());
+
 	// Wrap Guide Visible
 
 	bool showLineWrapGuide =
@@ -239,23 +257,36 @@ void EditorPreferencesWidget::initializeGUI()
 
 	editorFontLabel =
 	        new QLabel(tr("Editor Font"), generalGroupBox, nullptr);
-
 	editorFontButton = new FontPickerButton(generalGroupBox);
 
 	indentationWidthLabel =
 	        new QLabel(tr("Indentation Width"), generalGroupBox, nullptr);
-
 	indentationWidthSpinBox = new QSpinBox(generalGroupBox);
 	indentationWidthSpinBox->setMinimum(2);
 	indentationWidthSpinBox->setMaximum(24);
+
+	indentationModeLabel =
+	        new QLabel(tr("Indentation Mode"), generalGroupBox, nullptr);
+	indentationModeButtonGroup = new QButtonGroup(generalGroupBox);
+	indentationModeTabsRadioButton =
+	        new QRadioButton(tr("Tabs"), generalGroupBox);
+	indentationModeSpacesRadioButton =
+	        new QRadioButton(tr("Spaces"), generalGroupBox);
+	indentationModeButtonGroup->addButton(indentationModeTabsRadioButton);
+	indentationModeButtonGroup->addButton(indentationModeSpacesRadioButton);
 
 	generalLayout->addWidget(showGutterCheckBox, 0, 0, 1, 1, nullptr);
 	generalLayout->addWidget(editorFontLabel, 1, 0, 1, 1, nullptr);
 	generalLayout->addWidget(editorFontButton, 1, 1, 1, 1, nullptr);
 	generalLayout->addWidget(indentationWidthLabel, 2, 0, 1, 1, nullptr);
 	generalLayout->addWidget(indentationWidthSpinBox, 2, 1, 1, 1, nullptr);
+	generalLayout->addWidget(indentationModeLabel, 3, 0, 1, 1, nullptr);
+	generalLayout->addWidget(indentationModeTabsRadioButton, 3, 1, 1, 1,
+	                         nullptr);
+	generalLayout->addWidget(indentationModeSpacesRadioButton, 4, 1, 1, 1,
+	                         nullptr);
 
-	generalLayout->setRowStretch(3, 1);
+	generalLayout->setRowStretch(5, 1);
 	generalLayout->setColumnStretch(0, 1);
 
 	generalGroupBox->setLayout(generalLayout);
@@ -348,5 +379,37 @@ void EditorPreferencesWidget::initializeGUI()
 	layout->setRowStretch(4, 1);
 
 	setLayout(layout);
+}
+
+/*!
+ * This is a small utility function which returns the currently selected
+ * indentation mode as a string.
+ *
+ * \return The currently selected indentation mode as a string.
+ */
+QString EditorPreferencesWidget::getSelectedIndentationMode() const
+{
+	if(indentationModeTabsRadioButton->isChecked())
+		return "tabs";
+	else if(indentationModeSpacesRadioButton->isChecked())
+		return "spaces";
+	else
+		return "tabs";
+}
+
+/*!
+ * This is a small utility function which sets the currently selected
+ * indentation mode in the UI based upon the given string value.
+ *
+ * \param mode The new indentation mode.
+ */
+void EditorPreferencesWidget::setSelectedIndentaionMode(const QString &mode)
+{
+	if(mode == "tabs")
+		indentationModeTabsRadioButton->setChecked(true);
+	else if(mode == "spaces")
+		indentationModeSpacesRadioButton->setChecked(true);
+	else
+		indentationModeTabsRadioButton->setChecked(true);
 }
 }
