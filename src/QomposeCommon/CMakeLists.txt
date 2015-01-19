@@ -54,6 +54,11 @@ set(QomposeCommon_SOURCES
 	editor/Gutter.cpp
 	editor/Gutter.h
 
+	editor/spell/SpellChecker.cpp
+	editor/spell/SpellChecker.h
+	editor/spell/SpellCheckerWorker.cpp
+	editor/spell/SpellCheckerWorker.h
+
 	gui/BufferWidget.cpp
 	gui/BufferWidget.h
 	gui/ColorPickerButton.cpp
