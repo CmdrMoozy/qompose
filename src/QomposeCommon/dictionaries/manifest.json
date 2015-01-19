@@ -1,0 +1,8 @@
+{
+	'en': {
+		'US': {
+			'dictionary': ':/dictionaries/en_US.dic',
+			'user_wordlist': ':/dictionaries/en_US.aff'
+		}
+	}
+}

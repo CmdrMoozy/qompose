@@ -1,6 +1,7 @@
 set(QomposeCommon_RESOURCES
 
 	data.qrc
+	dictionaries.qrc
 	icons.qrc
 
 )

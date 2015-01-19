@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+	<qresource>
+		<file>dictionaries/manifest.json</file>
+
+		<file>dictionaries/en_US.aff</file>
+		<file>dictionaries/en_US.dic</file>
+	</qresource>
+</RCC>
