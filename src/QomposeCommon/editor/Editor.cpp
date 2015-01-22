@@ -239,7 +239,8 @@ void Editor::doBackspace()
 		QString selectedText = curs.selectedText();
 		curs.setPosition(originalPosition, QTextCursor::MoveAnchor);
 
-		if(selectedText.length() % getIndentationWidth() == 0)
+		if((selectedText.length() % getIndentationWidth() == 0) &&
+		   (selectedText.length() >= getIndentationWidth()))
 		{
 			bool onlySpaces = true;
 
