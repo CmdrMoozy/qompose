@@ -18,9 +18,69 @@
 
 #include "HotkeyMapTest.h"
 
+#include <functional>
+
 #include <QKeyEvent>
 
 #include "QomposeCommon/util/HotkeyMap.h"
+
+namespace
+{
+enum class TestFunction
+{
+	DoNewline,
+	DoTab,
+	DecreaseSelectionIndent,
+	DoMoveHome,
+	DoSelectHome,
+	DuplicateLine,
+	ResetFontZoom,
+	DoNoop,
+	None
+};
+
+TestFunction LAST_EXECUTED = TestFunction::None;
+
+void doNewline()
+{
+	LAST_EXECUTED = TestFunction::DoNewline;
+}
+
+void doTab()
+{
+	LAST_EXECUTED = TestFunction::DoTab;
+}
+
+void decreaseSelectionIndent()
+{
+	LAST_EXECUTED = TestFunction::DecreaseSelectionIndent;
+}
+
+void doMoveHome()
+{
+	LAST_EXECUTED = TestFunction::DoMoveHome;
+}
+
+void doSelectHome()
+{
+	LAST_EXECUTED = TestFunction::DoSelectHome;
+}
+
+void duplicateLine()
+{
+	LAST_EXECUTED = TestFunction::DuplicateLine;
+}
+
+void resetFontZoom()
+{
+	LAST_EXECUTED = TestFunction::ResetFontZoom;
+}
+
+void doNoop()
+{
+	LAST_EXECUTED = TestFunction::DoNoop;
+}
+}
 
 namespace qompose
 {
@@ -48,78 +108,73 @@ HotkeyMapTest::~HotkeyMapTest()
  */
 void HotkeyMapTest::test()
 {
-	HotkeyMap<int *> hotkeys;
-
-	int doNewline = 0;
-	int doTab = 0;
-	int decreaseSelectionIndent = 0;
-	int doMoveHome = 0;
-	int doSelectHome = 0;
-	int duplicateLine = 0;
-	int resetFontZoom = 0;
-	int doNoop = 0;
+	HotkeyMap hotkeys;
 
 	// Enter
 
 	hotkeys.addHotkey(
 	        Hotkey(Qt::Key_Enter, nullptr, ~Qt::KeyboardModifiers(nullptr)),
-	        &doNewline);
+	        std::bind(&doNewline));
 
 	// Tab
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Tab), &doTab);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Tab), std::bind(&doTab));
 
 	// Shift + Tab
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier),
-	                  &decreaseSelectionIndent);
+	                  std::bind(&decreaseSelectionIndent));
 
 	// Home
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Home), &doMoveHome);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Home), std::bind(&doMoveHome));
 
 	// Shift + Home
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier),
-	                  &doSelectHome);
+	                  std::bind(&doSelectHome));
 
 	// Ctrl+D
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier),
-	                  &duplicateLine);
+	                  std::bind(&duplicateLine));
 
 	// Ctrl+(Zero)
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_0, Qt::ControlModifier),
-	                  &resetFontZoom);
+	                  std::bind(&resetFontZoom));
 
 	// Ctrl+Shift+Left
 
 	hotkeys.addHotkey(
 	        Hotkey(Qt::Key_Left, Qt::ControlModifier | Qt::ShiftModifier),
-	        &doNoop);
+	        std::bind(&doNoop));
 
 	// Ctrl+Shift+Right
 
 	hotkeys.addHotkey(
 	        Hotkey(Qt::Key_Right, Qt::ControlModifier | Qt::ShiftModifier),
-	        &doNoop);
+	        std::bind(&doNoop));
 
 	// Ctrl+Insert
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier), &doNoop);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier),
+	                  std::bind(&doNoop));
 
 	// Ctrl+K
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier), &doNoop);
+	hotkeys.addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier),
+	                  std::bind(&doNoop));
 
 	// Shift+Insert
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier), &doNoop);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier),
+	                  std::bind(&doNoop));
 
 	// Shift+Delete
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier), &doNoop);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier),
+	                  std::bind(&doNoop));
 
 	// Test a series of example QKeyEvents against this hotkey mapping.
 
@@ -140,7 +195,7 @@ void HotkeyMapTest::test()
 	                              Qt::ControlModifier | Qt::ShiftModifier);
 	QKeyEvent ctrlInsertEvent(QKeyEvent::KeyPress, Qt::Key_Insert,
 	                          Qt::KeyboardModifiers(Qt::ControlModifier));
-	QKeyEvent ctrkKEvent(QKeyEvent::KeyPress, Qt::Key_K,
+	QKeyEvent ctrlKEvent(QKeyEvent::KeyPress, Qt::Key_K,
 	                     Qt::KeyboardModifiers(Qt::ControlModifier));
 	QKeyEvent shiftInsertEvent(QKeyEvent::KeyPress, Qt::Key_Insert,
 	                           Qt::KeyboardModifiers(Qt::ShiftModifier));
@@ -154,35 +209,35 @@ void HotkeyMapTest::test()
 	QKeyEvent ctrlAEvent(QKeyEvent::KeyPress, Qt::Key_A,
 	                     Qt::KeyboardModifiers(Qt::ControlModifier));
 
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&enterEvent), &doNewline);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&tabEvent), &doTab);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&backtabEvent),
-	                   &decreaseSelectionIndent);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&homeEvent), &doMoveHome);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&selectHomeEvent),
-	                   &doSelectHome);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&duplicateEvent),
-	                   &duplicateLine);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&resetZoomEvent),
-	                   &resetFontZoom);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&ctrlShiftLeftEvent),
-	                   &doNoop);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&ctrlShiftRightEvent),
-	                   &doNoop);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&ctrlInsertEvent),
-	                   &doNoop);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&ctrkKEvent), &doNoop);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&shiftInsertEvent),
-	                   &doNoop);
-	Test::assertEquals(*hotkeys.getHotkeyHandler(&shiftDeleteEvent),
-	                   &doNoop);
+	auto testHotkey =
+	        [&hotkeys](const QKeyEvent &event, TestFunction expected)
+	{
+		auto function = hotkeys.getHotkeyHandler(&event);
 
-	Test::assertEquals<int *const *>(
-	        hotkeys.getHotkeyHandler(&ctrlShiftTabEvent), nullptr);
-	Test::assertEquals<int *const *>(
-	        hotkeys.getHotkeyHandler(&ctrlShiftHomeEvent), nullptr);
-	Test::assertEquals<int *const *>(hotkeys.getHotkeyHandler(&ctrlAEvent),
-	                                 nullptr);
+		if(function == nullptr)
+			LAST_EXECUTED = TestFunction::None;
+		else
+			(*function)();
+
+		Test::assertEquals(LAST_EXECUTED, expected);
+	};
+
+	testHotkey(enterEvent, TestFunction::DoNewline);
+	testHotkey(tabEvent, TestFunction::DoTab);
+	testHotkey(backtabEvent, TestFunction::DecreaseSelectionIndent);
+	testHotkey(homeEvent, TestFunction::DoMoveHome);
+	testHotkey(selectHomeEvent, TestFunction::DoSelectHome);
+	testHotkey(duplicateEvent, TestFunction::DuplicateLine);
+	testHotkey(resetZoomEvent, TestFunction::ResetFontZoom);
+	testHotkey(ctrlShiftLeftEvent, TestFunction::DoNoop);
+	testHotkey(ctrlShiftRightEvent, TestFunction::DoNoop);
+	testHotkey(ctrlInsertEvent, TestFunction::DoNoop);
+	testHotkey(ctrlKEvent, TestFunction::DoNoop);
+	testHotkey(shiftInsertEvent, TestFunction::DoNoop);
+	testHotkey(shiftDeleteEvent, TestFunction::DoNoop);
+	testHotkey(ctrlShiftTabEvent, TestFunction::None);
+	testHotkey(ctrlShiftHomeEvent, TestFunction::None);
+	testHotkey(ctrlAEvent, TestFunction::None);
 }
 }
 }

@@ -65,8 +65,7 @@ protected:
 	virtual void keyPressEvent(QKeyEvent *e);
 
 private:
-	typedef void (Editor::*HotkeyFunction)();
-	HotkeyMap<HotkeyFunction> hotkeys;
+	HotkeyMap hotkeys;
 
 	void initializeHotkeys();
 

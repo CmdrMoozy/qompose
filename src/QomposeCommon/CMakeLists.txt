@@ -85,6 +85,7 @@ set(QomposeCommon_SOURCES
 	util/FontMetrics.h
 	util/Hotkey.cpp
 	util/Hotkey.h
+	util/HotkeyMap.cpp
 	util/HotkeyMap.h
 	util/ReplaceQuery.cpp
 	util/ReplaceQuery.h

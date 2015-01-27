@@ -19,6 +19,7 @@
 #include "Editor.h"
 
 #include <cstddef>
+#include <functional>
 #include <utility>
 
 #include <QGridLayout>
@@ -41,8 +42,6 @@
 #include "QomposeCommon/util/FindQuery.h"
 #include "QomposeCommon/util/Hotkey.h"
 #include "QomposeCommon/util/ReplaceQuery.h"
-
-#define CALL_HOTKEY_FUNCTION(obj, fn) ((obj).*(fn))
 
 namespace qompose
 {
@@ -113,10 +112,10 @@ Editor::~Editor()
  */
 void Editor::keyPressEvent(QKeyEvent *e)
 {
-	const HotkeyFunction *handler = hotkeys.getHotkeyHandler(e);
+	const std::function<void()> *handler = hotkeys.getHotkeyHandler(e);
 
 	if(handler != nullptr)
-		CALL_HOTKEY_FUNCTION (*this, *handler)();
+		(*handler)();
 	else
 		DecoratedTextEdit::keyPressEvent(e);
 }
@@ -132,86 +131,87 @@ void Editor::initializeHotkeys()
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Backspace, nullptr,
 	                         ~Qt::KeyboardModifiers(nullptr)),
-	                  &Editor::doBackspace);
+	                  std::bind(&Editor::doBackspace, this));
 
 	// Delete
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, nullptr,
 	                         ~Qt::KeyboardModifiers(nullptr)),
-	                  &Editor::doDelete);
+	                  std::bind(&Editor::doDelete, this));
 
 	// Enter
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Return, nullptr,
 	                         ~Qt::KeyboardModifiers(nullptr)),
-	                  &Editor::doNewline);
+	                  std::bind(&Editor::doNewline, this));
 
 	hotkeys.addHotkey(
 	        Hotkey(Qt::Key_Enter, nullptr, ~Qt::KeyboardModifiers(nullptr)),
-	        &Editor::doNewline);
+	        std::bind(&Editor::doNewline, this));
 
 	// Tab
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Tab), &Editor::doTab);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Tab), std::bind(&Editor::doTab, this));
 
 	// Shift + Tab
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier),
-	                  &Editor::decreaseSelectionIndent);
+	                  std::bind(&Editor::decreaseSelectionIndent, this));
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Backtab, Qt::ShiftModifier),
-	                  &Editor::decreaseSelectionIndent);
+	                  std::bind(&Editor::decreaseSelectionIndent, this));
 
 	// Home
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Home), &Editor::doMoveHome);
+	hotkeys.addHotkey(Hotkey(Qt::Key_Home),
+	                  std::bind(&Editor::doMoveHome, this));
 
 	// Shift + Home
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier),
-	                  &Editor::doSelectHome);
+	                  std::bind(&Editor::doSelectHome, this));
 
 	// Ctrl+D
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier),
-	                  &Editor::duplicateLine);
+	                  std::bind(&Editor::duplicateLine, this));
 
 	// Ctrl+(Zero)
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_0, Qt::ControlModifier),
-	                  &Editor::resetFontZoom);
+	                  std::bind(&Editor::resetFontZoom, this));
 
 	// Ctrl+Shift+Left
 
 	hotkeys.addHotkey(
 	        Hotkey(Qt::Key_Left, Qt::ControlModifier | Qt::ShiftModifier),
-	        &Editor::doNoop);
+	        std::bind(&Editor::doNoop, this));
 
 	// Ctrl+Shift+Right
 
 	hotkeys.addHotkey(
 	        Hotkey(Qt::Key_Right, Qt::ControlModifier | Qt::ShiftModifier),
-	        &Editor::doNoop);
+	        std::bind(&Editor::doNoop, this));
 
 	// Ctrl+Insert
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier),
-	                  &Editor::doNoop);
+	                  std::bind(&Editor::doNoop, this));
 
 	// Ctrl+K
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier),
-	                  &Editor::doNoop);
+	                  std::bind(&Editor::doNoop, this));
 
 	// Shift+Insert
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier),
-	                  &Editor::doNoop);
+	                  std::bind(&Editor::doNoop, this));
 
 	// Shift+Delete
 
 	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier),
-	                  &Editor::doNoop);
+	                  std::bind(&Editor::doNoop, this));
 }
 
 /*!
