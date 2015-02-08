@@ -86,9 +86,22 @@ if(UNIX)
 	set(Qompose_LIBS ${Qompose_LIBS} m)
 endif()
 
+# Add in Vrfy, if applicable.
+
+set(ENABLE_UNIT_TESTS FALSE)
+
+if(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
+	if(UNIX)
+		set(ENABLE_UNIT_TESTS TRUE)
+		add_subdirectory(vrfy)
+	endif()
+endif()
+
+# Add the various targets.
+
 add_subdirectory(src/QomposeCommon)
 add_subdirectory(src/Qompose)
 
-if(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
+if(ENABLE_UNIT_TESTS)
 	add_subdirectory(src/QomposeTest)
 endif()
