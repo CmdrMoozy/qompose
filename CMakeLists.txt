@@ -55,10 +55,10 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 
-# Set INCLUDE and C(XX)FLAGS
+# Setup our compile flags.
 
-include(${CMAKE_SOURCE_DIR}/CMake/Warnings.cmake)
-qomposeEnableWarnings()
+include(${CMAKE_SOURCE_DIR}/CMake/SetFlags.cmake)
+qomposeSetCompileFlags()
 
 add_definitions(-DQT_NO_KEYWORDS)
 
