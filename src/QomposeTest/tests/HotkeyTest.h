@@ -19,7 +19,7 @@
 #ifndef INCLUDE_QOMPOSETEST_TESTS_HOTKEY_TEST_H
 #define INCLUDE_QOMPOSETEST_TESTS_HOTKEY_TEST_H
 
-#include "QomposeTest/Test.h"
+#include <Vrfy/Vrfy.h>
 
 namespace qompose
 {
@@ -28,18 +28,15 @@ namespace test
 /*!
  * \brief This class implements unit tests for our hotkey object.
  */
-class HotkeyTest : public Test
+class HotkeyTest : public vrfy::Test
 {
 public:
-	HotkeyTest();
-	virtual ~HotkeyTest();
+	HotkeyTest() = default;
+	virtual ~HotkeyTest() = default;
 
 	virtual void test();
 
 private:
-	HotkeyTest(const HotkeyTest &);
-	HotkeyTest &operator=(const HotkeyTest &);
-
 	void testHotkeyConstruction();
 	void testHotkeyCopying();
 	void testHotkeyMatching();

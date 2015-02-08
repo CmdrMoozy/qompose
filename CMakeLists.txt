@@ -86,7 +86,7 @@ if(UNIX)
 	set(Qompose_LIBS ${Qompose_LIBS} m)
 endif()
 
-# Add in Vrfy, if applicable.
+# Add in libvrfy, if applicable.
 
 set(ENABLE_UNIT_TESTS FALSE)
 

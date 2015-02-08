@@ -27,21 +27,6 @@ namespace qompose
 namespace test
 {
 /*!
- * This is our default constructor, which creates a new insance of our test.
- */
-HotkeyTest::HotkeyTest()
-{
-}
-
-/*!
- * This is our default destructor, which cleans up an destroys this test
- * instance.
- */
-HotkeyTest::~HotkeyTest()
-{
-}
-
-/*!
  * We implement our superclass's test() function to perform our various tests
  * against the Hotkey class.
  */
@@ -60,29 +45,29 @@ void HotkeyTest::testHotkeyConstruction()
 {
 	Hotkey a(Qt::Key_A);
 
-	Test::assertEquals(a.getKey(), Qt::Key_A);
-	Test::assertEquals(a.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
-	Test::assertEquals(a.getRequiredModifiers(),
+	vrfy::assert::assertEquals(a.getKey(), Qt::Key_A);
+	vrfy::assert::assertEquals(a.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
+	vrfy::assert::assertEquals(a.getRequiredModifiers(),
 	                   Qt::KeyboardModifiers(Qt::NoModifier));
-	Test::assertEquals(a.getWhitelistedModifiers(),
+	vrfy::assert::assertEquals(a.getWhitelistedModifiers(),
 	                   Qt::KeyboardModifiers(Qt::NoModifier));
 
 	Hotkey b(Qt::Key_A, Qt::ControlModifier);
 
-	Test::assertEquals(b.getKey(), Qt::Key_A);
-	Test::assertEquals(b.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
-	Test::assertEquals(b.getRequiredModifiers(),
+	vrfy::assert::assertEquals(b.getKey(), Qt::Key_A);
+	vrfy::assert::assertEquals(b.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
+	vrfy::assert::assertEquals(b.getRequiredModifiers(),
 	                   Qt::KeyboardModifiers(Qt::ControlModifier));
-	Test::assertEquals(b.getWhitelistedModifiers(),
+	vrfy::assert::assertEquals(b.getWhitelistedModifiers(),
 	                   Qt::KeyboardModifiers(Qt::ControlModifier));
 
 	Hotkey c(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
 
-	Test::assertEquals(c.getKey(), Qt::Key_A);
-	Test::assertEquals(c.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
-	Test::assertEquals(c.getRequiredModifiers(),
+	vrfy::assert::assertEquals(c.getKey(), Qt::Key_A);
+	vrfy::assert::assertEquals(c.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
+	vrfy::assert::assertEquals(c.getRequiredModifiers(),
 	                   Qt::KeyboardModifiers(Qt::ControlModifier));
-	Test::assertEquals(c.getWhitelistedModifiers(),
+	vrfy::assert::assertEquals(c.getWhitelistedModifiers(),
 	                   Qt::ControlModifier | Qt::ShiftModifier);
 }
 
@@ -95,13 +80,13 @@ void HotkeyTest::testHotkeyCopying()
 	Hotkey a(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
 	Hotkey b(Qt::Key_B);
 
-	Test::assertTrue(!(a == b));
+	vrfy::assert::assertTrue(!(a == b));
 
 	Hotkey c(a);
 	b = a;
 
-	Test::assertTrue(a == b);
-	Test::assertTrue(a == c);
+	vrfy::assert::assertTrue(a == b);
+	vrfy::assert::assertTrue(a == c);
 }
 
 /*!
@@ -118,10 +103,10 @@ void HotkeyTest::testHotkeyMatching()
 	              ~Qt::KeyboardModifiers(nullptr));
 	QKeyEvent aeD(QKeyEvent::KeyPress, Qt::Key_A, nullptr);
 
-	Test::assertEquals(a.matches(&aeA), 0);
-	Test::assertEquals(a.matches(&aeB), 1);
-	Test::assertEquals(a.matches(&aeC), 32);
-	Test::assertEquals(a.matches(&aeD), -1);
+	vrfy::assert::assertEquals(a.matches(&aeA), 0);
+	vrfy::assert::assertEquals(a.matches(&aeB), 1);
+	vrfy::assert::assertEquals(a.matches(&aeC), 32);
+	vrfy::assert::assertEquals(a.matches(&aeD), -1);
 
 	Hotkey b(Qt::Key_Home);
 
@@ -132,10 +117,10 @@ void HotkeyTest::testHotkeyMatching()
 	              ~Qt::KeyboardModifiers(nullptr));
 	QKeyEvent beD(QKeyEvent::KeyPress, Qt::Key_A, nullptr);
 
-	Test::assertEquals(b.matches(&beA), 0);
-	Test::assertEquals(b.matches(&beB), -1);
-	Test::assertEquals(b.matches(&beC), -1);
-	Test::assertEquals(b.matches(&beD), -1);
+	vrfy::assert::assertEquals(b.matches(&beA), 0);
+	vrfy::assert::assertEquals(b.matches(&beB), -1);
+	vrfy::assert::assertEquals(b.matches(&beC), -1);
+	vrfy::assert::assertEquals(b.matches(&beD), -1);
 }
 }
 }

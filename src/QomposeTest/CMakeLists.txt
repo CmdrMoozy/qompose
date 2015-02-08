@@ -2,10 +2,6 @@ find_package(DWARF REQUIRED)
 
 set(QomposeTest_SOURCES
 
-	AssertionException.cpp
-	AssertionException.h
-	Test.cpp
-	Test.h
 	QomposeTest.cpp
 
 	tests/FontMetricsTest.cpp
@@ -17,10 +13,9 @@ set(QomposeTest_SOURCES
 
 )
 
-include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/backward-cpp")
-add_definitions(-DBACKWARD_HAS_DW=1)
+include_directories(${CMAKE_SOURCE_DIR}/vrfy/src)
 
 add_executable(QomposeTest ${QomposeTest_SOURCES})
-target_link_libraries(QomposeTest ${Qompose_LIBS} ${DWARF_LIBRARIES})
+target_link_libraries(QomposeTest ${Qompose_LIBS} ${Vrfy_LIBS})
 
 qt5_use_modules(QomposeTest Core Gui Widgets Network PrintSupport)

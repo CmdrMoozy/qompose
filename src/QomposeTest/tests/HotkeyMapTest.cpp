@@ -87,21 +87,6 @@ namespace qompose
 namespace test
 {
 /*!
- * This is our default constructor, which creates a new insance of our test.
- */
-HotkeyMapTest::HotkeyMapTest()
-{
-}
-
-/*!
- * This is our default destructor, which cleans up an destroys this test
- * instance.
- */
-HotkeyMapTest::~HotkeyMapTest()
-{
-}
-
-/*!
  * We implement our superclass's test() function to perform a test against the
  * HotkeyMap implementation. We'll setup a "typical" hotkey setup, and
  * then test a series of example QKeyEvents against it.
@@ -219,7 +204,7 @@ void HotkeyMapTest::test()
 		else
 			(*function)();
 
-		Test::assertEquals(LAST_EXECUTED, expected);
+		vrfy::assert::assertEquals(LAST_EXECUTED, expected);
 	};
 
 	testHotkey(enterEvent, TestFunction::DoNewline);

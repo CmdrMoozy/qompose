@@ -19,7 +19,7 @@
 #ifndef INCLUDE_QOMPOSETEST_TESTS_HOTKEY_MAP_TEST_H
 #define INCLUDE_QOMPOSETEST_TESTS_HOTKEY_MAP_TEST_H
 
-#include "QomposeTest/Test.h"
+#include <Vrfy/Vrfy.h>
 
 namespace qompose
 {
@@ -28,11 +28,11 @@ namespace test
 /*!
  * \brief This class implements tests for our hotkey map class.
  */
-class HotkeyMapTest : public Test
+class HotkeyMapTest : public vrfy::Test
 {
 public:
-	HotkeyMapTest();
-	virtual ~HotkeyMapTest();
+	HotkeyMapTest() = default;
+	virtual ~HotkeyMapTest() = default;
 
 	virtual void test();
 };

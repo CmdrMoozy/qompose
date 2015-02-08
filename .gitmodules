@@ -1,6 +1,3 @@
-[submodule "backward-cpp"]
-	path = backward-cpp
-	url = git@github.com:CmdrMoozy/backward-cpp.git
 [submodule "vrfy"]
 	path = vrfy
 	url = https://github.com/CmdrMoozy/vrfy.git

@@ -19,7 +19,7 @@
 #ifndef INCLUDE_QOMPOSETEST_TESTS_FONT_METRICS_TEST_H
 #define INCLUDE_QOMPOSETEST_TESTS_FONT_METRICS_TEST_H
 
-#include "QomposeTest/Test.h"
+#include <Vrfy/Vrfy.h>
 
 namespace qompose
 {
@@ -28,7 +28,7 @@ namespace test
 /*!
  * \brief This class defines unit tests for our font metrics class.
  */
-class FontMetricsTest : public Test
+class FontMetricsTest : public vrfy::Test
 {
 public:
 	FontMetricsTest() = default;

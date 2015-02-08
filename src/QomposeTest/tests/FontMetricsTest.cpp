@@ -46,16 +46,16 @@ void FontMetricsTest::testIsMonospaced()
 	QFont courier(QString("Courier New"), 12);
 	FontMetrics courierMetrics(courier);
 
-	Test::assertTrue(courier.exactMatch());
-	Test::assertEquals(true, courierMetrics.isMonospaced());
+	vrfy::assert::assertTrue(courier.exactMatch());
+	vrfy::assert::assertEquals(true, courierMetrics.isMonospaced());
 
 	// Test that we can identify non-monospaced fonts.
 
 	QFont times(QString("Times New Roman"), 12);
 	FontMetrics timesMetrics(times);
 
-	Test::assertTrue(times.exactMatch());
-	Test::assertEquals(false, timesMetrics.isMonospaced());
+	vrfy::assert::assertTrue(times.exactMatch());
+	vrfy::assert::assertEquals(false, timesMetrics.isMonospaced());
 }
 
 /*!
@@ -67,7 +67,7 @@ void FontMetricsTest::testGetColumnWidth()
 	QFont courier(QString("Courier New"), 11);
 	FontMetrics metrics(courier);
 
-	Test::assertEquals(720.0, metrics.getColumnWidthF(80));
+	vrfy::assert::assertEquals(720.0, metrics.getColumnWidthF(80));
 }
 }
 }

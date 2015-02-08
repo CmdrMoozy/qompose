@@ -18,18 +18,8 @@
 
 #include <QApplication>
 
-#include <iostream>
-#include <vector>
-#include <typeinfo>
-#include <algorithm>
-#include <string>
+#include <Vrfy/Vrfy.h>
 
-#ifdef __GNUC__
-#include <cxxabi.h>
-#endif
-
-#include "QomposeTest/AssertionException.h"
-#include "QomposeTest/Test.h"
 #include "QomposeTest/tests/FontMetricsTest.h"
 #include "QomposeTest/tests/HotkeyTest.h"
 #include "QomposeTest/tests/HotkeyMapTest.h"
@@ -38,60 +28,11 @@ int main(int argc, char **argv)
 {
 	QApplication app(argc, argv, false);
 
-	// Build the list of tests to run.
-
-	std::vector<qompose::test::Test *> tests;
-	std::vector<qompose::test::Test *>::iterator it;
-
-	tests.push_back(new qompose::test::FontMetricsTest());
-	tests.push_back(new qompose::test::HotkeyTest());
-	tests.push_back(new qompose::test::HotkeyMapTest());
-
-	// Execute each test.
-
-	for(it = tests.begin(); it != tests.end(); ++it)
-	{
-		// Get this test object's type name.
-
-		qompose::test::Test *test = *it;
-
-#ifdef __GNUC__
-		int status;
-
-		char *t = abi::__cxa_demangle(typeid(*test).name(), nullptr,
-		                              nullptr, &status);
-
-		std::string type = std::string(t);
-		free(t);
-#else
-		std::string type = std::string(typeid(*test).name());
-#endif
-
-		// Try executing the test, catching all assertion exceptions.
-
-		try
-		{
-			std::cout << type << "...\n";
-			test->test();
-		}
-		catch(const qompose::test::AssertionException &e)
-		{
-			std::cout << "ASSERTION FAILED: " << type << ": "
-			          << e.what() << "\n";
-
-			std::cout << e.getStackTrace();
-		}
-	}
-
-	// Clean up the tests.
-
-	while(!tests.empty())
-	{
-		qompose::test::Test *t = tests.back();
-		tests.pop_back();
-
-		delete t;
-	}
+	vrfy::Tests tests;
+	tests.add<qompose::test::FontMetricsTest>()
+		.add<qompose::test::HotkeyTest>()
+		.add<qompose::test::HotkeyMapTest>()
+		.execute();
 
 	return 0;
 }
