@@ -22,6 +22,7 @@
 #include <QLabel>
 #include <QFrame>
 
+#include "QomposeCommon/gui/EllipsizedLabel.h"
 #include "QomposeCommon/gui/NotificationLabel.h"
 
 namespace qompose
@@ -49,7 +50,7 @@ StatusBar::StatusBar(QWidget *p)
 
 	notificationLabel = new NotificationLabel(statusWidget);
 
-	tabPathLabel = new QLabel(statusWidget, nullptr);
+	tabPathLabel = new EllipsizedLabel(statusWidget, nullptr);
 
 	lineLabel = new QLabel(statusWidget, nullptr);
 	lineLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
@@ -100,10 +101,14 @@ void StatusBar::setCurrentTabPath(const QString &p)
 	int l = p.trimmed().length();
 
 	if(l > 0)
+	{
 		tabPathLabel->setFrameStyle(QFrame::StyledPanel |
 		                            QFrame::Plain);
+	}
 	else
+	{
 		tabPathLabel->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
+	}
 
 	tabPathLabel->setText(p.trimmed());
 }

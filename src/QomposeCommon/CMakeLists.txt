@@ -58,6 +58,8 @@ set(QomposeCommon_SOURCES
 	gui/BufferWidget.h
 	gui/ColorPickerButton.cpp
 	gui/ColorPickerButton.h
+	gui/EllipsizedLabel.cpp
+	gui/EllipsizedLabel.h
 	gui/FontPickerButton.cpp
 	gui/FontPickerButton.h
 	gui/GUIUtils.cpp

@@ -16,48 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSECOMMON_GUI_STATUS_BAR_H
-#define INCLUDE_QOMPOSECOMMON_GUI_STATUS_BAR_H
+#ifndef INCLUDE_QOMPOSECOMMON_GUI_ELLIPSIZED_LABEL_H
+#define INCLUDE_QOMPOSECOMMON_GUI_ELLIPSIZED_LABEL_H
 
-#include <QStatusBar>
-
-class QGridLayout;
-class QLabel;
+#include <QLabel>
 
 namespace qompose
 {
-class EllipsizedLabel;
-class NotificationLabel;
-
-/*!
- * \brief This class implements a status bar widget for our application.
- */
-class StatusBar : public QStatusBar
+class EllipsizedLabel : public QLabel
 {
-	Q_OBJECT
-
 public:
-	StatusBar(QWidget * = nullptr);
-	virtual ~StatusBar();
+	EllipsizedLabel(const QString &, QWidget * = nullptr,
+	                Qt::WindowFlags = nullptr);
+	EllipsizedLabel(QWidget * = nullptr, Qt::WindowFlags = nullptr);
+	virtual ~EllipsizedLabel() = default;
 
-	void displayNotification(const QString &, bool = false);
-
-	void setCurrentTabPath(const QString &);
-
-	void setLine(int);
-	void setColumn(int);
-
-private:
-	QWidget *statusWidget;
-	QGridLayout *statusLayout;
-
-	NotificationLabel *notificationLabel;
-	EllipsizedLabel *tabPathLabel;
-	QLabel *lineLabel;
-	QLabel *columnLabel;
-
-	StatusBar(const StatusBar &);
-	StatusBar &operator=(const StatusBar &);
+protected:
+	virtual void paintEvent(QPaintEvent *);
 };
 }
 
