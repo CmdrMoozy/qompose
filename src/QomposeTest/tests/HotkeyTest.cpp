@@ -46,29 +46,32 @@ void HotkeyTest::testHotkeyConstruction()
 	Hotkey a(Qt::Key_A);
 
 	vrfy::assert::assertEquals(a.getKey(), Qt::Key_A);
-	vrfy::assert::assertEquals(a.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
+	vrfy::assert::assertEquals(a.getKeyInteger(),
+	                           static_cast<quint64>(Qt::Key_A));
 	vrfy::assert::assertEquals(a.getRequiredModifiers(),
-	                   Qt::KeyboardModifiers(Qt::NoModifier));
+	                           Qt::KeyboardModifiers(Qt::NoModifier));
 	vrfy::assert::assertEquals(a.getWhitelistedModifiers(),
-	                   Qt::KeyboardModifiers(Qt::NoModifier));
+	                           Qt::KeyboardModifiers(Qt::NoModifier));
 
 	Hotkey b(Qt::Key_A, Qt::ControlModifier);
 
 	vrfy::assert::assertEquals(b.getKey(), Qt::Key_A);
-	vrfy::assert::assertEquals(b.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
+	vrfy::assert::assertEquals(b.getKeyInteger(),
+	                           static_cast<quint64>(Qt::Key_A));
 	vrfy::assert::assertEquals(b.getRequiredModifiers(),
-	                   Qt::KeyboardModifiers(Qt::ControlModifier));
+	                           Qt::KeyboardModifiers(Qt::ControlModifier));
 	vrfy::assert::assertEquals(b.getWhitelistedModifiers(),
-	                   Qt::KeyboardModifiers(Qt::ControlModifier));
+	                           Qt::KeyboardModifiers(Qt::ControlModifier));
 
 	Hotkey c(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
 
 	vrfy::assert::assertEquals(c.getKey(), Qt::Key_A);
-	vrfy::assert::assertEquals(c.getKeyInteger(), static_cast<quint64>(Qt::Key_A));
+	vrfy::assert::assertEquals(c.getKeyInteger(),
+	                           static_cast<quint64>(Qt::Key_A));
 	vrfy::assert::assertEquals(c.getRequiredModifiers(),
-	                   Qt::KeyboardModifiers(Qt::ControlModifier));
+	                           Qt::KeyboardModifiers(Qt::ControlModifier));
 	vrfy::assert::assertEquals(c.getWhitelistedModifiers(),
-	                   Qt::ControlModifier | Qt::ShiftModifier);
+	                           Qt::ControlModifier | Qt::ShiftModifier);
 }
 
 /*!

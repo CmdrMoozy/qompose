@@ -4,6 +4,8 @@ set(QomposeTest_SOURCES
 
 	QomposeTest.cpp
 
+	tests/DecoratedTextEditTest.cpp
+	tests/DecoratedTextEditTest.h
 	tests/FontMetricsTest.cpp
 	tests/FontMetricsTest.h
 	tests/HotkeyMapTest.cpp

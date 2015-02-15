@@ -16,25 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QApplication>
+#ifndef INCLUDE_QOMPOSETEST_TESTS_DECORATED_TEXT_EDIT_TEST_H
+#define INCLUDE_QOMPOSETEST_TESTS_DECORATED_TEXT_EDIT_TEST_H
 
 #include <Vrfy/Vrfy.h>
 
-#include "QomposeTest/tests/DecoratedTextEditTest.h"
-#include "QomposeTest/tests/FontMetricsTest.h"
-#include "QomposeTest/tests/HotkeyTest.h"
-#include "QomposeTest/tests/HotkeyMapTest.h"
-
-int main(int argc, char **argv)
+namespace qompose
 {
-	QApplication app(argc, argv, false);
+namespace test
+{
+/*!
+ * \brief This class defines unit tests for our decorated text edit class.
+ */
+class DecoratedTextEditTest : public vrfy::Test
+{
+public:
+	DecoratedTextEditTest() = default;
+	virtual ~DecoratedTextEditTest() = default;
 
-	vrfy::Tests tests;
-	tests.add<qompose::test::DecoratedTextEditTest>()
-	        .add<qompose::test::FontMetricsTest>()
-	        .add<qompose::test::HotkeyTest>()
-	        .add<qompose::test::HotkeyMapTest>()
-	        .execute();
-
-	return 0;
+	virtual void test();
+};
 }
+}
+
+#endif

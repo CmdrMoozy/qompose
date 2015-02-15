@@ -47,10 +47,13 @@ DecoratedTextEdit::DecoratedTextEdit(QWidget *p)
           gutterForeground(QColor(255, 255, 255)),
           gutterBackground(QColor(0, 0, 0))
 {
-	// Set our editor's default font.
+	// Set our editor's default font and color scheme.
 
 	setFont(QFont("Courier", 11));
 	setFontZoom(0);
+
+	setEditorForeground(QColor(0, 0, 0));
+	setEditorBackground(QColor(255, 255, 255));
 
 	// Initialize our gutter.
 
