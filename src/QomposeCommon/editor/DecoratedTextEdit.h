@@ -95,6 +95,11 @@ protected:
 
 	QString getIndentString() const;
 
+	qreal contentMargin() const;
+	qreal singleColumnWidth() const;
+	qreal columnOffset(int) const;
+	qreal wrapGuideOffset() const;
+
 private:
 	Gutter *gutter;
 	bool gutterVisible;
@@ -116,7 +121,6 @@ private:
 
 	void gutterPaintEvent(QPaintEvent *);
 	int gutterWidth();
-	qreal wrapGuideOffset();
 
 	DecoratedTextEdit(const DecoratedTextEdit &);
 	DecoratedTextEdit &operator=(const DecoratedTextEdit &);

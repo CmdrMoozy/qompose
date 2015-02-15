@@ -707,6 +707,53 @@ QString DecoratedTextEdit::getIndentString() const
 }
 
 /*!
+ * This function returns the margin around the editor's content area. This
+ * value is added to a bare column width in order to get a columnOffset().
+ *
+ * \return This editor's content margin.
+ */
+qreal DecoratedTextEdit::contentMargin() const
+{
+	return static_cast<qreal>(contentOffset().x()) +
+	       static_cast<qreal>(document()->documentMargin());
+}
+
+/*!
+ * This function returns the width of a single column.
+ *
+ * \return The width of one character column.
+ */
+qreal DecoratedTextEdit::singleColumnWidth() const
+{
+	FontMetrics metrics(currentFont);
+	return metrics.getColumnWidthF(1);
+}
+
+/*!
+ * This function computes and returns the offset from the left-hand side of our
+ * text editor widget to the end of the given column.
+ *
+ * \param columns The column to get an offset for.
+ */
+qreal DecoratedTextEdit::columnOffset(int column) const
+{
+	return singleColumnWidth() * static_cast<qreal>(column) +
+	       contentMargin();
+}
+
+/*!
+ * This function computes and returns the offset from the left-hand side of our
+ * text editor widget at which our line wrap guide will be painted. This is a
+ * shorthand for passing the line wrap guide's column width to columnOffset().
+ *
+ * \return The offset of the line wrap guide.
+ */
+qreal DecoratedTextEdit::wrapGuideOffset() const
+{
+	return columnOffset(getWrapGuideColumnWidth());
+}
+
+/*!
  * This function handles a paint event passed up to us by our gutter by
  * rendering the gutter according to our editor's current state.
  *
@@ -771,23 +818,6 @@ int DecoratedTextEdit::gutterWidth()
 	int space = 20 + (fontMetrics().width(QLatin1Char('9')) * digits);
 
 	return space;
-}
-
-/*!
- * This function computes and returns the offset from the left-hand side of our
- * text editor widget the line wrap guide should be painted.
- *
- * \return The offset of the line wrap guide.
- */
-qreal DecoratedTextEdit::wrapGuideOffset()
-{
-	FontMetrics metrics(currentFont);
-
-	qreal offset = metrics.getColumnWidthF(getWrapGuideColumnWidth());
-	offset += contentOffset().x();
-	offset += document()->documentMargin();
-
-	return offset;
 }
 
 /*!
