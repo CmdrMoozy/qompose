@@ -72,6 +72,7 @@ include_directories("src")
 
 set(Qompose_LIBS
 
+	m
 	QomposeCommon
 	${ICU_LIBRARIES}
 	${Qt5Core_LIBRARIES}

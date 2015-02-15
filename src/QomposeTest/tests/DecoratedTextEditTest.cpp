@@ -18,7 +18,9 @@
 
 #include "DecoratedTextEditTest.h"
 
+#include <cmath>
 #include <memory>
+#include <functional>
 
 #include <QColor>
 #include <QString>
@@ -27,6 +29,37 @@
 
 namespace
 {
+/*!
+ * \brief This subclass exposes DecoratedTextEdit functions useful for testing.
+ */
+class TestableDecoratedTextEdit : public qompose::DecoratedTextEdit
+{
+public:
+	TestableDecoratedTextEdit() : qompose::DecoratedTextEdit(nullptr)
+	{
+	}
+
+	virtual qreal contentMargin() const
+	{
+		return qompose::DecoratedTextEdit::contentMargin();
+	}
+
+	virtual qreal singleColumnWidth() const
+	{
+		return qompose::DecoratedTextEdit::singleColumnWidth();
+	}
+
+	virtual qreal columnOffset(int column) const
+	{
+		return qompose::DecoratedTextEdit::columnOffset(column);
+	}
+
+	virtual qreal wrapGuideOffset() const
+	{
+		return qompose::DecoratedTextEdit::wrapGuideOffset();
+	}
+};
+
 /*!
  * This test verifies that the default decorated text edit state is what we
  * expect it to be.
@@ -64,10 +97,53 @@ void testDefaultState()
 	vrfy::assert::assertEquals(editor->getCurrentColumn(), 1);
 }
 
+/*!
+ * This test verifies that the computations involved in our editor's font
+ * zooming code work correctly.
+ */
 void testFontZooming()
 {
-	std::shared_ptr<qompose::DecoratedTextEdit> editor(
-	        new qompose::DecoratedTextEdit());
+	std::shared_ptr<TestableDecoratedTextEdit> editor(
+	        new TestableDecoratedTextEdit());
+
+	// Set a non-default wrap guide column width.
+
+	vrfy::assert::assertEquals(editor->getWrapGuideColumnWidth(), 100);
+	editor->setWrapGuideColumnWidth(80);
+	vrfy::assert::assertEquals(editor->getWrapGuideColumnWidth(), 80);
+
+	// Make sure that offsets are always evenly divisible by column widths.
+
+	auto offsetDivisibleTest = [&](int column)
+	{
+		long double offset = static_cast<long double>(
+		        editor->columnOffset(column) - editor->contentMargin());
+		long double single =
+		        static_cast<long double>(editor->singleColumnWidth());
+		long double remainder = std::fmod(offset, single);
+		long double expected = 0.0;
+
+		vrfy::assert::assertEqualsEpsilon(remainder, expected, 5);
+	};
+
+	auto offsetDivisibleTests = [&]()
+	{
+		offsetDivisibleTest(80);
+		offsetDivisibleTest(40);
+		offsetDivisibleTest(120);
+		offsetDivisibleTest(31);
+	};
+
+	offsetDivisibleTests();
+
+	editor->setFontZoom(33);
+	offsetDivisibleTests();
+
+	editor->setFontZoom(-33);
+	offsetDivisibleTests();
+
+	editor->setFontZoom(331);
+	offsetDivisibleTests();
 }
 }
 
