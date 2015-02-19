@@ -77,6 +77,13 @@ set(QomposeCommon_SOURCES
 	gui/StatusBar.cpp
 	gui/StatusBar.h
 
+	gui/dock/BrowserDockWidget.cpp
+	gui/dock/BrowserDockWidget.h
+	gui/dock/BrowserModel.cpp
+	gui/dock/BrowserModel.h
+	gui/dock/BrowserView.cpp
+	gui/dock/BrowserView.h
+
 	gui/menus/MainMenu.cpp
 	gui/menus/MainMenu.h
 	gui/menus/RecentMenu.cpp
