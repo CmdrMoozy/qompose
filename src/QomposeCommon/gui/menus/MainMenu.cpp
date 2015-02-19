@@ -21,6 +21,7 @@
 #include <QMenu>
 #include <QAction>
 
+#include "QomposeCommon/Window.h"
 #include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/GUIUtils.h"
 #include "QomposeCommon/gui/menus/RecentMenu.h"
@@ -37,6 +38,7 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
           buffersMenu(nullptr),
           helpMenu(nullptr),
           newAction(nullptr),
+          newWindowAction(nullptr),
           openAction(nullptr),
           recentMenu(nullptr),
           reopenAction(nullptr),
@@ -80,6 +82,10 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	newAction = new QAction(tr("&New"), this);
 	newAction->setShortcut(Qt::CTRL + Qt::Key_N);
 	newAction->setIcon(GUIUtils::getIconFromTheme("document-new"));
+
+	newWindowAction = new QAction(tr("New &Window"), this);
+	newWindowAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
+	newWindowAction->setIcon(GUIUtils::getIconFromTheme("window-new"));
 
 	openAction = new QAction(tr("&Open..."), this);
 	openAction->setShortcut(Qt::CTRL + Qt::Key_O);
@@ -213,6 +219,7 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	fileMenu = new QMenu(tr("&File"), this);
 	fileMenu->addAction(newAction);
+	fileMenu->addAction(newWindowAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(openAction);
 	fileMenu->addMenu(recentMenu->getMenu());
@@ -276,6 +283,8 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	// Connect certain signals.
 
+	QObject::connect(newWindowAction, SIGNAL(triggered(bool)), this,
+	                 SLOT(doNewWindow()));
 	QObject::connect(printAction, SIGNAL(triggered(bool)), this,
 	                 SIGNAL(printTriggered(bool)));
 	QObject::connect(printPreviewAction, SIGNAL(triggered(bool)), this,
@@ -366,13 +375,21 @@ void MainMenu::connectBufferWidget(const BufferWidget *b)
 }
 
 /*!
+ * This slot handles the "new window" action by opening a new Qompose window.
+ */
+void MainMenu::doNewWindow()
+{
+	Window::openNewWindow();
+}
+
+/*!
  * This slot handles a file being opened by updating our recently opened menu
  * with the newly opened path.
  *
  * \param p The path to the file that was opened.
  */
 void MainMenu::doFileOpened(const QString &p)
-{ /* SLOT */
+{
 	recentMenu->addPath(p);
 }
 }

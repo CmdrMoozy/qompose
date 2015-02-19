@@ -47,12 +47,6 @@ Application::~Application()
 		delete sappServer;
 		sappServer = nullptr;
 	}
-
-	while(windows.length() > 0)
-	{
-		Window *w = windows.takeFirst();
-		delete w;
-	}
 }
 
 /*!
@@ -95,10 +89,7 @@ void Application::initializeLocalServer()
  * simply opening a new window on the existing instance instead.
  */
 void Application::doDuplicateInstanceDetected()
-{ /* SLOT */
-
-	Window *w = new Window();
-	windows.append(w);
-	w->show();
+{
+	Window::openNewWindow();
 }
 }

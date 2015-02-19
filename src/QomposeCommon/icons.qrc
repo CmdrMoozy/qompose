@@ -4,26 +4,27 @@
 		<file>icons/qompose.png</file>
 
 		<file>icons/accessories-text-editor.png</file>
+		<file>icons/application-exit.png</file>
 		<file>icons/document-new.png</file>
 		<file>icons/document-open.png</file>
+		<file>icons/document-print.png</file>
+		<file>icons/document-print-preview.png</file>
 		<file>icons/document-revert.png</file>
 		<file>icons/document-save.png</file>
 		<file>icons/document-save-as.png</file>
-		<file>icons/document-print.png</file>
-		<file>icons/document-print-preview.png</file>
-		<file>icons/window-close.png</file>
-		<file>icons/application-exit.png</file>
-		<file>icons/edit-undo.png</file>
-		<file>icons/edit-redo.png</file>
-		<file>icons/edit-cut.png</file>
 		<file>icons/edit-copy.png</file>
-		<file>icons/edit-paste.png</file>
-		<file>icons/edit-select-all.png</file>
-		<file>icons/preferences-other.png</file>
+		<file>icons/edit-cut.png</file>
 		<file>icons/edit-find.png</file>
+		<file>icons/edit-find-replace.png</file>
+		<file>icons/edit-paste.png</file>
+		<file>icons/edit-redo.png</file>
+		<file>icons/edit-select-all.png</file>
+		<file>icons/edit-undo.png</file>
 		<file>icons/go-next.png</file>
 		<file>icons/go-previous.png</file>
-		<file>icons/edit-find-replace.png</file>
 		<file>icons/help-about.png</file>
+		<file>icons/preferences-other.png</file>
+		<file>icons/window-close.png</file>
+		<file>icons/window-new.png</file>
 	</qresource>
 </RCC>

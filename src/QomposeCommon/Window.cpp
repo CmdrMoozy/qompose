@@ -44,6 +44,26 @@
 
 namespace qompose
 {
+
+std::vector<Window *> Window::windows = std::vector<Window *>();
+
+/*!
+ * This is a static function which opens a new Qompose window.
+ */
+void Window::openNewWindow()
+{
+	Window *w = new Window();
+	windows.push_back(w);
+	w->show();
+}
+
+/*!
+ * This is our default destructor, which cleans up & destroys our object.
+ */
+Window::~Window()
+{
+}
+
 /*!
  * This is our default constructor, which creates a new Qompose window, and
  * initializes its contents.
@@ -95,13 +115,6 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 	// Update our window title initially.
 
 	doUpdateWindowTitle();
-}
-
-/*!
- * This is our default destructor, which cleans up & destroys our object.
- */
-Window::~Window()
-{
 }
 
 /*!
@@ -182,6 +195,7 @@ void Window::initializeMenus()
 	// Connect our main menu's actions to our UI.
 
 	mainMenu->connectBufferWidget(buffers);
+
 
 	QObject::connect(mainMenu, SIGNAL(printTriggered(bool)), this,
 	                 SLOT(doPrint()));

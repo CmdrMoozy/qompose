@@ -19,6 +19,8 @@
 #ifndef INCLUDE_QOMPOSECOMMON_WINDOW_H
 #define INCLUDE_QOMPOSECOMMON_WINDOW_H
 
+#include <vector>
+
 #include <QMainWindow>
 #include <QIcon>
 
@@ -47,10 +49,16 @@ class Window : public QMainWindow
 	Q_OBJECT
 
 public:
-	Window(QWidget * = nullptr, Qt::WindowFlags = nullptr);
+	static void openNewWindow();
+
+private:
+	static std::vector<Window *> windows;
+
+public:
 	virtual ~Window();
 
 protected:
+	Window(QWidget * = nullptr, Qt::WindowFlags = nullptr);
 	void closeEvent(QCloseEvent *);
 
 private:

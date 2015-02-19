@@ -45,8 +45,7 @@ int main(int argc, char *argv[])
 
 	app.initializeLocalServer();
 
-	qompose::Window w;
-	w.show();
+	qompose::Window::openNewWindow();
 
 	return app.exec();
 }

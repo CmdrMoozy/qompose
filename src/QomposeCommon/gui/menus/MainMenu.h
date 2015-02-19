@@ -62,6 +62,7 @@ private:
 	QMenu *helpMenu;
 
 	QAction *newAction;
+	QAction *newWindowAction;
 	QAction *openAction;
 	RecentMenu *recentMenu;
 	QAction *reopenAction;
@@ -108,9 +109,11 @@ private:
 	MainMenu &operator=(const MainMenu &);
 
 private Q_SLOTS:
+	void doNewWindow();
 	void doFileOpened(const QString &);
 
 Q_SIGNALS:
+	void newWindowTriggered(bool);
 	void printTriggered(bool);
 	void printPreviewTriggered(bool);
 	void exitTriggered(bool);
