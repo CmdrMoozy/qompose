@@ -34,6 +34,7 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
           settings(s),
           fileMenu(nullptr),
           editMenu(nullptr),
+          viewMenu(nullptr),
           searchMenu(nullptr),
           buffersMenu(nullptr),
           helpMenu(nullptr),
@@ -61,6 +62,7 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
           increaseIndentAction(nullptr),
           decreaseIndentAction(nullptr),
           preferencesAction(nullptr),
+          showBrowserAction(nullptr),
           findAction(nullptr),
           findNextAction(nullptr),
           findPreviousAction(nullptr),
@@ -168,6 +170,10 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	preferencesAction->setIcon(
 	        GUIUtils::getIconFromTheme("preferences-other"));
 
+	showBrowserAction = new QAction(tr("Show File &Browser"), this);
+	showBrowserAction->setCheckable(true);
+	showBrowserAction->setChecked(false);
+
 	findAction = new QAction(tr("&Find..."), this);
 	findAction->setShortcut(Qt::CTRL + Qt::Key_F);
 	findAction->setIcon(GUIUtils::getIconFromTheme("edit-find"));
@@ -252,6 +258,9 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	editMenu->addSeparator();
 	editMenu->addAction(preferencesAction);
 
+	viewMenu = new QMenu(tr("&View"), this);
+	viewMenu->addAction(showBrowserAction);
+
 	searchMenu = new QMenu(tr("&Search"), this);
 	searchMenu->addAction(findAction);
 	searchMenu->addAction(findNextAction);
@@ -277,6 +286,7 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	addMenu(fileMenu);
 	addMenu(editMenu);
+	addMenu(viewMenu);
 	addMenu(searchMenu);
 	addMenu(buffersMenu);
 	addMenu(helpMenu);
@@ -293,6 +303,8 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	                 SIGNAL(exitTriggered(bool)));
 	QObject::connect(preferencesAction, SIGNAL(triggered(bool)), this,
 	                 SIGNAL(preferencesTriggered(bool)));
+	QObject::connect(showBrowserAction, SIGNAL(triggered(bool)), this,
+	                 SIGNAL(showBrowserTriggered(bool)));
 	QObject::connect(findAction, SIGNAL(triggered(bool)), this,
 	                 SIGNAL(findTriggered(bool)));
 	QObject::connect(findNextAction, SIGNAL(triggered(bool)), this,

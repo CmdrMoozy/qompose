@@ -44,7 +44,6 @@
 
 namespace qompose
 {
-
 std::vector<Window *> Window::windows = std::vector<Window *>();
 
 /*!
@@ -195,7 +194,6 @@ void Window::initializeMenus()
 	// Connect our main menu's actions to our UI.
 
 	mainMenu->connectBufferWidget(buffers);
-
 
 	QObject::connect(mainMenu, SIGNAL(printTriggered(bool)), this,
 	                 SLOT(doPrint()));
@@ -381,22 +379,6 @@ void Window::doSearchWrapped()
 }
 
 /*!
- * This slot handles our preferences dialog action being triggered
- * by resetting and showing our preferences dialog (if it isn't already
- * visible).
- *
- */
-void Window::doPreferencesDialog()
-{ /* SLOT */
-
-	if(!preferencesDialog->isVisible())
-	{
-		preferencesDialog->discardChanges();
-		preferencesDialog->show();
-	}
-}
-
-/*!
  * This slot handles our "print" action being triggered by displaying a
  * standard print dialog and, if it is accepted, printing our current buffer
  * using the printer object it configures.
@@ -447,6 +429,22 @@ void Window::doPrintPreview()
 	dialog->exec();
 
 	delete dialog;
+}
+
+/*!
+ * This slot handles our preferences dialog action being triggered
+ * by resetting and showing our preferences dialog (if it isn't already
+ * visible).
+ *
+ */
+void Window::doPreferencesDialog()
+{ /* SLOT */
+
+	if(!preferencesDialog->isVisible())
+	{
+		preferencesDialog->discardChanges();
+		preferencesDialog->show();
+	}
 }
 
 /*!

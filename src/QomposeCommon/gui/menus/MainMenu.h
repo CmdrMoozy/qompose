@@ -57,6 +57,7 @@ private:
 
 	QMenu *fileMenu;
 	QMenu *editMenu;
+	QMenu *viewMenu;
 	QMenu *searchMenu;
 	QMenu *buffersMenu;
 	QMenu *helpMenu;
@@ -87,6 +88,8 @@ private:
 	QAction *decreaseIndentAction;
 	QAction *preferencesAction;
 
+	QAction *showBrowserAction;
+
 	QAction *findAction;
 	QAction *findNextAction;
 	QAction *findPreviousAction;
@@ -113,11 +116,11 @@ private Q_SLOTS:
 	void doFileOpened(const QString &);
 
 Q_SIGNALS:
-	void newWindowTriggered(bool);
 	void printTriggered(bool);
 	void printPreviewTriggered(bool);
 	void exitTriggered(bool);
 	void preferencesTriggered(bool);
+	void showBrowserTriggered(bool);
 	void findTriggered(bool);
 	void findNextTriggered(bool);
 	void findPreviousTriggered(bool);

@@ -91,9 +91,9 @@ private Q_SLOTS:
 	void doCursorPositionChanged(int, int);
 	void doSearchWrapped();
 
-	void doPreferencesDialog();
 	void doPrint();
 	void doPrintPreview();
+	void doPreferencesDialog();
 	void doFindDialog();
 	void doFindNext();
 	void doFindPrevious();
