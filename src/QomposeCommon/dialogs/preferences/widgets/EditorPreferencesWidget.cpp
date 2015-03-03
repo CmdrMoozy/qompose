@@ -77,7 +77,7 @@ EditorPreferencesWidget::EditorPreferencesWidget(Settings *s, QWidget *p,
           gutterBGButton(nullptr)
 {
 	setPreferencesIcon(
-	        GUIUtils::getIconFromTheme("accessories-text-editor"));
+	        gui_utils::getIconFromTheme("accessories-text-editor"));
 	setPreferencesTitle(tr("Editor"));
 
 	initializeGUI();

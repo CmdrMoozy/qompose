@@ -83,79 +83,81 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	newAction = new QAction(tr("&New"), this);
 	newAction->setShortcut(Qt::CTRL + Qt::Key_N);
-	newAction->setIcon(GUIUtils::getIconFromTheme("document-new"));
+	newAction->setIcon(gui_utils::getIconFromTheme("document-new"));
 
 	newWindowAction = new QAction(tr("New &Window"), this);
 	newWindowAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
-	newWindowAction->setIcon(GUIUtils::getIconFromTheme("window-new"));
+	newWindowAction->setIcon(gui_utils::getIconFromTheme("window-new"));
 
 	openAction = new QAction(tr("&Open..."), this);
 	openAction->setShortcut(Qt::CTRL + Qt::Key_O);
-	openAction->setIcon(GUIUtils::getIconFromTheme("document-open"));
+	openAction->setIcon(gui_utils::getIconFromTheme("document-open"));
 
 	recentMenu = new RecentMenu(settings, this);
 
 	reopenAction = new QAction(tr("Reopen Tab"), this);
 	reopenAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_T);
-	reopenAction->setIcon(GUIUtils::getIconFromTheme("document-open"));
+	reopenAction->setIcon(gui_utils::getIconFromTheme("document-open"));
 
 	revertAction = new QAction(tr("&Revert"), this);
 	revertAction->setShortcut(Qt::CTRL + Qt::Key_R);
-	revertAction->setIcon(GUIUtils::getIconFromTheme("document-revert"));
+	revertAction->setIcon(gui_utils::getIconFromTheme("document-revert"));
 
 	revertAllAction = new QAction(tr("Revert All"), this);
 	revertAllAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R);
-	revertAllAction->setIcon(GUIUtils::getIconFromTheme("document-revert"));
+	revertAllAction->setIcon(
+	        gui_utils::getIconFromTheme("document-revert"));
 
 	saveAction = new QAction(tr("&Save"), this);
 	saveAction->setShortcut(Qt::CTRL + Qt::Key_S);
-	saveAction->setIcon(GUIUtils::getIconFromTheme("document-save"));
+	saveAction->setIcon(gui_utils::getIconFromTheme("document-save"));
 
 	saveAsAction = new QAction(tr("Save &As..."), this);
 	saveAsAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-	saveAsAction->setIcon(GUIUtils::getIconFromTheme("document-save-as"));
+	saveAsAction->setIcon(gui_utils::getIconFromTheme("document-save-as"));
 
 	printAction = new QAction(tr("&Print..."), this);
 	printAction->setShortcut(Qt::CTRL + Qt::Key_P);
-	printAction->setIcon(GUIUtils::getIconFromTheme("document-print"));
+	printAction->setIcon(gui_utils::getIconFromTheme("document-print"));
 
 	printPreviewAction = new QAction(tr("Print Pre&view..."), this);
 	printPreviewAction->setIcon(
-	        GUIUtils::getIconFromTheme("document-print-preview"));
+	        gui_utils::getIconFromTheme("document-print-preview"));
 
 	closeAction = new QAction(tr("Clos&e"), this);
 	closeAction->setShortcut(Qt::CTRL + Qt::Key_W);
-	closeAction->setIcon(GUIUtils::getIconFromTheme("window-close"));
+	closeAction->setIcon(gui_utils::getIconFromTheme("window-close"));
 
 	exitAction = new QAction(tr("E&xit"), this);
-	exitAction->setIcon(GUIUtils::getIconFromTheme("application-exit"));
+	exitAction->setIcon(gui_utils::getIconFromTheme("application-exit"));
 
 	undoAction = new QAction(tr("&Undo"), this);
 	undoAction->setShortcut(Qt::CTRL + Qt::Key_Z);
-	undoAction->setIcon(GUIUtils::getIconFromTheme("edit-undo"));
+	undoAction->setIcon(gui_utils::getIconFromTheme("edit-undo"));
 
 	redoAction = new QAction(tr("&Redo"), this);
 	redoAction->setShortcut(Qt::CTRL + Qt::Key_Y);
-	redoAction->setIcon(GUIUtils::getIconFromTheme("edit-redo"));
+	redoAction->setIcon(gui_utils::getIconFromTheme("edit-redo"));
 
 	cutAction = new QAction(tr("Cu&t"), this);
 	cutAction->setShortcut(Qt::CTRL + Qt::Key_X);
-	cutAction->setIcon(GUIUtils::getIconFromTheme("edit-cut"));
+	cutAction->setIcon(gui_utils::getIconFromTheme("edit-cut"));
 
 	copyAction = new QAction(tr("&Copy"), this);
 	copyAction->setShortcut(Qt::CTRL + Qt::Key_C);
-	copyAction->setIcon(GUIUtils::getIconFromTheme("edit-copy"));
+	copyAction->setIcon(gui_utils::getIconFromTheme("edit-copy"));
 
 	pasteAction = new QAction(tr("&Paste"), this);
 	pasteAction->setShortcut(Qt::CTRL + Qt::Key_V);
-	pasteAction->setIcon(GUIUtils::getIconFromTheme("edit-paste"));
+	pasteAction->setIcon(gui_utils::getIconFromTheme("edit-paste"));
 
 	duplicateLineAction = new QAction(tr("Duplicat&e Line"), this);
 	duplicateLineAction->setShortcut(Qt::CTRL + Qt::Key_D);
 
 	selectAllAction = new QAction(tr("Select &All"), this);
 	selectAllAction->setShortcut(Qt::CTRL + Qt::Key_A);
-	selectAllAction->setIcon(GUIUtils::getIconFromTheme("edit-select-all"));
+	selectAllAction->setIcon(
+	        gui_utils::getIconFromTheme("edit-select-all"));
 
 	deselectAction = new QAction(tr("Dese&lect"), this);
 	deselectAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
@@ -168,7 +170,7 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	preferencesAction = new QAction(tr("Pre&ferences..."), this);
 	preferencesAction->setIcon(
-	        GUIUtils::getIconFromTheme("preferences-other"));
+	        gui_utils::getIconFromTheme("preferences-other"));
 
 	showBrowserAction = new QAction(tr("Show File &Browser"), this);
 	showBrowserAction->setCheckable(true);
@@ -176,19 +178,20 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	findAction = new QAction(tr("&Find..."), this);
 	findAction->setShortcut(Qt::CTRL + Qt::Key_F);
-	findAction->setIcon(GUIUtils::getIconFromTheme("edit-find"));
+	findAction->setIcon(gui_utils::getIconFromTheme("edit-find"));
 
 	findNextAction = new QAction(tr("Find &Next"), this);
 	findNextAction->setShortcut(Qt::Key_F3);
-	findNextAction->setIcon(GUIUtils::getIconFromTheme("go-next"));
+	findNextAction->setIcon(gui_utils::getIconFromTheme("go-next"));
 
 	findPreviousAction = new QAction(tr("Find Previou&s"), this);
 	findPreviousAction->setShortcut(Qt::SHIFT + Qt::Key_F3);
-	findPreviousAction->setIcon(GUIUtils::getIconFromTheme("go-previous"));
+	findPreviousAction->setIcon(gui_utils::getIconFromTheme("go-previous"));
 
 	replaceAction = new QAction(tr("R&eplace..."), this);
 	replaceAction->setShortcut(Qt::CTRL + Qt::Key_H);
-	replaceAction->setIcon(GUIUtils::getIconFromTheme("edit-find-replace"));
+	replaceAction->setIcon(
+	        gui_utils::getIconFromTheme("edit-find-replace"));
 
 	goToAction = new QAction(tr("&Go To Line..."), this);
 	goToAction->setShortcut(Qt::CTRL + Qt::Key_G);
@@ -196,26 +199,26 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	previousBufferAction = new QAction(tr("&Previous Buffer"), this);
 	previousBufferAction->setShortcut(Qt::ALT + Qt::Key_Left);
 	previousBufferAction->setIcon(
-	        GUIUtils::getIconFromTheme("go-previous"));
+	        gui_utils::getIconFromTheme("go-previous"));
 
 	nextBufferAction = new QAction(tr("&Next Buffer"), this);
 	nextBufferAction->setShortcut(Qt::ALT + Qt::Key_Right);
-	nextBufferAction->setIcon(GUIUtils::getIconFromTheme("go-next"));
+	nextBufferAction->setIcon(gui_utils::getIconFromTheme("go-next"));
 
 	moveBufferLeftAction = new QAction(tr("Move Buffer &Left"), this);
 	moveBufferLeftAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Left);
 	moveBufferLeftAction->setIcon(
-	        GUIUtils::getIconFromTheme("go-previous"));
+	        gui_utils::getIconFromTheme("go-previous"));
 
 	moveBufferRightAction = new QAction(tr("Move Buffer &Right"), this);
 	moveBufferRightAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Right);
-	moveBufferRightAction->setIcon(GUIUtils::getIconFromTheme("go-next"));
+	moveBufferRightAction->setIcon(gui_utils::getIconFromTheme("go-next"));
 
 	aboutQomposeAction = new QAction(tr("&About Qompose..."), this);
-	aboutQomposeAction->setIcon(GUIUtils::getIconFromTheme("help-about"));
+	aboutQomposeAction->setIcon(gui_utils::getIconFromTheme("help-about"));
 
 	aboutQtAction = new QAction(tr("About &Qt..."), this);
-	aboutQtAction->setIcon(GUIUtils::getIconFromTheme("help-about"));
+	aboutQtAction->setIcon(gui_utils::getIconFromTheme("help-about"));
 
 #ifdef QOMPOSE_DEBUG
 	debugAction = new QAction(tr("Debugging..."), this);

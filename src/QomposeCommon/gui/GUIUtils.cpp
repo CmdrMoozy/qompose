@@ -22,6 +22,8 @@
 
 namespace qompose
 {
+namespace gui_utils
+{
 /*!
  * This function will return the icon for the given standard name. We try to
  * use an icon from the operating system's icon theme, but failing that, we
@@ -37,7 +39,7 @@ namespace qompose
  * \param n The name of the icon to find.
  * \return An icon object corresponding to the given name.
  */
-QIcon GUIUtils::getIconFromTheme(const QString &n)
+QIcon getIconFromTheme(const QString &n)
 {
 	QIcon defaultIcon;
 
@@ -51,5 +53,6 @@ QIcon GUIUtils::getIconFromTheme(const QString &n)
 		qDebug("Couldn't find icon: %s", qPrintable(n));
 
 	return QIcon::fromTheme(n, defaultIcon);
+}
 }
 }

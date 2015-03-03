@@ -24,14 +24,10 @@
 
 namespace qompose
 {
-/*!
- * \brief This class provides various GUI-related utility functions.
- */
-class GUIUtils
+namespace gui_utils
 {
-public:
-	static QIcon getIconFromTheme(const QString &n);
-};
+QIcon getIconFromTheme(const QString &n);
+}
 }
 
 #endif

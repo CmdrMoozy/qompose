@@ -44,7 +44,7 @@ OpenSavePreferencesWidget::OpenSavePreferencesWidget(Settings *s, QWidget *p,
           generalLayout(nullptr),
           stripTrailingSpacesCheckBox(nullptr)
 {
-	setPreferencesIcon(GUIUtils::getIconFromTheme("document-save"));
+	setPreferencesIcon(gui_utils::getIconFromTheme("document-save"));
 	setPreferencesTitle(tr("Open/Save"));
 
 	initializeGUI();

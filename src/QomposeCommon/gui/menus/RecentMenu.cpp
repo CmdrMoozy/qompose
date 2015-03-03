@@ -48,7 +48,7 @@ RecentMenu::RecentMenu(Settings *s, QObject *p)
 	// Initialize our menu.
 
 	menu = new QMenu(tr("Open Recent"));
-	menu->setIcon(GUIUtils::getIconFromTheme("document-open"));
+	menu->setIcon(gui_utils::getIconFromTheme("document-open"));
 
 	// Load our list's size from our settings instance.
 

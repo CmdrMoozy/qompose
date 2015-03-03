@@ -46,7 +46,7 @@ GeneralPreferencesWidget::GeneralPreferencesWidget(Settings *s, QWidget *p,
           recentListSizeSpinBox(nullptr),
           saveWindowAttribsCheckBox(nullptr)
 {
-	setPreferencesIcon(GUIUtils::getIconFromTheme("preferences-other"));
+	setPreferencesIcon(gui_utils::getIconFromTheme("preferences-other"));
 	setPreferencesTitle(tr("General"));
 
 	initializeGUI();
