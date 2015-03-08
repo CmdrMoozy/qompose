@@ -86,6 +86,8 @@ set(QomposeCommon_SOURCES
 
 	gui/menus/MainMenu.cpp
 	gui/menus/MainMenu.h
+	gui/menus/MenuDescriptors.cpp
+	gui/menus/MenuDescriptors.h
 	gui/menus/RecentMenu.cpp
 	gui/menus/RecentMenu.h
 

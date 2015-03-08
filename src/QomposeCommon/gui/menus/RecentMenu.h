@@ -19,11 +19,12 @@
 #ifndef INCLUDE_QOMPOSECOMMON_GUI_MENUS_RECENT_MENU_H
 #define INCLUDE_QOMPOSECOMMON_GUI_MENUS_RECENT_MENU_H
 
+#include <QList>
 #include <QObject>
-
 #include <QQueue>
 #include <QString>
-#include <QList>
+
+#include "QomposeCommon/gui/menus/MenuDescriptors.h"
 
 class QMenu;
 class QAction;
@@ -74,6 +75,20 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void recentClicked(const QString &);
 };
+
+namespace menu_desc
+{
+struct RecentMenuDescriptor
+{
+	Settings *settings;
+
+	RecentMenuDescriptor(Settings *);
+};
+
+template <>
+void constructDescriptor(QObject *parent, QMenu *menu,
+                         const RecentMenuDescriptor &descriptor);
+}
 }
 
 #endif

@@ -345,4 +345,15 @@ void RecentMenu::doSettingChanged(const QString &k, const QVariant &v)
 			setListContents(v.toStringList());
 	}
 }
+
+namespace menu_desc
+{
+template <>
+void constructDescriptor(QObject *parent, QMenu *menu,
+                         const RecentMenuDescriptor &descriptor)
+{
+	RecentMenu *recentMenu = new RecentMenu(descriptor.settings, parent);
+	menu->addMenu(recentMenu->getMenu());
+}
+}
 }

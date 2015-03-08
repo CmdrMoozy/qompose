@@ -24,6 +24,40 @@ namespace qompose
 {
 namespace gui_utils
 {
+QString translate(const std::string &s)
+{
+	return QObject::tr(s.c_str());
+}
+
+ConnectionFunctor::ConnectionFunctor(const QObject *o) : object(o)
+{
+}
+
+Connection ConnectionFunctor::operator()(const char *connection) const
+{
+	return std::make_pair(object, connection);
+}
+
+void connectAll(const QObject *sender, const char *signal,
+                const ConnectionList &slots)
+{
+	if(sender == nullptr || signal == nullptr)
+		return;
+
+	for(const auto &slot : slots)
+		QObject::connect(sender, signal, slot.first, slot.second);
+}
+
+void connectAll(const ConnectionList &signals, const QObject *receiver,
+                const char *slot)
+{
+	if(receiver == nullptr || slot == nullptr)
+		return;
+
+	for(const auto &signal : signals)
+		QObject::connect(signal.first, signal.second, receiver, slot);
+}
+
 /*!
  * This function will return the icon for the given standard name. We try to
  * use an icon from the operating system's icon theme, but failing that, we

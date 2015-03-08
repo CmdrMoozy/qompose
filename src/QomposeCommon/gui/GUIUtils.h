@@ -19,13 +19,35 @@
 #ifndef INCLUDE_QOMPOSECOMMON_GUI_GUI_UTILS_H
 #define INCLUDE_QOMPOSECOMMON_GUI_GUI_UTILS_H
 
+#include <utility>
+#include <vector>
+
 #include <QIcon>
+#include <QObject>
 #include <QString>
 
 namespace qompose
 {
 namespace gui_utils
 {
+typedef std::pair<const QObject *, const char *> Connection;
+typedef std::vector<Connection> ConnectionList;
+
+QString translate(const std::string &s);
+
+struct ConnectionFunctor
+{
+	const QObject *object;
+
+	ConnectionFunctor(const QObject *o);
+	Connection operator()(const char *connection) const;
+};
+
+void connectAll(const QObject *sender, const char *signal,
+                const ConnectionList &slots);
+void connectAll(const ConnectionList &signals, const QObject *receiver,
+                const char *slot);
+
 QIcon getIconFromTheme(const QString &n);
 }
 }
