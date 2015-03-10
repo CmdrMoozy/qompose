@@ -48,6 +48,7 @@ string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
 
 set(CMAKE_AUTOMOC ON)
 
+find_package(Boost REQUIRED)
 find_package(ICU COMPONENTS data uc i18n REQUIRED)
 find_package(HUNSPELL REQUIRED)
 find_package(Qt5Core REQUIRED)
