@@ -33,14 +33,54 @@ class Settings;
 class PreferencesWidget : public QWidget
 {
 public:
+	/*!
+	 * This is our default constructor, which creates a new, empty
+	 * preferences widget.
+	 *
+	 * \param s The settings instance to use to persist our settings.
+	 * \param p This widget's parent widget.
+	 * \param f The window flags to use for this widget.
+	 */
 	PreferencesWidget(Settings *s, QWidget *p = nullptr,
 	                  Qt::WindowFlags f = nullptr);
-	virtual ~PreferencesWidget();
 
+	PreferencesWidget(const PreferencesWidget &) = delete;
+	virtual ~PreferencesWidget() = default;
+
+	PreferencesWidget &operator=(const PreferencesWidget &) = delete;
+
+	/*!
+	 * This function returns our widget's current display icon, for use in
+	 * e.g. a preferences list view.
+	 *
+	 * \return Our widget's icon.
+	 */
 	QIcon getPreferencesIcon() const;
+
+	/*!
+	 * This function sets the icon our widget should display e.g. when in a
+	 * preferences list view.
+	 *
+	 * \param i The new icon for our widget to use.
+	 */
 	void setPreferencesIcon(const QIcon &i);
 
+	/*!
+	 * This function returns the title identifying this preferences widget.
+	 * This title can be displayed e.g. in a dialog title, or in a
+	 * preferences list view.
+	 *
+	 * \return Our widget's title.
+	 */
 	QString getPreferencesTitle() const;
+
+	/*!
+	 * This function sets the title used to identify this widget. This
+	 * title can be displayed e.g. in a dialog title, or in a preferences
+	 * list view.
+	 *
+	 * \param t The new title for our widget to use.
+	 */
 	void setPreferencesTitle(const QString &t);
 
 	/*!
@@ -59,6 +99,12 @@ public:
 	virtual void discardChanges() = 0;
 
 protected:
+	/*!
+	 * This function returns the settings instance our widget is using to
+	 * persist settings.
+	 *
+	 * \return Our widget's settings instance.
+	 */
 	Settings *getSettings() const;
 
 private:
@@ -66,9 +112,6 @@ private:
 
 	QIcon icon;
 	QString title;
-
-	PreferencesWidget(const PreferencesWidget &);
-	PreferencesWidget &operator=(const PreferencesWidget &);
 };
 }
 

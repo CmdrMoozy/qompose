@@ -36,8 +36,20 @@ namespace qompose
 class AboutDialog : public QDialog
 {
 public:
-	AboutDialog(QWidget * = nullptr, Qt::WindowFlags = nullptr);
-	virtual ~AboutDialog();
+	/*!
+	 * This is our default constructor, which creates a new about dialog
+	 * instance and loads the contents from our resources into its UI.
+	 *
+	 * \param p This dialog's parent widget.
+	 * \param f The window flags to use for this dialog.
+	 */
+	AboutDialog(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
+
+	AboutDialog(const AboutDialog &) = delete;
+
+	virtual ~AboutDialog() = default;
+
+	AboutDialog &operator=(const AboutDialog &) = delete;
 
 private:
 	QGridLayout *layout;
@@ -54,10 +66,16 @@ private:
 
 	QPushButton *closeButton;
 
-	AboutDialog(const AboutDialog &);
-	AboutDialog &operator=(const AboutDialog &);
-
+	/*!
+	 * This is a utility function which initializes our GUI elements and
+	 * adds them to our layout.
+	 */
 	void initializeGUI();
+
+	/*!
+	 * This is a utility function which loads the body of our license file,
+	 * and places its contents in our license text edit.
+	 */
 	void loadLicense();
 };
 }

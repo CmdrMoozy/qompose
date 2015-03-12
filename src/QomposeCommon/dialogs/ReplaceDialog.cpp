@@ -31,13 +31,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new instance of our
- * replace dialog.
- *
- * \param p The parent widget to use for this dialog.
- * \param f The window flags to use for this dialog.
- */
 ReplaceDialog::ReplaceDialog(QWidget *p, Qt::WindowFlags f)
         : QDialog(p, f),
           query(new ReplaceQuery(this)),
@@ -68,32 +61,11 @@ ReplaceDialog::ReplaceDialog(QWidget *p, Qt::WindowFlags f)
 	setMinimumWidth(450);
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our dialog.
- */
-ReplaceDialog::~ReplaceDialog()
-{
-}
-
-/*!
- * This function returns a pointer to the replace query our dialog currently
- * has. This pointer is still good even after the dialog has been re-shown.
- *
- * \return The replace query containing our dialog's selected data.
- */
 const ReplaceQuery *ReplaceDialog::getQuery() const
 {
 	return query;
 }
 
-/*!
- * This function handles our dialog being shown by resetting its
- * contents using our currently selected replace query, by setting
- * focus on the expression input box, and by raising our dialog to
- * the front.
- *
- * \param e The event being handled.
- */
 void ReplaceDialog::showEvent(QShowEvent *e)
 {
 	// Setup our line text edit.
@@ -128,10 +100,6 @@ void ReplaceDialog::showEvent(QShowEvent *e)
 	QDialog::showEvent(e);
 }
 
-/*!
- * This function initializes our GUI by creating the various widgets we contain,
- * and adding them to our layout.
- */
 void ReplaceDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
@@ -223,10 +191,6 @@ void ReplaceDialog::initializeGUI()
 	                 SLOT(close()));
 }
 
-/*!
- * This is a utility function which applies the currently selected options to
- * our dialog's internal replace query.
- */
 void ReplaceDialog::applyValues()
 {
 	query->setExpression(findTextEdit->text());
@@ -239,61 +203,29 @@ void ReplaceDialog::applyValues()
 	query->setRegularExpression(regexCheckBox->checkState() == Qt::Checked);
 }
 
-/*!
- * This slot handles our "replace" button being clicked by applying our
- * dialog's options to our query, and then notifying any listeners that our
- * replace action has been triggered.
- */
 void ReplaceDialog::doReplace()
-{ /* SLOT */
-
+{
 	applyValues();
-
 	Q_EMIT replaceClicked();
 }
 
-/*!
- * This slot handles our "find" button being clicked by applying our dialog's
- * options to our query, and then notifying any listeners that our find action
- * has been triggered.
- */
 void ReplaceDialog::doFind()
-{ /* SLOT */
-
+{
 	applyValues();
-
 	Q_EMIT findClicked();
 }
 
-/*!
- * This slot handles our "replace in selection" button being clicked by applying
- * our dialog's options to our query, closing our dialog and then notifying any
- * listeners that our "replace in selection" action has been triggered.
- */
 void ReplaceDialog::doReplaceSelection()
-{ /* SLOT */
-
+{
 	applyValues();
-
 	close();
-
 	Q_EMIT replaceSelectionClicked();
 }
 
-/*!
- * This slot handles our "replace all" button being clicked by applying our
- * dialog's
- * options to our query, closing our dialog and then notifying any listeners
- * that
- * our "replace all" action has been triggered.
- */
 void ReplaceDialog::doReplaceAll()
-{ /* SLOT */
-
+{
 	applyValues();
-
 	close();
-
 	Q_EMIT replaceAllClicked();
 }
 }

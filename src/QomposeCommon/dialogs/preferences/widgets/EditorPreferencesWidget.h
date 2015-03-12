@@ -41,11 +41,35 @@ class Settings;
 class EditorPreferencesWidget : public PreferencesWidget
 {
 public:
+	/*!
+	 * This is our default constructor, which creates a new instance of our
+	 * editor preferences widget.
+	 *
+	 * \param s The settings instance to use to save preferences values.
+	 * \param p The parent widget to use for this widget.
+	 * \param f The window flags to use for this widget.
+	 */
 	EditorPreferencesWidget(Settings *s, QWidget *p = nullptr,
 	                        Qt::WindowFlags f = nullptr);
-	virtual ~EditorPreferencesWidget();
 
+	EditorPreferencesWidget(const EditorPreferencesWidget &) = delete;
+
+	virtual ~EditorPreferencesWidget() = default;
+
+	EditorPreferencesWidget &
+	operator=(const EditorPreferencesWidget &) = delete;
+
+	/*!
+	 * We implement our superclass's apply() function to save our various
+	 * editor preferences values using our settings instance.
+	 */
 	virtual void apply();
+
+	/*!
+	 * We implement our superclass's discardChanges() function to discard
+	 * any preferences changes that may have been made to our widget by
+	 * reloading the existing values from our settings instance.
+	 */
 	virtual void discardChanges();
 
 private:
@@ -84,13 +108,27 @@ private:
 	QLabel *gutterBGLabel;
 	ColorPickerButton *gutterBGButton;
 
-	EditorPreferencesWidget(const EditorPreferencesWidget &);
-	EditorPreferencesWidget &operator=(const EditorPreferencesWidget &);
-
+	/*!
+	 * This function initializes our widget's GUI by creating the various
+	 * widgets we contain, and adding them to our layout.
+	 */
 	void initializeGUI();
 
+	/*!
+	 * This is a small utility function which returns the currently
+	 * selected indentation mode as a string.
+	 *
+	 * \return The currently selected indentation mode as a string.
+	 */
 	QString getSelectedIndentationMode() const;
-	void setSelectedIndentaionMode(const QString &);
+
+	/*!
+	 * This is a small utility function which sets the currently selected
+	 * indentation mode in the UI based upon the given string value.
+	 *
+	 * \param mode The new indentation mode.
+	 */
+	void setSelectedIndentaionMode(const QString &mode);
 };
 }
 

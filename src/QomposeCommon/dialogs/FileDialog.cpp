@@ -35,30 +35,10 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new file dialog instance.
- *
- * \param p The parent widget for our dialog.
- * \param f The window flags to use for our dialog.
- */
 FileDialog::FileDialog(QWidget *p, Qt::WindowFlags f) : QFileDialog(p, f)
 {
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our dialog.
- */
-FileDialog::~FileDialog()
-{
-}
-
-/*!
- * This is a factory function, which creates a new "null" file descriptor and
- * returns it. "Null" file descriptors are those with the value QString() for
- * both properties.
- *
- * \return A newly-created null file descriptor.
- */
 FileDescriptor FileDialog::getNullDescriptor()
 {
 	FileDescriptor desc = {QString(), QString()};
@@ -66,14 +46,6 @@ FileDescriptor FileDialog::getNullDescriptor()
 	return desc;
 }
 
-/*!
- * This function will create a file descriptor for the file at the given path.
- * The file's text codec will be detected or, failing that, the user will be
- * prompted to select the text codec to use.
- *
- * \param p The path to the file to create a descriptor for.
- * \return A file descriptor for the given path.
- */
 FileDescriptor FileDialog::getPathDescriptor(const QString &p)
 {
 	FileDescriptor desc = {p, FileDialog::detectTextCodec(p)};
@@ -89,18 +61,6 @@ FileDescriptor FileDialog::getPathDescriptor(const QString &p)
 	return desc;
 }
 
-/*!
- * This is a static utility function which displays an instance of our dialog
- * for the purposes of opening a single file.
- *
- * \param p The parent widget to use for our dialog.
- * \param c The caption to use for the dialog prompt.
- * \param d The default directory to use for the dialog.
- * \param f The filter to use for the open dialog.
- * \param sf The selected filter to use for the open dialog.
- * \param o The set of extra options to use for the open dialog.
- * \return A valid file descriptor on "accept," or a null descriptor otherwise.
- */
 FileDescriptor FileDialog::getOpenFileName(QWidget *p, const QString &c,
                                            const QString &d, const QString &f,
                                            QString *sf, QFileDialog::Options o)
@@ -116,18 +76,6 @@ FileDescriptor FileDialog::getOpenFileName(QWidget *p, const QString &c,
 	return FileDialog::getPathDescriptor(fileName);
 }
 
-/*!
- * This is a static utility function which displays an instance of our dialog
- * for the purposes of opening one or more files.
- *
- * \param p The parent widget to use for our dialog.
- * \param c The caption to use for the dialog prompt.
- * \param d The default directory to use for the dialog.
- * \param f The filter to use for the open dialog.
- * \param sf The selected filter to use for the open dialog.
- * \param o The set of extra options to use for the open dialog.
- * \return A list of file descriptors on "accept," or an empty list otherwise.
- */
 QList<FileDescriptor> FileDialog::getOpenFileNames(QWidget *p, const QString &c,
                                                    const QString &d,
                                                    const QString &f,
@@ -155,15 +103,6 @@ QList<FileDescriptor> FileDialog::getOpenFileNames(QWidget *p, const QString &c,
 	return ret;
 }
 
-/*!
- * This function tests whether or not the given file seems "good to go." This
- * includes whether or not it is a regular file, is readable, and is reasonably
- * sized (files larger than 5 MiB are considered unusually large).
- *
- * \param f The path to the file to inspect.
- * \param p The parent widget for any prompts we display.
- * \return True if the file looks good, or false otherwise.
- */
 bool FileDialog::fileIsGood(const QString &f, QWidget *p)
 {
 	QFileInfo file(f);
@@ -188,18 +127,6 @@ bool FileDialog::fileIsGood(const QString &f, QWidget *p)
 	return true;
 }
 
-/*!
- * This function attempts to detet the character encoding in the specified file.
- * The character encoding will be returned as a string which can be used with
- * QTextCodec's codecForName function.
- *
- * If the character encoding cannot be determined, or if some other error
- *occurs,
- * then we will return a null QString instead.
- *
- * \param f The path to the file whose encoding will be detected.
- * \return The encoding the given file seems to be using.
- */
 QString FileDialog::detectTextCodec(const QString &f)
 {
 	// Create our charset detector instance.
@@ -278,14 +205,6 @@ QString FileDialog::detectTextCodec(const QString &f)
 	}
 }
 
-/*!
- * This is a utility function which prompts the user to select a character
- *encoding,
- * in the case where the proper encoding couldn't be autodetected for a file.
- *
- * \param f The path to the file to prompt about.
- * \return The user-selected character encoding for the given file.
- */
 QString FileDialog::promptTextCodec(const QString &f)
 {
 	QFileInfo file(f);

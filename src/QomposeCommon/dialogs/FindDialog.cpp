@@ -32,13 +32,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new instance of our
- * find dialog.
- *
- * \param p The parent widget to use for this dialog.
- * \param f The window flags to use for this dialog.
- */
 FindDialog::FindDialog(QWidget *p, Qt::WindowFlags f)
         : QDialog(p, f),
           query(new FindQuery(this)),
@@ -64,32 +57,11 @@ FindDialog::FindDialog(QWidget *p, Qt::WindowFlags f)
 	setMinimumWidth(400);
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our dialog.
- */
-FindDialog::~FindDialog()
-{
-}
-
-/*!
- * This function returns a pointer to the find query our dialog currently
- * has. This pointer is still good even after the dialog has been re-shown.
- *
- * \return The find query containing our dialog's selected data.
- */
 const FindQuery *FindDialog::getQuery() const
 {
 	return query;
 }
 
-/*!
- * This function handles our dialog being shown by resetting its
- * contents using our currently selected find query, by setting
- * focus on the expression input box, and by raising our dialog to
- * the front.
- *
- * \param e The event being handled.
- */
 void FindDialog::showEvent(QShowEvent *e)
 {
 	// Setup our line text edit.
@@ -122,10 +94,6 @@ void FindDialog::showEvent(QShowEvent *e)
 	QDialog::showEvent(e);
 }
 
-/*!
- * This function initializes our GUI by creating the various widgets we contain,
- * and adding them to our layout.
- */
 void FindDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
@@ -198,16 +166,8 @@ void FindDialog::initializeGUI()
 	                 SLOT(close()));
 }
 
-/*!
- * This function handles our "find" button being clicked by applying our
- * dialog's
- * contents to our find query object, and by alerting our callers that our
- * dialog
- * has been accepted.
- */
 void FindDialog::doFind()
-{ /* SLOT */
-
+{
 	// Set our query's properties according to our dialog state.
 
 	query->setExpression(findTextEdit->text());

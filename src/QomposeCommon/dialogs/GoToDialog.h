@@ -38,13 +38,37 @@ class GoToDialog : public QDialog
 	Q_OBJECT
 
 public:
-	GoToDialog(QWidget * = nullptr, Qt::WindowFlags = nullptr);
-	virtual ~GoToDialog();
+	/*!
+	 * This is our default constructor, which initializes a new instance of
+	 * our "go to" dialog.
+	 *
+	 * \param p The parent widget for our dialog.
+	 * \param f The window falgs to use for our dialog.
+	 */
+	GoToDialog(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 
+	GoToDialog(const GoToDialog &) = delete;
+	virtual ~GoToDialog() = default;
+
+	GoToDialog &operator=(const GoToDialog &) = delete;
+
+	/*!
+	 * This function returns the currently selected line. This value is 0
+	 * by default, and is only updated when our "Go To" button is clicked.
+	 *
+	 * \return Our dialog's currently selected line.
+	 */
 	int getSelectedLine() const;
 
 protected:
-	virtual void showEvent(QShowEvent *);
+	/*!
+	 * This function handles our dialog being shown by resetting our
+	 * dialog's contents, setting focus on the correct dialog elements, and
+	 * by raising our dialog to the front.
+	 *
+	 * \param e The event being handled.
+	 */
+	virtual void showEvent(QShowEvent *e);
 
 private:
 	int selectedLine;
@@ -59,12 +83,22 @@ private:
 	QPushButton *closeButton;
 	QPushButton *goToButton;
 
-	GoToDialog(const GoToDialog &);
-	GoToDialog &operator=(const GoToDialog &);
-
+	/*!
+	 * This function initializes our dialog's GUI by creating our various
+	 * widgets and adding them to our layout.
+	 */
 	void initializeGUI();
 
 private Q_SLOTS:
+	/*!
+	 * This function performs our "Go To" operation by updating our
+	 * selected line, and then emitting a signal letting our callers know
+	 * that our dialog has been accepted.
+	 *
+	 * If the currently selected line number is invalid (i.e., isn't an
+	 * integer), then we will show an error instead, and avoid closing the
+	 * dialog.
+	 */
 	void doGoTo();
 
 Q_SIGNALS:

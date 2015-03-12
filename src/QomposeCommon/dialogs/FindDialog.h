@@ -42,13 +42,39 @@ class FindDialog : public QDialog
 	Q_OBJECT
 
 public:
-	FindDialog(QWidget * = nullptr, Qt::WindowFlags = nullptr);
-	virtual ~FindDialog();
+	/*!
+	 * This is our default constructor, which creates a new instance of our
+	 * find dialog.
+	 *
+	 * \param p The parent widget to use for this dialog.
+	 * \param f The window flags to use for this dialog.
+	 */
+	FindDialog(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 
+	FindDialog(const FindDialog &) = delete;
+	virtual ~FindDialog() = default;
+
+	FindDialog &operator=(const FindDialog &) = delete;
+
+	/*!
+	 * This function returns a pointer to the find query our dialog
+	 * currently has. This pointer is still good even after the dialog has
+	 * been re-shown.
+	 *
+	 * \return The find query containing our dialog's selected data.
+	 */
 	const FindQuery *getQuery() const;
 
 protected:
-	virtual void showEvent(QShowEvent *);
+	/*!
+	 * This function handles our dialog being shown by resetting its
+	 * contents using our currently selected find query, by setting
+	 * focus on the expression input box, and by raising our dialog to
+	 * the front.
+	 *
+	 * \param e The event being handled.
+	 */
+	virtual void showEvent(QShowEvent *e);
 
 private:
 	FindQuery *query;
@@ -71,12 +97,18 @@ private:
 	QPushButton *findButton;
 	QPushButton *closeButton;
 
-	FindDialog(const FindDialog &);
-	FindDialog &operator=(const FindDialog &);
-
+	/*!
+	 * This function initializes our GUI by creating the various widgets we
+	 * contain, and adding them to our layout.
+	 */
 	void initializeGUI();
 
 private Q_SLOTS:
+	/*!
+	 * This function handles our "find" button being clicked by applying
+	 * our dialog's contents to our find query object, and by alerting our
+	 * callers that our dialog has been accepted.
+	 */
 	void doFind();
 
 Q_SIGNALS:

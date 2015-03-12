@@ -33,13 +33,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new about dialog instance
- * and loads the contents from our resources into its UI.
- *
- * \param p This dialog's parent widget.
- * \param f The window flags to use for this dialog.
- */
 AboutDialog::AboutDialog(QWidget *p, Qt::WindowFlags f)
         : QDialog(p, f),
           layout(nullptr),
@@ -60,17 +53,6 @@ AboutDialog::AboutDialog(QWidget *p, Qt::WindowFlags f)
 	resize(500, 500);
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our dialog.
- */
-AboutDialog::~AboutDialog()
-{
-}
-
-/*!
- * This is a utility function which initializes our GUI elements and
- * adds them to our layout.
- */
 void AboutDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);
@@ -143,10 +125,6 @@ void AboutDialog::initializeGUI()
 	                 SLOT(close()));
 }
 
-/*!
- * This is a utility function which loads the body of our license file,
- * and places its contents in our license text edit.
- */
 void AboutDialog::loadLicense()
 {
 	licenseTextEdit->clear();

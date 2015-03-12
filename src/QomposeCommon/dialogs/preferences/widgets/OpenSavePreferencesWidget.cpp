@@ -28,14 +28,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new instance of our
- * open/save preferences widget.
- *
- * \param s The settings instance to use to save preferences values.
- * \param p The parent widget to use for this widget.
- * \param f The window flags to use for this widget.
- */
 OpenSavePreferencesWidget::OpenSavePreferencesWidget(Settings *s, QWidget *p,
                                                      Qt::WindowFlags f)
         : PreferencesWidget(s, p, f),
@@ -50,17 +42,6 @@ OpenSavePreferencesWidget::OpenSavePreferencesWidget(Settings *s, QWidget *p,
 	initializeGUI();
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our widget.
- */
-OpenSavePreferencesWidget::~OpenSavePreferencesWidget()
-{
-}
-
-/*!
- * We implement our superclass's apply() function to save our various open/save
- * preferences values using our settings instance.
- */
 void OpenSavePreferencesWidget::apply()
 {
 	// Strip Trailing Spaces
@@ -71,11 +52,6 @@ void OpenSavePreferencesWidget::apply()
 	                 Qt::Checked));
 }
 
-/*!
- * We implement our superclass's discardChanges() function to discard
- * any preferences changes that may have been made to our widget by
- * reloading the existing values from our settings instance.
- */
 void OpenSavePreferencesWidget::discardChanges()
 {
 	// Strip Trailing Spaces
@@ -88,10 +64,6 @@ void OpenSavePreferencesWidget::discardChanges()
 	                                                       : Qt::Unchecked);
 }
 
-/*!
- * This function initializes our widget's GUI by creating the various widgets
- * we contain, and adding them to our layout.
- */
 void OpenSavePreferencesWidget::initializeGUI()
 {
 	layout = new QGridLayout(this);

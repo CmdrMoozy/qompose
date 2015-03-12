@@ -31,16 +31,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new instance of our
- * character encoding dialog.
- *
- * \param p The parent widget for this dialog.
- * \param f The window flags to use for this dialog.
- * \param d The encoding to select by default in our list of encodings.
- * \param m The message to prompt the user with.
- * \param t The window title for the dialog.
- */
 EncodingDialog::EncodingDialog(QWidget *p, Qt::WindowFlags f, const QString &d,
                                const QString &m, const QString &t)
         : QDialog(p, f),
@@ -96,31 +86,6 @@ EncodingDialog::EncodingDialog(QWidget *p, Qt::WindowFlags f, const QString &d,
 	setWindowTitle(t);
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our dialog.
- */
-EncodingDialog::~EncodingDialog()
-{
-}
-
-/*!
- * This function creates a new encoding dialog, allowing the user to select a
- * character encoding to use. This dialog will show the given message, as well
- * as a combo box with all possible character encodings in it, and it has two
- * buttons - "Select" and "Cancel".
- *
- * The string returned by this function will be valid for QTextCodec's
- * codecForName function.
- *
- * If no character encoding is selected (i.e., the "Cancel" button is clicked,
- * or the dialog is closed), then we return a null QString instead.
- *
- * \param p The parent widget for the dialog.
- * \param d The default character encoding.
- * \param m The message to display in the dialog.
- * \param t The title of the dialog.
- * \return The selected character encoding.
- */
 QString EncodingDialog::promptEncoding(QWidget *p, const QString &d,
                                        const QString &m, const QString &t)
 {
@@ -129,26 +94,13 @@ QString EncodingDialog::promptEncoding(QWidget *p, const QString &d,
 	return dialog.getSelectedEncoding();
 }
 
-/*!
- * This function returns the encoding selected by our user. If the dialog was
- * "accepted," then this returns the selected encoding. If the dialog was
- * canceled, or no valid encoding was selected, then this returns QString()
- * instead.
- *
- * \return The currently selected character encoding.
- */
 QString EncodingDialog::getSelectedEncoding() const
 {
 	return encoding;
 }
 
-/*!
- * This function handles our select button being clicked by updating our
- * dialog's selected encoding, and then closes our dialog.
- */
 void EncodingDialog::doSelectClicked()
-{ /* SLOT */
-
+{
 	QList<QListWidgetItem *> selected = encodingList->selectedItems();
 
 	if(selected.size() == 1)
@@ -159,13 +111,8 @@ void EncodingDialog::doSelectClicked()
 	done(0);
 }
 
-/*!
- * This function handles our cancel button being clicked by clearing our
- * dialog's selected encoding, and then closes our dialog.
- */
 void EncodingDialog::doCancelClicked()
-{ /* SLOT */
-
+{
 	encoding = QString();
 	done(0);
 }

@@ -42,13 +42,39 @@ class ReplaceDialog : public QDialog
 	Q_OBJECT
 
 public:
-	ReplaceDialog(QWidget * = nullptr, Qt::WindowFlags = nullptr);
-	virtual ~ReplaceDialog();
+	/*!
+	 * This is our default constructor, which creates a new instance of our
+	 * replace dialog.
+	 *
+	 * \param p The parent widget to use for this dialog.
+	 * \param f The window flags to use for this dialog.
+	 */
+	ReplaceDialog(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 
+	ReplaceDialog(const ReplaceDialog &) = delete;
+	virtual ~ReplaceDialog() = default;
+
+	ReplaceDialog &operator=(const ReplaceDialog &) = delete;
+
+	/*!
+	 * This function returns a pointer to the replace query our dialog
+	 * currently has. This pointer is still good even after the dialog has
+	 * been re-shown.
+	 *
+	 * \return The replace query containing our dialog's selected data.
+	 */
 	const ReplaceQuery *getQuery() const;
 
 protected:
-	virtual void showEvent(QShowEvent *);
+	/*!
+	 * This function handles our dialog being shown by resetting its
+	 * contents using our currently selected replace query, by setting
+	 * focus on the expression input box, and by raising our dialog to
+	 * the front.
+	 *
+	 * \param e The event being handled.
+	 */
+	virtual void showEvent(QShowEvent *e);
 
 private:
 	ReplaceQuery *query;
@@ -76,17 +102,47 @@ private:
 	QPushButton *replaceAllButton;
 	QPushButton *closeButton;
 
-	ReplaceDialog(const ReplaceDialog &);
-	ReplaceDialog &operator=(const ReplaceDialog &);
-
+	/*!
+	 * This function initializes our GUI by creating the various widgets we
+	 * contain, and adding them to our layout.
+	 */
 	void initializeGUI();
 
+	/*!
+	 * This is a utility function which applies the currently selected
+	 * options to our dialog's internal replace query.
+	 */
 	void applyValues();
 
 private Q_SLOTS:
+	/*!
+	 * This slot handles our "replace" button being clicked by applying our
+	 * dialog's options to our query, and then notifying any listeners that
+	 * our replace action has been triggered.
+	 */
 	void doReplace();
+
+	/*!
+	 * This slot handles our "find" button being clicked by applying our
+	 * dialog's options to our query, and then notifying any listeners that
+	 * our find action has been triggered.
+	 */
 	void doFind();
+
+	/*!
+	 * This slot handles our "replace in selection" button being clicked by
+	 * applying our dialog's options to our query, closing our dialog and
+	 * then notifying any listeners that our "replace in selection" action
+	 * has been triggered.
+	 */
 	void doReplaceSelection();
+
+	/*!
+	 * This slot handles our "replace all" button being clicked by applying
+	 * our dialog's options to our query, closing our dialog and then
+	 * notifying any listeners that our "replace all" action has been
+	 * triggered.
+	 */
 	void doReplaceAll();
 
 Q_SIGNALS:

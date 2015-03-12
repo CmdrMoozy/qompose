@@ -33,14 +33,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new instance of our
- * preferences dialog.
- *
- * \param s The settings instance to use to persist settings.
- * \param p The parent widget for this dialog.
- * \param f The window flags for this dialog.
- */
 PreferencesDialog::PreferencesDialog(Settings *s, QWidget *p, Qt::WindowFlags f)
         : QDialog(p, f),
           settings(s),
@@ -116,28 +108,12 @@ PreferencesDialog::PreferencesDialog(Settings *s, QWidget *p, Qt::WindowFlags f)
 	                 SLOT(doDefaults()));
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our dialog.
- */
-PreferencesDialog::~PreferencesDialog()
-{
-}
-
-/*!
- * This function discards any changes that have been made to any of our
- * preferences widgets by instructing each widget in our model to discard
- * its changes.
- */
 void PreferencesDialog::discardChanges()
 {
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 		preferencesModel->widgetAt(i)->discardChanges();
 }
 
-/*!
- * This function initializes our preferences model by creating the model
- * as well as all of the widgets that will be placed inside of it.
- */
 void PreferencesDialog::createPreferencesModel()
 {
 	preferencesModel = new PreferencesListModel(preferencesView);
@@ -154,52 +130,26 @@ void PreferencesDialog::createPreferencesModel()
 	preferencesModel->addPreferencesWidget(openSavePreferencesWidget);
 }
 
-/*!
- * This function handles a new widget being activated in our list view of
- * preferences widgets by displaying the associated widget in our dialog's
- * display area.
- *
- * \param i The model index (i.e., the row) of the widget that was activated.
- */
 void PreferencesDialog::doWidgetActivated(const QModelIndex &i)
-{ /* SLOT */
-
+{
 	preferencesDisplayWidget->setCurrentWidget(
 	        preferencesModel->scrollWidgetAt(i.row()));
 }
 
-/*!
- * This function handles our OK button being clicked by applying all of our
- * preferences values, and then closing our dialog.
- */
 void PreferencesDialog::doOk()
-{ /* SLOT */
-
+{
 	doApply();
-
 	close();
 }
 
-/*!
- * This function handles our apply button being clicked by instructing each of
- * the preferences widgets in our model to apply their respective settings.
- */
 void PreferencesDialog::doApply()
-{ /* SLOT */
-
+{
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 		preferencesModel->widgetAt(i)->apply();
 }
 
-/*!
- * This function handles our defaults button being clicked by resetting all of
- * our preferences values back to their defaults, and then instructing each of
- * the preferences widgets in our model to reload the settings from the settings
- * instance.
- */
 void PreferencesDialog::doDefaults()
-{ /* SLOT */
-
+{
 	QMessageBox::StandardButton ret = QMessageBox::question(
 	        this, tr("Confirm Resetting Defaults"),
 	        tr("Are you sure you want to reset all settings to their "

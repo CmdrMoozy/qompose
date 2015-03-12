@@ -24,20 +24,11 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new, empty preferences
- * list model.
- *
- * \param p The parent object for this new model.
- */
 PreferencesListModel::PreferencesListModel(QObject *p)
         : QAbstractListModel(p), widgets(), scrollWidgets()
 {
 }
 
-/*!
- * This is our default destructor, which cleans up and destroys our list.
- */
 PreferencesListModel::~PreferencesListModel()
 {
 	while(!scrollWidgets.isEmpty())
@@ -48,26 +39,11 @@ PreferencesListModel::~PreferencesListModel()
 	}
 }
 
-/*!
- * This function returns the number of rows currently in our model.
- *
- * \param p The parent model index - this is ignored.
- * \return The number of rows currently in our model.
- */
 int PreferencesListModel::rowCount(const QModelIndex &QUNUSED(p)) const
 {
 	return widgets.count();
 }
 
-/*!
- * This function returns the data for the given model index and role. We will
- * return valid data for a display role (the widget title) as well as the
- * decoration role (the widget icon).
- *
- * \param i The model index (i.e., the row) to get data for.
- * \param r The role to get data for.
- * \return The data matching the given row and role.
- */
 QVariant PreferencesListModel::data(const QModelIndex &i, int r) const
 {
 	int idx = i.row();
@@ -93,15 +69,6 @@ QVariant PreferencesListModel::data(const QModelIndex &i, int r) const
 	};
 }
 
-/*!
- * This function returns an invalid QVariant, since out model doesn't keep
- * track of any "header data."
- *
- * \param s The section number of the desired data - this is ignored.
- * \param o The orientation the data will be displayed in - this is ignored.
- * \param r The role of the desired data - this is ignored.
- * \return An invalid QVariant, since we do not store any header data.
- */
 QVariant PreferencesListModel::headerData(int QUNUSED(s),
                                           Qt::Orientation QUNUSED(o),
                                           int QUNUSED(r)) const
@@ -109,44 +76,22 @@ QVariant PreferencesListModel::headerData(int QUNUSED(s),
 	return QVariant(QVariant::Invalid);
 }
 
-/*!
- * This is a utility function which returns the preferences widget on the given
- * row of our model. If the given row number is out-of-bounds, then this
- * function will return NULL instead.
- *
- * \param i The row of the desired widget.
- * \return The desired preferences widget.
- */
 PreferencesWidget *PreferencesListModel::widgetAt(int i) const
 {
 	if((i < 0) || (i >= rowCount()))
-		return NULL;
+		return nullptr;
 
 	return widgets.at(i);
 }
 
-/*!
- * This is a utility function which returns the preferences widget on the given
- * row of our model, encapsulated in a scroll area. If the given row number is
- * out-of-bounds, then this function will return NULL instead.
- *
- * \param i The row of the desired widget.
- * \return The desired preferences widget, encapsulated in a scroll area.
- */
 PreferencesScrollArea *PreferencesListModel::scrollWidgetAt(int i) const
 {
 	if((i < 0) || (i >= rowCount()))
-		return NULL;
+		return nullptr;
 
 	return scrollWidgets.at(i);
 }
 
-/*!
- * This function appends the given preferences widget to our model's list of
- * widgets.
- *
- * \param w The widget to add to our model.
- */
 void PreferencesListModel::addPreferencesWidget(PreferencesWidget *w)
 {
 	// Add the widget to our list.

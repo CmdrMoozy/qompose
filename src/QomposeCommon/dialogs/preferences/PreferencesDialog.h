@@ -44,10 +44,27 @@ class PreferencesDialog : public QDialog
 	Q_OBJECT
 
 public:
-	PreferencesDialog(Settings *, QWidget * = nullptr,
-	                  Qt::WindowFlags = nullptr);
-	virtual ~PreferencesDialog();
+	/*!
+	 * This is our default constructor, which creates a new instance of our
+	 * preferences dialog.
+	 *
+	 * \param s The settings instance to use to persist settings.
+	 * \param p The parent widget for this dialog.
+	 * \param f The window flags for this dialog.
+	 */
+	PreferencesDialog(Settings *s, QWidget *p = nullptr,
+	                  Qt::WindowFlags f = nullptr);
 
+	PreferencesDialog(const PreferencesDialog &) = delete;
+	virtual ~PreferencesDialog() = default;
+
+	PreferencesDialog &operator=(const PreferencesDialog &) = delete;
+
+	/*!
+	 * This function discards any changes that have been made to any of our
+	 * preferences widgets by instructing each widget in our model to
+	 * discard its changes.
+	 */
 	void discardChanges();
 
 private:
@@ -71,15 +88,42 @@ private:
 	QPushButton *cancelButton;
 	QPushButton *defaultsButton;
 
-	PreferencesDialog(const PreferencesDialog &);
-	PreferencesDialog &operator=(const PreferencesDialog &);
-
+	/*!
+	 * This function initializes our preferences model by creating the
+	 * model as well as all of the widgets that will be placed inside of
+	 * it.
+	 */
 	void createPreferencesModel();
 
 private Q_SLOTS:
-	void doWidgetActivated(const QModelIndex &);
+	/*!
+	 * This function handles a new widget being activated in our list view
+	 * of preferences widgets by displaying the associated widget in our
+	 * dialog's display area.
+	 *
+	 * \param i The model index (row) of the widget that was activated.
+	 */
+	void doWidgetActivated(const QModelIndex &i);
+
+	/*!
+	 * This function handles our OK button being clicked by applying all of
+	 * our preferences values, and then closing our dialog.
+	 */
 	void doOk();
+
+	/*!
+	 * This function handles our apply button being clicked by instructing
+	 * each of the preferences widgets in our model to apply their
+	 * respective settings.
+	 */
 	void doApply();
+
+	/*!
+	 * This function handles our defaults button being clicked by resetting
+	 * all of our preferences values back to their defaults, and then
+	 * instructing each of the preferences widgets in our model to reload
+	 * the settings from the settings instance.
+	 */
 	void doDefaults();
 };
 }

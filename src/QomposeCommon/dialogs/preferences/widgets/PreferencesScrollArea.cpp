@@ -25,12 +25,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new scroll area with the
- * given widget.
- *
- * \param p The widget this scroll area will be displaying.
- */
 PreferencesScrollArea::PreferencesScrollArea(QWidget *p) : QScrollArea(p)
 {
 	setWidgetResizable(true);
@@ -39,19 +33,6 @@ PreferencesScrollArea::PreferencesScrollArea(QWidget *p) : QScrollArea(p)
 	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
-/*!
- * This is our default destructor, which cleans up and destroys our scroll
- * area.
- */
-PreferencesScrollArea::~PreferencesScrollArea()
-{
-}
-
-/*!
- * This function sets the widget this scroll area will be displaying.
- *
- * \param w The new widget to display.
- */
 void PreferencesScrollArea::setWidget(QWidget *w)
 {
 	QScrollArea::setWidget(w);
@@ -60,15 +41,6 @@ void PreferencesScrollArea::setWidget(QWidget *w)
 		resizeFixedHorizontal();
 }
 
-/*!
- * We filter events to catch resize events from the widget we're displaying,
- * to update the size of our scroll area to prevent any horizontal scrolling
- * from being neccessary.
- *
- * \param o The object whose event is being filtered.
- * \param e The event being handled.
- * \return True if the event was handled, or false otherwise.
- */
 bool PreferencesScrollArea::eventFilter(QObject *o, QEvent *e)
 {
 	if((o == widget()) && (e->type() == QEvent::Resize))
@@ -82,13 +54,6 @@ bool PreferencesScrollArea::eventFilter(QObject *o, QEvent *e)
 	}
 }
 
-/*!
- * We handle our superclass's show event to resize our scroll area to prevent
- * horizontal scrolling from being neccessary. Since we do this on resize
- * events too, this is probably unneeded, but it doesn't hurt anything.
- *
- * \param e The event being handled.
- */
 void PreferencesScrollArea::showEvent(QShowEvent *e)
 {
 	QScrollArea::showEvent(e);
@@ -96,14 +61,6 @@ void PreferencesScrollArea::showEvent(QShowEvent *e)
 	resizeFixedHorizontal();
 }
 
-/*!
- * This is a utility function which updates our scroll area's minimum width
- * to be the sum of the width of our vertical scrollbar, and the minimum size
- * hint width of the widget we're displaying.
- *
- * This makes our scroll area always as wide as the widget we're displaying,
- * so no horizontal scrolling is necessary.
- */
 void PreferencesScrollArea::resizeFixedHorizontal()
 {
 	// Get our widget's size.

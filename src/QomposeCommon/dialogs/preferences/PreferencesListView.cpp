@@ -23,11 +23,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new preferences list view.
- *
- * \param p The parent widget to use for this widget.
- */
 PreferencesListView::PreferencesListView(QWidget *p) : QListView(p)
 {
 	setIconSize(QSize(30, 30));
@@ -38,18 +33,6 @@ PreferencesListView::PreferencesListView(QWidget *p) : QListView(p)
 	setFont(f);
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our object.
- */
-PreferencesListView::~PreferencesListView()
-{
-}
-
-/*!
- * This function sets the preferences list model our view should be using.
- *
- * \param m The new model for our view to use.
- */
 void PreferencesListView::setModel(PreferencesListModel *m)
 {
 	QAbstractItemModel *aim = dynamic_cast<QAbstractItemModel *>(m);
@@ -57,12 +40,6 @@ void PreferencesListView::setModel(PreferencesListModel *m)
 	setModel(aim);
 }
 
-/*!
- * We override our superclass's setModel() function to make it private,
- * so we can ensure any model we are given is a PreferencesListModel.
- *
- * \param m The new model to use.
- */
 void PreferencesListView::setModel(QAbstractItemModel *m)
 {
 	QListView::setModel(m);

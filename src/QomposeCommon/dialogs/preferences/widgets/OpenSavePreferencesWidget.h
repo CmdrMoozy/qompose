@@ -35,11 +35,35 @@ class Settings;
 class OpenSavePreferencesWidget : public PreferencesWidget
 {
 public:
+	/*!
+	 * This is our default constructor, which creates a new instance of our
+	 * open/save preferences widget.
+	 *
+	 * \param s The settings instance to use to save preferences values.
+	 * \param p The parent widget to use for this widget.
+	 * \param f The window flags to use for this widget.
+	 */
 	OpenSavePreferencesWidget(Settings *s, QWidget *p = nullptr,
 	                          Qt::WindowFlags f = nullptr);
-	virtual ~OpenSavePreferencesWidget();
 
+	OpenSavePreferencesWidget(const OpenSavePreferencesWidget &) = delete;
+
+	virtual ~OpenSavePreferencesWidget() = default;
+
+	OpenSavePreferencesWidget &
+	operator=(const OpenSavePreferencesWidget &) = delete;
+
+	/*!
+	 * We implement our superclass's apply() function to save our various
+	 * open/save preferences values using our settings instance.
+	 */
 	virtual void apply();
+
+	/*!
+	 * We implement our superclass's discardChanges() function to discard
+	 * any preferences changes that may have been made to our widget by
+	 * reloading the existing values from our settings instance.
+	 */
 	virtual void discardChanges();
 
 private:
@@ -49,9 +73,10 @@ private:
 	QGridLayout *generalLayout;
 	QCheckBox *stripTrailingSpacesCheckBox;
 
-	OpenSavePreferencesWidget(const OpenSavePreferencesWidget &);
-	OpenSavePreferencesWidget &operator=(const OpenSavePreferencesWidget &);
-
+	/*!
+	 * This function initializes our widget's GUI by creating the various
+	 * widgets we contain, and adding them to our layout.
+	 */
 	void initializeGUI();
 };
 }

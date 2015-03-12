@@ -36,11 +36,35 @@ class Settings;
 class GeneralPreferencesWidget : public PreferencesWidget
 {
 public:
+	/*!
+	 * This is our default constructor, which creates a new instance of our
+	 * general preferences widget.
+	 *
+	 * \param s The settings instance to use to persist settings values.
+	 * \param p The parent widget to use for this widget.
+	 * \param f The window flags to use for this widget.
+	 */
 	GeneralPreferencesWidget(Settings *s, QWidget *p = nullptr,
 	                         Qt::WindowFlags f = nullptr);
-	virtual ~GeneralPreferencesWidget();
 
+	GeneralPreferencesWidget(const GeneralPreferencesWidget &) = delete;
+
+	virtual ~GeneralPreferencesWidget() = default;
+
+	GeneralPreferencesWidget &
+	operator=(const GeneralPreferencesWidget &) = delete;
+
+	/*!
+	 * We implement our superclass's apply() function to save our various
+	 * general preferences values using our settings instance.
+	 */
 	virtual void apply();
+
+	/*!
+	 * We implement our superclass's discardChanges() function to discard
+	 * any preferences changes that may have been made to our widget by
+	 * reloading the existing values from our settings instance.
+	 */
 	virtual void discardChanges();
 
 private:
@@ -51,9 +75,10 @@ private:
 	QSpinBox *recentListSizeSpinBox;
 	QCheckBox *saveWindowAttribsCheckBox;
 
-	GeneralPreferencesWidget(const GeneralPreferencesWidget &);
-	GeneralPreferencesWidget &operator=(const GeneralPreferencesWidget &);
-
+	/*!
+	 * This function initializes our widget's GUI by creating the various
+	 * widgets we contain, and adding them to our layout.
+	 */
 	void initializeGUI();
 };
 }
