@@ -111,6 +111,52 @@ QMenu *createFileMenu(QWidget *parent, qompose::Settings *settings)
 	                            QKeySequence(), "application-exit")});
 	return buildMenu(parent, "&File", items);
 }
+
+QMenu *createEditMenu(QWidget *parent)
+{
+	qompose::gui_utils::ConnectionFunctor parentConn(parent);
+	const DescriptorList items(
+	        {MenuItemDescriptor("&Undo",
+	                            parentConn(SIGNAL(undoTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_Z, "edit-undo"),
+	         MenuItemDescriptor("&Redo",
+	                            parentConn(SIGNAL(redoTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_Y, "edit-redo"),
+	         SeparatorDescriptor(),
+	         MenuItemDescriptor("Cu&t",
+	                            parentConn(SIGNAL(cutTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_X, "edit-cut"),
+	         MenuItemDescriptor("&Copy",
+	                            parentConn(SIGNAL(copyTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_C, "edit-copy"),
+	         MenuItemDescriptor("&Paste",
+	                            parentConn(SIGNAL(pasteTriggered())),
+	                            Qt::CTRL + Qt::Key_V, "edit-paste"),
+	         MenuItemDescriptor(
+	                 "Duplicat&e Line",
+	                 parentConn(SIGNAL(duplicateLineTriggered(bool))),
+	                 Qt::CTRL + Qt::Key_D),
+	         MenuItemDescriptor(
+	                 "Select &All",
+	                 parentConn(SIGNAL(selectAllTriggered(bool))),
+	                 Qt::CTRL + Qt::Key_A, "edit-select-all"),
+	         MenuItemDescriptor("Dese&lect",
+	                            parentConn(SIGNAL(deselectTriggered(bool))),
+	                            Qt::CTRL + Qt::SHIFT + Qt::Key_A),
+	         SeparatorDescriptor(),
+	         MenuItemDescriptor(
+	                 "&Increase Selection Indent",
+	                 parentConn(SIGNAL(increaseIndentTriggered(bool)))),
+	         MenuItemDescriptor(
+	                 "&Decrease Selection Indent",
+	                 parentConn(SIGNAL(decreaseIndentTriggered(bool)))),
+	         SeparatorDescriptor(),
+	         MenuItemDescriptor(
+	                 "Pre&ferences...",
+	                 parentConn(SIGNAL(preferencesTriggered(bool))),
+	                 QKeySequence(), "preferences-other")});
+	return buildMenu(parent, "&Edit", items);
+}
 }
 
 namespace qompose
@@ -118,22 +164,10 @@ namespace qompose
 MainMenu::MainMenu(Settings *s, QWidget *p)
         : QMenuBar(p),
           settings(s),
-          editMenu(nullptr),
           viewMenu(nullptr),
           searchMenu(nullptr),
           buffersMenu(nullptr),
           helpMenu(nullptr),
-          undoAction(nullptr),
-          redoAction(nullptr),
-          cutAction(nullptr),
-          copyAction(nullptr),
-          pasteAction(nullptr),
-          duplicateLineAction(nullptr),
-          selectAllAction(nullptr),
-          deselectAction(nullptr),
-          increaseIndentAction(nullptr),
-          decreaseIndentAction(nullptr),
-          preferencesAction(nullptr),
           showBrowserAction(nullptr),
           findAction(nullptr),
           findNextAction(nullptr),
@@ -152,47 +186,6 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 #endif
 {
 	// Initialize our actions.
-
-	undoAction = new QAction(tr("&Undo"), this);
-	undoAction->setShortcut(Qt::CTRL + Qt::Key_Z);
-	undoAction->setIcon(gui_utils::getIconFromTheme("edit-undo"));
-
-	redoAction = new QAction(tr("&Redo"), this);
-	redoAction->setShortcut(Qt::CTRL + Qt::Key_Y);
-	redoAction->setIcon(gui_utils::getIconFromTheme("edit-redo"));
-
-	cutAction = new QAction(tr("Cu&t"), this);
-	cutAction->setShortcut(Qt::CTRL + Qt::Key_X);
-	cutAction->setIcon(gui_utils::getIconFromTheme("edit-cut"));
-
-	copyAction = new QAction(tr("&Copy"), this);
-	copyAction->setShortcut(Qt::CTRL + Qt::Key_C);
-	copyAction->setIcon(gui_utils::getIconFromTheme("edit-copy"));
-
-	pasteAction = new QAction(tr("&Paste"), this);
-	pasteAction->setShortcut(Qt::CTRL + Qt::Key_V);
-	pasteAction->setIcon(gui_utils::getIconFromTheme("edit-paste"));
-
-	duplicateLineAction = new QAction(tr("Duplicat&e Line"), this);
-	duplicateLineAction->setShortcut(Qt::CTRL + Qt::Key_D);
-
-	selectAllAction = new QAction(tr("Select &All"), this);
-	selectAllAction->setShortcut(Qt::CTRL + Qt::Key_A);
-	selectAllAction->setIcon(
-	        gui_utils::getIconFromTheme("edit-select-all"));
-
-	deselectAction = new QAction(tr("Dese&lect"), this);
-	deselectAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
-
-	increaseIndentAction =
-	        new QAction(tr("&Increase Selection Indent"), this);
-
-	decreaseIndentAction =
-	        new QAction(tr("&Decrease Selection Indent"), this);
-
-	preferencesAction = new QAction(tr("Pre&ferences..."), this);
-	preferencesAction->setIcon(
-	        gui_utils::getIconFromTheme("preferences-other"));
 
 	showBrowserAction = new QAction(tr("Show File &Browser"), this);
 	showBrowserAction->setCheckable(true);
@@ -249,22 +242,7 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	// Add these actions to our menu bar.
 
 	addMenu(createFileMenu(this, settings));
-
-	editMenu = new QMenu(tr("&Edit"), this);
-	editMenu->addAction(undoAction);
-	editMenu->addAction(redoAction);
-	editMenu->addSeparator();
-	editMenu->addAction(cutAction);
-	editMenu->addAction(copyAction);
-	editMenu->addAction(pasteAction);
-	editMenu->addAction(duplicateLineAction);
-	editMenu->addAction(selectAllAction);
-	editMenu->addAction(deselectAction);
-	editMenu->addSeparator();
-	editMenu->addAction(increaseIndentAction);
-	editMenu->addAction(decreaseIndentAction);
-	editMenu->addSeparator();
-	editMenu->addAction(preferencesAction);
+	addMenu(createEditMenu(this));
 
 	viewMenu = new QMenu(tr("&View"), this);
 	viewMenu->addAction(showBrowserAction);
@@ -292,7 +270,6 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	helpMenu->addAction(debugAction);
 #endif
 
-	addMenu(editMenu);
 	addMenu(viewMenu);
 	addMenu(searchMenu);
 	addMenu(buffersMenu);
@@ -300,8 +277,6 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	// Connect certain signals.
 
-	QObject::connect(preferencesAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(preferencesTriggered(bool)));
 	QObject::connect(showBrowserAction, SIGNAL(triggered(bool)), this,
 	                 SIGNAL(showBrowserTriggered(bool)));
 	QObject::connect(findAction, SIGNAL(triggered(bool)), this,
@@ -352,27 +327,27 @@ void MainMenu::connectBufferWidget(const BufferWidget *b)
 	QObject::connect(this, SIGNAL(closeTriggered(bool)), b,
 	                 SLOT(doClose()));
 
+	// Connect edit menu actions.
+
+	QObject::connect(this, SIGNAL(undoTriggered(bool)), b, SLOT(doUndo()));
+	QObject::connect(this, SIGNAL(redoTriggered(bool)), b, SLOT(doRedo()));
+	QObject::connect(this, SIGNAL(cutTriggered(bool)), b, SLOT(doCut()));
+	QObject::connect(this, SIGNAL(copyTriggered(bool)), b, SLOT(doCopy()));
+	QObject::connect(this, SIGNAL(pasteTriggered(bool)), b,
+	                 SLOT(doPaste()));
+	QObject::connect(this, SIGNAL(duplicateLineTriggered(bool)), b,
+	                 SLOT(doDuplicateLine()));
+	QObject::connect(this, SIGNAL(selectAllTriggered(bool)), b,
+	                 SLOT(doSelectAll()));
+	QObject::connect(this, SIGNAL(deselectTriggered(bool)), b,
+	                 SLOT(doDeselect()));
+	QObject::connect(this, SIGNAL(increaseIndentTriggered(bool)), b,
+	                 SLOT(doIncreaseIndent()));
+	QObject::connect(this, SIGNAL(decreaseIndentTriggered(bool)), b,
+	                 SLOT(doDecreaseIndent()));
+
 	// Connect the rest of our actions.
 
-	QObject::connect(undoAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doUndo()));
-	QObject::connect(redoAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doRedo()));
-	QObject::connect(cutAction, SIGNAL(triggered(bool)), b, SLOT(doCut()));
-	QObject::connect(copyAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doCopy()));
-	QObject::connect(pasteAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doPaste()));
-	QObject::connect(duplicateLineAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doDuplicateLine()));
-	QObject::connect(selectAllAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doSelectAll()));
-	QObject::connect(deselectAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doDeselect()));
-	QObject::connect(increaseIndentAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doIncreaseIndent()));
-	QObject::connect(decreaseIndentAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doDecreaseIndent()));
 	QObject::connect(previousBufferAction, SIGNAL(triggered(bool)), b,
 	                 SLOT(doPreviousBuffer()));
 	QObject::connect(nextBufferAction, SIGNAL(triggered(bool)), b,

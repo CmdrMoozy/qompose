@@ -55,23 +55,10 @@ public:
 private:
 	Settings *settings;
 
-	QMenu *editMenu;
 	QMenu *viewMenu;
 	QMenu *searchMenu;
 	QMenu *buffersMenu;
 	QMenu *helpMenu;
-
-	QAction *undoAction;
-	QAction *redoAction;
-	QAction *cutAction;
-	QAction *copyAction;
-	QAction *pasteAction;
-	QAction *duplicateLineAction;
-	QAction *selectAllAction;
-	QAction *deselectAction;
-	QAction *increaseIndentAction;
-	QAction *decreaseIndentAction;
-	QAction *preferencesAction;
 
 	QAction *showBrowserAction;
 
@@ -113,6 +100,16 @@ Q_SIGNALS:
 	void printPreviewTriggered(bool);
 	void closeTriggered(bool);
 	void exitTriggered(bool);
+	void undoTriggered(bool);
+	void redoTriggered(bool);
+	void cutTriggered(bool);
+	void copyTriggered(bool);
+	void pasteTriggered(bool);
+	void duplicateLineTriggered(bool);
+	void selectAllTriggered(bool);
+	void deselectTriggered(bool);
+	void increaseIndentTriggered(bool);
+	void decreaseIndentTriggered(bool);
 	void preferencesTriggered(bool);
 	void showBrowserTriggered(bool);
 	void findTriggered(bool);
