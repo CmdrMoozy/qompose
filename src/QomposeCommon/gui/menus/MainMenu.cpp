@@ -21,7 +21,6 @@
 #include <utility>
 #include <vector>
 
-#include <QAction>
 #include <QMenu>
 #include <QObject>
 
@@ -190,93 +189,63 @@ QMenu *createSearchMenu(QWidget *parent)
 	                            Qt::CTRL + Qt::Key_G)});
 	return buildMenu(parent, "&Search", items);
 }
+
+QMenu *createBuffersMenu(QWidget *parent)
+{
+	qompose::gui_utils::ConnectionFunctor parentConn(parent);
+	const DescriptorList items(
+	        {MenuItemDescriptor(
+	                 "&Previous Buffer",
+	                 parentConn(SIGNAL(previousBufferTriggered(bool))),
+	                 Qt::ALT + Qt::Key_Left, "go-previous"),
+	         MenuItemDescriptor(
+	                 "&Next Buffer",
+	                 parentConn(SIGNAL(nextBufferTriggered(bool))),
+	                 Qt::ALT + Qt::Key_Right, "go-next"),
+	         SeparatorDescriptor(),
+	         MenuItemDescriptor(
+	                 "Move Buffer &Left",
+	                 parentConn(SIGNAL(moveBufferLeftTriggered(bool))),
+	                 Qt::CTRL + Qt::ALT + Qt::Key_Left, "go-previous"),
+	         MenuItemDescriptor(
+	                 "Move Buffer &Right",
+	                 parentConn(SIGNAL(moveBufferRightTriggered(bool))),
+	                 Qt::CTRL + Qt::ALT + Qt::Key_Right, "go-next")});
+	return buildMenu(parent, "&Buffers", items);
+}
+
+QMenu *createHelpMenu(QWidget *parent)
+{
+	qompose::gui_utils::ConnectionFunctor parentConn(parent);
+	const DescriptorList items(
+	        {MenuItemDescriptor(
+	                 "&About Qompose...",
+	                 parentConn(SIGNAL(aboutQomposeTriggered(bool))),
+	                 QKeySequence(), "help-about"),
+	         MenuItemDescriptor("About &Qt...",
+	                            parentConn(SIGNAL(aboutQtTriggered(bool))),
+	                            QKeySequence(), "help-about")
+#ifdef QOMPOSE_DEBUG
+	         ,
+	         SeparatorDescriptor(),
+	         MenuItemDescriptor("Debugging...",
+	                            parentConn(SIGNAL(debugTriggered(bool))))
+#endif
+	        });
+	return buildMenu(parent, "&Help", items);
+}
 }
 
 namespace qompose
 {
-MainMenu::MainMenu(Settings *s, QWidget *p)
-        : QMenuBar(p),
-          settings(s),
-          buffersMenu(nullptr),
-          helpMenu(nullptr),
-          previousBufferAction(nullptr),
-          nextBufferAction(nullptr),
-          moveBufferLeftAction(nullptr),
-          moveBufferRightAction(nullptr),
-          aboutQomposeAction(nullptr),
-          aboutQtAction(nullptr)
-#ifdef QOMPOSE_DEBUG
-          ,
-          debugAction(nullptr)
-#endif
+MainMenu::MainMenu(Settings *settings, QWidget *p) : QMenuBar(p)
 {
-	// Initialize our actions.
-
-	previousBufferAction = new QAction(tr("&Previous Buffer"), this);
-	previousBufferAction->setShortcut(Qt::ALT + Qt::Key_Left);
-	previousBufferAction->setIcon(
-	        gui_utils::getIconFromTheme("go-previous"));
-
-	nextBufferAction = new QAction(tr("&Next Buffer"), this);
-	nextBufferAction->setShortcut(Qt::ALT + Qt::Key_Right);
-	nextBufferAction->setIcon(gui_utils::getIconFromTheme("go-next"));
-
-	moveBufferLeftAction = new QAction(tr("Move Buffer &Left"), this);
-	moveBufferLeftAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Left);
-	moveBufferLeftAction->setIcon(
-	        gui_utils::getIconFromTheme("go-previous"));
-
-	moveBufferRightAction = new QAction(tr("Move Buffer &Right"), this);
-	moveBufferRightAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Right);
-	moveBufferRightAction->setIcon(gui_utils::getIconFromTheme("go-next"));
-
-	aboutQomposeAction = new QAction(tr("&About Qompose..."), this);
-	aboutQomposeAction->setIcon(gui_utils::getIconFromTheme("help-about"));
-
-	aboutQtAction = new QAction(tr("About &Qt..."), this);
-	aboutQtAction->setIcon(gui_utils::getIconFromTheme("help-about"));
-
-#ifdef QOMPOSE_DEBUG
-	debugAction = new QAction(tr("Debugging..."), this);
-#endif
-
-	// Add these actions to our menu bar.
-
 	addMenu(createFileMenu(this, settings));
 	addMenu(createEditMenu(this));
 	addMenu(createViewMenu(this));
 	addMenu(createSearchMenu(this));
-
-	buffersMenu = new QMenu(tr("&Buffers"), this);
-	buffersMenu->addAction(previousBufferAction);
-	buffersMenu->addAction(nextBufferAction);
-	buffersMenu->addSeparator();
-	buffersMenu->addAction(moveBufferLeftAction);
-	buffersMenu->addAction(moveBufferRightAction);
-
-	helpMenu = new QMenu(tr("&Help"), this);
-	helpMenu->addAction(aboutQomposeAction);
-	helpMenu->addAction(aboutQtAction);
-
-#ifdef QOMPOSE_DEBUG
-	helpMenu->addSeparator();
-	helpMenu->addAction(debugAction);
-#endif
-
-	addMenu(buffersMenu);
-	addMenu(helpMenu);
-
-	// Connect certain signals.
-
-	QObject::connect(aboutQomposeAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(aboutQomposeTriggered(bool)));
-	QObject::connect(aboutQtAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(aboutQtTriggered(bool)));
-
-#ifdef QOMPOSE_DEBUG
-	QObject::connect(debugAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(debugTriggered(bool)));
-#endif
+	addMenu(createBuffersMenu(this));
+	addMenu(createHelpMenu(this));
 }
 
 MainMenu::~MainMenu()
@@ -325,15 +294,15 @@ void MainMenu::connectBufferWidget(const BufferWidget *b)
 	QObject::connect(this, SIGNAL(decreaseIndentTriggered(bool)), b,
 	                 SLOT(doDecreaseIndent()));
 
-	// Connect the rest of our actions.
+	// Connect buffers menu actions.
 
-	QObject::connect(previousBufferAction, SIGNAL(triggered(bool)), b,
+	QObject::connect(this, SIGNAL(previousBufferTriggered(bool)), b,
 	                 SLOT(doPreviousBuffer()));
-	QObject::connect(nextBufferAction, SIGNAL(triggered(bool)), b,
+	QObject::connect(this, SIGNAL(nextBufferTriggered(bool)), b,
 	                 SLOT(doNextBuffer()));
-	QObject::connect(moveBufferLeftAction, SIGNAL(triggered(bool)), b,
+	QObject::connect(this, SIGNAL(moveBufferLeftTriggered(bool)), b,
 	                 SLOT(doMoveBufferLeft()));
-	QObject::connect(moveBufferRightAction, SIGNAL(triggered(bool)), b,
+	QObject::connect(this, SIGNAL(moveBufferRightTriggered(bool)), b,
 	                 SLOT(doMoveBufferRight()));
 }
 

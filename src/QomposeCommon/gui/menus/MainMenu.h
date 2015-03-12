@@ -21,14 +21,10 @@
 
 #include <QMenuBar>
 
-class QMenu;
-class QAction;
-
 namespace qompose
 {
 class BufferWidget;
 class Settings;
-class RecentMenu;
 
 /*!
  * \brief This class implements Qompose's main menu bar.
@@ -48,30 +44,12 @@ class MainMenu : public QMenuBar
 
 public:
 	MainMenu(Settings *, QWidget * = nullptr);
+	MainMenu(const MainMenu &) = delete;
 	virtual ~MainMenu();
 
+	MainMenu &operator=(const MainMenu &) = delete;
+
 	void connectBufferWidget(const BufferWidget *);
-
-private:
-	Settings *settings;
-
-	QMenu *buffersMenu;
-	QMenu *helpMenu;
-
-	QAction *previousBufferAction;
-	QAction *nextBufferAction;
-	QAction *moveBufferLeftAction;
-	QAction *moveBufferRightAction;
-
-	QAction *aboutQomposeAction;
-	QAction *aboutQtAction;
-
-#ifdef QOMPOSE_DEBUG
-	QAction *debugAction;
-#endif
-
-	MainMenu(const MainMenu &);
-	MainMenu &operator=(const MainMenu &);
 
 private Q_SLOTS:
 	void doNewWindow();
@@ -107,12 +85,13 @@ Q_SIGNALS:
 	void findPreviousTriggered(bool);
 	void replaceTriggered(bool);
 	void goToTriggered(bool);
+	void previousBufferTriggered(bool);
+	void nextBufferTriggered(bool);
+	void moveBufferLeftTriggered(bool);
+	void moveBufferRightTriggered(bool);
 	void aboutQomposeTriggered(bool);
 	void aboutQtTriggered(bool);
-
-#ifdef QOMPOSE_DEBUG
 	void debugTriggered(bool);
-#endif
 
 	void pathOpened(const QString &);
 };
