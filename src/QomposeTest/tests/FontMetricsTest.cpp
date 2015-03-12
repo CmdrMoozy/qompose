@@ -22,29 +22,18 @@
 
 #include <QFont>
 
-namespace qompose
+namespace
 {
-namespace test
-{
-/*!
- * This function executes all of the tests this class defines.
- */
-void FontMetricsTest::test()
-{
-	testIsMonospaced();
-	testGetColumnWidth();
-}
-
 /*!
  * This function tests that our font metrics class' isMonospaced() function can
  * correctly identify monospaced and non-monospaced fonts.
  */
-void FontMetricsTest::testIsMonospaced()
+void testIsMonospaced()
 {
 	// Test that we can identify monospaced fonts.
 
 	QFont courier(QString("Courier New"), 12);
-	FontMetrics courierMetrics(courier);
+	qompose::FontMetrics courierMetrics(courier);
 
 	vrfy::assert::assertTrue(courier.exactMatch());
 	vrfy::assert::assertEquals(true, courierMetrics.isMonospaced());
@@ -52,7 +41,7 @@ void FontMetricsTest::testIsMonospaced()
 	// Test that we can identify non-monospaced fonts.
 
 	QFont times(QString("Times New Roman"), 12);
-	FontMetrics timesMetrics(times);
+	qompose::FontMetrics timesMetrics(times);
 
 	vrfy::assert::assertTrue(times.exactMatch());
 	vrfy::assert::assertEquals(false, timesMetrics.isMonospaced());
@@ -62,12 +51,23 @@ void FontMetricsTest::testIsMonospaced()
  * This function tests that our font metrics class' getColumnWidthF() function
  * can correctly compute column widths.
  */
-void FontMetricsTest::testGetColumnWidth()
+void testGetColumnWidth()
 {
 	QFont courier(QString("Courier New"), 11);
-	FontMetrics metrics(courier);
+	qompose::FontMetrics metrics(courier);
 
 	vrfy::assert::assertEquals(720.0, metrics.getColumnWidthF(80));
+}
+}
+
+namespace qompose
+{
+namespace test
+{
+void FontMetricsTest::test()
+{
+	testIsMonospaced();
+	testGetColumnWidth();
 }
 }
 }

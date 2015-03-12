@@ -34,6 +34,12 @@ public:
 	HotkeyMapTest() = default;
 	virtual ~HotkeyMapTest() = default;
 
+	/*!
+	 * We implement our superclass's test() function to perform a test
+	 * against the HotkeyMap implementation. We'll setup a "typical"
+	 * hotkey setup, and then test a series of example QKeyEvents against
+	 * it.
+	 */
 	virtual void test();
 };
 }

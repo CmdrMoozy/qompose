@@ -34,6 +34,10 @@ public:
 	DecoratedTextEditTest() = default;
 	virtual ~DecoratedTextEditTest() = default;
 
+	/*!
+	 * This function executes all of the various decorated text edit unit
+	 * tests.
+	 */
 	virtual void test();
 };
 }

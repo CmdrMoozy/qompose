@@ -34,11 +34,10 @@ public:
 	FontMetricsTest() = default;
 	virtual ~FontMetricsTest() = default;
 
+	/*!
+	 * This function executes all of the tests this class defines.
+	 */
 	virtual void test();
-
-private:
-	void testIsMonospaced();
-	void testGetColumnWidth();
 };
 }
 }

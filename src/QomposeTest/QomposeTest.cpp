@@ -25,6 +25,12 @@
 #include "QomposeTest/tests/HotkeyTest.h"
 #include "QomposeTest/tests/HotkeyMapTest.h"
 
+/*!
+ * This is our main function, which executes our unit tests.
+ *
+ * \param argc The number of command-line arguments.
+ * \param argv The command-line arguments.
+ */
 int main(int argc, char **argv)
 {
 	QApplication app(argc, argv, false);

@@ -34,12 +34,11 @@ public:
 	HotkeyTest() = default;
 	virtual ~HotkeyTest() = default;
 
+	/*!
+	 * We implement our superclass's test() function to perform our
+	 * various tests against the Hotkey class.
+	 */
 	virtual void test();
-
-private:
-	void testHotkeyConstruction();
-	void testHotkeyCopying();
-	void testHotkeyMatching();
 };
 }
 }

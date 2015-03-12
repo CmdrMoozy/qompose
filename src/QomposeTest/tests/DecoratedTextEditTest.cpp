@@ -151,9 +151,6 @@ namespace qompose
 {
 namespace test
 {
-/*!
- * This function executes all of the various decorated text edit unit tests.
- */
 void DecoratedTextEditTest::test()
 {
 	testDefaultState();

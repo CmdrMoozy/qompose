@@ -22,28 +22,15 @@
 
 #include "QomposeCommon/util/Hotkey.h"
 
-namespace qompose
+namespace
 {
-namespace test
-{
-/*!
- * We implement our superclass's test() function to perform our various tests
- * against the Hotkey class.
- */
-void HotkeyTest::test()
-{
-	testHotkeyConstruction();
-	testHotkeyCopying();
-	testHotkeyMatching();
-}
-
 /*!
  * This function tests that the various Hotkey constructors initialize
  * the resulting object's internal state properly.
  */
-void HotkeyTest::testHotkeyConstruction()
+void testHotkeyConstruction()
 {
-	Hotkey a(Qt::Key_A);
+	qompose::Hotkey a(Qt::Key_A);
 
 	vrfy::assert::assertEquals(a.getKey(), Qt::Key_A);
 	vrfy::assert::assertEquals(a.getKeyInteger(),
@@ -53,7 +40,7 @@ void HotkeyTest::testHotkeyConstruction()
 	vrfy::assert::assertEquals(a.getWhitelistedModifiers(),
 	                           Qt::KeyboardModifiers(Qt::NoModifier));
 
-	Hotkey b(Qt::Key_A, Qt::ControlModifier);
+	qompose::Hotkey b(Qt::Key_A, Qt::ControlModifier);
 
 	vrfy::assert::assertEquals(b.getKey(), Qt::Key_A);
 	vrfy::assert::assertEquals(b.getKeyInteger(),
@@ -63,7 +50,7 @@ void HotkeyTest::testHotkeyConstruction()
 	vrfy::assert::assertEquals(b.getWhitelistedModifiers(),
 	                           Qt::KeyboardModifiers(Qt::ControlModifier));
 
-	Hotkey c(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
+	qompose::Hotkey c(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
 
 	vrfy::assert::assertEquals(c.getKey(), Qt::Key_A);
 	vrfy::assert::assertEquals(c.getKeyInteger(),
@@ -78,14 +65,14 @@ void HotkeyTest::testHotkeyConstruction()
  * This function tests that the assignment operator, copy constructor, and
  * equivalence operator from the Hotkey class work properly.
  */
-void HotkeyTest::testHotkeyCopying()
+void testHotkeyCopying()
 {
-	Hotkey a(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
-	Hotkey b(Qt::Key_B);
+	qompose::Hotkey a(Qt::Key_A, Qt::ControlModifier, Qt::ShiftModifier);
+	qompose::Hotkey b(Qt::Key_B);
 
 	vrfy::assert::assertTrue(!(a == b));
 
-	Hotkey c(a);
+	qompose::Hotkey c(a);
 	b = a;
 
 	vrfy::assert::assertTrue(a == b);
@@ -95,9 +82,10 @@ void HotkeyTest::testHotkeyCopying()
 /*!
  * This function tests that Hotkey's matching function works properly.
  */
-void HotkeyTest::testHotkeyMatching()
+void testHotkeyMatching()
 {
-	Hotkey a(Qt::Key_Enter, nullptr, ~Qt::KeyboardModifiers(nullptr));
+	qompose::Hotkey a(Qt::Key_Enter, nullptr,
+	                  ~Qt::KeyboardModifiers(nullptr));
 
 	QKeyEvent aeA(QKeyEvent::KeyPress, Qt::Key_Enter, nullptr);
 	QKeyEvent aeB(QKeyEvent::KeyPress, Qt::Key_Enter,
@@ -111,7 +99,7 @@ void HotkeyTest::testHotkeyMatching()
 	vrfy::assert::assertEquals(a.matches(&aeC), 32);
 	vrfy::assert::assertEquals(a.matches(&aeD), -1);
 
-	Hotkey b(Qt::Key_Home);
+	qompose::Hotkey b(Qt::Key_Home);
 
 	QKeyEvent beA(QKeyEvent::KeyPress, Qt::Key_Home, nullptr);
 	QKeyEvent beB(QKeyEvent::KeyPress, Qt::Key_Home,
@@ -124,6 +112,18 @@ void HotkeyTest::testHotkeyMatching()
 	vrfy::assert::assertEquals(b.matches(&beB), -1);
 	vrfy::assert::assertEquals(b.matches(&beC), -1);
 	vrfy::assert::assertEquals(b.matches(&beD), -1);
+}
+}
+
+namespace qompose
+{
+namespace test
+{
+void HotkeyTest::test()
+{
+	testHotkeyConstruction();
+	testHotkeyCopying();
+	testHotkeyMatching();
 }
 }
 }
