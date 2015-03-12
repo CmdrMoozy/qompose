@@ -117,19 +117,6 @@ private:
 	static bool fileIsGood(const QString &f, QWidget *p = nullptr);
 
 	/*!
-	 * This function attempts to detet the character encoding in the
-	 * specified file. The character encoding will be returned as a string
-	 * which can be used with QTextCodec's codecForName function.
-	 *
-	 * If the character encoding cannot be determined, or if some other
-	 * error occurs, then we will return a null QString instead.
-	 *
-	 * \param f The path to the file whose encoding will be detected.
-	 * \return The encoding the given file seems to be using.
-	 */
-	static QString detectTextCodec(const QString &f);
-
-	/*!
 	 * This is a utility function which prompts the user to select a
 	 * character encoding, in the case where the proper encoding couldn't
 	 * be autodetected for a file.

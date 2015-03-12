@@ -99,6 +99,8 @@ set(QomposeCommon_SOURCES
 
 	util/DocumentWriter.cpp
 	util/DocumentWriter.h
+	util/Encoding.cpp
+	util/Encoding.h
 	util/FindQuery.cpp
 	util/FindQuery.h
 	util/FontMetrics.cpp

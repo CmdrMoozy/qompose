@@ -19,19 +19,14 @@
 #include "FileDialog.h"
 
 #include <cstddef>
-#include <fstream>
-#include <memory>
 
 #include <QStringList>
 #include <QFileInfo>
 #include <QMessageBox>
-#include <QTextCodec>
-#include <QByteArray>
-
-#include <unicode/ucsdet.h>
 
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/dialogs/EncodingDialog.h"
+#include "QomposeCommon/util/Encoding.h"
 
 namespace qompose
 {
@@ -48,7 +43,7 @@ FileDescriptor FileDialog::getNullDescriptor()
 
 FileDescriptor FileDialog::getPathDescriptor(const QString &p)
 {
-	FileDescriptor desc = {p, FileDialog::detectTextCodec(p)};
+	FileDescriptor desc = {p, encoding_utils::detectTextCodec(p)};
 
 	if(desc.textCodec.isNull())
 	{
@@ -125,84 +120,6 @@ bool FileDialog::fileIsGood(const QString &f, QWidget *p)
 	}
 
 	return true;
-}
-
-QString FileDialog::detectTextCodec(const QString &f)
-{
-	// Create our charset detector instance.
-
-	UErrorCode err = U_ZERO_ERROR;
-
-	std::shared_ptr<UCharsetDetector> detector(ucsdet_open(&err),
-	                                           [](UCharsetDetector *p)
-	                                           {
-		ucsdet_close(p);
-	});
-
-	if(U_FAILURE(err))
-		return QString();
-
-	// Read 1 KiB from our file for testing.
-
-	std::ifstream fs(f.toStdString().c_str());
-	std::shared_ptr<char> buf(new char[1024], [](char *p)
-	                          {
-		delete[] p;
-	});
-
-	fs.read(buf.get(), 1024);
-	size_t read = static_cast<size_t>(fs.gcount());
-
-	fs.close();
-
-	// Try to detect the charset.
-
-	ucsdet_setText(detector.get(), buf.get(), read, &err);
-
-	if(U_FAILURE(err))
-		return QString();
-
-	const UCharsetMatch *cs = ucsdet_detect(detector.get(), &err);
-
-	if(U_FAILURE(err) || (cs == NULL))
-		return QString();
-
-	// Get the match confidence & charset name.
-
-	int32_t confidence = ucsdet_getConfidence(cs, &err);
-
-	if(U_FAILURE(err))
-		return QString();
-
-	const char *csn = ucsdet_getName(cs, &err);
-
-	if(U_FAILURE(err))
-		return QString();
-
-	QString name(csn);
-
-	// Assuming we're confident enough, return the match.
-
-	if(confidence >= 10)
-	{
-		// Make sure the codec we detected is a valid QTextCodec.
-
-		QList<QByteArray> codecs = QTextCodec::availableCodecs();
-
-		for(int i = 0; i < codecs.size(); ++i)
-		{
-			if(QString(codecs.at(i)) == name)
-			{
-				return name;
-			}
-		}
-
-		return QString();
-	}
-	else
-	{
-		return QString();
-	}
 }
 
 QString FileDialog::promptTextCodec(const QString &f)
