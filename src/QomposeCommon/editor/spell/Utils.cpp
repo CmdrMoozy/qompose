@@ -22,18 +22,6 @@ namespace qompose
 {
 namespace spelling_utils
 {
-/*!
- * This function returns the ISO-1 language code for the given QLocale's
- * language() property. If the language property value is not supported, then
- * a default-constructed QString will be returned instead.
- *
- * For more information, see:
- *
- *     https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
- *
- * \param locale The locale object to inspect.
- * \return The ISO-1 language code for the locale's language.
- */
 QString getLocaleLanguageCode(const QLocale &locale)
 {
 	switch(locale.language())
@@ -306,18 +294,6 @@ QString getLocaleLanguageCode(const QLocale &locale)
 	}
 }
 
-/*!
- * This function returns the ISO 3166-1 alpha-2 country code for the given
- * QLocale's country() property. If the country property value is not
- * supported, then a default-constructed QString will be returned instead.
- *
- * For more information, see:
- *
- *     https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
- *
- * \param locale The locale object to inspect.
- * \return The ISO 3166-1 alpha-2 country code for the locale's country.
- */
 QString getLocaleCountryCode(const QLocale &locale)
 {
 	switch(locale.country())

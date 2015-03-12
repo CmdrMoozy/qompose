@@ -26,11 +26,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new decorated text exit.
- *
- * \param p Our parent widget.
- */
 DecoratedTextEdit::DecoratedTextEdit(QWidget *p)
         : QPlainTextEdit(p),
           gutter(nullptr),
@@ -85,18 +80,6 @@ DecoratedTextEdit::DecoratedTextEdit(QWidget *p)
 	highlightCurrentLine();
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our object.
- */
-DecoratedTextEdit::~DecoratedTextEdit()
-{
-}
-
-/*!
- * This function sets whether or not our gutter is visible.
- *
- * \param v Whether or not our gutter should be visible.
- */
 void DecoratedTextEdit::setGutterVisible(bool v)
 {
 	gutterVisible = v;
@@ -104,23 +87,11 @@ void DecoratedTextEdit::setGutterVisible(bool v)
 	updateGutterWidth();
 }
 
-/*!
- * This function returns whether or not our gutter is currently visible.
- *
- * \return Whether or not our gutter is visible.
- */
 bool DecoratedTextEdit::isGutterVisible()
 {
 	return gutterVisible;
 }
 
-/*!
- * This function returns our current font. Note that the size in the returned
- * font object does NOT include any changes due to our current zoom factor. Our
- * zoomed size can be determined from fontZoomSize().
- *
- * \return Our current font.
- */
 QFont DecoratedTextEdit::font() const
 {
 	// Return a font identical to ours, with a size excluding scaling.
@@ -131,13 +102,6 @@ QFont DecoratedTextEdit::font() const
 	return f;
 }
 
-/*!
- * This function sets our widget's font to the given value. Note that fonts
- * which are assigned a PIXEL SIZE are not allowed - these will be resized to
- * 10 points.
- *
- * \param f The new font to use.
- */
 void DecoratedTextEdit::setFont(const QFont &f)
 {
 	// Make sure we aren't given a pixel-sized font.
@@ -163,27 +127,11 @@ void DecoratedTextEdit::setFont(const QFont &f)
 	fullUpdate();
 }
 
-/*!
- * This function returns our widget's current font zoom factor. The value
- * returned is relative to zero; e.g., a value of 100 means doubling the
- * original font size, whereas a value of -100 means the original size reduced
- * to 0.
- *
- * The minimum value this can return is -100, and there is no maximum value.
- *
- * \return Our current font zooming factor.
- */
 int DecoratedTextEdit::fontZoom() const
 {
 	return currentFontZoom;
 }
 
-/*!
- * This function returns the current font size, including any zooming currently
- * in place.
- *
- * \return Our current font size, including zooming.
- */
 qreal DecoratedTextEdit::fontZoomSize() const
 {
 	qreal scale = static_cast<qreal>(fontZoom()) / 100.0;
@@ -192,16 +140,6 @@ qreal DecoratedTextEdit::fontZoomSize() const
 	return qMax(fsize, 0.0);
 }
 
-/*!
- * This function sets our widget's font zoom. The value given is relative to
- * the current size; e.g., passing 100 means doubling the size, whereas passing
- * -100 means a size of 0.
- *
- * The minimum value that can be set is -100; this results in a size of 0.
- * There is no maximum value, however.
- *
- * \param z The new zoom factor for our font size.
- */
 void DecoratedTextEdit::setFontZoom(int z)
 {
 	// Update the current font zoom factor.
@@ -223,34 +161,16 @@ void DecoratedTextEdit::setFontZoom(int z)
 	setIndentationWidth(indentationWidth);
 }
 
-/*!
- * This is a simple convenience function, which resets our editor's text zoom
- * to the default level (i.e., normally sized text).
- *
- * This is equivalent to calling setFontZoom(0).
- */
 void DecoratedTextEdit::resetFontZoom()
 {
 	setFontZoom(0);
 }
 
-/*!
- * This function returns the width of a tab stop, in spaces (based upon the
- * current font) - NOT in pixels.
- *
- * \return The editor's tab width.
- */
 int DecoratedTextEdit::getIndentationWidth() const
 {
 	return indentationWidth;
 }
 
-/*!
- * This function sets the width of our editor's tab stops, in spaces (based
- * upon the current font) - NOT in pixels.
- *
- * \param w The new tab width to use.
- */
 void DecoratedTextEdit::setIndentationWidth(int w)
 {
 	indentationWidth = qAbs(w);
@@ -263,22 +183,11 @@ void DecoratedTextEdit::setIndentationWidth(int w)
 	document()->setDefaultTextOption(opt);
 }
 
-/*!
- * This function returns the indentation mode this editor is currently using.
- *
- * \return Our current indentation mode.
- */
 IndentationMode DecoratedTextEdit::getIndentationMode() const
 {
 	return indentationMode;
 }
 
-/*!
- * This function sets the indentation mode this editor should use, given a
- * string representatino of an IndentationMode value.
- *
- * \param mode The new indentation mode.
- */
 void DecoratedTextEdit::setIndentationMode(const QString &mode)
 {
 	IndentationMode m = IndentationMode::Tabs;
@@ -291,34 +200,16 @@ void DecoratedTextEdit::setIndentationMode(const QString &mode)
 	setIndentationMode(m);
 }
 
-/*!
- * This function sets the indentation mode this editor should use.
- *
- * \param mode The new indentation mode.
- */
 void DecoratedTextEdit::setIndentationMode(IndentationMode mode)
 {
 	indentationMode = mode;
 }
 
-/*!
- * This function returns whether or not our line wrap guide is currently
- * visible.
- *
- * \return True if the line wrap guide is visible, or false otherwise.
- */
 bool DecoratedTextEdit::isWrapGuideVisible() const
 {
 	return wrapGuideVisible;
 }
 
-/*!
- * This function sets whether or not our line wrap guide should be visible.
- * Note that this function will result in a call to repaint(), so this new
- * visibility value will take effect.
- *
- * \param v Whether or not the line wrap guide should now be visible.
- */
 void DecoratedTextEdit::setWrapGuideVisible(bool v)
 {
 	wrapGuideVisible = v;
@@ -326,32 +217,11 @@ void DecoratedTextEdit::setWrapGuideVisible(bool v)
 	fullUpdate();
 }
 
-/*!
- * This function returns the current width of our line wrap guide, in
- * character columns (that is, the guide will be rendered this many
- * characters away from the left edge of the document).
- *
- * Note that this value is only very approximate for non-monospace
- * fonts.
- *
- * \return The current width of our line wrap guide, in character columns.
- */
 int DecoratedTextEdit::getWrapGuideColumnWidth() const
 {
 	return wrapGuideWidth;
 }
 
-/*!
- * This function sets the width of our line wrap guide, in character
- * columns (that is, the guide will be rendered this many characters
- * away from the left edge of the document).
- *
- * Note that this value is only very approximate for non-monospace
- * fonts, and that this function will result in a call to repaint(),
- * so this new width value will take effect.
- *
- * \param w The new width for the line wrap guide.
- */
 void DecoratedTextEdit::setWrapGuideColumnWidth(int w)
 {
 	wrapGuideWidth = qAbs(w);
@@ -359,23 +229,11 @@ void DecoratedTextEdit::setWrapGuideColumnWidth(int w)
 	fullUpdate();
 }
 
-/*!
- * This function returns the current color of the line wrap guide.
- *
- * \return The color of the line wrap guide.
- */
 QColor DecoratedTextEdit::getWrapGuideColor() const
 {
 	return wrapGuideColor;
 }
 
-/*!
- * This function sets the color the line wrap guide should be rendered
- * in. Note that this function will result in a call to repaint(), so
- * the new color value will take effect.
- *
- * \param c The new color for the line wrap guide.
- */
 void DecoratedTextEdit::setWrapGuideColor(const QColor &c)
 {
 	wrapGuideColor = c;
@@ -383,21 +241,11 @@ void DecoratedTextEdit::setWrapGuideColor(const QColor &c)
 	fullUpdate();
 }
 
-/*!
- * This function returns our editor's foreground (text) color.
- *
- * \return Our editor's foreground color.
- */
 QColor DecoratedTextEdit::getEditorForeground() const
 {
 	return palette().color(QPalette::Text);
 }
 
-/*!
- * This function sets our editor's foreground (text) color.
- *
- * \param c The new foreground color to use.
- */
 void DecoratedTextEdit::setEditorForeground(const QColor &c)
 {
 	QPalette p = palette();
@@ -413,21 +261,11 @@ void DecoratedTextEdit::setEditorForeground(const QColor &c)
 	setPalette(p);
 }
 
-/*!
- * This function returns our editor's background color.
- *
- * \return Our editor's background color.
- */
 QColor DecoratedTextEdit::getEditorBackground() const
 {
 	return palette().color(QPalette::Active, QPalette::Base);
 }
 
-/*!
- * This function sets our editor's background color.
- *
- * \param c The new background color to use.
- */
 void DecoratedTextEdit::setEditorBackground(const QColor &c)
 {
 	QPalette p = palette();
@@ -438,21 +276,11 @@ void DecoratedTextEdit::setEditorBackground(const QColor &c)
 	setPalette(p);
 }
 
-/*!
- * This function returns our editor's current line highlight color.
- *
- * \return Our editor's current line color.
- */
 QColor DecoratedTextEdit::getCurrentLineColor() const
 {
 	return currentLineHighlight;
 }
 
-/*!
- * This function sets our editor's current line highlight color.
- *
- * \param c The new current line color to use.
- */
 void DecoratedTextEdit::setCurrentLineColor(const QColor &c)
 {
 	currentLineHighlight = c;
@@ -460,22 +288,11 @@ void DecoratedTextEdit::setCurrentLineColor(const QColor &c)
 	highlightCurrentLine();
 }
 
-/*!
- * This function returns our editor's gutter's foreground (text) color.
- *
- * \return Our gutter's foreground color.
- */
 QColor DecoratedTextEdit::getGutterForeground() const
 {
 	return gutterForeground;
 }
 
-/*!
- * This function sets our editor's gutter's foreground (text) color. This
- * automatically repaints our gutter, so this change takes effect immediately.
- *
- * \param c The new gutter foreground color to use.
- */
 void DecoratedTextEdit::setGutterForeground(const QColor &c)
 {
 	gutterForeground = c;
@@ -483,22 +300,11 @@ void DecoratedTextEdit::setGutterForeground(const QColor &c)
 	gutter->update();
 }
 
-/*!
- * This function returns our editor's gutter's background color.
- *
- * \return Our gutter's background color.
- */
 QColor DecoratedTextEdit::getGutterBackground() const
 {
 	return gutterBackground;
 }
 
-/*!
- * This function sets our editor's gutter's background color. This
- * automatically repaints our gutter, so this change takes effect immediately.
- *
- * \param c The new gutter background color to use.
- */
 void DecoratedTextEdit::setGutterBackground(const QColor &c)
 {
 	gutterBackground = c;
@@ -506,23 +312,11 @@ void DecoratedTextEdit::setGutterBackground(const QColor &c)
 	gutter->update();
 }
 
-/*!
- * This function returns the current cursor's 1-indexed line number.
- *
- * \return The current cursor's line number.
- */
 int DecoratedTextEdit::getCurrentLine() const
 {
 	return textCursor().blockNumber() + 1;
 }
 
-/*!
- * This function returns the current cursor's 1-indexed column number. This is
- * based upon the pixel offset of the cursor, so we properly account for tab
- * stops.
- *
- * \return The current cursor's column number.
- */
 int DecoratedTextEdit::getCurrentColumn() const
 {
 	FontMetrics metrics(currentFont);
@@ -538,12 +332,6 @@ int DecoratedTextEdit::getCurrentColumn() const
 	return qRound(xoff) + 1;
 }
 
-/*!
- * We override our superclass's paint event to draw some additional decorations
- * on our text edit's viewport.
- *
- * \param e The paint event being handled.
- */
 void DecoratedTextEdit::paintEvent(QPaintEvent *e)
 {
 	// Let our superclass do its painting, and prepare to do our own.
@@ -597,36 +385,18 @@ void DecoratedTextEdit::paintEvent(QPaintEvent *e)
 	}
 }
 
-/*!
- * We override our parent's focus-in event to update our UI when that event
- * occurs.
- *
- * \param e The event being handled.
- */
 void DecoratedTextEdit::focusInEvent(QFocusEvent *e)
 {
 	highlightCurrentLine();
 	QPlainTextEdit::focusInEvent(e);
 }
 
-/*!
- * We override our parent's focus-out event to update our UI when that event
- * occurs.
- *
- * \param e The event being handled.
- */
 void DecoratedTextEdit::focusOutEvent(QFocusEvent *e)
 {
 	highlightCurrentLine();
 	QPlainTextEdit::focusOutEvent(e);
 }
 
-/*!
- * This function handles the resetting of our gutter's geometry when we get
- * resized.
- *
- * \param event The resize event we are handling.
- */
 void DecoratedTextEdit::resizeEvent(QResizeEvent *e)
 {
 	QPlainTextEdit::resizeEvent(e);
@@ -636,17 +406,6 @@ void DecoratedTextEdit::resizeEvent(QResizeEvent *e)
 	        QRect(cr.left(), cr.top(), gutterWidth(), cr.height()));
 }
 
-/*!
- * We handle mouse wheel events to implement text zooming. We implement two
- * wheel actions:
- *
- *     Ctrl + Wheel Forward - Increase font zoom.
- *     Ctrl + Wheel Backward - Decrease font zoom.
- *
- * All other wheel events are handled normally by our superclass.
- *
- * \param e The event being handled.
- */
 void DecoratedTextEdit::wheelEvent(QWheelEvent *e)
 {
 	if(e->modifiers() == Qt::ControlModifier)
@@ -670,14 +429,6 @@ void DecoratedTextEdit::wheelEvent(QWheelEvent *e)
 	}
 }
 
-/*!
- * This function handles any "mouse release" events on our editor by
- * re-highlighting the current line. Ths is necessary to avoid a bug where
- * rapidly clicking/arrow-key-ing can result in the wrong line being
- * highlighted; cursorPositionChanged is somewhat unreliable.
- *
- * \param e The event being handled.
- */
 void DecoratedTextEdit::mouseReleaseEvent(QMouseEvent *e)
 {
 	highlightCurrentLine();
@@ -687,12 +438,6 @@ void DecoratedTextEdit::mouseReleaseEvent(QMouseEvent *e)
 	QPlainTextEdit::mouseReleaseEvent(e);
 }
 
-/*!
- * This function returns a string which contains a single indentation for this
- * editor. This depends on the indentation mode and width.
- *
- * \return A single indentation string for this editor.
- */
 QString DecoratedTextEdit::getIndentString() const
 {
 	switch(getIndentationMode())
@@ -706,59 +451,29 @@ QString DecoratedTextEdit::getIndentString() const
 	}
 }
 
-/*!
- * This function returns the margin around the editor's content area. This
- * value is added to a bare column width in order to get a columnOffset().
- *
- * \return This editor's content margin.
- */
 qreal DecoratedTextEdit::contentMargin() const
 {
 	return static_cast<qreal>(contentOffset().x()) +
 	       static_cast<qreal>(document()->documentMargin());
 }
 
-/*!
- * This function returns the width of a single column.
- *
- * \return The width of one character column.
- */
 qreal DecoratedTextEdit::singleColumnWidth() const
 {
 	FontMetrics metrics(currentFont);
 	return metrics.getColumnWidthF(1);
 }
 
-/*!
- * This function computes and returns the offset from the left-hand side of our
- * text editor widget to the end of the given column.
- *
- * \param columns The column to get an offset for.
- */
 qreal DecoratedTextEdit::columnOffset(int column) const
 {
 	return singleColumnWidth() * static_cast<qreal>(column) +
 	       contentMargin();
 }
 
-/*!
- * This function computes and returns the offset from the left-hand side of our
- * text editor widget at which our line wrap guide will be painted. This is a
- * shorthand for passing the line wrap guide's column width to columnOffset().
- *
- * \return The offset of the line wrap guide.
- */
 qreal DecoratedTextEdit::wrapGuideOffset() const
 {
 	return columnOffset(getWrapGuideColumnWidth());
 }
 
-/*!
- * This function handles a paint event passed up to us by our gutter by
- * rendering the gutter according to our editor's current state.
- *
- * \param e The paint event being handled.
- */
 void DecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 {
 	QPainter painter(gutter);
@@ -794,13 +509,6 @@ void DecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 	}
 }
 
-/*!
- * This function computes the width our gutter should have, based upon the
- * number of lines in our document. We ensure that we have enough space to
- * render our line numbers inside the gutter.
- *
- * \return The width of our gutter.
- */
 int DecoratedTextEdit::gutterWidth()
 {
 	if(!isGutterVisible())
@@ -820,13 +528,8 @@ int DecoratedTextEdit::gutterWidth()
 	return space;
 }
 
-/*!
- * This is a utility function which calls update() on both this widget, as well
- * as our viewport widget, to make sure we are really updated.
- */
 void DecoratedTextEdit::fullUpdate()
-{ /* SLOT */
-
+{
 	updateGutterWidth();
 
 	update();
@@ -835,26 +538,16 @@ void DecoratedTextEdit::fullUpdate()
 	highlightCurrentLine();
 }
 
-/*!
- * This is a utility function which calls repaint() on both this widget, as
- * well as our viewport widget, to make sure our paintEvent() function is
- * called.
- */
 void DecoratedTextEdit::fullRepaint()
-{ /* SLOT */
-
+{
 	repaint();
 	viewport()->repaint();
 
 	highlightCurrentLine();
 }
 
-/*!
- * This function handles highlighting the current line in our editor.
- */
 void DecoratedTextEdit::highlightCurrentLine()
-{ /* SLOT */
-
+{
 	QList<QTextEdit::ExtraSelection> es;
 	QTextEdit::ExtraSelection selection;
 
@@ -868,26 +561,13 @@ void DecoratedTextEdit::highlightCurrentLine()
 	setExtraSelections(es);
 }
 
-/*!
- * This function updates our gutter's width, e.g. when the number of lines in
- * our document changes.
- */
 void DecoratedTextEdit::updateGutterWidth()
-{ /* SLOT */
-
+{
 	setViewportMargins(gutterWidth(), 0, 0, 0);
 }
 
-/*!
- * This function updates our gutter, e.g. when our editor widget's state is
- * updated, by resetting the gutter's scroll and width.
- *
- * \param r The viewport rect being updated.
- * \param dy The editor's current y scroll offset.
- */
 void DecoratedTextEdit::updateGutter(const QRect &r, int dy)
-{ /* SLOT */
-
+{
 	if(dy)
 		gutter->scroll(0, dy);
 	else

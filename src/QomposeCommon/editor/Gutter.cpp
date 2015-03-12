@@ -24,62 +24,26 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new gutter for the given
- * editor object.
- *
- * \param e The editor this gutter is attached to.
- */
 Gutter::Gutter(DecoratedTextEdit *e) : QWidget(e, nullptr), editor(e)
 {
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our object.
- */
-Gutter::~Gutter()
-{
-}
-
-/*!
- * This function sets the editor component this gutter is attached to.
- *
- * \param e The editor we should attach ourself to.
- */
 void Gutter::setEditor(DecoratedTextEdit *e)
 {
 	editor = e;
 }
 
-/*!
- * This function returns the width of our gutter.
- *
- * \return The gutter's width.
- */
 int Gutter::width() const
 {
 	return (editor == nullptr) ? 0 : editor->gutterWidth();
 }
 
-/*!
- * This function returns the size hint for our gutter, to let our parent widget
- * know how wide to render this gutter widget.
- *
- * \return The size hint for this gutter.
- */
 QSize Gutter::sizeHint() const
 {
 	int w = (editor == NULL) ? 0 : editor->gutterWidth();
 	return QSize(w, 0);
 }
 
-/*!
- * This function handles our gutter's paint event by passing the event up to
- * our parent editor, so it can render the gutter based upon the editor's
- * state.
- *
- * \param e The paint event being handled.
- */
 void Gutter::paintEvent(QPaintEvent *e)
 {
 	if(editor != NULL)

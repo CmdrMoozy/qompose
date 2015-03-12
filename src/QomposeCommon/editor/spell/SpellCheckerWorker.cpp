@@ -32,6 +32,6 @@ SpellCheckerWorker::~SpellCheckerWorker()
 }
 
 void SpellCheckerWorker::doSpellCheck()
-{ /* SLOT */
+{
 }
 }

@@ -34,22 +34,53 @@ class DecoratedTextEdit;
 class Gutter : public QWidget
 {
 public:
+	/*!
+	 * This is our default constructor, which creates a new gutter for the
+	 * given editor object.
+	 *
+	 * \param e The editor this gutter is attached to.
+	 */
 	Gutter(DecoratedTextEdit *e);
-	virtual ~Gutter();
 
+	Gutter(const Gutter &) = delete;
+	virtual ~Gutter() = default;
+
+	Gutter &operator=(const Gutter &) = delete;
+
+	/*!
+	 * This function sets the editor component this gutter is attached to.
+	 *
+	 * \param e The editor we should attach ourself to.
+	 */
 	void setEditor(DecoratedTextEdit *e);
 
+	/*!
+	 * This function returns the width of our gutter.
+	 *
+	 * \return The gutter's width.
+	 */
 	virtual int width() const;
+
+	/*!
+	 * This function returns the size hint for our gutter, to let our
+	 * parent widget know how wide to render this gutter widget.
+	 *
+	 * \return The size hint for this gutter.
+	 */
 	virtual QSize sizeHint() const;
 
 protected:
+	/*!
+	 * This function handles our gutter's paint event by passing the event
+	 * up to our parent editor, so it can render the gutter based upon the
+	 * editor's state.
+	 *
+	 * \param e The paint event being handled.
+	 */
 	virtual void paintEvent(QPaintEvent *e);
 
 private:
 	DecoratedTextEdit *editor;
-
-	Gutter(const Gutter &);
-	Gutter &operator=(const Gutter &);
 };
 }
 

@@ -39,6 +39,6 @@ SpellChecker::~SpellChecker()
 }
 
 void SpellChecker::doTextChanged()
-{ /* SLOT */
+{
 }
 }
