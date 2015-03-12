@@ -40,30 +40,11 @@ struct FileDescriptor
 	QString fileName;
 	QString textCodec;
 
-	FileDescriptor() : fileName(), textCodec()
-	{
-	}
+	FileDescriptor();
+	FileDescriptor(const QString &f, const QString &c);
+	FileDescriptor(const FileDescriptor &o);
 
-	FileDescriptor(const QString &f, const QString &c)
-	        : fileName(f), textCodec(c)
-	{
-	}
-
-	FileDescriptor(const FileDescriptor &o) : fileName(), textCodec()
-	{
-		*this = o;
-	}
-
-	FileDescriptor &operator=(const FileDescriptor &o)
-	{
-		if(&o == this)
-			return *this;
-
-		fileName = o.fileName;
-		textCodec = o.textCodec;
-
-		return *this;
-	}
+	FileDescriptor &operator=(const FileDescriptor &o);
 };
 
 /*!
@@ -74,31 +55,11 @@ struct ClosedBufferDescriptor
 	FileDescriptor file;
 	int cursorPosition;
 
-	ClosedBufferDescriptor() : file(), cursorPosition(0)
-	{
-	}
+	ClosedBufferDescriptor();
+	ClosedBufferDescriptor(FileDescriptor f, int c);
+	ClosedBufferDescriptor(const ClosedBufferDescriptor &o);
 
-	ClosedBufferDescriptor(FileDescriptor f, int c)
-	        : file(f), cursorPosition(c)
-	{
-	}
-
-	ClosedBufferDescriptor(const ClosedBufferDescriptor &o)
-	        : file(), cursorPosition(0)
-	{
-		*this = o;
-	}
-
-	ClosedBufferDescriptor &operator=(const ClosedBufferDescriptor &o)
-	{
-		if(&o == this)
-			return *this;
-
-		file = o.file;
-		cursorPosition = o.cursorPosition;
-
-		return *this;
-	}
+	ClosedBufferDescriptor &operator=(const ClosedBufferDescriptor &o);
 };
 }
 

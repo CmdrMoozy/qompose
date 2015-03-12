@@ -11,6 +11,7 @@ set(QomposeCommon_SOURCES
 	Application.cpp
 	Application.h
 	Defines.h
+	Types.cpp
 	Types.h
 	Window.cpp
 	Window.h

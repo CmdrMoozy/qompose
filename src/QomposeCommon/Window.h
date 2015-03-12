@@ -49,17 +49,38 @@ class Window : public QMainWindow
 	Q_OBJECT
 
 public:
+	/*!
+	 * This is a static function which opens a new Qompose window.
+	 */
 	static void openNewWindow();
 
 private:
 	static std::vector<Window *> windows;
 
 public:
-	virtual ~Window();
+	virtual ~Window() = default;
 
 protected:
-	Window(QWidget * = nullptr, Qt::WindowFlags = nullptr);
-	void closeEvent(QCloseEvent *);
+	/*!
+	 * This is our default constructor, which creates a new Qompose window,
+	 * and initializes its contents.
+	 *
+	 * \param p Our parent widget, if any.
+	 * \param f The Qt window flags to use for this window.
+	 */
+	Window(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
+
+	Window(const Window &) = delete;
+	Window &operator=(const Window &) = delete;
+
+	/*!
+	 * This function handles our window being closed by notifying our
+	 * buffers of the imminent close event, and then proceeding according
+	 * to what it reports back to us.
+	 *
+	 * \param e The event being handled.
+	 */
+	void closeEvent(QCloseEvent *e);
 
 private:
 	Settings *settings;
@@ -76,39 +97,170 @@ private:
 
 	StatusBar *statusBar;
 
-	Window(const Window &);
-	Window &operator=(const Window &);
-
+	/*!
+	 * This function initializes our dialog objects.
+	 */
 	void initializeDialogs();
+
+	/*!
+	 * This function initializes our main menu bar. Note that this function
+	 * must be called AFTER initializeActions, as we need actions to be
+	 * initialized before we can add them to menus.
+	 */
 	void initializeMenus();
+
+	/*!
+	 * This function reads various settings properties from our settings
+	 * object, and applies their values to our UI. Additionally, we connect
+	 * the settings object to our slots, so we can listen for settings
+	 * changes.
+	 */
 	void applyExistingSettings();
 
-	void handleFindResult(Editor::FindResult);
+	/*!
+	 * This function handles the result of a find operation by alerting the
+	 * user about what happened. This includes things like trying to find
+	 * using a bad regular expression, or finding something for which no
+	 * matches were found.
+	 *
+	 * \param r The find result to process.
+	 */
+	void handleFindResult(Editor::FindResult r);
 
 private Q_SLOTS:
+	/*!
+	 * This slot updates our window title. This slot should be connected to
+	 * any actions which might alter the window title - the current buffer
+	 * changing, certain settings changing, etc.
+	 */
 	void doUpdateWindowTitle();
-	void doTabPathChanged(const QString &);
-	void doCursorPositionChanged(int, int);
+
+	/*!
+	 * This slot handles one of our tab's paths being changed by updating
+	 * that tab's path label.
+	 *
+	 * \param p The new path for the current tab.
+	 */
+	void doTabPathChanged(const QString &p);
+
+	/*!
+	 * This slot handles one of our tab's cursor positions changing by
+	 * updating our status bar to display the current line and column
+	 * position.
+	 *
+	 * \param l The new cursor line number.
+	 * \param c The new cursor column number.
+	 */
+	void doCursorPositionChanged(int l, int c);
+
+	/*!
+	 * This function handles the case when whatever find/replace operation
+	 * was being executed has wrapped to the opposite side of the document.
+	 */
 	void doSearchWrapped();
 
+	/*!
+	 * This slot handles our "print" action being triggered by displaying a
+	 * standard print dialog and, if it is accepted, printing our current
+	 * buffer using the printer object it configures.
+	 */
 	void doPrint();
+
+	/*!
+	 * This slot handles our "print preview" action being triggered by
+	 * displaying a standard print preview dialog using our buffers'
+	 * standard print slot.
+	 */
 	void doPrintPreview();
+
+	/*!
+	 * This slot handles our preferences dialog action being triggered
+	 * by resetting and showing our preferences dialog (if it isn't already
+	 * visible).
+	 */
 	void doPreferencesDialog();
+
+	/*!
+	 * This function handles our "find" action being triggered by showing
+	 * our find dialog, if our replace dialog isn't already open (they are
+	 * mutually exclusive).
+	 */
 	void doFindDialog();
+
+	/*!
+	 * This slot performs a "find next" operation by extracting the current
+	 * find query from the find dialog, telling our buffers widget to
+	 * execute the query, and then dealing with the result.
+	 */
 	void doFindNext();
+
+	/*!
+	 * This slot performs a "find previous" operation by extracting the
+	 * current find query from the find dialog, telling our buffers widget
+	 * to execute the query, and then dealing with the result.
+	 */
 	void doFindPrevious();
+
+	/*!
+	 * This function handles our "replace" action being triggered by
+	 * showing our replace dialog, if our find dialog isn't already open
+	 * (they are mutually exclusive).
+	 */
 	void doReplaceDialog();
+
+	/*!
+	 * This slot performs a single "replace" operation by extracting the
+	 * current replace query from the replace dialog, telling our buffers
+	 * widget to execute the query, and then dealing with the result.
+	 */
 	void doReplace();
+
+	/*!
+	 * This slot performs a "replace find" operation. This is effectively
+	 * the same as a "find next" operation, but we use the query from the
+	 * replace dialog, instead of the one from the find dialog. We perform
+	 * this operation by extracting the current replace query from the
+	 * replace dialog, telling our buffers widget to execute the query as
+	 * a "find next" operation, and then we deal with the result.
+	 */
 	void doReplaceFind();
+
+	/*!
+	 * This slot performs a "replace in selection" operation by extracting
+	 * the current replace query from the replace dialog, telling our
+	 * buffers widget to execute the query, and then dealing with the
+	 * result.
+	 */
 	void doReplaceSelection();
+
+	/*!
+	 * This slot performs a "replace all" operation by extracting the
+	 * current replace query from the replace dialog, telling our buffers
+	 * widget to execute the query, and then dealing with the result.
+	 */
 	void doReplaceAll();
+
+	/*!
+	 * This function handles our "go to" dialog being accepted by telling
+	 * our buffers widget to perform the "go to" operation.
+	 */
 	void doGoToAccepted();
 
 #ifdef QOMPOSE_DEBUG
+	/*!
+	 * This function performs some action to help with debugging.
+	 */
 	void doDebug();
 #endif
 
-	void doSettingChanged(const QString &, const QVariant &);
+	/*!
+	 * This function handles a setting changed by applying that change to
+	 * our window.
+	 *
+	 * \param k The setting key that was changed.
+	 * \param v The new value for the given setting.
+	 */
+	void doSettingChanged(const QString &k, const QVariant &v);
 };
 }
 

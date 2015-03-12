@@ -46,9 +46,6 @@ namespace qompose
 {
 std::vector<Window *> Window::windows = std::vector<Window *>();
 
-/*!
- * This is a static function which opens a new Qompose window.
- */
 void Window::openNewWindow()
 {
 	Window *w = new Window();
@@ -56,20 +53,6 @@ void Window::openNewWindow()
 	w->show();
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our object.
- */
-Window::~Window()
-{
-}
-
-/*!
- * This is our default constructor, which creates a new Qompose window, and
- * initializes its contents.
- *
- * \param p Our parent widget, if any.
- * \param f The Qt window flags to use for this window.
- */
 Window::Window(QWidget *p, Qt::WindowFlags f)
         : QMainWindow(p, f),
           settings(nullptr),
@@ -116,13 +99,6 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 	doUpdateWindowTitle();
 }
 
-/*!
- * This function handles our window being closed by notifying our buffers of
- * the imminent close event, and then proceeding according to what it reports
- * back to us.
- *
- * \param e The event being handled.
- */
 void Window::closeEvent(QCloseEvent *e)
 {
 	if(buffers->prepareCloseParent())
@@ -145,9 +121,6 @@ void Window::closeEvent(QCloseEvent *e)
 	}
 }
 
-/*!
- * This function initializes our dialog objects.
- */
 void Window::initializeDialogs()
 {
 	// Create our dialog objects.
@@ -178,11 +151,6 @@ void Window::initializeDialogs()
 	                 SLOT(doGoToAccepted()));
 }
 
-/*!
- * This function initializes our main menu bar. Note that this function must be
- * called AFTER initializeActions, as we need actions to be initialized before
- * we can add them to menus.
- */
 void Window::initializeMenus()
 {
 	// Create our main menu.
@@ -224,11 +192,6 @@ void Window::initializeMenus()
 #endif
 }
 
-/*!
- * This function reads various settings properties from our settings object,
- * and applies their values to our UI. Additionally, we connect the settings
- * object to our slots, so we can listen for settings changes.
- */
 void Window::applyExistingSettings()
 {
 	// Load our initial settings, and connect our settings object.
@@ -259,14 +222,6 @@ void Window::applyExistingSettings()
 			                     QVariant(QByteArray()));
 }
 
-/*!
- * This function handles the result of a find operation by alerting the
- * user about what happened. This includes things like trying to find using
- * a bad regular expression, or finding something for which no matches
- * were found.
- *
- * \param r The find result to process.
- */
 void Window::handleFindResult(Editor::FindResult r)
 {
 	// Deal with the find result.
@@ -306,14 +261,8 @@ void Window::handleFindResult(Editor::FindResult r)
 	}
 }
 
-/*!
- * This slot updates our window title. This slot should be connected to any
- * actions which might alter the window title - the current buffer changing,
- * certain settings changing, etc.
- */
 void Window::doUpdateWindowTitle()
-{ /* SLOT */
-
+{
 	QString title("Qompose");
 
 	bool showFile = settings->getSetting("show-file-in-title").toBool();
@@ -341,51 +290,25 @@ void Window::doUpdateWindowTitle()
 	setWindowTitle(title);
 }
 
-/*!
- * This slot handles one of our tab's paths being changed by updating that
- * tab's path label.
- *
- * \param p The new path for the current tab.
- */
 void Window::doTabPathChanged(const QString &p)
-{ /* SLOT */
-
+{
 	doUpdateWindowTitle();
 	statusBar->setCurrentTabPath(p);
 }
 
-/*!
- * This slot handles one of our tab's cursor positions changing by updating
- * our status bar to display the current line and column position.
- *
- * \param l The new cursor line number.
- * \param c The new cursor column number.
- */
 void Window::doCursorPositionChanged(int l, int c)
-{ /* SLOT */
-
+{
 	statusBar->setLine(l);
 	statusBar->setColumn(c);
 }
 
-/*!
- * This function handles the case when whatever find/replace operation was
- * being executed has wrapped to the opposite side of the document.
- */
 void Window::doSearchWrapped()
-{ /* SLOT */
-
+{
 	statusBar->displayNotification(tr("Search wrapped around buffer."));
 }
 
-/*!
- * This slot handles our "print" action being triggered by displaying a
- * standard print dialog and, if it is accepted, printing our current buffer
- * using the printer object it configures.
- */
 void Window::doPrint()
-{ /* SLOT */
-
+{
 	if(!buffers->hasCurrentBuffer())
 	{
 		QMessageBox::warning(
@@ -403,13 +326,8 @@ void Window::doPrint()
 		buffers->doPrint(&printer);
 }
 
-/*!
- * This slot handles our "print preview" action being triggered by displaying
- * a standard print preview dialog using our buffers' standard print slot.
- */
 void Window::doPrintPreview()
-{ /* SLOT */
-
+{
 	if(!buffers->hasCurrentBuffer())
 	{
 		QMessageBox::warning(
@@ -431,15 +349,8 @@ void Window::doPrintPreview()
 	delete dialog;
 }
 
-/*!
- * This slot handles our preferences dialog action being triggered
- * by resetting and showing our preferences dialog (if it isn't already
- * visible).
- *
- */
 void Window::doPreferencesDialog()
-{ /* SLOT */
-
+{
 	if(!preferencesDialog->isVisible())
 	{
 		preferencesDialog->discardChanges();
@@ -447,133 +358,66 @@ void Window::doPreferencesDialog()
 	}
 }
 
-/*!
- * This function handles our "find" action being triggered by showing our find
- * dialog, if our replace dialog isn't already open (they are mutually
- * exclusive).
- */
 void Window::doFindDialog()
-{ /* SLOT */
-
+{
 	if(!replaceDialog->isVisible())
 	{
 		findDialog->show();
 	}
 }
 
-/*!
- * This slot performs a "find next" operation by extracting the current
- * find query from the find dialog, telling our buffers widget to execute the
- * query, and then dealing with the result.
- */
 void Window::doFindNext()
-{ /* SLOT */
-
+{
 	handleFindResult(buffers->doFindNext(findDialog->getQuery()));
 }
 
-/*!
- * This slot performs a "find previous" operation by extracting the current
- * find query from the find dialog, telling our buffers widget to execute the
- * query, and then dealing with the result.
- */
 void Window::doFindPrevious()
-{ /* SLOT */
-
+{
 	handleFindResult(buffers->doFindPrevious(findDialog->getQuery()));
 }
 
-/*!
- * This function handles our "replace" action being triggered by showing our
- * replace dialog, if our find dialog isn't already open (they are mutually
- * exclusive).
- */
 void Window::doReplaceDialog()
-{ /* SLOT */
-
+{
 	if(!findDialog->isVisible())
 	{
 		replaceDialog->show();
 	}
 }
 
-/*!
- * This slot performs a single "replace" operation by extracting the current
- * replace query from the replace dialog, telling our buffers widget to execute
- * the query, and then dealing with the result.
- */
 void Window::doReplace()
-{ /* SLOT */
-
+{
 	handleFindResult(buffers->doReplace(replaceDialog->getQuery()));
 }
 
-/*!
- * This slot performs a "replace find" operation. This is effectively the same
- * as a "find next" operation, but we use the query from the replace dialog,
- * instead of the one from the find dialog. We perform this operation by
- * extracting the current replace query from the replace dialog, telling our
- * buffers widget to execute the query as a "find next" operation, and then
- * we deal with the result.
- */
 void Window::doReplaceFind()
-{ /* SLOT */
-
+{
 	handleFindResult(buffers->doFindNext(replaceDialog->getQuery()));
 }
 
-/*!
- * This slot performs a "replace in selection" operation by extracting the
- * current replace query from the replace dialog, telling our buffers widget
- * to execute the query, and then dealing with the result.
- */
 void Window::doReplaceSelection()
-{ /* SLOT */
-
+{
 	handleFindResult(
 	        buffers->doReplaceSelection(replaceDialog->getQuery()));
 }
 
-/*!
- * This slot performs a "replace all" operation by extracting the current
- * replace query from the replace dialog, telling our buffers widget to
- * execute the query, and then dealing with the result.
- */
 void Window::doReplaceAll()
-{ /* SLOT */
-
+{
 	handleFindResult(buffers->doReplaceAll(replaceDialog->getQuery()));
 }
 
-/*!
- * This function handles our "go to" dialog being accepted by telling our
- * buffers widget to perform the "go to" operation.
- */
 void Window::doGoToAccepted()
-{ /* SLOT */
-
+{
 	buffers->doGoTo(goToDialog->getSelectedLine());
 }
 
 #ifdef QOMPOSE_DEBUG
-/*!
- * This function performs some action to help with debugging.
- */
 void Window::doDebug()
-{ /* SLOT */
+{
 }
 #endif
 
-/*!
- * This function handles a setting changed by applying that change to our
- * window.
- *
- * \param k The setting key that was changed.
- * \param v The new value for the given setting.
- */
 void Window::doSettingChanged(const QString &k, const QVariant &v)
-{ /* SLOT */
-
+{
 	if(k == "show-file-in-title")
 		doUpdateWindowTitle();
 	else if(k == "show-status-bar")

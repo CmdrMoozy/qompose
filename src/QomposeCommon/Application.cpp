@@ -25,44 +25,19 @@
 
 namespace qompose
 {
-/*!
- * Initializes a new QomposeApplication instance.
- *
- * \param ac The number of command-line arguments.
- * \param av The command-line arguments.
- */
 Application::Application(int &ac, char **av)
         : QApplication(ac, av), sappServer(nullptr), windows(QList<Window *>())
 {
 }
 
-/*!
- * This is our default destructor, which cleans up our local "single
- * application server," and destroys all of our open window objects.
- */
 Application::~Application()
 {
-	if(sappServer != nullptr)
-	{
-		delete sappServer;
-		sappServer = nullptr;
-	}
+	clearServer();
 }
 
-/*!
- * This function initializes our QLocalServer instance by attempting to listen
- * using our pre-defined GUID value, to ensure that only one instance of our
- * application is running at a time. Duplicate instances will be handled by
- * notifying the original process.
- */
 void Application::initializeLocalServer()
 {
-	if(sappServer != nullptr)
-	{
-		delete sappServer;
-		sappServer = nullptr;
-	}
-
+	clearServer();
 	sappServer = new QLocalServer();
 
 	if(!sappServer->listen(QOMPOSE_GUID))
@@ -84,10 +59,15 @@ void Application::initializeLocalServer()
 	                 SLOT(doDuplicateInstanceDetected()));
 }
 
-/*!
- * This slot handles a duplicate instance of our application being started by
- * simply opening a new window on the existing instance instead.
- */
+void Application::clearServer()
+{
+	if(sappServer != nullptr)
+	{
+		delete sappServer;
+		sappServer = nullptr;
+	}
+}
+
 void Application::doDuplicateInstanceDetected()
 {
 	Window::openNewWindow();

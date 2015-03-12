@@ -36,19 +36,47 @@ class Application : public QApplication
 	Q_OBJECT
 
 public:
-	Application(int &, char **);
+	/*!
+	 * Initializes a new QomposeApplication instance.
+	 *
+	 * \param ac The number of command-line arguments.
+	 * \param av The command-line arguments.
+	 */
+	Application(int &ac, char **av);
+
+	Application(const Application &) = delete;
+
+	/*!
+	 * This is our default destructor, which cleans up our local "single
+	 * application server", and destroys all of our open window objects.
+	 */
 	virtual ~Application();
 
+	Application &operator=(const Application &) = delete;
+
+	/*!
+	 * This function initializes our QLocalServer instance by attempting
+	 * to listen using our pre-defined GUID value, to ensure that only one
+	 * instance of our application is running at a time. Duplicate
+	 * instances will be handled by notifying the original process.
+	 */
 	void initializeLocalServer();
 
 private:
 	QLocalServer *sappServer;
 	QList<Window *> windows;
 
-	Application(const Application &);
-	Application &operator=(const Application &);
+	/*!
+	 * This function cleans up our local "single application server".
+	 */
+	void clearServer();
 
 private Q_SLOTS:
+	/*!
+	 * This slot handles a duplicate instance of our application being
+	 * started by simply opening a new window on the existing instance
+	 * instead.
+	 */
 	void doDuplicateInstanceDetected();
 };
 }
