@@ -47,9 +47,10 @@ public:
 	int getCapacity() const;
 	QMenu *getMenu() const;
 
-	void addPath(const QString &);
-
 	void saveContents();
+
+public Q_SLOTS:
+	void addPath(const QString &);
 
 private:
 	Settings *settings;
@@ -81,8 +82,22 @@ namespace menu_desc
 struct RecentMenuDescriptor
 {
 	Settings *settings;
+	gui_utils::ConnectionList signalConnections;
+	gui_utils::ConnectionList slotConnections;
 
-	RecentMenuDescriptor(Settings *);
+	RecentMenuDescriptor(Settings *s,
+	                     const gui_utils::ConnectionList &sigc =
+	                             gui_utils::ConnectionList(),
+	                     const gui_utils::ConnectionList &slotc =
+	                             gui_utils::ConnectionList());
+	RecentMenuDescriptor(Settings *s,
+	                     const gui_utils::Connection &sigc =
+	                             gui_utils::Connection(nullptr, nullptr),
+	                     const gui_utils::Connection &slotc =
+	                             gui_utils::Connection(nullptr, nullptr));
+
+	RecentMenuDescriptor(const RecentMenuDescriptor &) = default;
+	RecentMenuDescriptor &operator=(const RecentMenuDescriptor &) = default;
 };
 
 template <>

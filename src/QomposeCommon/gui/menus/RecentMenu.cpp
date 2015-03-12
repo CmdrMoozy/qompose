@@ -109,6 +109,20 @@ QMenu *RecentMenu::getMenu() const
 }
 
 /*!
+ * This function saves our menu's current contents using the settings
+ * instance given to our constructor.
+ */
+void RecentMenu::saveContents()
+{
+	QStringList l;
+
+	for(int i = 0; i < recentList.count(); ++i)
+		l.append(recentList.at(i));
+
+	settings->setSetting("recent-list", QVariant(l));
+}
+
+/*!
  * This function adds the given path to our recent menu.
  *
  * If this would make our list of recent items exceed our capacity, then
@@ -150,20 +164,6 @@ void RecentMenu::addPath(const QString &p)
 	// Save our new list, which will also re-render it.
 
 	saveContents();
-}
-
-/*!
- * This function saves our menu's current contents using the settings
- * instance given to our constructor.
- */
-void RecentMenu::saveContents()
-{
-	QStringList l;
-
-	for(int i = 0; i < recentList.count(); ++i)
-		l.append(recentList.at(i));
-
-	settings->setSetting("recent-list", QVariant(l));
 }
 
 /*!
@@ -348,11 +348,37 @@ void RecentMenu::doSettingChanged(const QString &k, const QVariant &v)
 
 namespace menu_desc
 {
+RecentMenuDescriptor::RecentMenuDescriptor(
+        Settings *s, const gui_utils::ConnectionList &sigc,
+        const gui_utils::ConnectionList &slotc)
+        : settings(s), signalConnections(sigc), slotConnections(slotc)
+{
+}
+
+RecentMenuDescriptor::RecentMenuDescriptor(Settings *s,
+                                           const gui_utils::Connection &sigc,
+                                           const gui_utils::Connection &slotc)
+        : settings(s), signalConnections(), slotConnections()
+{
+	if(sigc.first != nullptr && sigc.second != nullptr)
+		signalConnections.push_back(sigc);
+
+	if(slotc.first != nullptr && slotc.second != nullptr)
+		slotConnections.push_back(slotc);
+}
+
 template <>
 void constructDescriptor(QObject *parent, QMenu *menu,
                          const RecentMenuDescriptor &descriptor)
 {
 	RecentMenu *recentMenu = new RecentMenu(descriptor.settings, parent);
+
+	gui_utils::connectAll(recentMenu,
+	                      SIGNAL(recentClicked(const QString &)),
+	                      descriptor.signalConnections);
+	gui_utils::connectAll(descriptor.slotConnections, recentMenu,
+	                      SLOT(addPath(const QString &)));
+
 	menu->addMenu(recentMenu->getMenu());
 }
 }
