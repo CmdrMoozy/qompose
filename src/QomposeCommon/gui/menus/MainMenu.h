@@ -55,18 +55,8 @@ public:
 private:
 	Settings *settings;
 
-	QMenu *viewMenu;
-	QMenu *searchMenu;
 	QMenu *buffersMenu;
 	QMenu *helpMenu;
-
-	QAction *showBrowserAction;
-
-	QAction *findAction;
-	QAction *findNextAction;
-	QAction *findPreviousAction;
-	QAction *replaceAction;
-	QAction *goToAction;
 
 	QAction *previousBufferAction;
 	QAction *nextBufferAction;

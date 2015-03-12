@@ -31,15 +31,25 @@ MenuDescriptorVisitor::MenuDescriptorVisitor(QObject *p, QMenu *m)
 
 MenuItemDescriptor::MenuItemDescriptor(const std::string &t,
                                        const gui_utils::ConnectionList &c,
-                                       QKeySequence s, const QString &i)
-        : text(gui_utils::translate(t)), shortcut(s), icon(i), connections(c)
+                                       QKeySequence s, const QString &i,
+                                       bool chk)
+        : text(gui_utils::translate(t)),
+          shortcut(s),
+          icon(i),
+          connections(c),
+          checkable(chk)
 {
 }
 
 MenuItemDescriptor::MenuItemDescriptor(const std::string &t,
                                        const gui_utils::Connection &c,
-                                       QKeySequence s, const QString &i)
-        : text(gui_utils::translate(t)), shortcut(s), icon(i), connections()
+                                       QKeySequence s, const QString &i,
+                                       bool chk)
+        : text(gui_utils::translate(t)),
+          shortcut(s),
+          icon(i),
+          connections(),
+          checkable(chk)
 {
 	if(c.first != nullptr && c.second != nullptr)
 		connections.push_back(c);
@@ -59,6 +69,12 @@ void constructDescriptor(QObject *parent, QMenu *menu,
 
 	gui_utils::connectAll(action, SIGNAL(triggered(bool)),
 	                      descriptor.connections);
+
+	if(descriptor.checkable)
+	{
+		action->setCheckable(true);
+		action->setChecked(false);
+	}
 
 	menu->addAction(action);
 }

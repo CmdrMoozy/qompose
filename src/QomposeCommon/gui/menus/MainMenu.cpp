@@ -157,6 +157,39 @@ QMenu *createEditMenu(QWidget *parent)
 	                 QKeySequence(), "preferences-other")});
 	return buildMenu(parent, "&Edit", items);
 }
+
+QMenu *createViewMenu(QWidget *parent)
+{
+	qompose::gui_utils::ConnectionFunctor parentConn(parent);
+	const DescriptorList items({MenuItemDescriptor(
+	        "Show File &Browser",
+	        parentConn(SIGNAL(showBrowserTriggered(bool))), QKeySequence(),
+	        QString(), true)});
+	return buildMenu(parent, "&View", items);
+}
+
+QMenu *createSearchMenu(QWidget *parent)
+{
+	qompose::gui_utils::ConnectionFunctor parentConn(parent);
+	const DescriptorList items(
+	        {MenuItemDescriptor("&Find...",
+	                            parentConn(SIGNAL(findTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_F, "edit-find"),
+	         MenuItemDescriptor("Find &Next",
+	                            parentConn(SIGNAL(findNextTriggered(bool))),
+	                            Qt::Key_F3, "go-next"),
+	         MenuItemDescriptor(
+	                 "Find Previou&s",
+	                 parentConn(SIGNAL(findPreviousTriggered(bool))),
+	                 Qt::SHIFT + Qt::Key_F3, "go-previous"),
+	         MenuItemDescriptor("R&eplace...",
+	                            parentConn(SIGNAL(replaceTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_H, "edit-find-replace"),
+	         MenuItemDescriptor("&Go To Line...",
+	                            parentConn(SIGNAL(goToTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_G)});
+	return buildMenu(parent, "&Search", items);
+}
 }
 
 namespace qompose
@@ -164,16 +197,8 @@ namespace qompose
 MainMenu::MainMenu(Settings *s, QWidget *p)
         : QMenuBar(p),
           settings(s),
-          viewMenu(nullptr),
-          searchMenu(nullptr),
           buffersMenu(nullptr),
           helpMenu(nullptr),
-          showBrowserAction(nullptr),
-          findAction(nullptr),
-          findNextAction(nullptr),
-          findPreviousAction(nullptr),
-          replaceAction(nullptr),
-          goToAction(nullptr),
           previousBufferAction(nullptr),
           nextBufferAction(nullptr),
           moveBufferLeftAction(nullptr),
@@ -186,30 +211,6 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 #endif
 {
 	// Initialize our actions.
-
-	showBrowserAction = new QAction(tr("Show File &Browser"), this);
-	showBrowserAction->setCheckable(true);
-	showBrowserAction->setChecked(false);
-
-	findAction = new QAction(tr("&Find..."), this);
-	findAction->setShortcut(Qt::CTRL + Qt::Key_F);
-	findAction->setIcon(gui_utils::getIconFromTheme("edit-find"));
-
-	findNextAction = new QAction(tr("Find &Next"), this);
-	findNextAction->setShortcut(Qt::Key_F3);
-	findNextAction->setIcon(gui_utils::getIconFromTheme("go-next"));
-
-	findPreviousAction = new QAction(tr("Find Previou&s"), this);
-	findPreviousAction->setShortcut(Qt::SHIFT + Qt::Key_F3);
-	findPreviousAction->setIcon(gui_utils::getIconFromTheme("go-previous"));
-
-	replaceAction = new QAction(tr("R&eplace..."), this);
-	replaceAction->setShortcut(Qt::CTRL + Qt::Key_H);
-	replaceAction->setIcon(
-	        gui_utils::getIconFromTheme("edit-find-replace"));
-
-	goToAction = new QAction(tr("&Go To Line..."), this);
-	goToAction->setShortcut(Qt::CTRL + Qt::Key_G);
 
 	previousBufferAction = new QAction(tr("&Previous Buffer"), this);
 	previousBufferAction->setShortcut(Qt::ALT + Qt::Key_Left);
@@ -243,16 +244,8 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	addMenu(createFileMenu(this, settings));
 	addMenu(createEditMenu(this));
-
-	viewMenu = new QMenu(tr("&View"), this);
-	viewMenu->addAction(showBrowserAction);
-
-	searchMenu = new QMenu(tr("&Search"), this);
-	searchMenu->addAction(findAction);
-	searchMenu->addAction(findNextAction);
-	searchMenu->addAction(findPreviousAction);
-	searchMenu->addAction(replaceAction);
-	searchMenu->addAction(goToAction);
+	addMenu(createViewMenu(this));
+	addMenu(createSearchMenu(this));
 
 	buffersMenu = new QMenu(tr("&Buffers"), this);
 	buffersMenu->addAction(previousBufferAction);
@@ -270,25 +263,11 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	helpMenu->addAction(debugAction);
 #endif
 
-	addMenu(viewMenu);
-	addMenu(searchMenu);
 	addMenu(buffersMenu);
 	addMenu(helpMenu);
 
 	// Connect certain signals.
 
-	QObject::connect(showBrowserAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(showBrowserTriggered(bool)));
-	QObject::connect(findAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(findTriggered(bool)));
-	QObject::connect(findNextAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(findNextTriggered(bool)));
-	QObject::connect(findPreviousAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(findPreviousTriggered(bool)));
-	QObject::connect(replaceAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(replaceTriggered(bool)));
-	QObject::connect(goToAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(goToTriggered(bool)));
 	QObject::connect(aboutQomposeAction, SIGNAL(triggered(bool)), this,
 	                 SIGNAL(aboutQomposeTriggered(bool)));
 	QObject::connect(aboutQtAction, SIGNAL(triggered(bool)), this,

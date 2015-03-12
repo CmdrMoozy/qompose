@@ -65,16 +65,18 @@ struct MenuItemDescriptor
 	QKeySequence shortcut;
 	QString icon;
 	gui_utils::ConnectionList connections;
+	bool checkable;
 
 	MenuItemDescriptor(
 	        const std::string &,
 	        const gui_utils::ConnectionList & = gui_utils::ConnectionList(),
-	        QKeySequence = QKeySequence(), const QString & = QString());
+	        QKeySequence = QKeySequence(), const QString & = QString(),
+	        bool chk = false);
 	MenuItemDescriptor(const std::string &,
 	                   const gui_utils::Connection & =
 	                           gui_utils::Connection(nullptr, nullptr),
 	                   QKeySequence = QKeySequence(),
-	                   const QString & = QString());
+	                   const QString & = QString(), bool chk = false);
 };
 
 struct SeparatorDescriptor
