@@ -55,26 +55,11 @@ public:
 private:
 	Settings *settings;
 
-	QMenu *fileMenu;
 	QMenu *editMenu;
 	QMenu *viewMenu;
 	QMenu *searchMenu;
 	QMenu *buffersMenu;
 	QMenu *helpMenu;
-
-	QAction *newAction;
-	QAction *newWindowAction;
-	QAction *openAction;
-	RecentMenu *recentMenu;
-	QAction *reopenAction;
-	QAction *revertAction;
-	QAction *revertAllAction;
-	QAction *saveAction;
-	QAction *saveAsAction;
-	QAction *printAction;
-	QAction *printPreviewAction;
-	QAction *closeAction;
-	QAction *exitAction;
 
 	QAction *undoAction;
 	QAction *redoAction;
@@ -116,8 +101,17 @@ private Q_SLOTS:
 	void doFileOpened(const QString &);
 
 Q_SIGNALS:
+	void newTriggered(bool);
+	void openTriggered(bool);
+	void recentTriggered(const QString &);
+	void reopenTriggered(bool);
+	void revertTriggered(bool);
+	void revertAllTriggered(bool);
+	void saveTriggered(bool);
+	void saveAsTriggered(bool);
 	void printTriggered(bool);
 	void printPreviewTriggered(bool);
+	void closeTriggered(bool);
 	void exitTriggered(bool);
 	void preferencesTriggered(bool);
 	void showBrowserTriggered(bool);
@@ -132,6 +126,8 @@ Q_SIGNALS:
 #ifdef QOMPOSE_DEBUG
 	void debugTriggered(bool);
 #endif
+
+	void pathOpened(const QString &);
 };
 }
 

@@ -18,8 +18,15 @@
 
 #include "MainMenu.h"
 
-#include <QMenu>
+#include <utility>
+#include <vector>
+
 #include <QAction>
+#include <QMenu>
+#include <QObject>
+
+#include <boost/variant/apply_visitor.hpp>
+#include <boost/variant/variant.hpp>
 
 #include "QomposeCommon/Window.h"
 #include "QomposeCommon/gui/BufferWidget.h"
@@ -27,30 +34,95 @@
 #include "QomposeCommon/gui/menus/RecentMenu.h"
 #include "QomposeCommon/util/Settings.h"
 
+namespace
+{
+using qompose::menu_desc::MenuItemDescriptor;
+using qompose::menu_desc::SeparatorDescriptor;
+using qompose::menu_desc::RecentMenuDescriptor;
+
+typedef std::vector<boost::variant<MenuItemDescriptor, SeparatorDescriptor,
+                                   RecentMenuDescriptor>> DescriptorList;
+
+template <typename VariantType>
+QMenu *buildMenu(QWidget *parent, const std::string &title,
+                 const std::vector<VariantType> &items)
+{
+	QMenu *menu = new QMenu(qompose::gui_utils::translate(title), parent);
+	for(const auto &item : items)
+	{
+		boost::apply_visitor(
+		        qompose::menu_desc::MenuDescriptorVisitor(parent, menu),
+		        item);
+	}
+	return menu;
+}
+
+QMenu *createFileMenu(QWidget *parent, qompose::Settings *settings)
+{
+	qompose::gui_utils::ConnectionFunctor parentConn(parent);
+	const DescriptorList items(
+	        {MenuItemDescriptor("&New",
+	                            parentConn(SIGNAL(newTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_N, "document-new"),
+	         MenuItemDescriptor(
+	                 "New &Window", parentConn(SLOT(doNewWindow())),
+	                 Qt::CTRL + Qt::SHIFT + Qt::Key_N, "window-new"),
+	         SeparatorDescriptor(),
+	         MenuItemDescriptor("&Open...",
+	                            parentConn(SIGNAL(openTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_O, "document-open"),
+	         RecentMenuDescriptor(
+	                 settings,
+	                 parentConn(SIGNAL(recentTriggered(const QString &))),
+	                 parentConn(SIGNAL(pathOpened(const QString &)))),
+	         MenuItemDescriptor("Repoen Tab",
+	                            parentConn(SIGNAL(reopenTriggered(bool))),
+	                            Qt::CTRL + Qt::SHIFT + Qt::Key_T,
+	                            "document-open"),
+	         MenuItemDescriptor("&Revert",
+	                            parentConn(SIGNAL(revertTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_R, "document-revert"),
+	         MenuItemDescriptor(
+	                 "Revert All",
+	                 parentConn(SIGNAL(revertAllTriggered(bool))),
+	                 Qt::CTRL + Qt::SHIFT + Qt::Key_R, "document-revert"),
+	         SeparatorDescriptor(),
+	         MenuItemDescriptor("&Save",
+	                            parentConn(SIGNAL(saveTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_S, "document-save"),
+	         MenuItemDescriptor("Save &As...",
+	                            parentConn(SIGNAL(saveAsTriggered(bool))),
+	                            Qt::CTRL + Qt::SHIFT + Qt::Key_S,
+	                            "document-save-as"),
+	         SeparatorDescriptor(),
+	         MenuItemDescriptor("&Print...",
+	                            parentConn(SIGNAL(printTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_P, "document-print"),
+	         MenuItemDescriptor(
+	                 "Print Pre&view...",
+	                 parentConn(SIGNAL(printPreviewTriggered(bool))),
+	                 QKeySequence(), "document-print-preview"),
+	         SeparatorDescriptor(),
+	         MenuItemDescriptor("Clos&e",
+	                            parentConn(SIGNAL(closeTriggered(bool))),
+	                            Qt::CTRL + Qt::Key_W, "window-close"),
+	         MenuItemDescriptor("E&xit",
+	                            parentConn(SIGNAL(exitTriggered(bool))),
+	                            QKeySequence(), "application-exit")});
+	return buildMenu(parent, "&File", items);
+}
+}
+
 namespace qompose
 {
 MainMenu::MainMenu(Settings *s, QWidget *p)
         : QMenuBar(p),
           settings(s),
-          fileMenu(nullptr),
           editMenu(nullptr),
           viewMenu(nullptr),
           searchMenu(nullptr),
           buffersMenu(nullptr),
           helpMenu(nullptr),
-          newAction(nullptr),
-          newWindowAction(nullptr),
-          openAction(nullptr),
-          recentMenu(nullptr),
-          reopenAction(nullptr),
-          revertAction(nullptr),
-          revertAllAction(nullptr),
-          saveAction(nullptr),
-          saveAsAction(nullptr),
-          printAction(nullptr),
-          printPreviewAction(nullptr),
-          closeAction(nullptr),
-          exitAction(nullptr),
           undoAction(nullptr),
           redoAction(nullptr),
           cutAction(nullptr),
@@ -80,56 +152,6 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 #endif
 {
 	// Initialize our actions.
-
-	newAction = new QAction(tr("&New"), this);
-	newAction->setShortcut(Qt::CTRL + Qt::Key_N);
-	newAction->setIcon(gui_utils::getIconFromTheme("document-new"));
-
-	newWindowAction = new QAction(tr("New &Window"), this);
-	newWindowAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
-	newWindowAction->setIcon(gui_utils::getIconFromTheme("window-new"));
-
-	openAction = new QAction(tr("&Open..."), this);
-	openAction->setShortcut(Qt::CTRL + Qt::Key_O);
-	openAction->setIcon(gui_utils::getIconFromTheme("document-open"));
-
-	recentMenu = new RecentMenu(settings, this);
-
-	reopenAction = new QAction(tr("Reopen Tab"), this);
-	reopenAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_T);
-	reopenAction->setIcon(gui_utils::getIconFromTheme("document-open"));
-
-	revertAction = new QAction(tr("&Revert"), this);
-	revertAction->setShortcut(Qt::CTRL + Qt::Key_R);
-	revertAction->setIcon(gui_utils::getIconFromTheme("document-revert"));
-
-	revertAllAction = new QAction(tr("Revert All"), this);
-	revertAllAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R);
-	revertAllAction->setIcon(
-	        gui_utils::getIconFromTheme("document-revert"));
-
-	saveAction = new QAction(tr("&Save"), this);
-	saveAction->setShortcut(Qt::CTRL + Qt::Key_S);
-	saveAction->setIcon(gui_utils::getIconFromTheme("document-save"));
-
-	saveAsAction = new QAction(tr("Save &As..."), this);
-	saveAsAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-	saveAsAction->setIcon(gui_utils::getIconFromTheme("document-save-as"));
-
-	printAction = new QAction(tr("&Print..."), this);
-	printAction->setShortcut(Qt::CTRL + Qt::Key_P);
-	printAction->setIcon(gui_utils::getIconFromTheme("document-print"));
-
-	printPreviewAction = new QAction(tr("Print Pre&view..."), this);
-	printPreviewAction->setIcon(
-	        gui_utils::getIconFromTheme("document-print-preview"));
-
-	closeAction = new QAction(tr("Clos&e"), this);
-	closeAction->setShortcut(Qt::CTRL + Qt::Key_W);
-	closeAction->setIcon(gui_utils::getIconFromTheme("window-close"));
-
-	exitAction = new QAction(tr("E&xit"), this);
-	exitAction->setIcon(gui_utils::getIconFromTheme("application-exit"));
 
 	undoAction = new QAction(tr("&Undo"), this);
 	undoAction->setShortcut(Qt::CTRL + Qt::Key_Z);
@@ -226,24 +248,7 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	// Add these actions to our menu bar.
 
-	fileMenu = new QMenu(tr("&File"), this);
-	fileMenu->addAction(newAction);
-	fileMenu->addAction(newWindowAction);
-	fileMenu->addSeparator();
-	fileMenu->addAction(openAction);
-	fileMenu->addMenu(recentMenu->getMenu());
-	fileMenu->addAction(reopenAction);
-	fileMenu->addAction(revertAction);
-	fileMenu->addAction(revertAllAction);
-	fileMenu->addSeparator();
-	fileMenu->addAction(saveAction);
-	fileMenu->addAction(saveAsAction);
-	fileMenu->addSeparator();
-	fileMenu->addAction(printAction);
-	fileMenu->addAction(printPreviewAction);
-	fileMenu->addSeparator();
-	fileMenu->addAction(closeAction);
-	fileMenu->addAction(exitAction);
+	addMenu(createFileMenu(this, settings));
 
 	editMenu = new QMenu(tr("&Edit"), this);
 	editMenu->addAction(undoAction);
@@ -287,7 +292,6 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	helpMenu->addAction(debugAction);
 #endif
 
-	addMenu(fileMenu);
 	addMenu(editMenu);
 	addMenu(viewMenu);
 	addMenu(searchMenu);
@@ -296,14 +300,6 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 
 	// Connect certain signals.
 
-	QObject::connect(newWindowAction, SIGNAL(triggered(bool)), this,
-	                 SLOT(doNewWindow()));
-	QObject::connect(printAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(printTriggered(bool)));
-	QObject::connect(printPreviewAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(printPreviewTriggered(bool)));
-	QObject::connect(exitAction, SIGNAL(triggered(bool)), this,
-	                 SIGNAL(exitTriggered(bool)));
 	QObject::connect(preferencesAction, SIGNAL(triggered(bool)), this,
 	                 SIGNAL(preferencesTriggered(bool)));
 	QObject::connect(showBrowserAction, SIGNAL(triggered(bool)), this,
@@ -335,31 +331,29 @@ MainMenu::~MainMenu()
 
 void MainMenu::connectBufferWidget(const BufferWidget *b)
 {
-	// Connect our recent menu actions.
-
 	QObject::connect(b, SIGNAL(pathOpened(const QString &)), this,
-	                 SLOT(doFileOpened(const QString &)));
+	                 SIGNAL(pathOpened(const QString &)));
 
-	QObject::connect(recentMenu, SIGNAL(recentClicked(const QString &)), b,
+	// Connect file menu actions.
+
+	QObject::connect(this, SIGNAL(newTriggered(bool)), b, SLOT(doNew()));
+	QObject::connect(this, SIGNAL(openTriggered(bool)), b, SLOT(doOpen()));
+	QObject::connect(this, SIGNAL(recentTriggered(const QString &)), b,
 	                 SLOT(doOpenPath(const QString &)));
+	QObject::connect(this, SIGNAL(reopenTriggered(bool)), b,
+	                 SLOT(doReopen()));
+	QObject::connect(this, SIGNAL(revertTriggered(bool)), b,
+	                 SLOT(doRevert()));
+	QObject::connect(this, SIGNAL(revertAllTriggered(bool)), b,
+	                 SLOT(doRevertAll()));
+	QObject::connect(this, SIGNAL(saveTriggered(bool)), b, SLOT(doSave()));
+	QObject::connect(this, SIGNAL(saveAsTriggered(bool)), b,
+	                 SLOT(doSaveAs()));
+	QObject::connect(this, SIGNAL(closeTriggered(bool)), b,
+	                 SLOT(doClose()));
 
 	// Connect the rest of our actions.
 
-	QObject::connect(newAction, SIGNAL(triggered(bool)), b, SLOT(doNew()));
-	QObject::connect(openAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doOpen()));
-	QObject::connect(reopenAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doReopen()));
-	QObject::connect(revertAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doRevert()));
-	QObject::connect(revertAllAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doRevertAll()));
-	QObject::connect(saveAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doSave()));
-	QObject::connect(saveAsAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doSaveAs()));
-	QObject::connect(closeAction, SIGNAL(triggered(bool)), b,
-	                 SLOT(doClose()));
 	QObject::connect(undoAction, SIGNAL(triggered(bool)), b,
 	                 SLOT(doUndo()));
 	QObject::connect(redoAction, SIGNAL(triggered(bool)), b,
@@ -405,6 +399,6 @@ void MainMenu::doNewWindow()
  */
 void MainMenu::doFileOpened(const QString &p)
 {
-	recentMenu->addPath(p);
+	Q_EMIT(pathOpened(p));
 }
 }
