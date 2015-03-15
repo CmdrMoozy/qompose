@@ -26,111 +26,46 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new document writer
- * instance. Before writing any documents, one will need to set the QIODevice
- * with setDevice().
- */
 DocumentWriter::DocumentWriter() : whitespaceTrimmed(false), stream()
 {
 }
 
-/*!
- * This constructor creates a new document writer, which is configured to write
- * to the given QIODevice.
- *
- * \param d The device to write to.
- */
 DocumentWriter::DocumentWriter(QIODevice *d)
         : whitespaceTrimmed(false), stream()
 {
 	setDevice(d);
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our object.
- */
-DocumentWriter::~DocumentWriter()
-{
-}
-
-/*!
- * This function returns a pointer to the QIODevice this writer is currently
- * configured to use when writing data.
- *
- * \return The device this object is currently using.
- */
 QIODevice *DocumentWriter::getDevice() const
 {
 	return stream.device();
 }
 
-/*!
- * This function sets the QIODevice we will use for any subsequent write
- * requests.
- *
- * \param d The device to write to.
- */
 void DocumentWriter::setDevice(QIODevice *d)
 {
 	stream.setDevice(d);
 }
 
-/*!
- * This function returns a pointer to the QTextCodec this writer will use to
- * encode data it writes.
- *
- * \return The text codec this object is currently using.
- */
 QTextCodec *DocumentWriter::getCodec() const
 {
 	return stream.codec();
 }
 
-/*!
- * This function sets the QTextCodec we will use to encode text for any
- * subsequent write requests.
- *
- * \param codec The text codec to use for encoding.
- */
 void DocumentWriter::setCodec(QTextCodec *codec)
 {
 	stream.setCodec(codec);
 }
 
-/*!
- * This function returns whether or not our object is currently configured to
- * trim trailing whitespace before writing documents.
- *
- * \return Whether or not this object will trim trailing whitespace.
- */
 bool DocumentWriter::isWhitespaceTrimmed() const
 {
 	return whitespaceTrimmed;
 }
 
-/*!
- * This function sets whether or not this writer should trim all trailing
- * whitespace from the lines in a document before writing it.
- *
- * \param w Whether or not to trim trailing whitespace.
- */
 void DocumentWriter::setWhitespaceTrimmed(bool w)
 {
 	whitespaceTrimmed = w;
 }
 
-/*!
- * This function writes the given document to our writer's current QIODevice,
- * using our current QTextCodec for text encoding.
- *
- * This is done by getting the document's plain text (via toPlainText()),
- * optionally processing it first, and then writing it to whatever QIODevice
- * we're configured to use.
- *
- * \param d The text document to write.
- * \return True on success, or false otherwise.
- */
 bool DocumentWriter::write(const QTextDocument *d)
 {
 	// Make sure our device is good for writing.
@@ -157,17 +92,6 @@ bool DocumentWriter::write(const QTextDocument *d)
 	return true;
 }
 
-/*!
- * This is a utility function which trims the trailing whitespace from each line
- * in the given string. The given string is split into lines ending with one of
- * \n, \r\n or \r, and then each line is stripped of trailing whitespace (i.e.,
- * any QChars where isSpace() returns true).
- *
- * Note that the given string isn't modified; a new string is returned instead.
- *
- * \param s The string to trim trailing whitespace from.
- * \return A copy of the given string, after processing.
- */
 QString DocumentWriter::trimWhitespace(const QString &s) const
 {
 	QString result("");

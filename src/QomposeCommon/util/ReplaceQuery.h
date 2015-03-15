@@ -31,11 +31,33 @@ namespace qompose
 class ReplaceQuery : public FindQuery
 {
 public:
-	ReplaceQuery(QObject * = nullptr);
-	virtual ~ReplaceQuery();
+	/*!
+	 * This is our default constructor, which creates a new replace query.
+	 *
+	 * \param p The parent object for this replace query.
+	 */
+	ReplaceQuery(QObject *p = nullptr);
 
+	ReplaceQuery(const ReplaceQuery &) = delete;
+	virtual ~ReplaceQuery() = default;
+
+	ReplaceQuery &operator=(const ReplaceQuery &) = delete;
+
+	/*!
+	 * This function returns the replace value our replace query is
+	 * currently going to be replacing matches with.
+	 *
+	 * \return Our current replacement value.
+	 */
 	QString getReplaceValue() const;
-	void setReplaceValue(const QString &);
+
+	/*!
+	 * This function sets the replace value our replace query will use to
+	 * replace matches with.
+	 *
+	 * \param v The new replacement value.
+	 */
+	void setReplaceValue(const QString &v);
 
 private:
 	QString replaceValue;

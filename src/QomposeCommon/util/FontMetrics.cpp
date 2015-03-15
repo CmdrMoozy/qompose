@@ -23,48 +23,20 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new instance of our font
- * metrics class.
- *
- * \param f The font we will be examining.
- */
 FontMetrics::FontMetrics(const QFont &f) : font(f)
 {
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our object.
- */
-FontMetrics::~FontMetrics()
-{
-}
-
-/*!
- * This function returns the font this object is currently examining.
- *
- * \return Our current font.
- */
 QFont FontMetrics::getFont() const
 {
 	return font;
 }
 
-/*!
- * This function sets the font our object will examine from here on.
- *
- * \param f The new font to examine.
- */
 void FontMetrics::setFont(const QFont &f)
 {
 	font = f;
 }
 
-/*!
- * This function returns whether or not our current font is monospaced.
- *
- * \return True if our current font is monospaced, or false otherwise.
- */
 bool FontMetrics::isMonospaced() const
 {
 	QFontInfo into(font);
@@ -72,30 +44,11 @@ bool FontMetrics::isMonospaced() const
 	return into.fixedPitch();
 }
 
-/*!
- * This is a convenience function which returns the width of the given number of
- * columns in our current font as an integer. This is equivalent to rounding the
- * return value of getColumnWidthF() and then casting it to an int.
- *
- * \param columns The number of columns to get the width of.
- * \return The width of the given number of columns.
- */
 int FontMetrics::getColumnWidth(int columns) const
 {
 	return qRound(getColumnWidthF(columns));
 }
 
-/*!
- * This function returns the width, in pixels, of the given number of columns in
- * our current font. Note that this value is as exact as possible - no rounding
- * is done.
- *
- * Also note that this function only returns a useful value if our current font
- * is monospaced. It is up to the caller to ensure that this is the case.
- *
- * \param columns The number of columns to get the width of.
- * \return The width of the given number of columns.
- */
 qreal FontMetrics::getColumnWidthF(int columns) const
 {
 	QFontMetricsF metrics(font);

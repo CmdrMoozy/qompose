@@ -58,10 +58,42 @@ namespace qompose
 class HotkeyMap
 {
 public:
+	/*!
+	 * This is our default constructor, which creates a new hotkey map
+	 * instance.
+	 */
 	HotkeyMap();
+
+	HotkeyMap(const HotkeyMap &) = default;
 	~HotkeyMap() = default;
 
+	HotkeyMap &operator=(const HotkeyMap &) = default;
+
+	/*!
+	 * This function adds the given hotkey to the map, with the given
+	 * function. When the given hotkey is the best match for a particular
+	 * QKeyEvent, our getHotkeyHandler() function will return the given
+	 * function.
+	 *
+	 * Note that if the map already contains an identical hotkey to the one
+	 * given, then we will simply update its associated F value instead of
+	 * inserting.
+	 *
+	 * \param h The hotkey to add to the map.
+	 * \param f The hotkey handler associated with this hotkey.
+	 * \return True if newly added, or false if merely updated.
+	 */
 	bool addHotkey(const Hotkey &h, const std::function<void()> &f);
+
+	/*!
+	 * This function returns the hotkey handler associated with the hotkey
+	 * which is the best match for the given KeyEvent. If no hotkey in the
+	 * map matches the given key event, then an instance of std::exception
+	 * is thrown instead.
+	 *
+	 * \param e The event to find a matching hotkey for.
+	 * \return The handler associated with the best-matching hotkey.
+	 */
 	const std::function<void()> *getHotkeyHandler(const QKeyEvent *e) const;
 
 private:

@@ -36,25 +36,78 @@ class Settings : public QObject
 	Q_OBJECT
 
 public:
-	Settings(QObject * = nullptr);
-	virtual ~Settings();
+	/*!
+	 * This function initializes a new settings instance, with the given
+	 * parent. Note that, for settings which are currently unset, default
+	 * values will be automatically initialized.
+	 *
+	 * \param p Our parent object.
+	 */
+	Settings(QObject *p = nullptr);
 
+	Settings(const Settings &) = delete;
+	virtual ~Settings() = default;
+
+	Settings &operator=(const Settings &) = delete;
+
+	/*!
+	 * This function returns the total number of settings keys our object
+	 * is storing.
+	 *
+	 * \return The total number of settings keys.
+	 */
 	int count() const;
 
+	/*!
+	 * This function resets ALL of our settings to their default values.
+	 * Any existing data will be overwritten.
+	 */
 	void resetDefaults();
-	void resetDefault(const QString &);
 
-	void setSetting(const QString &, const QVariant &);
-	bool containsSetting(const QString &) const;
-	QVariant getSetting(const QString &) const;
+	/*!
+	 * This function resets one particular setting to its default value.
+	 * Any existing data will be overwritten.
+	 *
+	 * \param k The key of the setting to reset.
+	 */
+	void resetDefault(const QString &k);
+
+	/*!
+	 * This function sets the given setting key to the given value.
+	 *
+	 * \param k The setting key to set.
+	 * \param v The new value for the given key.
+	 */
+	void setSetting(const QString &k, const QVariant &v);
+
+	/*!
+	 * This function returns whether or not our object contains a value for
+	 * the given settings key.
+	 *
+	 * \param k The key to search for.
+	 * \return True if we have a value for the given key, or false.
+	 */
+	bool containsSetting(const QString &k) const;
+
+	/*!
+	 * This function retrieves the value associated with the given settings
+	 * key. If the given key is not present, then we will return QVariant()
+	 * instead.
+	 *
+	 * \param k The key to search for.
+	 * \return The value for the given settings key.
+	 */
+	QVariant getSetting(const QString &k) const;
 
 private:
 	static const QList<QPair<QString, QVariant>> defaults;
 	QSettings *settings;
 
-	Settings(const Settings &);
-	Settings &operator=(const Settings &);
-
+	/*!
+	 * This function initializes default values, for settings which have no
+	 * value set for them already. Existing values will NOT be overwritten
+	 * (unlike resetDefaults()).
+	 */
 	void initializeDefaults();
 
 Q_SIGNALS:

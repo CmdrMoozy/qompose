@@ -57,13 +57,6 @@ const QList<QPair<QString, QVariant>> Settings::defaults =
         << SettingPair("window-geometry", QByteArray())
         << SettingPair("window-state", QByteArray());
 
-/*!
- * This function initializes a new settings instance, with the given parent.
- * Note that, for settings which are currently unset, default values will
- * be automatically initialized.
- *
- * \param p Our parent object.
- */
 Settings::Settings(QObject *p) : QObject(p), settings(nullptr)
 {
 #ifdef QOMPOSE_DEBUG
@@ -77,41 +70,17 @@ Settings::Settings(QObject *p) : QObject(p), settings(nullptr)
 	initializeDefaults();
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our object.
- */
-Settings::~Settings()
-{
-	delete settings;
-}
-
-/*!
- * This function returns the total number of settings keys our object is
- * storing.
- *
- * \return The total number of settings keys.
- */
 int Settings::count() const
 {
 	return settings->allKeys().count();
 }
 
-/*!
- * This function resets ALL of our settings to their default values. Any
- * existing data will be overwritten.
- */
 void Settings::resetDefaults()
 {
 	for(int i = 0; i < defaults.count(); ++i)
 		setSetting(defaults.at(i).first, defaults.at(i).second);
 }
 
-/*!
- * This function resets one particular setting to its default value. Any
- * existing data will be overwritten.
- *
- * \param k The key of the setting to reset.
- */
 void Settings::resetDefault(const QString &k)
 {
 	for(int i = 0; i < defaults.count(); ++i)
@@ -124,47 +93,22 @@ void Settings::resetDefault(const QString &k)
 	}
 }
 
-/*!
- * This function sets the given setting key to the given value.
- *
- * \param k The setting key to set.
- * \param v The new value for the given key.
- */
 void Settings::setSetting(const QString &k, const QVariant &v)
 {
 	settings->setValue(k, v);
 	Q_EMIT settingChanged(k, v);
 }
 
-/*!
- * This function returns whether or not our object contains a value for the
- * given settings key.
- *
- * \param k The key to search for.
- * \return True if we have a value for the given key, or false otherwise.
- */
 bool Settings::containsSetting(const QString &k) const
 {
 	return settings->contains(k);
 }
 
-/*!
- * This function retrieves the value associated with the given settings key. If
- * the given key is not present, then we will return QVariant() instead.
- *
- * \param k The key to search for.
- * \return The value for the given settings key.
- */
 QVariant Settings::getSetting(const QString &k) const
 {
 	return settings->value(k, QVariant());
 }
 
-/*!
- * This function initializes default values, for settings which have no value
- * set for them already. Existing values will NOT be overwritten - unlike
- * resetDefaults().
- */
 void Settings::initializeDefaults()
 {
 	for(int i = 0; i < defaults.count(); ++i)
