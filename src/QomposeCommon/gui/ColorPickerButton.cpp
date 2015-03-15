@@ -29,13 +29,6 @@
 
 namespace qompose
 {
-/*!
- * This is one of our constructors, which intializes a new color picker
- * object with the given parameters.
- *
- * \param p Our parent widget.
- * \param iC Our initial color.
- */
 ColorPickerButton::ColorPickerButton(QWidget *p, const QColor &iC)
         : QPushButton("", p), selectedColor(QColor())
 {
@@ -45,14 +38,6 @@ ColorPickerButton::ColorPickerButton(QWidget *p, const QColor &iC)
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
 }
 
-/*!
- * This is one of our constructors, which intializes a new color picker object
- * with the given parameters.
- *
- * \param t Our button's text (IGNORED).
- * \param p Our parent widget.
- * \param iC Our initial color.
- */
 ColorPickerButton::ColorPickerButton(const QString &QUNUSED(t), QWidget *p,
                                      const QColor &iC)
         : QPushButton("", p), selectedColor(QColor())
@@ -63,15 +48,6 @@ ColorPickerButton::ColorPickerButton(const QString &QUNUSED(t), QWidget *p,
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
 }
 
-/*!
- * This is one of our constructors, which intializes a new color picker
- * object with the given parameters.
- *
- * \param i Our button's icon (IGNORED).
- * \param t Our button's text (IGNORED).
- * \param p Our parent widget.
- * \param iC Our initial color.
- */
 ColorPickerButton::ColorPickerButton(const QIcon &QUNUSED(i),
                                      const QString &QUNUSED(t), QWidget *p,
                                      const QColor &iC)
@@ -83,45 +59,17 @@ ColorPickerButton::ColorPickerButton(const QIcon &QUNUSED(i),
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
 }
 
-/*!
- * This is our default constructor, which cleans up and destroys our object.
- */
-ColorPickerButton::~ColorPickerButton()
-{
-}
-
-/*!
- * This function simply returns the color we are currently representing. This
- * is also the color that is displayed by our button.
- *
- * \return Our currently selected color.
- */
 const QColor &ColorPickerButton::getSelectedColor() const
 {
 	return selectedColor;
 }
 
-/*!
- * This function allows the currently selected color to be set. This will be
- * the color that our button displays.
- *
- * Note that this function does NOT emit a selectedColorChanged() signal - that
- * is reserved for the color being changed by the USER when they click us.
- *
- * \param c The new color to represent.
- */
 void ColorPickerButton::setSelectedColor(const QColor &c)
 {
 	selectedColor = c;
 	update();
 }
 
-/*!
- * We override our parent class's paint event so we can draw the color we are
- * representing on our button.
- *
- * \param e The event we are handling.
- */
 void ColorPickerButton::paintEvent(QPaintEvent *e)
 {
 	// Call our superclass' paint event so we still look like a button.
@@ -134,53 +82,30 @@ void ColorPickerButton::paintEvent(QPaintEvent *e)
 
 	QRect r = rect();
 
-#ifdef _WIN32
+#if defined(_WIN32)
 	r.adjust(5, 5, -5, -7);
-#else
-#ifdef __APPLE__
+#elif defined(__APPLE__)
 	r.adjust(9, 7, -9, -10);
 #else
 	r.adjust(4, 4, -4, -5);
-#endif
 #endif
 
 	// Fill our rectangle.
 	painter.fillRect(r, getSelectedColor());
 }
 
-/*!
- * We override our parent class's setIcon() function, since this particular
- * button does not, by definition, display icons. Note that this function
- * still performs its function correctly, but is private.
- *
- * \param i The new icon to display.
- */
 void ColorPickerButton::setIcon(const QIcon &i)
 {
 	QPushButton::setIcon(i);
 }
 
-/*!
- * We override our parent class's setText() function, since this particular
- * button does not, by definition, display text. Note that this function
- * still performs its function correctly, but is private.
- *
- * \param i The new text to display.
- */
 void ColorPickerButton::setText(const QString &t)
 {
 	QPushButton::setText(t);
 }
 
-/*!
- * When we are clicked, we want to automatically pop up a QColorDialog to get
- * a new color selection from the user. If the user selects a new color
- * (i.e., doesn't click "Cancel"), then we emit a selectedColorChanged()
- * signal.
- */
 void ColorPickerButton::doClicked()
-{ /* SLOT */
-
+{
 	QColor c = QColorDialog::getColor(getSelectedColor(), this,
 	                                  tr("Select a Color"),
 	                                  QColorDialog::DontUseNativeDialog);

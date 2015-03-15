@@ -37,15 +37,50 @@ class StatusBar : public QStatusBar
 	Q_OBJECT
 
 public:
-	StatusBar(QWidget * = nullptr);
-	virtual ~StatusBar();
+	/*!
+	 * This is our default constructor, which creates a new instance of our
+	 * status bar widget.
+	 *
+	 * \param p Our status bar's parent widget.
+	 */
+	StatusBar(QWidget *p = nullptr);
 
-	void displayNotification(const QString &, bool = false);
+	StatusBar(const StatusBar &) = delete;
+	virtual ~StatusBar() = default;
 
-	void setCurrentTabPath(const QString &);
+	StatusBar &operator=(const StatusBar &) = delete;
 
-	void setLine(int);
-	void setColumn(int);
+	/*!
+	 * This function displays a notification in this status bar widget.
+	 *
+	 * \param n The notification to display.
+	 * \param c Whether or not the notification is critical.
+	 */
+	void displayNotification(const QString &n, bool c = false);
+
+	/*!
+	 * This function sets the "current tab path" that we're displaying.
+	 * This should be the absolute path to the file which is open in the
+	 * current tab, or an empty string if no valid absolute path exists.
+	 *
+	 * \param p The current tab path to display.
+	 */
+	void setCurrentTabPath(const QString &p);
+
+	/*!
+	 * This function sets the line number we'll display in the status bar.
+	 *
+	 * \param l The current line number.
+	 */
+	void setLine(int l);
+
+	/*!
+	 * This function sets the column number we'll display in the status
+	 * bar.
+	 *
+	 * \param c The current column number.
+	 */
+	void setColumn(int c);
 
 private:
 	QWidget *statusWidget;
@@ -55,9 +90,6 @@ private:
 	EllipsizedLabel *tabPathLabel;
 	QLabel *lineLabel;
 	QLabel *columnLabel;
-
-	StatusBar(const StatusBar &);
-	StatusBar &operator=(const StatusBar &);
 };
 }
 

@@ -39,40 +39,31 @@ Connection ConnectionFunctor::operator()(const char *connection) const
 }
 
 void connectAll(const QObject *sender, const char *signal,
-                const ConnectionList &slots)
+                const ConnectionList &connections)
 {
 	if(sender == nullptr || signal == nullptr)
 		return;
 
-	for(const auto &slot : slots)
-		QObject::connect(sender, signal, slot.first, slot.second);
+	for(const auto &connection : connections)
+	{
+		QObject::connect(sender, signal, connection.first,
+		                 connection.second);
+	}
 }
 
 void connectAll(const ConnectionList &signals, const QObject *receiver,
-                const char *slot)
+                const char *connection)
 {
-	if(receiver == nullptr || slot == nullptr)
+	if(receiver == nullptr || connection == nullptr)
 		return;
 
 	for(const auto &signal : signals)
-		QObject::connect(signal.first, signal.second, receiver, slot);
+	{
+		QObject::connect(signal.first, signal.second, receiver,
+		                 connection);
+	}
 }
 
-/*!
- * This function will return the icon for the given standard name. We try to
- * use an icon from the operating system's icon theme, but failing that, we
- * try to use a fallback from our internal icon store.
- *
- * If no icon can be found, a null QIcon is returned instead.
- *
- * The default names supported by QIcon (and, therefore, this function) can be
- * found here:
- *
- *     http://standards.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
- *
- * \param n The name of the icon to find.
- * \return An icon object corresponding to the given name.
- */
 QIcon getIconFromTheme(const QString &n)
 {
 	QIcon defaultIcon;

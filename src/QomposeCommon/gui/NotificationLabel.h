@@ -33,13 +33,43 @@ class NotificationLabel : public QLabel
 	Q_PROPERTY(QColor textColor READ getTextColor WRITE setTextColor)
 
 public:
-	NotificationLabel(QWidget * = nullptr, Qt::WindowFlags = nullptr);
-	virtual ~NotificationLabel();
+	/*!
+	 * This is our default constructor, which creates a new instance of our
+	 * notification label.
+	 *
+	 * \param p The parent widget for this label.
+	 * \param f The window flags for this label.
+	 */
+	NotificationLabel(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 
+	NotificationLabel(const NotificationLabel &) = delete;
+	virtual ~NotificationLabel() = default;
+
+	NotificationLabel &operator=(const NotificationLabel &) = delete;
+
+	/*!
+	 * This function returns the color this label's text is currently being
+	 * displayed in.
+	 *
+	 * \return This label's current text color.
+	 */
 	QColor getTextColor() const;
-	void setTextColor(const QColor &);
 
-	void displayNotification(const QString &, bool = false, int = 0);
+	/*!
+	 * This function sets the color this label's text will be displayed in.
+	 *
+	 * \param c This label's new text color.
+	 */
+	void setTextColor(const QColor &c);
+
+	/*!
+	 * This function displays a new notification string in this label.
+	 *
+	 * \param n The notification to display.
+	 * \param c Whether or not the notification is critical.
+	 * \param d The duration to display the notification for.
+	 */
+	void displayNotification(const QString &n, bool c = false, int d = 0);
 
 private:
 	QColor defaultColor;

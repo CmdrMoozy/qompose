@@ -43,17 +43,41 @@ class MainMenu : public QMenuBar
 	Q_OBJECT
 
 public:
-	MainMenu(Settings *, QWidget * = nullptr);
+	/*!
+	 * This is our default constructor, which creates a new main menu.
+	 *
+	 * \param settings The settings object to connect to menu items.
+	 * \param p The menu bar's parent widget.
+	 */
+	MainMenu(Settings *settings, QWidget *p = nullptr);
+
 	MainMenu(const MainMenu &) = delete;
-	virtual ~MainMenu();
+	virtual ~MainMenu() = default;
 
 	MainMenu &operator=(const MainMenu &) = delete;
 
-	void connectBufferWidget(const BufferWidget *);
+	/*!
+	 * This function connects all of this menu's signals to the given
+	 * buffer widget.
+	 *
+	 * \param b The buffer widget to connect.
+	 */
+	void connectBufferWidget(const BufferWidget *b);
 
 private Q_SLOTS:
+	/*!
+	 * This slot handles the "new window" action by opening a new Qompose
+	 * window.
+	 */
 	void doNewWindow();
-	void doFileOpened(const QString &);
+
+	/*!
+	 * This slot handles a file being opened by updating our recently
+	 * opened menu with the newly opened path.
+	 *
+	 * \param p The path to the file that was opened.
+	 */
+	void doFileOpened(const QString &p);
 
 Q_SIGNALS:
 	void newTriggered(bool);

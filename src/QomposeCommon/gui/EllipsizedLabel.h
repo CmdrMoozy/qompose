@@ -26,13 +26,16 @@ namespace qompose
 class EllipsizedLabel : public QLabel
 {
 public:
-	EllipsizedLabel(const QString &, QWidget * = nullptr,
-	                Qt::WindowFlags = nullptr);
-	EllipsizedLabel(QWidget * = nullptr, Qt::WindowFlags = nullptr);
+	EllipsizedLabel(const QString &t, QWidget *p = nullptr,
+	                Qt::WindowFlags f = nullptr);
+	EllipsizedLabel(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
+	EllipsizedLabel(const EllipsizedLabel &) = delete;
 	virtual ~EllipsizedLabel() = default;
 
+	EllipsizedLabel &operator=(const EllipsizedLabel &) = delete;
+
 protected:
-	virtual void paintEvent(QPaintEvent *);
+	virtual void paintEvent(QPaintEvent *e);
 };
 }
 

@@ -25,33 +25,12 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new instance of our
- * notification label.
- *
- * \param p The parent widget for this label.
- * \param f The window flags for this label.
- */
 NotificationLabel::NotificationLabel(QWidget *p, Qt::WindowFlags f)
         : QLabel(p, f), defaultColor(QColor())
 {
 	defaultColor = getTextColor();
 }
 
-/*!
- * This is our default destructor, which cleans up and destroys this
- * notification label instance.
- */
-NotificationLabel::~NotificationLabel()
-{
-}
-
-/*!
- * This function returns the color this label's text is currently being
- * displayed in.
- *
- * \return This label's current text color.
- */
 QColor NotificationLabel::getTextColor() const
 {
 	QPalette p = palette();
@@ -59,11 +38,6 @@ QColor NotificationLabel::getTextColor() const
 	return p.color(foregroundRole());
 }
 
-/*!
- * This function sets the color this label's text will be displayed in.
- *
- * \param c This label's new text color.
- */
 void NotificationLabel::setTextColor(const QColor &c)
 {
 	QPalette p = palette();
@@ -73,13 +47,6 @@ void NotificationLabel::setTextColor(const QColor &c)
 	setPalette(p);
 }
 
-/*!
- * This function displays a new notification string in this label.
- *
- * \param n The notification to display.
- * \param c Whether or not the notification is critical.
- * \param d The duration for which the notification should be displayed.
- */
 void NotificationLabel::displayNotification(const QString &n, bool c, int d)
 {
 	setText(n.trimmed());

@@ -24,13 +24,6 @@
 
 namespace qompose
 {
-/*!
- * This is one of our constructors, which intializes a new font picker
- * object with the given parameters.
- *
- * \param p Our parent widget.
- * \param iF Our initial font.
- */
 FontPickerButton::FontPickerButton(QWidget *p, const QFont &iF)
         : QPushButton(tr("Select a Font"), p), selectedFont(QFont())
 {
@@ -38,14 +31,6 @@ FontPickerButton::FontPickerButton(QWidget *p, const QFont &iF)
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
 }
 
-/*!
- * This is one of our constructors, which intializes a new font picker object
- * with the given parameters.
- *
- * \param t Our button's text.
- * \param p Our parent widget.
- * \param iF Our initial font.
- */
 FontPickerButton::FontPickerButton(const QString &t, QWidget *p,
                                    const QFont &iF)
         : QPushButton(t, p), selectedFont(QFont())
@@ -54,15 +39,6 @@ FontPickerButton::FontPickerButton(const QString &t, QWidget *p,
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
 }
 
-/*!
- * This is one of our constructors, which intializes a new font picker
- * object with the given parameters.
- *
- * \param i Our button's icon.
- * \param t Our button's text.
- * \param p Our parent widget.
- * \param iF Our initial font.
- */
 FontPickerButton::FontPickerButton(const QIcon &i, const QString &t, QWidget *p,
                                    const QFont &iF)
         : QPushButton(i, t, p), selectedFont(QFont())
@@ -71,34 +47,11 @@ FontPickerButton::FontPickerButton(const QIcon &i, const QString &t, QWidget *p,
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(doClicked()));
 }
 
-/*!
- * This is our default destructor, which cleans up and destroys our object.
- */
-FontPickerButton::~FontPickerButton()
-{
-}
-
-/*!
- * This function simply returns the font we are currently representing.
- * Note that this is NOT necessarily the font we are displaying (i.e.,
- * the value returned by font()).
- *
- * \return Our currently selected font.
- */
 const QFont &FontPickerButton::getSelectedFont() const
 {
 	return selectedFont;
 }
 
-/*!
- * This function allows the currently selected font to be set. Note that
- * this will NOT necessarily become the font we are displaying.
- *
- * Note that this function does NOT emit a selectedFontChanged() signal -
- * that is reserved for the font being changed by the USER when they click us.
- *
- * \param f The new font to represent.
- */
 void FontPickerButton::setSelectedFont(const QFont &f)
 {
 	QFont display = selectedFont = f;
@@ -111,27 +64,13 @@ void FontPickerButton::setSelectedFont(const QFont &f)
 	setFont(display);
 }
 
-/*!
- * We override our parent class's implementation of this, because we
- * will be handling what font we are using internally; the user should
- * be calling setSelectedFont() if they want to change the font we are
- * currently representing.
- *
- * \param f The font we will display.
- */
 void FontPickerButton::setFont(const QFont &f)
 {
 	QPushButton::setFont(f);
 }
 
-/*!
- * When we are clicked, we want to automatically pop up a QFontDialog
- * to get a new font selection from the user. If the user selects a
- * new font (i.e., doesn't click "Cancel"), then we emit a
- * selectedFontChanged() signal.
- */
 void FontPickerButton::doClicked()
-{ /* SLOT */
+{
 	bool ok;
 	setSelectedFont(QFontDialog::getFont(&ok, getSelectedFont(), this,
 	                                     tr("Select a Font"), nullptr));

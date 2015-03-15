@@ -27,12 +27,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new instance of our status
- * bar widget.
- *
- * \param p Our status bar's parent widget.
- */
 StatusBar::StatusBar(QWidget *p)
         : QStatusBar(p),
           statusWidget(nullptr),
@@ -70,32 +64,11 @@ StatusBar::StatusBar(QWidget *p)
 	addPermanentWidget(statusWidget, 1);
 }
 
-/*!
- * This is our default destructor, which cleans up and destroys our this status
- * bar widget instance.
- */
-StatusBar::~StatusBar()
-{
-}
-
-/*!
- * This function displays a notification in this status bar widget.
- *
- * \param n The notification to display.
- * \param c Whether or not the notification is critical.
- */
 void StatusBar::displayNotification(const QString &n, bool c)
 {
 	notificationLabel->displayNotification(n, c);
 }
 
-/*!
- * This function sets the "current tab path" that we're displaying. This should
- * be the absolute path to the file which is open in the current tab, or an
- * empty string if no valid absolute path exists.
- *
- * \param p The current tab path to display.
- */
 void StatusBar::setCurrentTabPath(const QString &p)
 {
 	int l = p.trimmed().length();
@@ -113,21 +86,11 @@ void StatusBar::setCurrentTabPath(const QString &p)
 	tabPathLabel->setText(p.trimmed());
 }
 
-/*!
- * This function sets the line number we'll display in the status bar.
- *
- * \param l The current line number.
- */
 void StatusBar::setLine(int l)
 {
 	lineLabel->setText(QString("L %1").arg(l));
 }
 
-/*!
- * This function sets the column number we'll display in the status bar.
- *
- * \param c The current column number.
- */
 void StatusBar::setColumn(int c)
 {
 	columnLabel->setText(QString("C %1").arg(c));

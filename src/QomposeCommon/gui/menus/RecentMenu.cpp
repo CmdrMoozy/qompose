@@ -29,14 +29,6 @@
 
 namespace qompose
 {
-/*!
- * This is our default constructor, which creates a new instance of our
- * class. Our capacity and our contents will be automatically loaded from
- * the given settings instance.
- *
- * \param s The settings instance to use.
- * \param p This menu's parent object.
- */
 RecentMenu::RecentMenu(Settings *s, QObject *p)
         : QObject(p),
           settings(s),
@@ -77,41 +69,21 @@ RecentMenu::RecentMenu(Settings *s, QObject *p)
 		setListContents(vcontents.toStringList());
 }
 
-/*!
- * This is our default destructor, which cleans up & destroys our object.
- */
 RecentMenu::~RecentMenu()
 {
 	delete menu;
 }
 
-/*!
- * This function returns our recent menu's capacity.
- *
- * \return The current capacity of our menu.
- */
 int RecentMenu::getCapacity() const
 {
 	return capacity;
 }
 
-/*!
- * This function returns a pointer to the QMenu instance which contains
- * our list of items. Note that we retain ownership of this menu - our
- * caller should probably not alter it, and DEFINITELY shouldn't delete
- * it.
- *
- * \return A pointer to our internal QMenu instance.
- */
 QMenu *RecentMenu::getMenu() const
 {
 	return menu;
 }
 
-/*!
- * This function saves our menu's current contents using the settings
- * instance given to our constructor.
- */
 void RecentMenu::saveContents()
 {
 	QStringList l;
@@ -122,18 +94,6 @@ void RecentMenu::saveContents()
 	settings->setSetting("recent-list", QVariant(l));
 }
 
-/*!
- * This function adds the given path to our recent menu.
- *
- * If this would make our list of recent items exceed our capacity, then
- * the oldest item(s) in the list will be removed to make room for this
- * new item.
- *
- * If this item is already in our list, then it will simply be moved
- * to the top of the list.
- *
- * \param p The path to add to our list.
- */
 void RecentMenu::addPath(const QString &p)
 {
 	// If we already have this path, remove it first (move to the top).
@@ -166,17 +126,6 @@ void RecentMenu::addPath(const QString &p)
 	saveContents();
 }
 
-/*!
- * This function updates our actions list's size, for instance after our
- * capacity or list of recent items has been changed.
- *
- * If our actions list is larger or smaller than our recent items list,
- * then new actions will be removed or added (respectively) to make them
- * the same size.
- *
- * Note that this function does NOT alter the text of the actions; this
- * should be done by renderListContents() AFTER calling this function.
- */
 void RecentMenu::updateActionsListSize()
 {
 	// Make sure our items list isn't too long.
@@ -203,16 +152,6 @@ void RecentMenu::updateActionsListSize()
 	}
 }
 
-/*!
- * This function alters our list's capacity. If our existing list of recent
- * items is larger than this new capacity, the oldest item(s) will be removed
- * until our recent list's size is equal to our capacity.
- *
- * After this is done, we update the size of our actions list, and then we
- * update the text of the actions to match our new items list.
- *
- * \param c The new capacity for our menu.
- */
 void RecentMenu::setCapacity(int c)
 {
 	capacity = c;
@@ -236,10 +175,6 @@ void RecentMenu::setCapacity(int c)
 	renderListContents();
 }
 
-/*!
- * This function renders our list contents by setting the appropriate text
- * for each action, based upon the contents of our recent items list.
- */
 void RecentMenu::renderListContents()
 {
 	for(int i = (recentList.count() - 1); i >= 0; --i)
@@ -252,17 +187,6 @@ void RecentMenu::renderListContents()
 	}
 }
 
-/*!
- * This function sets our list contents to the given list. It is assumed
- * that the given list is in order such that the LAST item in the given
- * list is the MOST recent item.
- *
- * If the given list is larger than our capacity, then after the items
- * are all added to our list then we will remove the oldest item(s) until
- * the recent list size is the same as our capacity.
- *
- * \param l Our new list of items.
- */
 void RecentMenu::setListContents(const QStringList &l)
 {
 	// Set our recent list's contents to the given list.
@@ -289,14 +213,8 @@ void RecentMenu::setListContents(const QStringList &l)
 	renderListContents();
 }
 
-/*!
- * This function handles an action being clicked by determining which action
- * was clicked, and then emitting an appropriate "recentClicked" signal with
- * the path corresponding to the action that was clicked.
- */
 void RecentMenu::doActionClicked()
-{ /* SLOT */
-
+{
 	// Get the action that was clicked.
 
 	QObject *s = sender();
@@ -319,18 +237,8 @@ void RecentMenu::doActionClicked()
 	Q_EMIT recentClicked(recentList.at(i));
 }
 
-/*!
- * This slot handles a settings value being changed by, if it's a setting we
- * care about (namely, the recent-list-size and recent-list settings), then we
- *will
- * update our internal state to match that setting's new value.
- *
- * \param k The key of the setting that was changed.
- * \param v The setting's new value.
- */
 void RecentMenu::doSettingChanged(const QString &k, const QVariant &v)
-{ /* SLOT */
-
+{
 	if(k == "recent-list-size")
 	{
 		bool ok;

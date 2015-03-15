@@ -33,21 +33,86 @@ namespace gui_utils
 typedef std::pair<const QObject *, const char *> Connection;
 typedef std::vector<Connection> ConnectionList;
 
+/*!
+ * This function provides a concise way to use Qt's tr() function on a
+ * standard string.
+ *
+ * \param s The string to translat.
+ * \return The translated string.
+ */
 QString translate(const std::string &s);
 
+/*!
+ * \brief This structure provides a function to make Connection pairs.
+ *
+ * The operator() this structure provides is equivalent to calling:
+ *
+ *     std::make_pair(object, connection)
+ *
+ * This structure simply provides a much more concise way to do this, so one
+ * doesn't need to repeat as much code when building a large list of
+ * connections.
+ */
 struct ConnectionFunctor
 {
 	const QObject *object;
 
+	/*!
+	 * Create a new ConnectionFunctor which will create Connections for the
+	 * given object.
+	 *
+	 * \param o The object to create connections for.
+	 */
 	ConnectionFunctor(const QObject *o);
+
+	/*!
+	 * This function will create a new Connection with the object given to
+	 * our constructor, and the given signal or slot created using Qt's
+	 * SIGNAL or SLOT macros.
+	 *
+	 * \param connection The signal or slot to create a connection with.
+	 * \return The resulting connection pair.
+	 */
 	Connection operator()(const char *connection) const;
 };
 
+/*!
+ * This function connects the given object's signal to all of the given
+ * connections (either signals or slots).
+ *
+ * \param sender The object which sends the signal.
+ * \param signal The signal to connect.
+ * \param connections The list of connections to connect to the signal.
+ */
 void connectAll(const QObject *sender, const char *signal,
-                const ConnectionList &slots);
-void connectAll(const ConnectionList &signals, const QObject *receiver,
-                const char *slot);
+                const ConnectionList &connections);
 
+/*!
+ * This function connects all of the given signals to the given object's
+ * signal or slot.
+ *
+ * \param signals The list of signals to connect to the given signal or slot.
+ * \param receiver The object to connect each signal to.
+ * \param connection The signal or slot to connect each signal to.
+ */
+void connectAll(const ConnectionList &signals, const QObject *receiver,
+                const char *connection);
+
+/*!
+ * This function will return the icon for the given standard name. We try to
+ * use an icon from the operating system's icon theme, but failing that, we
+ * try to use a fallback from our internal icon store.
+ *
+ * If no icon can be found, a null QIcon is returned instead.
+ *
+ * The default names supported by QIcon (and, therefore, this function) can be
+ * found here:
+ *
+ *     http://standards.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
+ *
+ * \param n The name of the icon to find.
+ * \return An icon object corresponding to the given name.
+ */
 QIcon getIconFromTheme(const QString &n);
 }
 }

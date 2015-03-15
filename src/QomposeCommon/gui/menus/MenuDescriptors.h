@@ -35,19 +35,49 @@ namespace qompose
 {
 namespace menu_desc
 {
+/*!
+ * This template function should be specialized for each descriptor type to
+ * create a new object from the descriptor, and to add it to the menu.
+ *
+ * \param parent The new object's parent.
+ * \param menu The menu to add the new object to.
+ * \param descriptor The descriptor to create the new object from.
+ */
 template <typename DescriptorType>
 void constructDescriptor(QObject *parent, QMenu *menu,
                          const DescriptorType &descriptor);
 
+/*!
+ * \brief This class provides a variant visitor for a menu descriptor variant.
+ *
+ * This class provides a boost::variant visitor which will call the appropriate
+ * constructDescriptor() function for the variant, depending on its type.
+ */
 class MenuDescriptorVisitor : public boost::static_visitor<void>
 {
 public:
+	/*!
+	 * This constructor creates a new menu descriptor visitor, which will
+	 * construct objects from descriptors using the given parent and menu.
+	 *
+	 * \param p The parent for the new objects.
+	 * \param m The menu to add the new objects to.
+	 */
 	MenuDescriptorVisitor(QObject *p, QMenu *m);
 
 	MenuDescriptorVisitor(const MenuDescriptorVisitor &) = delete;
+	~MenuDescriptorVisitor() = default;
+
 	MenuDescriptorVisitor &
 	operator=(const MenuDescriptorVisitor &) = delete;
 
+	/*!
+	 * This call operator will construct a new object from the given
+	 * descriptor, as well as the object and menu given to this visitor in
+	 * its constructor.
+	 *
+	 * \param descriptor The descriptor to create an object from.
+	 */
 	template <typename Descriptor>
 	void operator()(const Descriptor &descriptor) const
 	{
@@ -59,6 +89,9 @@ private:
 	QMenu *menu;
 };
 
+/*!
+ * \brief This structure provides a descriptor for menu items (QActions).
+ */
 struct MenuItemDescriptor
 {
 	QString text;
@@ -67,28 +100,74 @@ struct MenuItemDescriptor
 	gui_utils::ConnectionList connections;
 	bool checkable;
 
-	MenuItemDescriptor(
-	        const std::string &,
-	        const gui_utils::ConnectionList & = gui_utils::ConnectionList(),
-	        QKeySequence = QKeySequence(), const QString & = QString(),
-	        bool chk = false);
-	MenuItemDescriptor(const std::string &,
-	                   const gui_utils::Connection & =
+	/*!
+	 * This constructor creates a new MenuItemDescriptor with the given
+	 * properties and connections for its triggered(bool) signal.
+	 *
+	 * \param t The text for this menu item.
+	 * \param c The connections for this item's triggered(bool) signal.
+	 * \param s The hotkey for this menu item.
+	 * \param i The icon for this menu item (see getIconFromTheme).
+	 * \param chk Whether or not this item should be checkable.
+	 */
+	MenuItemDescriptor(const std::string &t,
+	                   const gui_utils::ConnectionList &c =
+	                           gui_utils::ConnectionList(),
+	                   QKeySequence s = QKeySequence(),
+	                   const QString &i = QString(), bool chk = false);
+
+	/*!
+	 * This constructor creates a new MenuItemDescriptor with the given
+	 * properties and connection for its triggered(bool) signal.
+	 *
+	 * \param t The text for this menu item.
+	 * \param c The connection for this menu item's triggered(bool) signal.
+	 * \param s The hotkey for this menu item.
+	 * \param i The icon for this menu item (see getIconFromTheme).
+	 * \param chk Whether or not this item should be checkable.
+	 */
+	MenuItemDescriptor(const std::string &t,
+	                   const gui_utils::Connection &c =
 	                           gui_utils::Connection(nullptr, nullptr),
-	                   QKeySequence = QKeySequence(),
-	                   const QString & = QString(), bool chk = false);
+	                   QKeySequence s = QKeySequence(),
+	                   const QString &i = QString(), bool chk = false);
+
+	MenuItemDescriptor(const MenuItemDescriptor &) = default;
+	~MenuItemDescriptor() = default;
+
+	MenuItemDescriptor &operator=(const MenuItemDescriptor &) = default;
 };
 
-struct SeparatorDescriptor
-{
-};
-
+/*!
+ * We specialize this function in order to create a menu item from a
+ * descriptor, and add it to the given menu.
+ *
+ * \param parent The parent for the new menu item.
+ * \param menu The menu to add the new menu item to.
+ * \param descriptor The descriptor to create the new menu item from.
+ */
 template <>
 void constructDescriptor(QObject *parent, QMenu *menu,
                          const MenuItemDescriptor &descriptor);
 
+/*!
+ * \brief This structure provides a descriptor for a menu separator.
+ */
+struct SeparatorDescriptor
+{
+};
+
+/*!
+ * We specialize this function in order to create a menu separator from a
+ * descriptor, and add it to the given menu.
+ *
+ * \param parent The parent for the new menu item.
+ * \param menu The menu to add the new separator to.
+ * \param descriptor The descriptor to create the new separator from.
+ */
 template <>
-void constructDescriptor(QObject *, QMenu *menu, const SeparatorDescriptor &);
+void constructDescriptor(QObject *parent, QMenu *menu,
+                         const SeparatorDescriptor &descriptor);
 }
 }
 

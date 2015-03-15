@@ -248,10 +248,6 @@ MainMenu::MainMenu(Settings *settings, QWidget *p) : QMenuBar(p)
 	addMenu(createHelpMenu(this));
 }
 
-MainMenu::~MainMenu()
-{
-}
-
 void MainMenu::connectBufferWidget(const BufferWidget *b)
 {
 	QObject::connect(b, SIGNAL(pathOpened(const QString &)), this,
@@ -306,20 +302,11 @@ void MainMenu::connectBufferWidget(const BufferWidget *b)
 	                 SLOT(doMoveBufferRight()));
 }
 
-/*!
- * This slot handles the "new window" action by opening a new Qompose window.
- */
 void MainMenu::doNewWindow()
 {
 	Window::openNewWindow();
 }
 
-/*!
- * This slot handles a file being opened by updating our recently opened menu
- * with the newly opened path.
- *
- * \param p The path to the file that was opened.
- */
 void MainMenu::doFileOpened(const QString &p)
 {
 	Q_EMIT(pathOpened(p));
