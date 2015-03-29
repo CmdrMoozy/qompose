@@ -46,10 +46,10 @@ public:
 	/*!
 	 * This is our default constructor, which creates a new main menu.
 	 *
-	 * \param settings The settings object to connect to menu items.
+	 * \param s The settings object to connect to menu items.
 	 * \param p The menu bar's parent widget.
 	 */
-	MainMenu(Settings *settings, QWidget *p = nullptr);
+	MainMenu(Settings *s, QWidget *p = nullptr);
 
 	MainMenu(const MainMenu &) = delete;
 	virtual ~MainMenu() = default;
@@ -65,6 +65,7 @@ public:
 	void connectBufferWidget(const BufferWidget *b);
 
 private:
+	Settings *settings;
 	const BufferWidget *bufferWidget;
 
 private Q_SLOTS:
@@ -87,6 +88,14 @@ private Q_SLOTS:
 	 * \param p The path to the file that was opened.
 	 */
 	void doFileOpened(const QString &p);
+
+	/*!
+	 * This slot handles our file browser widget menu item's visibility
+	 * changing.
+	 *
+	 * \param s Whether or not the file browser widget should be shown.
+	 */
+	void doShowBrowser(bool s);
 
 Q_SIGNALS:
 	void newTriggered(bool);
@@ -113,7 +122,6 @@ Q_SIGNALS:
 	void decreaseIndentTriggered(bool);
 	void preferencesTriggered(bool);
 	void lineWrappingTriggered(bool);
-	void showBrowserTriggered(bool);
 	void findTriggered(bool);
 	void findNextTriggered(bool);
 	void findPreviousTriggered(bool);

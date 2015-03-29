@@ -20,9 +20,9 @@
 
 namespace qompose
 {
-BrowserDockWidget::BrowserDockWidget(const QString &t, QWidget *p,
-                                     Qt::WindowFlags f)
-        : QDockWidget(t, p, f)
+BrowserDockWidget::BrowserDockWidget(QWidget *p, Qt::WindowFlags f)
+        : QDockWidget(tr("File Browser"), p, f)
 {
+	setObjectName("FileBrowser");
 }
 }

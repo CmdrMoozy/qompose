@@ -31,15 +31,16 @@ class QPrinter;
 
 namespace qompose
 {
-class PreferencesDialog;
-class BufferWidget;
 class AboutDialog;
+class BrowserDockWidget;
+class BufferWidget;
 class FindDialog;
-class ReplaceDialog;
 class GoToDialog;
 class MainMenu;
-class StatusBar;
+class PreferencesDialog;
+class ReplaceDialog;
 class Settings;
+class StatusBar;
 
 /*!
  * \brief This class implements one of our application's standard windows.
@@ -97,6 +98,8 @@ private:
 
 	StatusBar *statusBar;
 
+	BrowserDockWidget *browserWidget;
+
 	/*!
 	 * This function initializes our dialog objects.
 	 */
@@ -108,6 +111,12 @@ private:
 	 * initialized before we can add them to menus.
 	 */
 	void initializeMenus();
+
+	/*!
+	 * This function initializes the various dock widgets which can be
+	 * displayed as components of the main window.
+	 */
+	void initializeDockWidgets();
 
 	/*!
 	 * This function reads various settings properties from our settings
@@ -179,6 +188,13 @@ private Q_SLOTS:
 	 * visible).
 	 */
 	void doPreferencesDialog();
+
+	/*!
+	 * This slot shows or hides the file browser dock widget.
+	 *
+	 * \param show Whether or not the file browser widget should be shown.
+	 */
+	void doShowBrowser(bool s);
 
 	/*!
 	 * This function handles our "find" action being triggered by showing

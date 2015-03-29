@@ -37,6 +37,7 @@
 #include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/GUIUtils.h"
 #include "QomposeCommon/gui/StatusBar.h"
+#include "QomposeCommon/gui/dock/BrowserDockWidget.h"
 #include "QomposeCommon/gui/menus/MainMenu.h"
 #include "QomposeCommon/util/FindQuery.h"
 #include "QomposeCommon/util/ReplaceQuery.h"
@@ -63,7 +64,8 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
           aboutDialog(nullptr),
           mainMenu(nullptr),
           buffers(nullptr),
-          statusBar(nullptr)
+          statusBar(nullptr),
+          browserWidget(nullptr)
 {
 	settings = new Settings(this);
 
@@ -82,6 +84,7 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 
 	initializeDialogs();
 	initializeMenus();
+	initializeDockWidgets();
 
 	QObject::connect(buffers, SIGNAL(pathChanged(const QString &)), this,
 	                 SLOT(doTabPathChanged(const QString &)));
@@ -190,6 +193,14 @@ void Window::initializeMenus()
 	QObject::connect(mainMenu, SIGNAL(debugTriggered(bool)), this,
 	                 SLOT(doDebug()));
 #endif
+}
+
+void Window::initializeDockWidgets()
+{
+	browserWidget = new BrowserDockWidget(this);
+	addDockWidget(Qt::RightDockWidgetArea, browserWidget);
+	browserWidget->setVisible(
+	        settings->getSetting("show-file-browser").toBool());
 }
 
 void Window::applyExistingSettings()
@@ -358,6 +369,11 @@ void Window::doPreferencesDialog()
 	}
 }
 
+void Window::doShowBrowser(bool s)
+{
+	browserWidget->setVisible(s);
+}
+
 void Window::doFindDialog()
 {
 	if(!replaceDialog->isVisible())
@@ -422,5 +438,7 @@ void Window::doSettingChanged(const QString &k, const QVariant &v)
 		doUpdateWindowTitle();
 	else if(k == "show-status-bar")
 		statusBar->setVisible(v.toBool());
+	else if(k == "show-file-browser")
+		doShowBrowser(v.toBool());
 }
 }

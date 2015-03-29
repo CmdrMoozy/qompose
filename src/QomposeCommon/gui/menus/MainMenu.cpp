@@ -160,19 +160,20 @@ QMenu *createEditMenu(QWidget *parent)
 	return buildMenu(parent, "&Edit", items);
 }
 
-QMenu *createViewMenu(QWidget *parent)
+QMenu *createViewMenu(QWidget *parent, qompose::Settings *settings)
 {
 	qompose::gui_utils::ConnectionFunctor parentConn(parent);
 	const DescriptorList items(
 	        {MenuItemDescriptor(
 	                 "Line &Wrapping",
 	                 parentConn(SIGNAL(lineWrappingTriggered(bool))),
-	                 QKeySequence(), QString(), true,
+	                 QKeySequence(), QString(), true, false,
 	                 parentConn(SIGNAL(lineWrappingChanged(bool)))),
 	         MenuItemDescriptor(
 	                 "Show File &Browser",
-	                 parentConn(SIGNAL(showBrowserTriggered(bool))),
-	                 QKeySequence(), QString(), true)});
+	                 parentConn(SLOT(doShowBrowser(bool))), QKeySequence(),
+	                 QString(), true,
+	                 settings->getSetting("show-file-browser").toBool())});
 	return buildMenu(parent, "&View", items);
 }
 
@@ -247,12 +248,12 @@ QMenu *createHelpMenu(QWidget *parent)
 
 namespace qompose
 {
-MainMenu::MainMenu(Settings *settings, QWidget *p)
-        : QMenuBar(p), bufferWidget(nullptr)
+MainMenu::MainMenu(Settings *s, QWidget *p)
+        : QMenuBar(p), settings(s), bufferWidget(nullptr)
 {
-	addMenu(createFileMenu(this, settings));
+	addMenu(createFileMenu(this, s));
 	addMenu(createEditMenu(this));
-	addMenu(createViewMenu(this));
+	addMenu(createViewMenu(this, settings));
 	addMenu(createSearchMenu(this));
 	addMenu(createBuffersMenu(this));
 	addMenu(createHelpMenu(this));
@@ -344,5 +345,10 @@ void MainMenu::doBufferChanged()
 void MainMenu::doFileOpened(const QString &p)
 {
 	Q_EMIT(pathOpened(p));
+}
+
+void MainMenu::doShowBrowser(bool s)
+{
+	settings->setSetting("show-file-browser", s);
 }
 }

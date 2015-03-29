@@ -54,6 +54,7 @@ const QList<QPair<QString, QVariant>> Settings::defaults =
         << SettingPair("editor-current-line", QColor(70, 72, 61))
         << SettingPair("gutter-foreground", QColor(Qt::white))
         << SettingPair("gutter-background", QColor(Qt::black))
+        << SettingPair("show-file-browser", false)
         << SettingPair("window-geometry", QByteArray())
         << SettingPair("window-state", QByteArray());
 

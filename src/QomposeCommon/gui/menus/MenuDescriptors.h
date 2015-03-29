@@ -99,6 +99,7 @@ struct MenuItemDescriptor
 	QString icon;
 	gui_utils::ConnectionList signalConnections;
 	bool checkable;
+	bool defaultChecked;
 	gui_utils::ConnectionList slotConnections;
 
 	/*!
@@ -110,6 +111,7 @@ struct MenuItemDescriptor
 	 * \param s The hotkey for this menu item.
 	 * \param i The icon for this menu item (see getIconFromTheme).
 	 * \param chk Whether or not this item should be checkable.
+	 * \param dchk Whether or not this item should be checked by default.
 	 * \param slotc The connections for this menu item's setChecked slot.
 	 */
 	MenuItemDescriptor(const std::string &t,
@@ -117,6 +119,7 @@ struct MenuItemDescriptor
 	                           gui_utils::ConnectionList(),
 	                   QKeySequence s = QKeySequence(),
 	                   const QString &i = QString(), bool chk = false,
+	                   bool dchk = false,
 	                   const gui_utils::ConnectionList &slotc =
 	                           gui_utils::ConnectionList());
 
@@ -129,6 +132,7 @@ struct MenuItemDescriptor
 	 * \param s The hotkey for this menu item.
 	 * \param i The icon for this menu item (see getIconFromTheme).
 	 * \param chk Whether or not this item should be checkable.
+	 * \param dchk Whether or not this item should be checked by default.
 	 * \param slotc The connection for this menu item's setChecked slot.
 	 */
 	MenuItemDescriptor(const std::string &t,
@@ -136,6 +140,7 @@ struct MenuItemDescriptor
 	                           gui_utils::Connection(nullptr, nullptr),
 	                   QKeySequence s = QKeySequence(),
 	                   const QString &i = QString(), bool chk = false,
+	                   bool dchk = false,
 	                   const gui_utils::Connection &slotc =
 	                           gui_utils::Connection(nullptr, nullptr));
 

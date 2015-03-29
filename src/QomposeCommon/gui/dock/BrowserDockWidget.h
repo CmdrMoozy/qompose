@@ -26,8 +26,7 @@ namespace qompose
 class BrowserDockWidget : public QDockWidget
 {
 public:
-	BrowserDockWidget(const QString &, QWidget * = nullptr,
-	                  Qt::WindowFlags = nullptr);
+	BrowserDockWidget(QWidget * = nullptr, Qt::WindowFlags = nullptr);
 	virtual ~BrowserDockWidget() = default;
 };
 }
