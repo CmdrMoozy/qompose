@@ -623,6 +623,8 @@ void BufferWidget::doPrint(QPrinter *p)
 
 void BufferWidget::doTabChanged(int i)
 {
+	Q_EMIT bufferChanged();
+
 	Buffer *b = dynamic_cast<Buffer *>(tabWidget->widget(i));
 
 	if(b != NULL)

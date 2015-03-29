@@ -64,12 +64,21 @@ public:
 	 */
 	void connectBufferWidget(const BufferWidget *b);
 
+private:
+	const BufferWidget *bufferWidget;
+
 private Q_SLOTS:
 	/*!
 	 * This slot handles the "new window" action by opening a new Qompose
 	 * window.
 	 */
 	void doNewWindow();
+
+	/*!
+	 * This slot handles the current buffer being changed by updating our
+	 * buffer-specific menu items.
+	 */
+	void doBufferChanged();
 
 	/*!
 	 * This slot handles a file being opened by updating our recently
@@ -119,6 +128,7 @@ Q_SIGNALS:
 	void debugTriggered(bool);
 
 	void pathOpened(const QString &);
+	void lineWrappingChanged(bool);
 };
 }
 

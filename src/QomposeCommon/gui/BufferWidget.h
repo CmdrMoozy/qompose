@@ -468,6 +468,7 @@ private Q_SLOTS:
 	void doReopenBuffer(const ClosedBufferDescriptor &d);
 
 Q_SIGNALS:
+	void bufferChanged();
 	void pathChanged(const QString &);
 	void pathOpened(const QString &);
 	void cursorPositionChanged(int, int);

@@ -18,6 +18,8 @@
 
 #include "MainMenu.h"
 
+#include <cassert>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
@@ -28,6 +30,7 @@
 #include <boost/variant/variant.hpp>
 
 #include "QomposeCommon/Window.h"
+#include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/GUIUtils.h"
 #include "QomposeCommon/gui/menus/RecentMenu.h"
@@ -164,7 +167,8 @@ QMenu *createViewMenu(QWidget *parent)
 	        {MenuItemDescriptor(
 	                 "Line &Wrapping",
 	                 parentConn(SIGNAL(lineWrappingTriggered(bool))),
-	                 QKeySequence(), QString(), true),
+	                 QKeySequence(), QString(), true,
+	                 parentConn(SIGNAL(lineWrappingChanged(bool)))),
 	         MenuItemDescriptor(
 	                 "Show File &Browser",
 	                 parentConn(SIGNAL(showBrowserTriggered(bool))),
@@ -243,7 +247,8 @@ QMenu *createHelpMenu(QWidget *parent)
 
 namespace qompose
 {
-MainMenu::MainMenu(Settings *settings, QWidget *p) : QMenuBar(p)
+MainMenu::MainMenu(Settings *settings, QWidget *p)
+        : QMenuBar(p), bufferWidget(nullptr)
 {
 	addMenu(createFileMenu(this, settings));
 	addMenu(createEditMenu(this));
@@ -255,6 +260,16 @@ MainMenu::MainMenu(Settings *settings, QWidget *p) : QMenuBar(p)
 
 void MainMenu::connectBufferWidget(const BufferWidget *b)
 {
+	if(bufferWidget != nullptr)
+	{
+		throw std::runtime_error("Only one buffer widget "
+		                         "can be connected to a menu.");
+	}
+
+	bufferWidget = b;
+
+	QObject::connect(b, SIGNAL(bufferChanged()), this,
+	                 SLOT(doBufferChanged()));
 	QObject::connect(b, SIGNAL(pathOpened(const QString &)), this,
 	                 SIGNAL(pathOpened(const QString &)));
 
@@ -315,6 +330,15 @@ void MainMenu::connectBufferWidget(const BufferWidget *b)
 void MainMenu::doNewWindow()
 {
 	Window::openNewWindow();
+}
+
+void MainMenu::doBufferChanged()
+{
+	assert(QObject::sender() == bufferWidget);
+
+	Buffer *buffer = bufferWidget->currentBuffer();
+	if(buffer != nullptr)
+		Q_EMIT lineWrappingChanged(buffer->getLineWrapping());
 }
 
 void MainMenu::doFileOpened(const QString &p)
