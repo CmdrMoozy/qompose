@@ -160,10 +160,15 @@ QMenu *createEditMenu(QWidget *parent)
 QMenu *createViewMenu(QWidget *parent)
 {
 	qompose::gui_utils::ConnectionFunctor parentConn(parent);
-	const DescriptorList items({MenuItemDescriptor(
-	        "Show File &Browser",
-	        parentConn(SIGNAL(showBrowserTriggered(bool))), QKeySequence(),
-	        QString(), true)});
+	const DescriptorList items(
+	        {MenuItemDescriptor(
+	                 "Line &Wrapping",
+	                 parentConn(SIGNAL(lineWrappingTriggered(bool))),
+	                 QKeySequence(), QString(), true),
+	         MenuItemDescriptor(
+	                 "Show File &Browser",
+	                 parentConn(SIGNAL(showBrowserTriggered(bool))),
+	                 QKeySequence(), QString(), true)});
 	return buildMenu(parent, "&View", items);
 }
 
@@ -289,6 +294,11 @@ void MainMenu::connectBufferWidget(const BufferWidget *b)
 	                 SLOT(doIncreaseIndent()));
 	QObject::connect(this, SIGNAL(decreaseIndentTriggered(bool)), b,
 	                 SLOT(doDecreaseIndent()));
+
+	// Connect view menu actions.
+
+	QObject::connect(this, SIGNAL(lineWrappingTriggered(bool)), b,
+	                 SLOT(doLineWrapping(bool)));
 
 	// Connect buffers menu actions.
 

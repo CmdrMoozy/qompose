@@ -497,6 +497,16 @@ void BufferWidget::doDecreaseIndent()
 	buf->decreaseSelectionIndent();
 }
 
+void BufferWidget::doLineWrapping(bool enabled)
+{
+	Buffer *buf = currentBuffer();
+
+	if(buf == NULL)
+		return;
+
+	buf->setLineWrapping(enabled);
+}
+
 Editor::FindResult BufferWidget::doFindNext(const FindQuery *q)
 {
 	Buffer *buf = currentBuffer();

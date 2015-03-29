@@ -299,6 +299,14 @@ public Q_SLOTS:
 	void doDecreaseIndent();
 
 	/*!
+	 * This slot handles line wrapping being enabled or diabled by making
+	 * the change in the current buffer.
+	 *
+	 * \param enabled Whether or not line wrapping is now enabled.
+	 */
+	void doLineWrapping(bool enabled);
+
+	/*!
 	 * This slot executes a "find next" action by instructing our current
 	 * buffer to execute the given find query.
 	 *

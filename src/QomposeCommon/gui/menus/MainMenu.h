@@ -103,6 +103,7 @@ Q_SIGNALS:
 	void increaseIndentTriggered(bool);
 	void decreaseIndentTriggered(bool);
 	void preferencesTriggered(bool);
+	void lineWrappingTriggered(bool);
 	void showBrowserTriggered(bool);
 	void findTriggered(bool);
 	void findNextTriggered(bool);

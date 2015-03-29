@@ -241,6 +241,17 @@ void DecoratedTextEdit::setWrapGuideColor(const QColor &c)
 	fullUpdate();
 }
 
+bool DecoratedTextEdit::getLineWrapping() const
+{
+	return lineWrapMode() == QPlainTextEdit::WidgetWidth;
+}
+
+void DecoratedTextEdit::setLineWrapping(bool enabled)
+{
+	setLineWrapMode(enabled ? QPlainTextEdit::WidgetWidth
+	                        : QPlainTextEdit::NoWrap);
+}
+
 QColor DecoratedTextEdit::getEditorForeground() const
 {
 	return palette().color(QPalette::Text);

@@ -228,6 +228,22 @@ public:
 	void setWrapGuideColor(const QColor &c);
 
 	/*!
+	 * This function returns whether or not line wrapping is enabled for
+	 * this decorated text edit.
+	 *
+	 * \return Whether or not line wrapping is enabled.
+	 */
+	bool getLineWrapping() const;
+
+	/*!
+	 * This function sets whether or not line wrapping is enabled for this
+	 * decorated text edit.
+	 *
+	 * \param enabled Whether or not line wrapping should be enabled.
+	 */
+	void setLineWrapping(bool enabled);
+
+	/*!
 	 * This function returns our editor's foreground (text) color.
 	 *
 	 * \return Our editor's foreground color.
