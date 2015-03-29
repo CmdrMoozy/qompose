@@ -129,7 +129,7 @@ QMenu *createEditMenu(QWidget *parent)
 	                            parentConn(SIGNAL(copyTriggered(bool))),
 	                            Qt::CTRL + Qt::Key_C, "edit-copy"),
 	         MenuItemDescriptor("&Paste",
-	                            parentConn(SIGNAL(pasteTriggered())),
+	                            parentConn(SIGNAL(pasteTriggered(bool))),
 	                            Qt::CTRL + Qt::Key_V, "edit-paste"),
 	         MenuItemDescriptor(
 	                 "Duplicat&e Line",
