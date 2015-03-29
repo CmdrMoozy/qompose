@@ -97,8 +97,9 @@ struct MenuItemDescriptor
 	QString text;
 	QKeySequence shortcut;
 	QString icon;
-	gui_utils::ConnectionList connections;
+	gui_utils::ConnectionList signalConnections;
 	bool checkable;
+	gui_utils::ConnectionList slotConnections;
 
 	/*!
 	 * This constructor creates a new MenuItemDescriptor with the given
@@ -109,28 +110,34 @@ struct MenuItemDescriptor
 	 * \param s The hotkey for this menu item.
 	 * \param i The icon for this menu item (see getIconFromTheme).
 	 * \param chk Whether or not this item should be checkable.
+	 * \param slotc The connections for this menu item's setChecked slot.
 	 */
 	MenuItemDescriptor(const std::string &t,
-	                   const gui_utils::ConnectionList &c =
+	                   const gui_utils::ConnectionList &sigc =
 	                           gui_utils::ConnectionList(),
 	                   QKeySequence s = QKeySequence(),
-	                   const QString &i = QString(), bool chk = false);
+	                   const QString &i = QString(), bool chk = false,
+	                   const gui_utils::ConnectionList &slotc =
+	                           gui_utils::ConnectionList());
 
 	/*!
 	 * This constructor creates a new MenuItemDescriptor with the given
 	 * properties and connection for its triggered(bool) signal.
 	 *
 	 * \param t The text for this menu item.
-	 * \param c The connection for this menu item's triggered(bool) signal.
+	 * \param sigc The connection for this menu item's triggered signal.
 	 * \param s The hotkey for this menu item.
 	 * \param i The icon for this menu item (see getIconFromTheme).
 	 * \param chk Whether or not this item should be checkable.
+	 * \param slotc The connection for this menu item's setChecked slot.
 	 */
 	MenuItemDescriptor(const std::string &t,
-	                   const gui_utils::Connection &c =
+	                   const gui_utils::Connection &sigc =
 	                           gui_utils::Connection(nullptr, nullptr),
 	                   QKeySequence s = QKeySequence(),
-	                   const QString &i = QString(), bool chk = false);
+	                   const QString &i = QString(), bool chk = false,
+	                   const gui_utils::Connection &slotc =
+	                           gui_utils::Connection(nullptr, nullptr));
 
 	MenuItemDescriptor(const MenuItemDescriptor &) = default;
 	~MenuItemDescriptor() = default;

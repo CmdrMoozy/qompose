@@ -30,29 +30,36 @@ MenuDescriptorVisitor::MenuDescriptorVisitor(QObject *p, QMenu *m)
 }
 
 MenuItemDescriptor::MenuItemDescriptor(const std::string &t,
-                                       const gui_utils::ConnectionList &c,
+                                       const gui_utils::ConnectionList &sigc,
                                        QKeySequence s, const QString &i,
-                                       bool chk)
+                                       bool chk,
+                                       const gui_utils::ConnectionList &slotc)
         : text(gui_utils::translate(t)),
           shortcut(s),
           icon(i),
-          connections(c),
-          checkable(chk)
+          signalConnections(sigc),
+          checkable(chk),
+          slotConnections(slotc)
 {
 }
 
 MenuItemDescriptor::MenuItemDescriptor(const std::string &t,
-                                       const gui_utils::Connection &c,
+                                       const gui_utils::Connection &sigc,
                                        QKeySequence s, const QString &i,
-                                       bool chk)
+                                       bool chk,
+                                       const gui_utils::Connection &slotc)
         : text(gui_utils::translate(t)),
           shortcut(s),
           icon(i),
-          connections(),
-          checkable(chk)
+          signalConnections(),
+          checkable(chk),
+          slotConnections()
 {
-	if(c.first != nullptr && c.second != nullptr)
-		connections.push_back(c);
+	if(sigc.first != nullptr && sigc.second != nullptr)
+		signalConnections.push_back(sigc);
+
+	if(slotc.first != nullptr && slotc.second != nullptr)
+		slotConnections.push_back(slotc);
 }
 
 template <>
@@ -68,13 +75,16 @@ void constructDescriptor(QObject *parent, QMenu *menu,
 		action->setIcon(gui_utils::getIconFromTheme(descriptor.icon));
 
 	gui_utils::connectAll(action, SIGNAL(triggered(bool)),
-	                      descriptor.connections);
+	                      descriptor.signalConnections);
 
 	if(descriptor.checkable)
 	{
 		action->setCheckable(true);
 		action->setChecked(false);
 	}
+
+	gui_utils::connectAll(descriptor.slotConnections, action,
+	                      SLOT(setChecked(bool)));
 
 	menu->addAction(action);
 }
