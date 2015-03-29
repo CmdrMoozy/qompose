@@ -14,7 +14,9 @@ function(qomposeSetCompileFlags)
 		set(F_DBG "${F_WARN} -std=c++11 -g -O0 -fsanitize=address")
 		set(F_DBG "${F_DBG} -fstack-protector-strong")
 		set(F_DBG "${F_DBG} -fsanitize=undefined")
+
 		set(F_REL "${F_WARN} -std=c++11 -O2 -fomit-frame-pointer")
+		set(F_REL "${F_REL} -fstack-protector-strong")
 	elseif(CMAKE_CXX_COMPILER_ID MATCHES Clang)
 		set(F_WARN "-pedantic -Wall -Wextra -Wcast-align -Wcast-qual")
 		set(F_WARN "${F_WARN} -Wdisabled-optimization -Wformat=2")
@@ -28,7 +30,9 @@ function(qomposeSetCompileFlags)
 
 		set(F_DBG "${F_WARN} -std=c++11 -g -O0 -fsanitize=address")
 		set(F_DBG "${F_DBG} -fsanitize=undefined")
+
 		set(F_REL "${F_WARN} -std=c++11 -O2 -fomit-frame-pointer")
+		set(F_REL "${F_REL} -fstack-protector-strong")
 	elseif(CMAKE_CXX_COMPILER_ID MATCHES MSVC)
 		set(F_DBG "/W4 /WX /FIQomposeCommon/MSVCWarnings.h")
 
