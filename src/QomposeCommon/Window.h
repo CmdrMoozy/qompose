@@ -197,6 +197,15 @@ private Q_SLOTS:
 	void doShowBrowser(bool s);
 
 	/*!
+	 * This slot handles the browser widget's visiblity changing by
+	 * updating the associated setting, as well as by emitting a signal
+	 * to let anyone else who cares know about the change.
+	 *
+	 * \param v Whether or not the browser widget is now visible.
+	 */
+	void doBrowserWidgetVisibilityChanged(bool v);
+
+	/*!
 	 * This function handles our "find" action being triggered by showing
 	 * our find dialog, if our replace dialog isn't already open (they are
 	 * mutually exclusive).
@@ -277,6 +286,9 @@ private Q_SLOTS:
 	 * \param v The new value for the given setting.
 	 */
 	void doSettingChanged(const QString &k, const QVariant &v);
+
+Q_SIGNALS:
+	void browserWidgetVisibilityChanged(bool);
 };
 }
 

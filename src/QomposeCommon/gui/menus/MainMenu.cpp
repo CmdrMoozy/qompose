@@ -173,7 +173,9 @@ QMenu *createViewMenu(QWidget *parent, qompose::Settings *settings)
 	                 "Show File &Browser",
 	                 parentConn(SLOT(doShowBrowser(bool))), QKeySequence(),
 	                 QString(), true,
-	                 settings->getSetting("show-file-browser").toBool())});
+	                 settings->getSetting("show-file-browser").toBool(),
+	                 parentConn(SIGNAL(
+	                         browserWidgetVisibilityChanged(bool))))});
 	return buildMenu(parent, "&View", items);
 }
 
@@ -248,7 +250,7 @@ QMenu *createHelpMenu(QWidget *parent)
 
 namespace qompose
 {
-MainMenu::MainMenu(Settings *s, QWidget *p)
+MainMenu::MainMenu(Settings *s, Window *p)
         : QMenuBar(p), settings(s), bufferWidget(nullptr)
 {
 	addMenu(createFileMenu(this, s));
@@ -257,6 +259,9 @@ MainMenu::MainMenu(Settings *s, QWidget *p)
 	addMenu(createSearchMenu(this));
 	addMenu(createBuffersMenu(this));
 	addMenu(createHelpMenu(this));
+
+	QObject::connect(p, SIGNAL(browserWidgetVisibilityChanged(bool)), this,
+	                 SIGNAL(browserWidgetVisibilityChanged(bool)));
 }
 
 void MainMenu::connectBufferWidget(const BufferWidget *b)

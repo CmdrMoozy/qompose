@@ -201,6 +201,9 @@ void Window::initializeDockWidgets()
 	addDockWidget(Qt::RightDockWidgetArea, browserWidget);
 	browserWidget->setVisible(
 	        settings->getSetting("show-file-browser").toBool());
+
+	QObject::connect(browserWidget, SIGNAL(visibilityChanged(bool)), this,
+	                 SLOT(doBrowserWidgetVisibilityChanged(bool)));
 }
 
 void Window::applyExistingSettings()
@@ -372,6 +375,12 @@ void Window::doPreferencesDialog()
 void Window::doShowBrowser(bool s)
 {
 	browserWidget->setVisible(s);
+}
+
+void Window::doBrowserWidgetVisibilityChanged(bool v)
+{
+	settings->setSetting("show-file-browser", v);
+	Q_EMIT browserWidgetVisibilityChanged(v);
 }
 
 void Window::doFindDialog()

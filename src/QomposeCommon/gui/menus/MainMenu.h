@@ -25,6 +25,7 @@ namespace qompose
 {
 class BufferWidget;
 class Settings;
+class Window;
 
 /*!
  * \brief This class implements Qompose's main menu bar.
@@ -49,7 +50,7 @@ public:
 	 * \param s The settings object to connect to menu items.
 	 * \param p The menu bar's parent widget.
 	 */
-	MainMenu(Settings *s, QWidget *p = nullptr);
+	MainMenu(Settings *s, Window *p = nullptr);
 
 	MainMenu(const MainMenu &) = delete;
 	virtual ~MainMenu() = default;
@@ -137,6 +138,7 @@ Q_SIGNALS:
 
 	void pathOpened(const QString &);
 	void lineWrappingChanged(bool);
+	void browserWidgetVisibilityChanged(bool);
 };
 }
 
