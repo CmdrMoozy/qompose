@@ -19,11 +19,18 @@
 #ifndef INCLUDE_QOMPOSECOMMON_GUI_ELLIPSIZED_LABEL_H
 #define INCLUDE_QOMPOSECOMMON_GUI_ELLIPSIZED_LABEL_H
 
-#include <QLabel>
+#include <QWidget>
+
+class QBoxLayout;
 
 namespace qompose
 {
-class EllipsizedLabel : public QLabel
+namespace detail
+{
+class EllipsizedLabelImpl;
+}
+
+class EllipsizedLabel : public QWidget
 {
 public:
 	EllipsizedLabel(const QString &t, QWidget *p = nullptr,
@@ -34,8 +41,15 @@ public:
 
 	EllipsizedLabel &operator=(const EllipsizedLabel &) = delete;
 
-protected:
-	virtual void paintEvent(QPaintEvent *e);
+	void setText(const QString &t);
+	QString text() const;
+
+	void setFrameStyle(int s);
+	int frameStyle() const;
+
+private:
+	QBoxLayout *layout;
+	detail::EllipsizedLabelImpl *label;
 };
 }
 

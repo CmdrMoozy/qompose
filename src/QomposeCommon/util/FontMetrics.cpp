@@ -44,15 +44,25 @@ bool FontMetrics::isMonospaced() const
 	return into.fixedPitch();
 }
 
+qreal FontMetrics::getColumnWidthF(int columns) const
+{
+	QFontMetricsF metrics(font);
+	return (metrics.averageCharWidth() * static_cast<qreal>(columns));
+}
+
 int FontMetrics::getColumnWidth(int columns) const
 {
 	return qRound(getColumnWidthF(columns));
 }
 
-qreal FontMetrics::getColumnWidthF(int columns) const
+qreal FontMetrics::getWidthF(const QString &t) const
 {
 	QFontMetricsF metrics(font);
+	return metrics.width(t);
+}
 
-	return (metrics.averageCharWidth() * static_cast<qreal>(columns));
+int FontMetrics::getWidth(const QString &t) const
+{
+	return qRound(getWidthF(t));
 }
 }

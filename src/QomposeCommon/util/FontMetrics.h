@@ -64,17 +64,6 @@ public:
 	bool isMonospaced() const;
 
 	/*!
-	 * This is a convenience function which returns the width of the given
-	 * number of columns in our current font as an integer. This is
-	 * equivalent to rounding the return value of getColumnWidthF() and
-	 * then casting it to an int.
-	 *
-	 * \param columns The number of columns to get the width of.
-	 * \return The width of the given number of columns.
-	 */
-	int getColumnWidth(int columns = 1) const;
-
-	/*!
 	 * This function returns the width, in pixels, of the given number of
 	 * columns in our current font. Note that this value is as exact as
 	 * possible - no rounding is done.
@@ -87,6 +76,35 @@ public:
 	 * \return The width of the given number of columns.
 	 */
 	qreal getColumnWidthF(int columns = 1) const;
+
+	/*!
+	 * This is a convenience function which returns the width of the given
+	 * number of columns in our current font as an integer. This is
+	 * equivalent to rounding the return value of getColumnWidthF() and
+	 * then casting it to an int.
+	 *
+	 * \param columns The number of columns to get the width of.
+	 * \return The width of the given number of columns.
+	 */
+	int getColumnWidth(int columns = 1) const;
+
+	/*!
+	 * This function returns the width of the given string in the current
+	 * font as a real number.
+	 *
+	 * \param t The text to measure.
+	 * \return The width of the given text.
+	 */
+	qreal getWidthF(const QString &t) const;
+
+	/*!
+	 * This function returns the width of the given string in the current
+	 * font as an integer.
+	 *
+	 * \param t The text to measure.
+	 * \return The width of the given text.
+	 */
+	int getWidth(const QString &t) const;
 
 private:
 	QFont font;
