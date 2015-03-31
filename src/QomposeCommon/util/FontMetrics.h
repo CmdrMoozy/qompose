@@ -106,6 +106,10 @@ public:
 	 */
 	int getWidth(const QString &t) const;
 
+	QString ellipsizedText(const QString &t, qreal w,
+	                       Qt::TextElideMode m = Qt::ElideMiddle,
+	                       int f = 0) const;
+
 private:
 	QFont font;
 };

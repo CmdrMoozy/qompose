@@ -44,7 +44,7 @@ StatusBar::StatusBar(QWidget *p)
 
 	notificationLabel = new NotificationLabel(statusWidget);
 
-	tabPathLabel = new EllipsizedLabel(statusWidget, nullptr);
+	tabPathLabel = new EllipsizedLabel(statusWidget, Qt::AlignRight);
 
 	lineLabel = new QLabel(statusWidget, nullptr);
 	lineLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
@@ -58,7 +58,7 @@ StatusBar::StatusBar(QWidget *p)
 	statusLayout->addWidget(tabPathLabel, 0, 2, 1, 1, nullptr);
 	statusLayout->addWidget(lineLabel, 0, 3, 1, 1, nullptr);
 	statusLayout->addWidget(columnLabel, 0, 4, 1, 1, nullptr);
-	statusLayout->setColumnStretch(1, 1);
+	statusLayout->setColumnStretch(2, 1);
 	statusWidget->setLayout(statusLayout);
 
 	addPermanentWidget(statusWidget, 1);

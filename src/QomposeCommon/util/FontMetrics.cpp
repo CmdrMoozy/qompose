@@ -65,4 +65,11 @@ int FontMetrics::getWidth(const QString &t) const
 {
 	return qRound(getWidthF(t));
 }
+
+QString FontMetrics::ellipsizedText(const QString &t, qreal w,
+                                    Qt::TextElideMode m, int f) const
+{
+	QFontMetricsF metrics(font);
+	return metrics.elidedText(t, m, w, f);
+}
 }

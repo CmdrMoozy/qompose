@@ -34,8 +34,10 @@ class EllipsizedLabel : public QWidget
 {
 public:
 	EllipsizedLabel(const QString &t, QWidget *p = nullptr,
+	                Qt::Alignment a = Qt::AlignLeft,
 	                Qt::WindowFlags f = nullptr);
-	EllipsizedLabel(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
+	EllipsizedLabel(QWidget *p = nullptr, Qt::Alignment a = Qt::AlignLeft,
+	                Qt::WindowFlags f = nullptr);
 	EllipsizedLabel(const EllipsizedLabel &) = delete;
 	virtual ~EllipsizedLabel() = default;
 

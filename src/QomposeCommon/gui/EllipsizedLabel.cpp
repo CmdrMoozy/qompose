@@ -20,6 +20,8 @@
 
 #include <QBoxLayout>
 #include <QLabel>
+#include <QPainter>
+#include <QStyleOption>
 
 #include "QomposeCommon/util/FontMetrics.h"
 
@@ -44,11 +46,6 @@ qreal getMinimumEllipsizedWidth(const QFont &f, const QString &t)
 		// e.g. x...x.
 		return metrics.getWidth(t);
 	}
-}
-
-QString ellipsize(int, const QString &t)
-{
-	return t;
 }
 }
 
@@ -79,8 +76,6 @@ public:
 		minw += contentsMargins().left() + contentsMargins().right();
 		minw += frameWidth() * 2;
 		setMinimumWidth(minw);
-
-		updateText();
 	}
 
 	virtual QString text() const
@@ -89,19 +84,26 @@ public:
 	}
 
 protected:
-	virtual void resizeEvent(QResizeEvent *e)
+	virtual void paintEvent(QPaintEvent *)
 	{
-		updateText();
-		QLabel::resizeEvent(e);
+		FontMetrics metrics(font());
+		QRect r = contentsRect();
+		r.adjust(margin(), margin(), -margin(), -margin());
+		QString et(
+		        metrics.ellipsizedText(originalText, getTextWidth()));
+
+		QStyleOption opt;
+		opt.initFrom(this);
+
+		QPainter painter(this);
+		drawFrame(&painter);
+
+		style()->drawItemText(&painter, r, alignment(), opt.palette,
+		                      isEnabled(), et, foregroundRole());
 	}
 
 private:
 	QString originalText;
-
-	void updateText()
-	{
-		QLabel::setText(ellipsize(getTextWidth(), originalText));
-	}
 
 	int getHMargin() const
 	{
@@ -121,18 +123,21 @@ private:
 };
 }
 
-EllipsizedLabel::EllipsizedLabel(const QString &t, QWidget *p,
+EllipsizedLabel::EllipsizedLabel(const QString &t, QWidget *p, Qt::Alignment a,
                                  Qt::WindowFlags f)
         : QWidget(p, f), layout(nullptr), label(nullptr)
 {
 	layout = new QBoxLayout(QBoxLayout::Direction::LeftToRight, this);
+
 	label = new detail::EllipsizedLabelImpl(t, this);
+	label->setAlignment(a);
+
 	layout->addWidget(label, 1);
 	setLayout(layout);
 }
 
-EllipsizedLabel::EllipsizedLabel(QWidget *p, Qt::WindowFlags f)
-        : EllipsizedLabel(tr(""), p, f)
+EllipsizedLabel::EllipsizedLabel(QWidget *p, Qt::Alignment a, Qt::WindowFlags f)
+        : EllipsizedLabel(tr(""), p, a, f)
 {
 }
 
