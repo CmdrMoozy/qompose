@@ -23,11 +23,19 @@
 
 namespace qompose
 {
+class BrowserView;
+
 class BrowserDockWidget : public QDockWidget
 {
 public:
 	BrowserDockWidget(QWidget * = nullptr, Qt::WindowFlags = nullptr);
+
+	BrowserDockWidget(const BrowserDockWidget &) = delete;
 	virtual ~BrowserDockWidget() = default;
+	BrowserDockWidget &operator=(const BrowserDockWidget &) = delete;
+
+private:
+	BrowserView *view;
 };
 }
 

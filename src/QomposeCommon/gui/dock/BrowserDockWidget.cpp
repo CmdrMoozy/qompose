@@ -18,11 +18,20 @@
 
 #include "BrowserDockWidget.h"
 
+#include <cassert>
+
+#include "QomposeCommon/gui/dock/BrowserView.h"
+
 namespace qompose
 {
 BrowserDockWidget::BrowserDockWidget(QWidget *p, Qt::WindowFlags f)
-        : QDockWidget(tr("File Browser"), p, f)
+        : QDockWidget(tr("File Browser"), p, f), view(nullptr)
 {
 	setObjectName("FileBrowser");
+
+	view = new BrowserView(this);
+
+	assert(!isVisible());
+	setWidget(view);
 }
 }

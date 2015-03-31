@@ -18,9 +18,19 @@
 
 #include "BrowserView.h"
 
+#include <QGridLayout>
+#include <QTreeView>
+
 namespace qompose
 {
-BrowserWidget::BrowserWidget(QWidget *p, Qt::WindowFlags f) : QWidget(p, f)
+BrowserView::BrowserView(QWidget *p, Qt::WindowFlags f)
+        : QWidget(p, f), layout(nullptr), treeView(nullptr)
 {
+	layout = new QGridLayout(this);
+
+	treeView = new QTreeView(this);
+
+	layout->addWidget(treeView, 0, 0, 1, 1);
+	setLayout(layout);
 }
 }

@@ -21,13 +21,23 @@
 
 #include <QWidget>
 
+class QGridLayout;
+class QTreeView;
+
 namespace qompose
 {
-class BrowserWidget : public QWidget
+class BrowserView : public QWidget
 {
 public:
-	BrowserWidget(QWidget * = nullptr, Qt::WindowFlags = nullptr);
-	virtual ~BrowserWidget() = default;
+	BrowserView(QWidget * = nullptr, Qt::WindowFlags = nullptr);
+
+	BrowserView(const BrowserView &) = delete;
+	virtual ~BrowserView() = default;
+	BrowserView &operator=(const BrowserView &) = delete;
+
+private:
+	QGridLayout *layout;
+	QTreeView *treeView;
 };
 }
 
