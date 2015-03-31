@@ -89,8 +89,14 @@ protected:
 		FontMetrics metrics(font());
 		QRect r = contentsRect();
 		r.adjust(margin(), margin(), -margin(), -margin());
-		QString et(
-		        metrics.ellipsizedText(originalText, getTextWidth()));
+
+		int w = getTextWidth();
+		if(w != lastWidth)
+		{
+			lastWidth = w;
+			ellipsizedText =
+			        metrics.ellipsizedText(originalText, w);
+		}
 
 		QStyleOption opt;
 		opt.initFrom(this);
@@ -99,11 +105,15 @@ protected:
 		drawFrame(&painter);
 
 		style()->drawItemText(&painter, r, alignment(), opt.palette,
-		                      isEnabled(), et, foregroundRole());
+		                      isEnabled(), ellipsizedText,
+		                      foregroundRole());
 	}
 
 private:
 	QString originalText;
+
+	int lastWidth;
+	QString ellipsizedText;
 
 	int getHMargin() const
 	{
