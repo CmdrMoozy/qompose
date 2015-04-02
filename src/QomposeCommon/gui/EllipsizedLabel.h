@@ -19,39 +19,41 @@
 #ifndef INCLUDE_QOMPOSECOMMON_GUI_ELLIPSIZED_LABEL_H
 #define INCLUDE_QOMPOSECOMMON_GUI_ELLIPSIZED_LABEL_H
 
-#include <QWidget>
-
-class QBoxLayout;
+#include <QFrame>
 
 namespace qompose
 {
-namespace detail
-{
-class EllipsizedLabelImpl;
-}
-
-class EllipsizedLabel : public QWidget
+class EllipsizedLabel : public QFrame
 {
 public:
-	EllipsizedLabel(const QString &t, QWidget *p = nullptr,
-	                Qt::Alignment a = Qt::AlignLeft,
-	                Qt::WindowFlags f = nullptr);
-	EllipsizedLabel(QWidget *p = nullptr, Qt::Alignment a = Qt::AlignLeft,
+	EllipsizedLabel(const QString &t, Qt::Alignment a = Qt::AlignRight,
+	                QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
+	EllipsizedLabel(Qt::Alignment a = Qt::AlignRight, QWidget *p = nullptr,
 	                Qt::WindowFlags f = nullptr);
 	EllipsizedLabel(const EllipsizedLabel &) = delete;
 	virtual ~EllipsizedLabel() = default;
 
 	EllipsizedLabel &operator=(const EllipsizedLabel &) = delete;
 
+	Qt::Alignment getAlignment() const;
+	void setAlignment(Qt::Alignment a);
+
 	void setText(const QString &t);
 	QString text() const;
 
-	void setFrameStyle(int s);
-	int frameStyle() const;
+protected:
+	virtual void paintEvent(QPaintEvent *e);
 
 private:
-	QBoxLayout *layout;
-	detail::EllipsizedLabelImpl *label;
+	Qt::Alignment alignment;
+	QString originalText;
+
+	int lastWidth;
+	QString ellipsizedText;
+
+	int getHMargin() const;
+	int getTextWidth() const;
+	int textWidthToWidth(int w) const;
 };
 }
 

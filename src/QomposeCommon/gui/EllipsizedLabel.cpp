@@ -23,6 +23,8 @@
 #include <QPainter>
 #include <QStyleOption>
 
+#include <QDebug>
+
 #include "QomposeCommon/util/FontMetrics.h"
 
 namespace
@@ -51,123 +53,88 @@ qreal getMinimumEllipsizedWidth(const QFont &f, const QString &t)
 
 namespace qompose
 {
-namespace detail
-{
-class EllipsizedLabelImpl : public QLabel
-{
-public:
-	EllipsizedLabelImpl(const QString &t, QWidget *p = nullptr,
-	                    Qt::WindowFlags f = nullptr)
-	        : QLabel(p, f)
-	{
-		setText(t);
-	}
-
-	EllipsizedLabelImpl(const EllipsizedLabelImpl &) = delete;
-	virtual ~EllipsizedLabelImpl() = default;
-
-	EllipsizedLabelImpl &operator=(const EllipsizedLabelImpl &) = delete;
-
-	virtual void setText(const QString &t)
-	{
-		originalText = t;
-
-		int minw = getMinimumEllipsizedWidth(font(), t);
-		minw += contentsMargins().left() + contentsMargins().right();
-		minw += frameWidth() * 2;
-		setMinimumWidth(minw);
-	}
-
-	virtual QString text() const
-	{
-		return originalText;
-	}
-
-protected:
-	virtual void paintEvent(QPaintEvent *)
-	{
-		FontMetrics metrics(font());
-		QRect r = contentsRect();
-		r.adjust(margin(), margin(), -margin(), -margin());
-
-		int w = getTextWidth();
-		if(w != lastWidth)
-		{
-			lastWidth = w;
-			ellipsizedText =
-			        metrics.ellipsizedText(originalText, w);
-		}
-
-		QStyleOption opt;
-		opt.initFrom(this);
-
-		QPainter painter(this);
-		drawFrame(&painter);
-
-		style()->drawItemText(&painter, r, alignment(), opt.palette,
-		                      isEnabled(), ellipsizedText,
-		                      foregroundRole());
-	}
-
-private:
-	QString originalText;
-
-	int lastWidth;
-	QString ellipsizedText;
-
-	int getHMargin() const
-	{
-		auto cm = contentsMargins();
-		return cm.left() + cm.right() + (frameWidth() * 2);
-	}
-
-	int getTextWidth() const
-	{
-		return width() - getHMargin();
-	}
-
-	int textWidthToWidth(int w) const
-	{
-		return w + getHMargin();
-	}
-};
-}
-
-EllipsizedLabel::EllipsizedLabel(const QString &t, QWidget *p, Qt::Alignment a,
+EllipsizedLabel::EllipsizedLabel(const QString &t, Qt::Alignment a, QWidget *p,
                                  Qt::WindowFlags f)
-        : QWidget(p, f), layout(nullptr), label(nullptr)
+        : QFrame(p, f),
+          alignment(a),
+          originalText(),
+          lastWidth(-1),
+          ellipsizedText()
 {
-	layout = new QBoxLayout(QBoxLayout::Direction::LeftToRight, this);
-
-	label = new detail::EllipsizedLabelImpl(t, this);
-	label->setAlignment(a);
-
-	layout->addWidget(label, 1);
-	setLayout(layout);
+	setText(t);
 }
 
-EllipsizedLabel::EllipsizedLabel(QWidget *p, Qt::Alignment a, Qt::WindowFlags f)
-        : EllipsizedLabel(tr(""), p, a, f)
+EllipsizedLabel::EllipsizedLabel(Qt::Alignment a, QWidget *p, Qt::WindowFlags f)
+        : EllipsizedLabel(tr(""), a, p, f)
 {
+}
+
+Qt::Alignment EllipsizedLabel::getAlignment() const
+{
+	return alignment;
+}
+
+void EllipsizedLabel::setAlignment(Qt::Alignment a)
+{
+	alignment = a;
+	update();
 }
 
 void EllipsizedLabel::setText(const QString &t)
 {
-	label->setText(t);
+	originalText = t;
+
+	lastWidth = -1;
+	ellipsizedText.clear();
+
+	int minw = getMinimumEllipsizedWidth(font(), t);
+	minw += contentsMargins().left() + contentsMargins().right();
+	minw += frameWidth() * 2;
+	setMinimumWidth(minw);
+
+	update();
 }
 
 QString EllipsizedLabel::text() const
 {
-	return label->text();
+	return originalText;
 }
 
-void EllipsizedLabel::setFrameStyle(int s)
+void EllipsizedLabel::paintEvent(QPaintEvent *)
 {
-	label->setFrameStyle(s);
+	FontMetrics metrics(font());
+	QRect r = contentsRect();
+
+	int w = getTextWidth();
+	if(w != lastWidth)
+	{
+		lastWidth = w;
+		ellipsizedText = metrics.ellipsizedText(originalText, w);
+	}
+
+	QStyleOption opt;
+	opt.initFrom(this);
+
+	QPainter painter(this);
+	drawFrame(&painter);
+
+	style()->drawItemText(&painter, r, getAlignment(), opt.palette,
+	                      isEnabled(), ellipsizedText, foregroundRole());
 }
 
-int EllipsizedLabel::frameStyle() const
+int EllipsizedLabel::getHMargin() const
 {
-	return label->frameStyle();
+	auto cm = contentsMargins();
+	return cm.left() + cm.right() + (frameWidth() * 2);
+}
+
+int EllipsizedLabel::getTextWidth() const
+{
+	return width() - getHMargin();
+}
+
+int EllipsizedLabel::textWidthToWidth(int w) const
+{
+	return w + getHMargin();
 }
 }
