@@ -91,6 +91,9 @@ public:
 	 * This function returns the path to the file this buffer is currently
 	 * representing, or QString() if we don't have a valid file.
 	 *
+	 * This function guarantees that the returned string will be either a
+	 * valid, canonical file path, or an empty string.
+	 *
 	 * \return The path to this buffer's current file.
 	 */
 	QString getPath() const;
@@ -159,6 +162,18 @@ private:
 
 	QString path;
 	QString codec;
+
+	/*!
+	 * This function sets our buffer's internal path to the given file
+	 * path, in such a way that we can guarantee that our internal path is
+	 * always either an empty QString or a valid canonical file path.
+	 *
+	 * Note that this function will automatically emit pathChanged().
+	 *
+	 * \param p The new path to use.
+	 * \return True on success, or false otherwise.
+	 */
+	bool setPath(const QString &p);
 
 	/*!
 	 * This function (re-)reads our buffer's contents from the disk, using

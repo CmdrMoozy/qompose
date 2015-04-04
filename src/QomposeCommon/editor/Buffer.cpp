@@ -77,10 +77,9 @@ Buffer::Buffer(Settings *s, QWidget *p)
 
 bool Buffer::open(const FileDescriptor &f)
 {
-	path = f.fileName;
+	if(!setPath(f.fileName))
+		return false;
 	codec = f.textCodec;
-
-	Q_EMIT pathChanged(path);
 
 	bool r = read();
 
@@ -138,11 +137,10 @@ bool Buffer::save(const QString &p)
 	}
 	else
 	{
-		if(path.isNull())
+		if(getPath().isEmpty())
 			codec = "UTF-8";
 
-		path = p;
-		Q_EMIT pathChanged(path);
+		setPath(p);
 
 		return write();
 	}
@@ -182,14 +180,14 @@ QString Buffer::getDirectory() const
 
 	QFileInfo info(p);
 
-	return info.dir().absolutePath();
+	return info.dir().canonicalPath();
 }
 
 QString Buffer::getFile() const
 {
 	QString p = getPath();
 
-	if(p.isNull())
+	if(p.isEmpty())
 		return QString();
 
 	QFileInfo info(p);
@@ -199,14 +197,13 @@ QString Buffer::getFile() const
 
 FileDescriptor Buffer::getFileDescriptor() const
 {
-	FileDescriptor d = {path, codec};
-
+	FileDescriptor d = {getPath(), codec};
 	return d;
 }
 
 bool Buffer::hasBeenSaved() const
 {
-	return (!path.isNull());
+	return (!getPath().isEmpty());
 }
 
 bool Buffer::isModified() const
@@ -225,6 +222,17 @@ void Buffer::print(QPrinter *p)
 	document()->print(p);
 }
 
+bool Buffer::setPath(const QString &p)
+{
+	QFileInfo info(p);
+	QString canonicalPath = info.canonicalFilePath();
+	if(canonicalPath.isEmpty())
+		return false;
+	path = canonicalPath;
+	Q_EMIT pathChanged(path);
+	return true;
+}
+
 bool Buffer::read(bool u)
 {
 	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
@@ -232,7 +240,7 @@ bool Buffer::read(bool u)
 	if(c == nullptr)
 		return false;
 
-	QFile file(path);
+	QFile file(getPath());
 
 	if(!file.open(QIODevice::ReadOnly))
 		return false;
@@ -266,7 +274,7 @@ bool Buffer::write()
 
 	// Try opening the file we're going to write.
 
-	QFile file(path);
+	QFile file(getPath());
 
 	if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
 		return false;
