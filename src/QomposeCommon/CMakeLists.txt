@@ -97,6 +97,9 @@ set(QomposeCommon_SOURCES
 	syntax/SyntaxHighlighter.cpp
 	syntax/SyntaxHighlighter.h
 
+	thread/Utils.cpp
+	thread/Utils.h
+
 	util/DocumentWriter.cpp
 	util/DocumentWriter.h
 	util/Encoding.cpp
