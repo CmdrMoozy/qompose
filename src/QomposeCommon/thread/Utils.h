@@ -19,6 +19,10 @@
 #ifndef INCLUDE_QOMPOSECOMMON_THREAD_UTILS_H
 #define INCLUDE_QOMPOSECOMMON_THREAD_UTILS_H
 
+#ifdef _WIN32
+#include <cstdint>
+#endif
+
 namespace qompose
 {
 namespace thread_utils
@@ -49,6 +53,32 @@ int ioprio_get(int which, int who);
  * \param ioprio The new IO priority value for the specified thread(s).
  */
 void ioprio_set(int which, int who, int ioprio);
+#endif
+
+#ifdef _WIN32
+/*!
+ * This function sets the priority value for a specific thread. By default, the
+ * calling thread is used.
+ *
+ * This function is a wrapper for Windows' SetThreadPriority function, except
+ * it throws an exception on error instead of returning an error value.
+ *
+ * \param c The new priority value for the thread.
+ * \param thread The thread whose priority should be changed.
+ */
+void setThreadPriority(uint32_t c, HANDLE thread = nullptr);
+
+/*!
+ * This function sets the priority value for a process (as well as all of its
+ * threads). By default, the calling process is used.
+ *
+ * This function is a wrapper for Windows' SetPriorityClass function, except
+ * it throws an exception on error instead of returning an error value.
+ *
+ * \param c The new priority value for the process.
+ * \param process The process whose priority should be changed.
+ */
+void setPriorityClass(uint32_t c, HANDLE process = nullptr);
 #endif
 }
 }
