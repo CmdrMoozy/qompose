@@ -19,13 +19,15 @@
 #ifndef INCLUDE_QOMPOSECOMMON_THREAD_LOW_PRIORITY_THREAD_H
 #define INCLUDE_QOMPOSECOMMON_THREAD_LOW_PRIORITY_THREAD_H
 
-#include <functional>
 #include <initializer_list>
 #include <memory>
-#include <thread>
+
+class QObject;
 
 namespace qompose
 {
+class LowPriorityThreadImpl;
+
 /*!
  * \brief Defines the types of thread priority which can be changed.
  */
@@ -53,19 +55,17 @@ public:
 	 * priority for all of the given priority types.
 	 *
 	 * \param t The low priority types for this thread.
-	 * \param f The function for this thread to execute.
 	 */
-	explicit LowPriorityThread(const std::initializer_list<PriorityType> &t,
-	                           const std::function<void()> &f);
+	explicit LowPriorityThread(
+	        const std::initializer_list<PriorityType> &t);
 
 	/*!
 	 * This constructor creates a new low priority thread, which has low
 	 * priority for the given priority type.
 	 *
 	 * \param t The low priority type for this thread.
-	 * \param f The function for this thread to execute.
 	 */
-	LowPriorityThread(PriorityType t, const std::function<void()> &f);
+	LowPriorityThread(PriorityType t);
 
 	LowPriorityThread(const LowPriorityThread &) = delete;
 
@@ -78,11 +78,12 @@ public:
 	LowPriorityThread &operator=(const LowPriorityThread &) = delete;
 
 	/*!
-	 * This function returns this thread's ID.
+	 * This function moves the given QObject to this thread for event
+	 * processing.
 	 *
-	 * \return This thread's ID.
+	 * \param o The object to move.
 	 */
-	std::thread::id getID() const;
+	void moveToThread(QObject *o);
 
 	/*!
 	 * This function waits for this thread to stop running. If something
@@ -91,7 +92,7 @@ public:
 	void join();
 
 private:
-	std::unique_ptr<std::thread> thread;
+	std::unique_ptr<LowPriorityThreadImpl> thread;
 };
 }
 

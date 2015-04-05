@@ -19,15 +19,17 @@
 #include "LowPriorityThread.h"
 
 #include <stdexcept>
-#include <system_error>
-
-#include "QomposeCommon/thread/Utils.h"
-#include "QomposeCommon/util/Strings.h"
 
 #ifdef __linux__
 #include <pthread.h>
 #include <sched.h>
 #endif
+
+#include <QObject>
+#include <QThread>
+
+#include "QomposeCommon/thread/Utils.h"
+#include "QomposeCommon/util/Strings.h"
 
 namespace
 {
@@ -99,22 +101,72 @@ void setLowPriority(const std::initializer_list<qompose::PriorityType> &types)
 
 namespace qompose
 {
-LowPriorityThread::LowPriorityThread(
-        const std::initializer_list<PriorityType> &t,
-        const std::function<void()> &f)
-        : thread()
+/*!
+ * \brief The QThread-based implementation of LowPriorityThread.
+ */
+class LowPriorityThreadImpl : public QThread
 {
-	auto function = [t, f]()
+public:
+	/*!
+	 * This constructor creates a new low priority thread, which has low
+	 * priority for all of the given priority types.
+	 *
+	 * \param t The low priority types for this thread.
+	 */
+	LowPriorityThreadImpl(const std::initializer_list<PriorityType> &t)
+	        : QThread(), priorityTypes(t)
 	{
-		setLowPriority(t);
-		f();
-	};
-	thread.reset(new std::thread(function));
+	}
+
+	virtual ~LowPriorityThreadImpl() = default;
+
+	/*!
+	 * This function returns this thread's priority. This is
+	 * LowestPriority, by definition.
+	 *
+	 * \return This thread's priority.
+	 */
+	virtual Priority priority() const
+	{
+		return QThread::LowestPriority;
+	}
+
+	/*!
+	 * We override setPriority() to enforce that it is not implemented for
+	 * this QThread subclass. If this function is called, an exception is
+	 * thrown and no action is taken.
+	 *
+	 * \param p The new priority for this thread.
+	 */
+	virtual void setPriority(Priority)
+	{
+		throw std::runtime_error(
+		        "setPriority() isn't supported for this subclass.");
+	}
+
+protected:
+	/*!
+	 * This QThread's run method simply sets the thread priority
+	 * appropriately, and then begins event processing.
+	 */
+	virtual void run()
+	{
+		setLowPriority(priorityTypes);
+		exec();
+	}
+
+private:
+	std::initializer_list<PriorityType> priorityTypes;
+};
+
+LowPriorityThread::LowPriorityThread(
+        const std::initializer_list<PriorityType> &t)
+        : thread(new LowPriorityThreadImpl(t))
+{
 }
 
-LowPriorityThread::LowPriorityThread(PriorityType t,
-                                     const std::function<void()> &f)
-        : LowPriorityThread(std::initializer_list<PriorityType>({t}), f)
+LowPriorityThread::LowPriorityThread(PriorityType t)
+        : thread(new LowPriorityThreadImpl({t}))
 {
 }
 
@@ -123,23 +175,14 @@ LowPriorityThread::~LowPriorityThread()
 	join();
 }
 
-std::thread::id LowPriorityThread::getID() const
+void LowPriorityThread::moveToThread(QObject *o)
 {
-	return thread->get_id();
+	o->moveToThread(thread.get());
 }
 
 void LowPriorityThread::join()
 {
-	try
-	{
-		thread->join();
-	}
-	catch(const std::system_error &e)
-	{
-		// If the thread isn't joinable, it probably just stopped on
-		// its own, so we eat the resulting exception.
-		if(e.code() != std::errc::invalid_argument)
-			throw;
-	}
+	if(!thread->wait())
+		throw std::runtime_error("Thread join failed.");
 }
 }
