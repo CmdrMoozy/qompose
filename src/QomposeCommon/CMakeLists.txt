@@ -118,6 +118,7 @@ set(QomposeCommon_SOURCES
 	util/ReplaceQuery.h
 	util/Settings.cpp
 	util/Settings.h
+	util/Strings.cpp
 	util/Strings.h
 
 )
