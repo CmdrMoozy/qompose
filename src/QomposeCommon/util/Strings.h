@@ -34,6 +34,15 @@ namespace qompose
 namespace string_utils
 {
 /*!
+ * This function converts a std::wstring to a std::string using best-effort
+ * character conversion for any unicode characters which may be present.
+ *
+ * \param s The string to convert.
+ * \return The converted string.
+ */
+std::string wstringToString(const std::wstring &s);
+
+/*!
  * \brief This typedef denotes a boost::basic_string_ref of const char's.
  */
 typedef boost::basic_string_ref<const char> ConstStringRef;
@@ -66,6 +75,16 @@ StringRef toStringRef(typename StringRef::pointer s,
  */
 std::string getErrnoError(const std::string &defaultMessage = "Unknown error.",
                           boost::optional<int> errnoValue = boost::none);
+
+#ifdef _WIN32
+/*!
+ * This function is a wrapper for Windows' GetLastError() function, which
+ * returns the last error message as a human-readable string.
+ *
+ * \return The last error as a human-readable string.
+ */
+std::string getLastWindowsError();
+#endif
 
 /*!
  * This function returns the size of the smallest string in the given iterator

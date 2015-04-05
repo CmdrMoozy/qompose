@@ -22,6 +22,8 @@
 #include <cstring>
 #include <vector>
 
+#include <boost/locale/encoding_utf.hpp>
+
 namespace
 {
 const std::size_t ERROR_MESSAGE_BUFFER_SIZE = 256;
@@ -40,12 +42,32 @@ std::string getErrorMessage<char *>(char *ret, const std::vector<char> &)
 {
 	return std::string(ret);
 }
+
+#ifdef _WIN32
+template <typename StringPointer> std::string lptstrToString(StringPointer);
+
+template <> std::string lptstrToString<LPSTR>(LPSTR s)
+{
+	return std::string(s);
+}
+
+template <> std::string lptstrToString<LPWSTR>(LPWSTR s)
+{
+	return qompose::string_utils::wstringToString(std::wstring(s));
+}
+#endif
 }
 
 namespace qompose
 {
 namespace string_utils
 {
+std::string wstringToString(const std::wstring &s)
+{
+	return boost::locale::conv::utf_to_utf<char>(s.c_str(),
+	                                             s.c_str() + s.length());
+}
+
 std::string getErrnoError(const std::string &defaultMessage,
                           boost::optional<int> errnoValue)
 {
@@ -65,5 +87,24 @@ std::string getErrnoError(const std::string &defaultMessage,
 		error = defaultMessage;
 	return error;
 }
+
+#ifdef _WIN32
+std::string getLastWindowsError()
+{
+	DWORD error = GetLastError();
+
+	LPTSTR buffer;
+	DWORD ret =
+	        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER, nullptr, error, 0,
+	                      static_cast<LPTSTR>(&buffer), 0, nullptr);
+
+	if(ret == 0)
+		return std::string("Unknown error.");
+
+	std::string errorMessage = lptstrToString(buffer);
+	LocalFree(buffer);
+	return errorMessage);
+}
+#endif
 }
 }
