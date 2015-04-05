@@ -28,6 +28,9 @@ namespace thread_utils
  * This function is simply a syscall() wrapper for ioprio_get. See
  * IOPRIO_SET(2) for more information.
  *
+ * Instead of returning an error value, an exception is thrown in case an error
+ * occurs.
+ *
  * \param which Defines how the who argument is interpreted.
  * \param who The thread(s) on which the system call will operate.
  * \return The highest ioprio value of any of the specified thread(s).
@@ -38,12 +41,14 @@ int ioprio_get(int which, int who);
  * This function is simply a syscall() wrapper for ioprio_set. See
  * IOPRIO_SET(2) for more information.
  *
+ * Instead of returning a success/error flag, an exception is thrown in case
+ * an error occurs.
+ *
  * \param which Defines how the who argument is interpreted.
  * \param who The thread(s) on which the system call will operate.
  * \param ioprio The new IO priority value for the specified thread(s).
- * \return 0 on success, or -1 and errno is set on error.
  */
-int ioprio_set(int which, int who, int ioprio);
+void ioprio_set(int which, int who, int ioprio);
 #endif
 }
 }

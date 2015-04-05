@@ -18,6 +18,8 @@
 
 #include "Utils.h"
 
+#include <stdexcept>
+
 #ifdef __linux__
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -26,6 +28,8 @@
 #include <sys/syscall.h>
 #endif
 
+#include "QomposeCommon/util/Strings.h"
+
 namespace qompose
 {
 namespace thread_utils
@@ -33,12 +37,17 @@ namespace thread_utils
 #ifdef __linux__
 int ioprio_get(int which, int who)
 {
-	return syscall(SYS_ioprio_get, which, who);
+	int r = syscall(SYS_ioprio_get, which, who);
+	if(r == -1)
+		throw std::runtime_error(string_utils::getErrnoError());
+	return r;
 }
 
-int ioprio_set(int which, int who, int ioprio)
+void ioprio_set(int which, int who, int ioprio)
 {
-	return syscall(SYS_ioprio_set, which, who, ioprio);
+	int r = syscall(SYS_ioprio_set, which, who, ioprio);
+	if(r != 0)
+		throw std::runtime_error(string_utils::getErrnoError());
 }
 #endif
 }
