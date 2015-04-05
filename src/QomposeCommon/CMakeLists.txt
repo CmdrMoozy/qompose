@@ -109,6 +109,8 @@ set(QomposeCommon_SOURCES
 	util/Hotkey.h
 	util/HotkeyMap.cpp
 	util/HotkeyMap.h
+	util/Paths.cpp
+	util/Paths.h
 	util/ReplaceQuery.cpp
 	util/ReplaceQuery.h
 	util/Settings.cpp
