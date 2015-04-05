@@ -97,6 +97,7 @@ set(QomposeCommon_SOURCES
 	syntax/SyntaxHighlighter.cpp
 	syntax/SyntaxHighlighter.h
 
+	thread/IOPriorityDefines.h
 	thread/Utils.cpp
 	thread/Utils.h
 

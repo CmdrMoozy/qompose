@@ -23,6 +23,10 @@
 #include <cstdint>
 #endif
 
+#ifdef __linux__
+#include "QomposeCommon/thread/IOPriorityDefines.h"
+#endif
+
 namespace qompose
 {
 namespace thread_utils
@@ -39,7 +43,7 @@ namespace thread_utils
  * \param who The thread(s) on which the system call will operate.
  * \return The highest ioprio value of any of the specified thread(s).
  */
-int ioprio_get(int which, int who);
+int ioprio_get(IOPrioWho which, int who);
 
 /*!
  * This function is simply a syscall() wrapper for ioprio_set. See
@@ -52,7 +56,7 @@ int ioprio_get(int which, int who);
  * \param who The thread(s) on which the system call will operate.
  * \param ioprio The new IO priority value for the specified thread(s).
  */
-void ioprio_set(int which, int who, int ioprio);
+void ioprio_set(IOPrioWho which, int who, int ioprio);
 #endif
 
 #ifdef _WIN32
