@@ -98,6 +98,8 @@ set(QomposeCommon_SOURCES
 	syntax/SyntaxHighlighter.h
 
 	thread/IOPriorityDefines.h
+	thread/LowPriorityThread.cpp
+	thread/LowPriorityThread.h
 	thread/Utils.cpp
 	thread/Utils.h
 
