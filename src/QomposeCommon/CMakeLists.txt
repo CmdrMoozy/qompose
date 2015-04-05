@@ -120,6 +120,7 @@ set(QomposeCommon_SOURCES
 	util/Settings.h
 	util/Strings.cpp
 	util/Strings.h
+	util/Windows.h
 
 )
 
