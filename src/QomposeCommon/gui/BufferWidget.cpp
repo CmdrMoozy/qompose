@@ -143,6 +143,25 @@ int BufferWidget::findBufferWithPath(const QString &p)
 	return -1;
 }
 
+std::vector<std::string> BufferWidget::getOpenPaths() const
+{
+	std::vector<std::string> paths;
+	for(int i = 0; i < count(); ++i)
+	{
+		Buffer *buf = bufferAt(i);
+		QString path = buf->getPath();
+		if(!path.isEmpty())
+			continue;
+		paths.push_back(path.toStdString());
+	}
+	return paths;
+}
+
+std::string BufferWidget::getCommonParentPath() const
+{
+	return path_utils::getCommonParentPath(getOpenPaths());
+}
+
 Buffer *BufferWidget::newBuffer()
 {
 	Buffer *b = new Buffer(settings, tabWidget);

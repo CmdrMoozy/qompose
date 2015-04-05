@@ -20,11 +20,16 @@
 #define INCLUDE_QOMPOSECOMMON_GUI_BUFFER_WIDGET_H
 
 #include <QWidget>
+
+#include <string>
+#include <vector>
+
 #include <QSet>
 #include <QStack>
 
 #include "QomposeCommon/Types.h"
 #include "QomposeCommon/editor/Editor.h"
+#include "QomposeCommon/util/Paths.h"
 
 class QGridLayout;
 class QTabWidget;
@@ -126,6 +131,24 @@ public:
 	 * \return The index of the (first) buffer which has the given path.
 	 */
 	int findBufferWithPath(const QString &p);
+
+	/*!
+	 * This function returns a list of all file paths which are currently
+	 * open in this buffer widget's buffers.
+	 *
+	 * \return The list of paths currently open.
+	 */
+	std::vector<std::string> getOpenPaths() const;
+
+	/*!
+	 * This function returns the deepest parent path which contains all of
+	 * the files currently open in this BufferWidget. If no such path
+	 * exists (because no files are open, or because they have no path in
+	 * common), then an empty string will be returned instead.
+	 *
+	 * \return The common parent directory containing all open files.
+	 */
+	std::string getCommonParentPath() const;
 
 private:
 	Settings *settings;
