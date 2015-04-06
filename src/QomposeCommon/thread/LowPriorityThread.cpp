@@ -175,6 +175,11 @@ LowPriorityThread::~LowPriorityThread()
 	join();
 }
 
+void LowPriorityThread::start()
+{
+	thread->start();
+}
+
 void LowPriorityThread::moveToThread(QObject *o)
 {
 	o->moveToThread(thread.get());

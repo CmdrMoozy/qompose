@@ -78,6 +78,11 @@ public:
 	LowPriorityThread &operator=(const LowPriorityThread &) = delete;
 
 	/*!
+	 * This function starts this thread's execution.
+	 */
+	void start();
+
+	/*!
 	 * This function moves the given QObject to this thread for event
 	 * processing.
 	 *
