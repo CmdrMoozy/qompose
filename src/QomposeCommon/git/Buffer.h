@@ -20,6 +20,7 @@
 #define INCLUDE_QOMPOSECOMMON_GIT_BUFFER_H
 
 #include <cstddef>
+#include <string>
 
 #include <git2.h>
 
@@ -91,6 +92,15 @@ public:
 	 * \param s The size of the given data, in bytes.
 	 */
 	void set(const void *d, std::size_t s);
+
+	/*!
+	 * This function returns the contents of this buffer as a std::string.
+	 * It is up to the caller to ensure that this buffer's current content
+	 * is actually something that ought to be represened as a string.
+	 *
+	 * \return This buffer's current contents as a string.
+	 */
+	std::string toString() const;
 
 private:
 	git_buf buffer;

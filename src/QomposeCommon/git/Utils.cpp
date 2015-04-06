@@ -16,62 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Buffer.h"
+#include "Utils.h"
 
 #include <cassert>
-#include <cstring>
-#include <stdexcept>
 
+#include <git2.h>
+
+#include "QomposeCommon/git/Buffer.h"
 #include "QomposeCommon/git/GitAPI.h"
 
 namespace qompose
 {
-namespace git
+namespace git_utils
 {
-Buffer::Buffer(std::size_t size) : buffer()
+std::string lastErrorToString()
 {
-	assert(GitAPI::isInitialized());
-	memset(&buffer, 0, sizeof(git_buf));
-	grow(size);
+	assert(git::GitAPI::isInitialized());
+	const git_error *error = giterr_last();
+	if(error == nullptr)
+		return std::string();
+	return std::string(error->message);
 }
 
-Buffer::~Buffer()
+std::string discoverRepository(const std::string &p)
 {
-	git_buf_free(&buffer);
-}
+	assert(git::GitAPI::isInitialized());
+	git::Buffer buf(1024);
 
-git_buf *Buffer::get()
-{
-	return &buffer;
-}
-
-void Buffer::grow(std::size_t s)
-{
-	int ret = git_buf_grow(&buffer, s);
+	int ret = git_repository_discover(buf.get(), p.c_str(), 0, "");
 	if(ret != 0)
-		throw std::runtime_error("Allocation failure.");
-}
+		throw std::runtime_error(lastErrorToString());
 
-bool Buffer::containsNul() const
-{
-	return git_buf_contains_nul(&buffer) == 1;
-}
-
-bool Buffer::isBinary() const
-{
-	return git_buf_is_binary(&buffer) == 1;
-}
-
-void Buffer::set(const void *d, std::size_t s)
-{
-	int ret = git_buf_set(&buffer, d, s);
-	if(ret != 0)
-		throw std::runtime_error("Allocation failure.");
-}
-
-std::string Buffer::toString() const
-{
-	return std::string(buffer.ptr, buffer.size);
+	return buf.toString();
 }
 }
 }

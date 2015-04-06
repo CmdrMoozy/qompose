@@ -67,6 +67,8 @@ set(QomposeCommon_SOURCES
 	git/Buffer.h
 	git/GitAPI.cpp
 	git/GitAPI.h
+	git/Utils.cpp
+	git/Utils.h
 
 	gui/BufferWidget.cpp
 	gui/BufferWidget.h
