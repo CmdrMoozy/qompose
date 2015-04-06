@@ -63,6 +63,9 @@ set(QomposeCommon_SOURCES
 	editor/spell/Utils.cpp
 	editor/spell/Utils.h
 
+	git/GitAPI.cpp
+	git/GitAPI.h
+
 	gui/BufferWidget.cpp
 	gui/BufferWidget.h
 	gui/ColorPickerButton.cpp
