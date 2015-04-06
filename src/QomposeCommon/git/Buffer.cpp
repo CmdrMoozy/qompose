@@ -16,42 +16,57 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "GitAPI.h"
+#include "Buffer.h"
 
 #include <cassert>
+#include <cstring>
+#include <stdexcept>
 
-#include <git2.h>
+#include "QomposeCommon/git/GitAPI.h"
 
 namespace qompose
 {
 namespace git
 {
-std::mutex GitAPI::mutex;
-std::unique_ptr<GitAPI> GitAPI::api;
-
-void GitAPI::initialize()
+Buffer::Buffer(std::size_t size) : buffer()
 {
-	std::lock_guard<std::mutex> lock(GitAPI::mutex);
-	if(!GitAPI::api)
-		GitAPI::api.reset(new GitAPI());
+	assert(GitAPI::isInitialized());
+	memset(&buffer, 0, sizeof(git_buf));
+	grow(size);
 }
 
-bool GitAPI::isInitialized()
+Buffer::~Buffer()
 {
-	std::lock_guard<std::mutex> lock(GitAPI::mutex);
-	return !!GitAPI::api;
+	git_buf_free(&buffer);
 }
 
-GitAPI::~GitAPI()
+git_buf *Buffer::get()
 {
-	int ret = git_libgit2_shutdown();
-	assert(ret == 0);
+	return &buffer;
 }
 
-GitAPI::GitAPI()
+void Buffer::grow(std::size_t s)
 {
-	int ret = git_libgit2_init();
-	assert(ret == 1);
+	int ret = git_buf_grow(&buffer, s);
+	if(ret != 0)
+		throw std::runtime_error("Allocation failure.");
+}
+
+bool Buffer::containsNul() const
+{
+	return git_buf_contains_nul(&buffer) == 1;
+}
+
+bool Buffer::isBinary() const
+{
+	return git_buf_is_binary(&buffer) == 1;
+}
+
+void Buffer::set(const void *d, std::size_t s)
+{
+	int ret = git_buf_set(&buffer, d, s);
+	if(ret != 0)
+		throw std::runtime_error("Allocation failure.");
 }
 }
 }

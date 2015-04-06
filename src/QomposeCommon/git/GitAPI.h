@@ -43,6 +43,14 @@ public:
 	static void initialize();
 
 	/*!
+	 * This function returns whether or not our global singleton has
+	 * already been initialized.
+	 *
+	 * \return Whether or not the singleton has been initialized.
+	 */
+	static bool isInitialized();
+
+	/*!
 	 * This destructor should only be called at program termination, when
 	 * the singleton instance is destructed. It shuts down the libgit2
 	 * internals which this class initializes.

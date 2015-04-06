@@ -63,6 +63,8 @@ set(QomposeCommon_SOURCES
 	editor/spell/Utils.cpp
 	editor/spell/Utils.h
 
+	git/Buffer.cpp
+	git/Buffer.h
 	git/GitAPI.cpp
 	git/GitAPI.h
 
