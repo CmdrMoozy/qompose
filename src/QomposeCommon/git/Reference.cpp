@@ -16,50 +16,51 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Repository.h"
+#include "Reference.h"
 
 #include <cassert>
 #include <stdexcept>
 
 #include "QomposeCommon/git/GitAPI.h"
+#include "QomposeCommon/git/Repository.h"
 #include "QomposeCommon/git/Utils.h"
 
 namespace qompose
 {
 namespace git
 {
-Repository::Repository(const std::string &p) : repository()
+Reference Reference::head(Repository &repository)
 {
-	assert(GitAPI::isInitialized());
-
-	std::string path = git_utils::discoverRepository(p);
-
-	git_repository *r = nullptr;
-	int ret = git_repository_open(&r, path.c_str());
-	if(r != nullptr)
-		repository.reset(r, git_repository_free);
+	git_reference *reference;
+	int ret = git_repository_head(&reference, repository.get());
 	if(ret != 0)
 	{
-		throw std::runtime_error(git_utils::lastErrorToString());
+		if(reference != nullptr)
+			git_reference_free(reference);
+		switch(ret)
+		{
+		case GIT_EUNBORNBRANCH:
+			throw std::runtime_error(
+			        "HEAD is a nonexistant branch.");
+		case GIT_ENOTFOUND:
+			throw std::runtime_error("HEAD is missing.");
+		default:
+			throw std::runtime_error(
+			        git_utils::lastErrorToString());
+		}
 	}
+	return Reference(reference);
 }
 
-git_repository *Repository::get()
+Reference::Reference(git_reference *r)
 {
-	return repository.get();
-}
-
-const git_repository *Repository::get() const
-{
-	return repository.get();
-}
-
-std::string Repository::getWorkDirectory() const
-{
-	const char *dir = git_repository_workdir(repository.get());
-	if(dir == nullptr)
-		return std::string();
-	return std::string(dir);
+	assert(GitAPI::isInitialized());
+	if(r == nullptr)
+	{
+		throw std::runtime_error(
+		        "Can't construct Reference from NULL.");
+	}
+	reference.reset(r, git_reference_free);
 }
 }
 }

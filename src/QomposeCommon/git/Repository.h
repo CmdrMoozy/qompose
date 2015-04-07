@@ -49,6 +49,20 @@ public:
 	Repository &operator=(const Repository &) = default;
 
 	/*!
+	 * This function returns this object's internal git_repository.
+	 *
+	 * \return This object's internal git_repository.
+	 */
+	git_repository *get();
+
+	/*!
+	 * This function returns this object's internal git_repository.
+	 *
+	 * \return This object's internal git_repository.
+	 */
+	const git_repository *get() const;
+
+	/*!
 	 * This function returns this repository's work directory. If the
 	 * repository has no work directory (for instance, if it is a bare
 	 * repository), then an empty string is returned instead.
