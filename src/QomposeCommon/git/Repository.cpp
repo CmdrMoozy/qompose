@@ -28,38 +28,28 @@ namespace qompose
 {
 namespace git
 {
-Repository::Repository(const std::string &p) : repository()
+Repository::Repository(const std::string &p) : AbstractGitObject()
 {
-	assert(GitAPI::isInitialized());
-
 	std::string path = git_utils::discoverRepository(p);
-
 	git_repository *r = nullptr;
 	int ret = git_repository_open(&r, path.c_str());
 	if(r != nullptr)
-		repository.reset(r, git_repository_free);
+		set(r);
 	if(ret != 0)
-	{
 		throw std::runtime_error(git_utils::lastErrorToString());
-	}
-}
-
-git_repository *Repository::get()
-{
-	return repository.get();
-}
-
-const git_repository *Repository::get() const
-{
-	return repository.get();
 }
 
 std::string Repository::getWorkDirectory() const
 {
-	const char *dir = git_repository_workdir(repository.get());
+	const char *dir = git_repository_workdir(get());
 	if(dir == nullptr)
 		return std::string();
 	return std::string(dir);
+}
+
+Repository::deleter_t Repository::getDeleter() const
+{
+	return git_repository_free;
 }
 }
 }

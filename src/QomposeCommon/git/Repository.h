@@ -24,6 +24,8 @@
 
 #include <git2.h>
 
+#include "QomposeCommon/git/AbstractGitObject.h"
+
 namespace qompose
 {
 namespace git
@@ -31,7 +33,7 @@ namespace git
 /*!
  * \brief This class represents a Git repository.
  */
-class Repository
+class Repository : public AbstractGitObject<git_repository>
 {
 public:
 	/*!
@@ -43,24 +45,7 @@ public:
 	 */
 	Repository(const std::string &p);
 
-	Repository(const Repository &) = default;
-	~Repository() = default;
-
-	Repository &operator=(const Repository &) = default;
-
-	/*!
-	 * This function returns this object's internal git_repository.
-	 *
-	 * \return This object's internal git_repository.
-	 */
-	git_repository *get();
-
-	/*!
-	 * This function returns this object's internal git_repository.
-	 *
-	 * \return This object's internal git_repository.
-	 */
-	const git_repository *get() const;
+	virtual ~Repository() = default;
 
 	/*!
 	 * This function returns this repository's work directory. If the
@@ -71,8 +56,13 @@ public:
 	 */
 	std::string getWorkDirectory() const;
 
-private:
-	std::shared_ptr<git_repository> repository;
+protected:
+	/*!
+	 * Return the function which can free git_reposiory pointers.
+	 *
+	 * \return The deleter function for objects of this type.
+	 */
+	virtual deleter_t getDeleter() const override;
 };
 }
 }
