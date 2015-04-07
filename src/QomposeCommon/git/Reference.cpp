@@ -50,6 +50,21 @@ Reference Reference::head(Repository &repository)
 	return Reference(reference);
 }
 
+Reference Reference::resolve() const
+{
+	if(isOIDReference())
+		return *this;
+	git_reference *reference = nullptr;
+	int ret = git_reference_resolve(&reference, get());
+	if(ret != 0)
+	{
+		if(reference != nullptr)
+			git_reference_free(reference);
+		throw std::runtime_error(git_utils::lastErrorToString());
+	}
+	return Reference(reference);
+}
+
 bool Reference::isOIDReference() const
 {
 	return git_reference_type(get()) == GIT_REF_OID;
@@ -58,6 +73,17 @@ bool Reference::isOIDReference() const
 bool Reference::isSymbolicReference() const
 {
 	return git_reference_type(get()) == GIT_REF_SYMBOLIC;
+}
+
+git_oid Reference::getOID() const
+{
+	Reference resolved = resolve();
+	const git_oid *id = git_reference_target(resolved.get());
+	if(id == nullptr)
+		throw std::runtime_error("Getting reference OID failed.");
+	git_oid copy;
+	git_oid_cpy(&copy, id);
+	return copy;
 }
 
 std::string Reference::getTargetName() const

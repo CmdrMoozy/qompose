@@ -48,6 +48,15 @@ public:
 	virtual ~Reference() = default;
 
 	/*!
+	 * This function returns an equivalent reference which is guaranteed to
+	 * be a direct OID reference. If this reference isn't symbolic, this
+	 * function simply returns *this.
+	 *
+	 * \return A resolved version of this reference.
+	 */
+	Reference resolve() const;
+
+	/*!
 	 * This function returns whether or not this reference refers to an
 	 * OID (that is, a particular commit).
 	 *
@@ -62,6 +71,13 @@ public:
 	 * \return Whether or not this is a symbolic reference.
 	 */
 	bool isSymbolicReference() const;
+
+	/*!
+	 * This function returns the OID of this reference's target.
+	 *
+	 * \return This reference's target OID.
+	 */
+	git_oid getOID() const;
 
 	/*!
 	 * This function returns this reference's target's name. If this isn't
