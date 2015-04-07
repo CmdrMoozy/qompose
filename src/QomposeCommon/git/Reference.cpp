@@ -50,6 +50,24 @@ Reference Reference::head(Repository &repository)
 	return Reference(reference);
 }
 
+bool Reference::isOIDReference() const
+{
+	return git_reference_type(get()) == GIT_REF_OID;
+}
+
+bool Reference::isSymbolicReference() const
+{
+	return git_reference_type(get()) == GIT_REF_SYMBOLIC;
+}
+
+std::string Reference::getTargetName() const
+{
+	const char *name = git_reference_symbolic_target(get());
+	if(name == nullptr)
+		return std::string();
+	return std::string(name);
+}
+
 Reference::Reference(git_reference *r) : AbstractGitObject(r)
 {
 }

@@ -19,6 +19,8 @@
 #ifndef INCLUDE_QOMPOSECOMMON_GIT_REFERENCE_H
 #define INCLUDE_QOMPOSECOMMON_GIT_REFERENCE_H
 
+#include <string>
+
 #include <git2.h>
 
 #include "QomposeCommon/git/AbstractGitObject.h"
@@ -44,6 +46,31 @@ public:
 	static Reference head(Repository &repository);
 
 	virtual ~Reference() = default;
+
+	/*!
+	 * This function returns whether or not this reference refers to an
+	 * OID (that is, a particular commit).
+	 *
+	 * \return Whether or not this is an OID reference.
+	 */
+	bool isOIDReference() const;
+
+	/*!
+	 * This function returns whether or not this reference is a symbolic
+	 * reference (that is, it refers to a branch, for example).
+	 *
+	 * \return Whether or not this is a symbolic reference.
+	 */
+	bool isSymbolicReference() const;
+
+	/*!
+	 * This function returns this reference's target's name. If this isn't
+	 * a symbolic reference, then an empty string will be returned instead
+	 * (since such a reference doesn't have a target, by definition).
+	 *
+	 * \return This reference's target's name.
+	 */
+	std::string getTargetName() const;
 
 protected:
 	/*!
