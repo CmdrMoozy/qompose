@@ -19,7 +19,6 @@
 #ifndef INCLUDE_QOMPOSECOMMON_GIT_REPOSITORY_H
 #define INCLUDE_QOMPOSECOMMON_GIT_REPOSITORY_H
 
-#include <memory>
 #include <string>
 
 #include <git2.h>

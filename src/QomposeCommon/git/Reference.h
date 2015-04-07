@@ -19,8 +19,6 @@
 #ifndef INCLUDE_QOMPOSECOMMON_GIT_REFERENCE_H
 #define INCLUDE_QOMPOSECOMMON_GIT_REFERENCE_H
 
-#include <memory>
-
 #include <git2.h>
 
 #include "QomposeCommon/git/AbstractGitObject.h"
@@ -62,8 +60,6 @@ protected:
 	 * \return The deleter function for objects of this type.
 	 */
 	virtual deleter_t getDeleter() const override;
-
-private:
 };
 }
 }
