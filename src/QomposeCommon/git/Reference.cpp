@@ -18,10 +18,8 @@
 
 #include "Reference.h"
 
-#include <cassert>
 #include <stdexcept>
 
-#include "QomposeCommon/git/GitAPI.h"
 #include "QomposeCommon/git/Repository.h"
 #include "QomposeCommon/git/Utils.h"
 
@@ -52,15 +50,13 @@ Reference Reference::head(Repository &repository)
 	return Reference(reference);
 }
 
-Reference::Reference(git_reference *r)
+Reference::Reference(git_reference *r) : AbstractGitObject(r)
 {
-	assert(GitAPI::isInitialized());
-	if(r == nullptr)
-	{
-		throw std::runtime_error(
-		        "Can't construct Reference from NULL.");
-	}
-	reference.reset(r, git_reference_free);
+}
+
+Reference::deleter_t Reference::getDeleter() const
+{
+	return git_reference_free;
 }
 }
 }

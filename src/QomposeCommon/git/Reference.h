@@ -23,6 +23,8 @@
 
 #include <git2.h>
 
+#include "QomposeCommon/git/AbstractGitObject.h"
+
 namespace qompose
 {
 namespace git
@@ -32,7 +34,7 @@ class Repository;
 /*!
  * \brief This class represents a Git reference.
  */
-class Reference
+class Reference : public AbstractGitObject<git_reference>
 {
 public:
 	/*!
@@ -43,21 +45,25 @@ public:
 	 */
 	static Reference head(Repository &repository);
 
-	Reference(const Reference &) = default;
-	~Reference() = default;
+	virtual ~Reference() = default;
 
-	Reference &operator=(const Reference &) = default;
-
-private:
-	std::shared_ptr<git_reference> reference;
-
+protected:
 	/*!
-	 * Construct a new Reference using the given bare git_reference
-	 * pointer. The resulting object takes ownership of the given pointer.
+	 * This constructor creates a new object from the given raw Git
+	 * pointer. The resulting object takes ownership of the pointer.
 	 *
-	 * \param r The pointer to construct an object from.
+	 * \param p The pointer to create an object wrapper for.
 	 */
 	Reference(git_reference *r);
+
+	/*!
+	 * Return the function which can free git_reference pointers.
+	 *
+	 * \return The deleter function for objects of this type.
+	 */
+	virtual deleter_t getDeleter() const override;
+
+private:
 };
 }
 }
