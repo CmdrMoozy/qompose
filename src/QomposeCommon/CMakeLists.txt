@@ -68,6 +68,8 @@ set(QomposeCommon_SOURCES
 	git/Buffer.h
 	git/Diff.cpp
 	git/Diff.h
+	git/DiffStats.cpp
+	git/DiffStats.h
 	git/GitAPI.cpp
 	git/GitAPI.h
 	git/Reference.cpp
