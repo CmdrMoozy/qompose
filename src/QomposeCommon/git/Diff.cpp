@@ -33,16 +33,10 @@ Diff Diff::diffHEAD(const Repository &repository)
 {
 	Reference head = Reference::head(repository);
 	Tree headTree(repository, head.getOID());
-	git_diff *diff = nullptr;
-	int ret = git_diff_tree_to_workdir_with_index(&diff, repository.get(),
-	                                              headTree.get(), nullptr);
-	if(ret != 0)
-	{
-		if(diff != nullptr)
-			git_diff_free(diff);
-		throw std::runtime_error(git_utils::lastErrorToString());
-	}
-	return Diff(diff);
+	const git_diff_options *options = nullptr;
+	return Diff(git_utils::newGitObject(git_diff_tree_to_workdir_with_index,
+	                                    git_diff_free, repository.get(),
+	                                    headTree.get(), options));
 }
 
 Diff::Diff(git_diff *p) : AbstractGitObject(p)

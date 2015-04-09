@@ -29,40 +29,32 @@ namespace git
 {
 Reference Reference::head(const Repository &repository)
 {
-	git_reference *reference;
-	int ret = git_repository_head(&reference, repository.get());
-	if(ret != 0)
+	std::function<int(git_reference **, git_repository *)> creator =
+	        [](git_reference **out, git_repository *repo)
 	{
-		if(reference != nullptr)
-			git_reference_free(reference);
-		switch(ret)
+		int ret = git_repository_head(out, repo);
+		if(ret == GIT_EUNBORNBRANCH)
 		{
-		case GIT_EUNBORNBRANCH:
 			throw std::runtime_error(
 			        "HEAD is a nonexistant branch.");
-		case GIT_ENOTFOUND:
-			throw std::runtime_error("HEAD is missing.");
-		default:
-			throw std::runtime_error(
-			        git_utils::lastErrorToString());
 		}
-	}
-	return Reference(reference);
+		else if(ret == GIT_ENOTFOUND)
+		{
+			throw std::runtime_error("HEAD is missing.");
+		}
+		return ret;
+	};
+	return Reference(git_utils::newGitObject(creator, git_reference_free,
+	                                         repository.get()));
 }
 
 Reference Reference::resolve() const
 {
 	if(isOIDReference())
 		return *this;
-	git_reference *reference = nullptr;
-	int ret = git_reference_resolve(&reference, get());
-	if(ret != 0)
-	{
-		if(reference != nullptr)
-			git_reference_free(reference);
-		throw std::runtime_error(git_utils::lastErrorToString());
-	}
-	return Reference(reference);
+	const git_reference *thisReference = get();
+	return Reference(git_utils::newGitObject(
+	        git_reference_resolve, git_reference_free, thisReference));
 }
 
 bool Reference::isOIDReference() const

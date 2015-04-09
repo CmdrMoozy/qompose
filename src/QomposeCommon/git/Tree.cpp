@@ -30,12 +30,8 @@ namespace git
 Tree::Tree(const Repository &repository, const git_oid &id)
         : AbstractGitObject()
 {
-	git_tree *tree;
-	int ret = git_tree_lookup(&tree, repository.get(), &id);
-	if(tree != nullptr)
-		set(tree);
-	if(ret != 0)
-		throw std::runtime_error(git_utils::lastErrorToString());
+	set(git_utils::newGitObject(git_tree_lookup, git_tree_free,
+	                            repository.get(), &id));
 }
 
 Tree::deleter_t Tree::getDeleter() const

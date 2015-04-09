@@ -21,7 +21,6 @@
 #include <cassert>
 #include <stdexcept>
 
-#include "QomposeCommon/git/GitAPI.h"
 #include "QomposeCommon/git/Utils.h"
 
 namespace qompose
@@ -31,12 +30,8 @@ namespace git
 Repository::Repository(const std::string &p) : AbstractGitObject()
 {
 	std::string path = git_utils::discoverRepository(p);
-	git_repository *r = nullptr;
-	int ret = git_repository_open(&r, path.c_str());
-	if(r != nullptr)
-		set(r);
-	if(ret != 0)
-		throw std::runtime_error(git_utils::lastErrorToString());
+	set(git_utils::newGitObject(git_repository_open, git_repository_free,
+	                            path.c_str()));
 }
 
 std::string Repository::getWorkDirectory() const
