@@ -7,7 +7,10 @@ Dependencies
 ------------
 
 - CMake 3.0.2 or later.
-- GCC 4.8 or MSVC
+- GCC 4.8 or later, or Visual Studio 2015 or later
+- Boost 1.56.0 or later.
+- Hunspell 1.3.3 or later.
+- Libgit2 0.22.2 or later.
 - ICU 54.1 or later.
 - Qt 5.4 or later.
 
@@ -16,7 +19,13 @@ Dependencies
 Building on Linux
 -----------------
 
-Building on Linux, assuming that all of the dependencies have been installed via the system's package manager, is trivial. From inside the Qompose source tree, simply run either `debug.sh` or `release.sh` to build in that mode.
+Building on Linux, assuming that all of the dependencies have been installed via the system's package manager, is trivial. From inside the Qompose source tree, perform something like the following:
+
+```
+mkdir build && cd build
+cmake ..
+make
+```
 
 Building on Windows
 -------------------
@@ -41,7 +50,7 @@ dos2unix -f configure
 bash runConfigureICU Cygwin/MSVC --prefix=/cygdrive/c/dev/prefix \
 	--disable-static --enable-shared \
 	--disable-debug --enable-release
-	
+
 make
 make install
 ```
