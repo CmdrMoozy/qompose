@@ -27,7 +27,7 @@ namespace qompose
 {
 namespace git
 {
-Reference Reference::head(Repository &repository)
+Reference Reference::head(const Repository &repository)
 {
 	git_reference *reference;
 	int ret = git_repository_head(&reference, repository.get());

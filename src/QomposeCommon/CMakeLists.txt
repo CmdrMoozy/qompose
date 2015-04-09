@@ -66,6 +66,8 @@ set(QomposeCommon_SOURCES
 	git/AbstractGitObject.h
 	git/Buffer.cpp
 	git/Buffer.h
+	git/Diff.cpp
+	git/Diff.h
 	git/GitAPI.cpp
 	git/GitAPI.h
 	git/Reference.cpp

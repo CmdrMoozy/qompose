@@ -43,7 +43,7 @@ public:
 	 * \param repository The repository to inspect.
 	 * \return A Reference to the repository's head.
 	 */
-	static Reference head(Repository &repository);
+	static Reference head(const Repository &repository);
 
 	virtual ~Reference() = default;
 
