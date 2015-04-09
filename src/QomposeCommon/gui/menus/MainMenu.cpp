@@ -165,7 +165,7 @@ QMenu *createViewMenu(QWidget *parent, qompose::Settings *settings)
 	qompose::gui_utils::ConnectionFunctor parentConn(parent);
 	const DescriptorList items(
 	        {MenuItemDescriptor(
-	                 "Line &Wrapping",
+	                 "&Line Wrapping",
 	                 parentConn(SIGNAL(lineWrappingTriggered(bool))),
 	                 QKeySequence(), QString(), true, false,
 	                 parentConn(SIGNAL(lineWrappingChanged(bool)))),
