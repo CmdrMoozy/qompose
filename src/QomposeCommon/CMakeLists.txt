@@ -76,6 +76,8 @@ set(QomposeCommon_SOURCES
 	git/Reference.h
 	git/Repository.cpp
 	git/Repository.h
+	git/RepositoryWatcher.cpp
+	git/RepositoryWatcher.h
 	git/Tree.cpp
 	git/Tree.h
 	git/Utils.cpp
