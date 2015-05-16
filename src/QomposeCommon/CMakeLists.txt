@@ -105,6 +105,8 @@ set(QomposeCommon_SOURCES
 	gui/dock/BrowserView.cpp
 	gui/dock/BrowserView.h
 
+	gui/menus/EncodingMenu.cpp
+	gui/menus/EncodingMenu.h
 	gui/menus/MainMenu.cpp
 	gui/menus/MainMenu.h
 	gui/menus/MenuDescriptors.cpp

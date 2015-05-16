@@ -33,17 +33,20 @@
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/GUIUtils.h"
+#include "QomposeCommon/gui/menus/EncodingMenu.h"
 #include "QomposeCommon/gui/menus/RecentMenu.h"
 #include "QomposeCommon/util/Settings.h"
 
 namespace
 {
+using qompose::menu_desc::EncodingMenuDescriptor;
 using qompose::menu_desc::MenuItemDescriptor;
-using qompose::menu_desc::SeparatorDescriptor;
 using qompose::menu_desc::RecentMenuDescriptor;
+using qompose::menu_desc::SeparatorDescriptor;
 
-typedef std::vector<boost::variant<MenuItemDescriptor, SeparatorDescriptor,
-                                   RecentMenuDescriptor>> DescriptorList;
+typedef std::vector<boost::variant<MenuItemDescriptor, RecentMenuDescriptor,
+                                   EncodingMenuDescriptor, SeparatorDescriptor>>
+        DescriptorList;
 
 template <typename VariantType>
 QMenu *buildMenu(QWidget *parent, const std::string &title,
@@ -226,6 +229,12 @@ QMenu *createBuffersMenu(QWidget *parent)
 	return buildMenu(parent, "&Buffers", items);
 }
 
+QMenu *createEncodingMenu(QWidget *parent)
+{
+	const DescriptorList items({EncodingMenuDescriptor("Buffer Encoding")});
+	return buildMenu(parent, "&Encoding", items);
+}
+
 QMenu *createHelpMenu(QWidget *parent)
 {
 	qompose::gui_utils::ConnectionFunctor parentConn(parent);
@@ -258,6 +267,7 @@ MainMenu::MainMenu(Settings *s, Window *p)
 	addMenu(createViewMenu(this, settings));
 	addMenu(createSearchMenu(this));
 	addMenu(createBuffersMenu(this));
+	addMenu(createEncodingMenu(this));
 	addMenu(createHelpMenu(this));
 
 	QObject::connect(p, SIGNAL(browserWidgetVisibilityChanged(bool)), this,
