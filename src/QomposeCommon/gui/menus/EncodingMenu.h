@@ -40,29 +40,57 @@ class EncodingMenu : public QObject
 	Q_OBJECT
 
 public:
+	/*!
+	 * \brief This structure encapsulates an encoding item's state.
+	 */
 	struct EncodingMenuItem
 	{
 		std::string name;
 		QAction *action;
 	};
 
+	/*!
+	 * \brief This comparator allows sorting EncodingMenuItems.
+	 */
 	struct EncodingMenuItemComparator
 	{
+		/*!
+		 * This operator can be used to sort a list of menu items in
+		 * case-sensitive alphabetical order.
+		 *
+		 * \return True if a comes before b, or false otherwise.
+		 */
 		bool operator()(const EncodingMenuItem &a,
 		                const EncodingMenuItem &b);
 	};
 
+	/*!
+	 * \param label The menu label for this new encoding menu.
+	 * \param p This encoding menu's parent object.
+	 */
 	EncodingMenu(const QString &label, QObject *p = nullptr);
 
 	EncodingMenu(const EncodingMenu &) = delete;
 
+	/*!
+	 * Free resources allocated for this encoding menu.
+	 */
 	virtual ~EncodingMenu();
 
 	EncodingMenu &operator=(const EncodingMenu &) = delete;
 
+	/*!
+	 * \return This encoding menu's QMenu instance.
+	 */
 	QMenu *getMenu() const;
 
 public Q_SLOTS:
+	/*!
+	 * This function sets this encoding menu's currently selected
+	 * encoding. Note that no signal will be emitted for this change.
+	 *
+	 * \param e The new encoding to select.
+	 */
 	void setEncoding(const QByteArray &e);
 
 private:
@@ -71,6 +99,11 @@ private:
 	std::set<EncodingMenuItem, EncodingMenuItemComparator> encodings;
 
 private Q_SLOTS:
+	/*!
+	 * This slot handles the currently selecting encoding changing by
+	 * finding the currently selected encoding, and then emitting the
+	 * appropriate signals.
+	 */
 	void doEncodingChanged();
 
 Q_SIGNALS:
@@ -88,6 +121,11 @@ struct EncodingMenuDescriptor
 	gui_utils::ConnectionList signalConnections;
 	gui_utils::ConnectionList slotConnections;
 
+	/*!
+	 * \param l The menu label for the new EncodingMenu.
+	 * \param sigc The connection for the menu's encodingChanged signal.
+	 * \param slotc The connection for the menu's setEncoding slot.
+	 */
 	EncodingMenuDescriptor(const std::string &l,
 	                       const gui_utils::Connection &sigc =
 	                               gui_utils::Connection(nullptr, nullptr),

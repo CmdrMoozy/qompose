@@ -503,6 +503,8 @@ private Q_SLOTS:
 	 * This slot handles a buffer's encoding changing by emitting our own
 	 * encodingChanged signal, if the buffer that emitted this signal is
 	 * the current buffer.
+	 *
+	 * \param e The new encoding for the sender() buffer.
 	 */
 	void doBufferEncodingChanged(const QByteArray &e);
 
