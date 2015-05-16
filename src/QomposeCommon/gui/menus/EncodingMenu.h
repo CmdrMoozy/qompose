@@ -63,7 +63,7 @@ public:
 	QMenu *getMenu() const;
 
 public Q_SLOTS:
-	void setEncoding(const QString &e);
+	void setEncoding(const QByteArray &e);
 
 private:
 	QMenu *menu;
@@ -74,7 +74,7 @@ private Q_SLOTS:
 	void doEncodingChanged();
 
 Q_SIGNALS:
-	void encodingChanged(const QString &);
+	void encodingChanged(const QByteArray &);
 };
 
 namespace menu_desc
@@ -85,8 +85,14 @@ namespace menu_desc
 struct EncodingMenuDescriptor
 {
 	QString label;
+	gui_utils::ConnectionList signalConnections;
+	gui_utils::ConnectionList slotConnections;
 
-	EncodingMenuDescriptor(const std::string &l);
+	EncodingMenuDescriptor(const std::string &l,
+	                       const gui_utils::Connection &sigc =
+	                               gui_utils::Connection(nullptr, nullptr),
+	                       const gui_utils::Connection &slotc =
+	                               gui_utils::Connection(nullptr, nullptr));
 
 	EncodingMenuDescriptor(const EncodingMenuDescriptor &) = default;
 	~EncodingMenuDescriptor() = default;

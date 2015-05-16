@@ -231,7 +231,11 @@ QMenu *createBuffersMenu(QWidget *parent)
 
 QMenu *createEncodingMenu(QWidget *parent)
 {
-	const DescriptorList items({EncodingMenuDescriptor("Buffer Encoding")});
+	qompose::gui_utils::ConnectionFunctor parentConn(parent);
+	const DescriptorList items({EncodingMenuDescriptor(
+	        "Buffer Encoding",
+	        parentConn(SIGNAL(encodingTriggered(const QByteArray &))),
+	        parentConn(SIGNAL(encodingChanged(const QByteArray &))))});
 	return buildMenu(parent, "&Encoding", items);
 }
 
@@ -288,6 +292,8 @@ void MainMenu::connectBufferWidget(const BufferWidget *b)
 	                 SLOT(doBufferChanged()));
 	QObject::connect(b, SIGNAL(pathOpened(const QString &)), this,
 	                 SIGNAL(pathOpened(const QString &)));
+	QObject::connect(b, SIGNAL(encodingChanged(const QByteArray &)), this,
+	                 SIGNAL(encodingChanged(const QByteArray &)));
 
 	// Connect file menu actions.
 
@@ -330,6 +336,11 @@ void MainMenu::connectBufferWidget(const BufferWidget *b)
 
 	QObject::connect(this, SIGNAL(lineWrappingTriggered(bool)), b,
 	                 SLOT(doLineWrapping(bool)));
+
+	// Connect encoding menu actions.
+
+	QObject::connect(this, SIGNAL(encodingTriggered(const QByteArray &)), b,
+	                 SLOT(doSetEncoding(const QByteArray &)));
 
 	// Connect buffers menu actions.
 

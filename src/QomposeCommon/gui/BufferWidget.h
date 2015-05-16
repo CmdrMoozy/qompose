@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include <QByteArray>
 #include <QSet>
 #include <QStack>
 
@@ -198,6 +199,14 @@ private:
 	QString getDefaultDirectory() const;
 
 public Q_SLOTS:
+	/*!
+	 * This slot sets the encoding of the current buffer (if any). Note
+	 * that this involves reloading the contents of the buffer from disk.
+	 *
+	 * \param e The new character encoding to use.
+	 */
+	void doSetEncoding(const QByteArray &e);
+
 	/*!
 	 * This slot executes a new action by creating a new buffer widget.
 	 */
@@ -494,6 +503,7 @@ Q_SIGNALS:
 	void bufferChanged();
 	void pathChanged(const QString &);
 	void pathOpened(const QString &);
+	void encodingChanged(const QByteArray &);
 	void cursorPositionChanged(int, int);
 	void searchWrapped();
 };

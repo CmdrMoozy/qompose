@@ -132,6 +132,7 @@ Q_SIGNALS:
 	void nextBufferTriggered(bool);
 	void moveBufferLeftTriggered(bool);
 	void moveBufferRightTriggered(bool);
+	void encodingTriggered(const QByteArray &);
 	void aboutQomposeTriggered(bool);
 	void aboutQtTriggered(bool);
 	void debugTriggered(bool);
@@ -139,6 +140,7 @@ Q_SIGNALS:
 	void pathOpened(const QString &);
 	void lineWrappingChanged(bool);
 	void browserWidgetVisibilityChanged(bool);
+	void encodingChanged(const QByteArray &);
 };
 }
 

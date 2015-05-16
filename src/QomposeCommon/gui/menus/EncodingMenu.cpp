@@ -110,10 +110,10 @@ QMenu *EncodingMenu::getMenu() const
 	return menu;
 }
 
-void EncodingMenu::setEncoding(const QString &e)
+void EncodingMenu::setEncoding(const QByteArray &e)
 {
 	EncodingMenuItem item;
-	item.name = std::string(e.toLatin1().data());
+	item.name = std::string(e.data());
 	item.action = nullptr;
 	auto it = encodings.find(item);
 	if(it != encodings.end())
@@ -133,15 +133,20 @@ void EncodingMenu::doEncodingChanged()
 		if(encoding.action->isChecked())
 		{
 			Q_EMIT(encodingChanged(
-			        QString::fromStdString(encoding.name)));
+			        QString::fromStdString(encoding.name)
+			                .toLatin1()));
 		}
 	}
 }
 
 namespace menu_desc
 {
-EncodingMenuDescriptor::EncodingMenuDescriptor(const std::string &l)
-        : label(gui_utils::translate(l))
+EncodingMenuDescriptor::EncodingMenuDescriptor(
+        const std::string &l, const gui_utils::Connection &sigc,
+        const gui_utils::Connection &slotc)
+        : label(gui_utils::translate(l)),
+          signalConnections({sigc}),
+          slotConnections({slotc})
 {
 }
 
@@ -150,6 +155,13 @@ void constructDescriptor(QObject *parent, QMenu *menu,
                          const EncodingMenuDescriptor &descriptor)
 {
 	EncodingMenu *encodingMenu = new EncodingMenu(descriptor.label, parent);
+
+	gui_utils::connectAll(encodingMenu,
+	                      SIGNAL(encodingChanged(const QByteArray &)),
+	                      descriptor.signalConnections);
+	gui_utils::connectAll(descriptor.slotConnections, encodingMenu,
+	                      SLOT(setEncoding(const QByteArray &)));
+
 	menu->addMenu(encodingMenu->getMenu());
 }
 }

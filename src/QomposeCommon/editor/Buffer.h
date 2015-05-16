@@ -149,6 +149,21 @@ public:
 	 */
 	void setModified(bool m);
 
+	/*!
+	 * \return The current character encoding in use by this buffer.
+	 */
+	QByteArray getEncoding() const;
+
+	/*!
+	 * This function sets the character encoding this buffer will use. If
+	 * this buffer was previously loaded from the disk, this will require
+	 * a revert() action in order to set the encoding. Otherwise, the
+	 * encoding will be modified in-place.
+	 *
+	 * \param e The new character encoding to use.
+	 */
+	void setEncoding(const QByteArray &e);
+
 public Q_SLOTS:
 	/*!
 	 * This slot prints our buffer's contents to the given printer object.

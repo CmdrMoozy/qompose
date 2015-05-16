@@ -37,7 +37,7 @@
 namespace qompose
 {
 Buffer::Buffer(Settings *s, QWidget *p)
-        : Editor(p), settings(s), path(QString()), codec(QString())
+        : Editor(p), settings(s), path(QString()), codec("UTF-8")
 {
 	// Load our initial settings, and connect our settings object.
 
@@ -137,11 +137,7 @@ bool Buffer::save(const QString &p)
 	}
 	else
 	{
-		if(getPath().isEmpty())
-			codec = "UTF-8";
-
 		setPath(p);
-
 		return write();
 	}
 }
@@ -215,6 +211,19 @@ void Buffer::setModified(bool m)
 {
 	document()->setModified(m);
 	Q_EMIT modificationChanged(m);
+}
+
+QByteArray Buffer::getEncoding() const
+{
+	return codec.toLatin1();
+}
+
+void Buffer::setEncoding(const QByteArray &e)
+{
+	codec = QString::fromLatin1(e);
+
+	if(hasBeenSaved())
+		revert();
 }
 
 void Buffer::print(QPrinter *p)
