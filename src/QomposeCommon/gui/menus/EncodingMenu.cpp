@@ -91,8 +91,8 @@ EncodingMenu::EncodingMenu(const QString &label, QObject *p)
 {
 	menu->setStyleSheet("QMenu { menu-scrollable: 1; }");
 
-	EncodingSet_t encodingSet = buildEncodingMenuItems(this, group);
-	for(const auto &encoding : encodingSet)
+	encodings = buildEncodingMenuItems(this, group);
+	for(const auto &encoding : encodings)
 	{
 		menu->addAction(encoding.action);
 		QObject::connect(encoding.action, SIGNAL(toggled(bool)), this,
@@ -135,6 +135,7 @@ void EncodingMenu::doEncodingChanged()
 			Q_EMIT(encodingChanged(
 			        QString::fromStdString(encoding.name)
 			                .toLatin1()));
+			return;
 		}
 	}
 }
