@@ -499,6 +499,13 @@ private Q_SLOTS:
 	 */
 	void doReopenBuffer(const ClosedBufferDescriptor &d);
 
+	/*!
+	 * This slot handles a buffer's encoding changing by emitting our own
+	 * encodingChanged signal, if the buffer that emitted this signal is
+	 * the current buffer.
+	 */
+	void doBufferEncodingChanged(const QByteArray &e);
+
 Q_SIGNALS:
 	void bufferChanged();
 	void pathChanged(const QString &);

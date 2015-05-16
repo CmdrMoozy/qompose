@@ -170,6 +170,8 @@ Buffer *BufferWidget::newBuffer()
 	                 SLOT(doTabTitleChanged(const QString &)));
 	QObject::connect(b, SIGNAL(pathChanged(const QString &)), this,
 	                 SLOT(doTabPathChanged(const QString &)));
+	QObject::connect(b, SIGNAL(encodingChanged(const QByteArray &)), this,
+	                 SLOT(doBufferEncodingChanged(const QByteArray &)));
 	QObject::connect(b, SIGNAL(cursorPositionChanged()), this,
 	                 SLOT(doCursorPositionChanged()));
 	QObject::connect(b, SIGNAL(searchWrapped()), this,
@@ -681,12 +683,14 @@ void BufferWidget::doTabChanged(int i)
 		b->setFocus(Qt::OtherFocusReason);
 
 		Q_EMIT pathChanged(b->getPath());
+		Q_EMIT encodingChanged(b->getEncoding());
 		Q_EMIT cursorPositionChanged(curs.blockNumber() + 1,
 		                             curs.positionInBlock() + 1);
 	}
 	else
 	{
 		Q_EMIT pathChanged("");
+		Q_EMIT encodingChanged("UTF-8");
 		Q_EMIT cursorPositionChanged(1, 1);
 	}
 }
@@ -805,5 +809,17 @@ void BufferWidget::doReopenBuffer(const ClosedBufferDescriptor &d)
 
 		b->setTextCursor(curs);
 	}
+}
+
+void BufferWidget::doBufferEncodingChanged(const QByteArray &e)
+{
+	const Buffer *b = dynamic_cast<const Buffer *>(sender());
+	if(b == nullptr)
+		return;
+
+	const Buffer *current = currentBuffer();
+
+	if(b == current)
+		Q_EMIT(encodingChanged(e));
 }
 }

@@ -76,6 +76,8 @@ EncodingSet_t buildEncodingMenuItems(QObject *p, QActionGroup *group)
 			        new QAction(QObject::tr(item.name.c_str()), p);
 			item.action->setActionGroup(group);
 			item.action->setCheckable(true);
+			if(item.name == "UTF-8")
+				item.action->setChecked(true);
 			encodings.insert(item);
 		}
 	}

@@ -230,6 +230,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void titleChanged(const QString &);
 	void pathChanged(const QString &);
+	void encodingChanged(const QByteArray &);
 };
 }
 

@@ -80,6 +80,7 @@ bool Buffer::open(const FileDescriptor &f)
 	if(!setPath(f.fileName))
 		return false;
 	codec = f.textCodec;
+	Q_EMIT(encodingChanged(f.textCodec.toLatin1()));
 
 	bool r = read();
 
@@ -244,7 +245,7 @@ bool Buffer::setPath(const QString &p)
 
 bool Buffer::read(bool u)
 {
-	QTextCodec *c = QTextCodec::codecForName(codec.toStdString().c_str());
+	QTextCodec *c = QTextCodec::codecForName(codec.toLatin1());
 
 	if(c == nullptr)
 		return false;
