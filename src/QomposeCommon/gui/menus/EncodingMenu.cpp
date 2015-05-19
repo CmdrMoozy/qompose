@@ -97,7 +97,7 @@ EncodingMenu::EncodingMenu(const QString &label, QObject *p)
 	for(const auto &encoding : encodings)
 	{
 		menu->addAction(encoding.action);
-		QObject::connect(encoding.action, SIGNAL(toggled(bool)), this,
+		QObject::connect(encoding.action, SIGNAL(triggered(bool)), this,
 		                 SLOT(doEncodingChanged()));
 	}
 }
