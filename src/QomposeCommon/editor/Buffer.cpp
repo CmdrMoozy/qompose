@@ -32,6 +32,7 @@
 
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/util/DocumentWriter.h"
+#include "QomposeCommon/util/Paths.h"
 #include "QomposeCommon/util/Settings.h"
 
 namespace qompose
@@ -234,8 +235,7 @@ void Buffer::print(QPrinter *p)
 
 bool Buffer::setPath(const QString &p)
 {
-	QFileInfo info(p);
-	QString canonicalPath = info.canonicalFilePath();
+	QString canonicalPath = path_utils::getCanonicalPath(p);
 	if(canonicalPath.isEmpty())
 		return false;
 	path = canonicalPath;
