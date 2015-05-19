@@ -141,6 +141,8 @@ set(QomposeCommon_SOURCES
 	util/Paths.h
 	util/ReplaceQuery.cpp
 	util/ReplaceQuery.h
+	util/ScopeExit.cpp
+	util/ScopeExit.h
 	util/Settings.cpp
 	util/Settings.h
 	util/Strings.cpp
