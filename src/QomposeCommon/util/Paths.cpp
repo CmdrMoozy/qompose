@@ -20,7 +20,12 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <fstream>
 
+#include <QFile>
+#include <QFileInfo>
+
+#include "QomposeCommon/util/ScopeExit.h"
 #include "QomposeCommon/util/Strings.h"
 
 namespace qompose
@@ -65,6 +70,27 @@ std::string getCommonParentPath(const std::vector<std::string> &paths)
 	if(refStart == refEnd)
 		return std::string();
 	return std::string(refStart, refEnd);
+}
+
+QString getCanonicalPath(const QString &path)
+{
+	QFileInfo info(path);
+
+	bool exists = info.exists();
+	auto cleanupFn = [exists, path]()
+	{
+		if(!exists)
+		{
+			QFile file(path);
+			file.remove();
+		}
+	};
+	ScopeExit cleanup(cleanupFn);
+
+	if(!exists)
+		std::ofstream out(path.toStdString(), std::ios_base::out);
+
+	return info.canonicalFilePath();
 }
 }
 }

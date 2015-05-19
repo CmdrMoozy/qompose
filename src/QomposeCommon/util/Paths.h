@@ -22,6 +22,8 @@
 #include <string>
 #include <vector>
 
+#include <QString>
+
 namespace qompose
 {
 namespace path_utils
@@ -36,6 +38,16 @@ namespace path_utils
  * \return The path containing all the given paths.
  */
 std::string getCommonParentPath(const std::vector<std::string> &paths);
+
+/*!
+ * This function returns a canonical version of the given path, similar to
+ * QFileInfo's canonicalFilePath() function. The difference is that this
+ * function works even if the given file doesn't already exist.
+ *
+ * \param path The path to canonicalize.
+ * \return The canonical version of the given path.
+ */
+QString getCanonicalPath(const QString &path);
 }
 }
 
