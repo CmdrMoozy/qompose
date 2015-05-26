@@ -109,5 +109,6 @@ add_subdirectory(src/QomposeCommon)
 add_subdirectory(src/Qompose)
 
 if(ENABLE_UNIT_TESTS)
+	enable_testing()
 	add_subdirectory(src/QomposeTest)
 endif()
