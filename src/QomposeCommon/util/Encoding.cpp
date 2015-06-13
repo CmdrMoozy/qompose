@@ -40,8 +40,8 @@ QString detectTextCodec(const QString &f)
 	std::shared_ptr<UCharsetDetector> detector(ucsdet_open(&err),
 	                                           [](UCharsetDetector *p)
 	                                           {
-		ucsdet_close(p);
-	});
+		                                           ucsdet_close(p);
+		                                   });
 
 	if(U_FAILURE(err))
 		return QString();
@@ -51,8 +51,8 @@ QString detectTextCodec(const QString &f)
 	std::ifstream fs(f.toStdString().c_str());
 	std::shared_ptr<char> buf(new char[1024], [](char *p)
 	                          {
-		delete[] p;
-	});
+		                          delete[] p;
+		                  });
 
 	fs.read(buf.get(), 1024);
 	size_t read = static_cast<size_t>(fs.gcount());

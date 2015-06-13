@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "HotkeyMapTest.h"
+#include <catch.hpp>
 
 #include <functional>
 
@@ -82,78 +82,77 @@ void doNoop()
 }
 }
 
-namespace qompose
+TEST_CASE("Test HotkeyMap function lookup behavior", "[HotkeyMap]")
 {
-namespace test
-{
-void HotkeyMapTest::test()
-{
-	HotkeyMap hotkeys;
+	qompose::HotkeyMap hotkeys;
 
 	// Enter
 
-	hotkeys.addHotkey(
-	        Hotkey(Qt::Key_Enter, nullptr, ~Qt::KeyboardModifiers(nullptr)),
-	        std::bind(&doNewline));
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_Enter, nullptr,
+	                                  ~Qt::KeyboardModifiers(nullptr)),
+	                  std::bind(&doNewline));
 
 	// Tab
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Tab), std::bind(&doTab));
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_Tab), std::bind(&doTab));
 
 	// Shift + Tab
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier),
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_Tab, Qt::ShiftModifier),
 	                  std::bind(&decreaseSelectionIndent));
 
 	// Home
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Home), std::bind(&doMoveHome));
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_Home),
+	                  std::bind(&doMoveHome));
 
 	// Shift + Home
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier),
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_Home, Qt::ShiftModifier),
 	                  std::bind(&doSelectHome));
 
 	// Ctrl+D
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier),
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_D, Qt::ControlModifier),
 	                  std::bind(&duplicateLine));
 
 	// Ctrl+(Zero)
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_0, Qt::ControlModifier),
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_0, Qt::ControlModifier),
 	                  std::bind(&resetFontZoom));
 
 	// Ctrl+Shift+Left
 
 	hotkeys.addHotkey(
-	        Hotkey(Qt::Key_Left, Qt::ControlModifier | Qt::ShiftModifier),
+	        qompose::Hotkey(Qt::Key_Left,
+	                        Qt::ControlModifier | Qt::ShiftModifier),
 	        std::bind(&doNoop));
 
 	// Ctrl+Shift+Right
 
 	hotkeys.addHotkey(
-	        Hotkey(Qt::Key_Right, Qt::ControlModifier | Qt::ShiftModifier),
+	        qompose::Hotkey(Qt::Key_Right,
+	                        Qt::ControlModifier | Qt::ShiftModifier),
 	        std::bind(&doNoop));
 
 	// Ctrl+Insert
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier),
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_Insert, Qt::ControlModifier),
 	                  std::bind(&doNoop));
 
 	// Ctrl+K
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier),
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_K, Qt::ControlModifier),
 	                  std::bind(&doNoop));
 
 	// Shift+Insert
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier),
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_Insert, Qt::ShiftModifier),
 	                  std::bind(&doNoop));
 
 	// Shift+Delete
 
-	hotkeys.addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier),
+	hotkeys.addHotkey(qompose::Hotkey(Qt::Key_Delete, Qt::ShiftModifier),
 	                  std::bind(&doNoop));
 
 	// Test a series of example QKeyEvents against this hotkey mapping.
@@ -189,8 +188,8 @@ void HotkeyMapTest::test()
 	QKeyEvent ctrlAEvent(QKeyEvent::KeyPress, Qt::Key_A,
 	                     Qt::KeyboardModifiers(Qt::ControlModifier));
 
-	auto testHotkey =
-	        [&hotkeys](const QKeyEvent &event, TestFunction expected)
+	auto updateLastExecuted = [&hotkeys](const QKeyEvent &event)
+	                                  -> TestFunction
 	{
 		auto function = hotkeys.getHotkeyHandler(&event);
 
@@ -199,25 +198,28 @@ void HotkeyMapTest::test()
 		else
 			(*function)();
 
-		vrfy::assert::assertEquals(LAST_EXECUTED, expected);
+		return LAST_EXECUTED;
 	};
 
-	testHotkey(enterEvent, TestFunction::DoNewline);
-	testHotkey(tabEvent, TestFunction::DoTab);
-	testHotkey(backtabEvent, TestFunction::DecreaseSelectionIndent);
-	testHotkey(homeEvent, TestFunction::DoMoveHome);
-	testHotkey(selectHomeEvent, TestFunction::DoSelectHome);
-	testHotkey(duplicateEvent, TestFunction::DuplicateLine);
-	testHotkey(resetZoomEvent, TestFunction::ResetFontZoom);
-	testHotkey(ctrlShiftLeftEvent, TestFunction::DoNoop);
-	testHotkey(ctrlShiftRightEvent, TestFunction::DoNoop);
-	testHotkey(ctrlInsertEvent, TestFunction::DoNoop);
-	testHotkey(ctrlKEvent, TestFunction::DoNoop);
-	testHotkey(shiftInsertEvent, TestFunction::DoNoop);
-	testHotkey(shiftDeleteEvent, TestFunction::DoNoop);
-	testHotkey(ctrlShiftTabEvent, TestFunction::None);
-	testHotkey(ctrlShiftHomeEvent, TestFunction::None);
-	testHotkey(ctrlAEvent, TestFunction::None);
-}
-}
+	REQUIRE(updateLastExecuted(enterEvent) == TestFunction::DoNewline);
+	REQUIRE(updateLastExecuted(tabEvent) == TestFunction::DoTab);
+	REQUIRE(updateLastExecuted(backtabEvent) ==
+	        TestFunction::DecreaseSelectionIndent);
+	REQUIRE(updateLastExecuted(homeEvent) == TestFunction::DoMoveHome);
+	REQUIRE(updateLastExecuted(selectHomeEvent) ==
+	        TestFunction::DoSelectHome);
+	REQUIRE(updateLastExecuted(duplicateEvent) ==
+	        TestFunction::DuplicateLine);
+	REQUIRE(updateLastExecuted(resetZoomEvent) ==
+	        TestFunction::ResetFontZoom);
+	REQUIRE(updateLastExecuted(ctrlShiftLeftEvent) == TestFunction::DoNoop);
+	REQUIRE(updateLastExecuted(ctrlShiftRightEvent) ==
+	        TestFunction::DoNoop);
+	REQUIRE(updateLastExecuted(ctrlInsertEvent) == TestFunction::DoNoop);
+	REQUIRE(updateLastExecuted(ctrlKEvent) == TestFunction::DoNoop);
+	REQUIRE(updateLastExecuted(shiftInsertEvent) == TestFunction::DoNoop);
+	REQUIRE(updateLastExecuted(shiftDeleteEvent) == TestFunction::DoNoop);
+	REQUIRE(updateLastExecuted(ctrlShiftTabEvent) == TestFunction::None);
+	REQUIRE(updateLastExecuted(ctrlShiftHomeEvent) == TestFunction::None);
+	REQUIRE(updateLastExecuted(ctrlAEvent) == TestFunction::None);
 }

@@ -93,7 +93,7 @@ newGitObject(const std::function<int(object_t **, args_t...)> &creator,
 template <typename object_t, typename... args_t>
 object_t *
 newGitObject(const std::function<int(object_t **, args_t...)> &creator,
-             void (&deleter)(object_t *), args_t... args)
+             void(&deleter)(object_t *), args_t... args)
 {
 	return newGitObject(creator, std::function<void(object_t *)>(deleter),
 	                    args...);
@@ -109,8 +109,8 @@ newGitObject(const std::function<int(object_t **, args_t...)> &creator,
  * \return The newly created Git object.
  */
 template <typename object_t, typename... args_t>
-object_t *newGitObject(int (&creator)(object_t **, args_t...),
-                       void (&deleter)(object_t *), args_t... args)
+object_t *newGitObject(int(&creator)(object_t **, args_t...),
+                       void(&deleter)(object_t *), args_t... args)
 {
 	return newGitObject(std::function<int(object_t **, args_t...)>(creator),
 	                    std::function<void(object_t *)>(deleter), args...);
