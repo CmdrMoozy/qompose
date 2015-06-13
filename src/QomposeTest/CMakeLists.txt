@@ -8,8 +8,6 @@ set(QomposeTest_SOURCES
 
 )
 
-include_directories(SYSTEM ${CMAKE_SOURCE_DIR}/3rdparty/catch/single_include)
-
 add_executable(QomposeTest ${QomposeTest_SOURCES})
 target_link_libraries(QomposeTest ${Qompose_LIBS})
 

@@ -69,6 +69,7 @@ if(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 endif()
 
 include_directories("src")
+include_directories(SYSTEM "3rdparty/include")
 
 # Define the libraries Qompose uses.
 

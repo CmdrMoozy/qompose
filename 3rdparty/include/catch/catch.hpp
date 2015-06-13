@@ -16,13 +16,4 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QApplication>
-
-#define CATCH_CONFIG_RUNNER
-#include <catch/catch.hpp>
-
-int main(int argc, char **argv)
-{
-	QApplication app(argc, argv, false);
-	return Catch::Session().run(argc, argv);
-}
+#include "../../catch/single_include/catch.hpp"
