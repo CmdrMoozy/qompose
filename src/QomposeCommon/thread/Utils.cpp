@@ -28,7 +28,7 @@
 #include <sys/syscall.h>
 #endif
 
-#include "QomposeCommon/util/Strings.h"
+#include "QomposeCommon/util/Errno.h"
 #include "QomposeCommon/util/Windows.h"
 
 namespace qompose
@@ -40,7 +40,7 @@ int ioprio_get(int which, int who)
 {
 	int r = syscall(SYS_ioprio_get, which, who);
 	if(r == -1)
-		throw std::runtime_error(string_utils::getErrnoError());
+		util::throwErrnoError();
 	return r;
 }
 
@@ -48,7 +48,7 @@ void ioprio_set(int which, int who, int ioprio)
 {
 	int r = syscall(SYS_ioprio_set, which, who, ioprio);
 	if(r != 0)
-		throw std::runtime_error(string_utils::getErrnoError());
+		util::throwErrnoError();
 }
 #endif
 
@@ -60,7 +60,7 @@ void setThreadPriority(uint32_t c, HANDLE thread)
 
 	bool ret = SetThreadPriority(thread, static_cast<DWORD>(c)) != 0;
 	if(!ret)
-		throw std::runtime_error(string_utils::getLastWindowsError());
+		util::throwLastWindowsError();
 }
 
 void setPriorityClass(uint32_t c, HANDLE process)
@@ -70,7 +70,7 @@ void setPriorityClass(uint32_t c, HANDLE process)
 
 	bool ret = SetPriorityClass(process, static_cast<DWORD>(c)) != 0;
 	if(!ret)
-		throw std::runtime_error(string_utils::getLastWindowsError());
+		util::throwLastWindowsError();
 }
 #endif
 }

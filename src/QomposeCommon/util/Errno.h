@@ -43,6 +43,22 @@ std::string getErrnoError(int error = 0,
  */
 void throwErrnoError(int error = 0,
                      const std::string &defaultMessage = "Unknown error.");
+
+#ifdef _WIN32
+/*!
+ * This function is a wrapper for Windows' GetLastError() function, which
+ * returns the last error message as a human-readable string.
+ *
+ * \return The last error as a human-readable string.
+ */
+std::string getLastWindowsError();
+
+/*!
+ * Throw an exception, with the last Windows error message as its "what"
+ * parameter. See getLastWindowsError() for details.
+ */
+void throwLastWindowsError();
+#endif
 }
 }
 

@@ -22,11 +22,11 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <functional>
 #include <limits>
 #include <numeric>
 #include <string>
 
-#include <boost/optional/optional.hpp>
 #include <boost/utility/string_ref.hpp>
 
 namespace qompose
@@ -63,28 +63,6 @@ StringRef toStringRef(typename StringRef::pointer s,
 	assert(l >= 0);
 	return StringRef(s, static_cast<typename StringRef::size_type>(l));
 }
-
-/*!
- * This function returns a human-readable error string for the given errno
- * value (or the current global errno value, by default). If a proper string
- * cannot be retrieved, the default message will be returned instead.
- *
- * \param defaultMessage The default error message to return.
- * \param errnoValue The errno value to interpret.
- * \return A human-readable error string for the given errno value.
- */
-std::string getErrnoError(const std::string &defaultMessage = "Unknown error.",
-                          boost::optional<int> errnoValue = boost::none);
-
-#ifdef _WIN32
-/*!
- * This function is a wrapper for Windows' GetLastError() function, which
- * returns the last error message as a human-readable string.
- *
- * \return The last error as a human-readable string.
- */
-std::string getLastWindowsError();
-#endif
 
 /*!
  * This function returns the size of the smallest string in the given iterator

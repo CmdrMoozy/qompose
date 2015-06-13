@@ -29,7 +29,7 @@
 #include <QThread>
 
 #include "QomposeCommon/thread/Utils.h"
-#include "QomposeCommon/util/Strings.h"
+#include "QomposeCommon/util/Errno.h"
 
 namespace
 {
@@ -46,10 +46,7 @@ void setLowCPUPriority()
 
 	int ret = pthread_setschedparam(pthread_self(), SCHED_OTHER, &param);
 	if(ret != 0)
-	{
-		throw std::runtime_error(qompose::string_utils::getErrnoError(
-		        "Setting thread CPU priority failed.", ret));
-	}
+		qompose::util::throwErrnoError(ret);
 #else
 	static_assert(false, "CPU priority unsupported on this platform.");
 #endif

@@ -18,9 +18,26 @@
 
 #include "Errno.h"
 
+#include "QomposeCommon/util/Strings.h"
+
 #include <cerrno>
 #include <cstring>
 #include <stdexcept>
+
+namespace
+{
+#ifdef _WIN32
+std::string lptstrToString(LPSTR s)
+{
+	return std::string(s);
+}
+
+std::string lptstrToString(LPWSTR s)
+{
+	return qompose::string_utils::wstringToString(std::wstring(s));
+}
+#endif
+}
 
 namespace qompose
 {
@@ -41,5 +58,29 @@ void throwErrnoError(int error, const std::string &defaultMessage)
 {
 	throw std::runtime_error(getErrnoError(error, defaultMessage));
 }
+
+#ifdef _WIN32
+std::string getLastWindowsError()
+{
+	DWORD error = GetLastError();
+
+	LPTSTR buffer;
+	DWORD ret =
+	        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER, nullptr, error, 0,
+	                      static_cast<LPTSTR>(&buffer), 0, nullptr);
+
+	if(ret == 0)
+		return std::string("Unknown error.");
+
+	std::string errorMessage = lptstrToString(buffer);
+	LocalFree(buffer);
+	return errorMessage);
+}
+
+void throwLastWindowsError()
+{
+	throw std::runtime_error(getLastWindowsError());
+}
+#endif
 }
 }
