@@ -18,29 +18,11 @@
 
 #include <QApplication>
 
-#include <Vrfy/Vrfy.h>
+#define CATCH_CONFIG_RUNNER
+#include <catch.hpp>
 
-#include "QomposeTest/tests/DecoratedTextEditTest.h"
-#include "QomposeTest/tests/FontMetricsTest.h"
-#include "QomposeTest/tests/HotkeyTest.h"
-#include "QomposeTest/tests/HotkeyMapTest.h"
-
-/*!
- * This is our main function, which executes our unit tests.
- *
- * \param argc The number of command-line arguments.
- * \param argv The command-line arguments.
- */
 int main(int argc, char **argv)
 {
 	QApplication app(argc, argv, false);
-
-	vrfy::Tests tests;
-	tests.add<qompose::test::DecoratedTextEditTest>()
-	        .add<qompose::test::FontMetricsTest>()
-	        .add<qompose::test::HotkeyTest>()
-	        .add<qompose::test::HotkeyMapTest>()
-	        .execute();
-
-	return 0;
+	return Catch::Session().run(argc, argv);
 }
