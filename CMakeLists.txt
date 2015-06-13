@@ -49,7 +49,6 @@ string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
 set(CMAKE_AUTOMOC ON)
 
 find_package(Boost REQUIRED)
-find_package(ICU COMPONENTS data uc i18n REQUIRED)
 find_package(HUNSPELL REQUIRED)
 find_package(Libgit2 REQUIRED)
 find_package(Qt5Core REQUIRED)
@@ -77,7 +76,6 @@ set(Qompose_LIBS
 
 	m
 	QomposeCommon
-	${ICU_LIBRARIES}
 	${HUNSPELL_LIBRARIES}
 	${LIBGIT2_LIBRARIES}
 	${Qt5Core_LIBRARIES}

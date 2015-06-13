@@ -18,14 +18,149 @@
 
 #include "Encoding.h"
 
-#include <fstream>
-#include <memory>
+#include <algorithm>
+#include <cstdint>
+#include <utility>
+#include <vector>
 
-#include <QList>
-#include <QByteArray>
-#include <QTextCodec>
+#include "QomposeCommon/util/MemoryMappedFile.h"
 
-#include <unicode/ucsdet.h>
+namespace
+{
+/**
+ * \brief A list of valid unicode BOM's, and their associated encodings.
+ *
+ * Note that the order matters here; some BOM's start with the same bytes
+ * as others, so if they are checked in the wrong order we may mistake one
+ * for another (e.g. UTF-32LE and UTF-16LE).
+ */
+const std::vector<std::pair<QString, std::vector<uint8_t>>> BOM_TYPES = {
+        {QString("UTF-32BE"), {0x00, 0x00, 0xFE, 0xFF}},
+        {QString("UTF-32LE"), {0xFF, 0xFE, 0x00, 0x00}},
+        {QString("UTF-8"), {0xEF, 0xBB, 0xBF}},
+        {QString("UTF-16BE"), {0xFE, 0xFF}},
+        {QString("UTF-16LE"), {0xFF, 0xFE}}};
+
+/**
+ * Tests whether or not the given unicode BOM is present at the beginning of
+ * the given file.
+ *
+ * \param bytes The BOM bytes to search for.
+ * \param file The file whose contents will be examined.
+ * \return Whether or not the given BOM is present in the given file.
+ */
+bool bomPresent(const std::vector<uint8_t> &bytes,
+                const qompose::MemoryMappedFile &file)
+{
+	if(file.getLength() < bytes.size())
+		return false;
+
+	return std::equal(bytes.data(), bytes.data() + bytes.size(),
+	                  file.getData());
+}
+
+/**
+ * Tests whether or not the contents of a suspected UTF-8 codepoint are
+ * valid. It is assumed that the caller has already verified the first byte
+ * of the codepoint, which indicates the number of other bytes.
+ *
+ * If the codepoint is valid, then the given codepoint pointer will be moved
+ * to the first byte after the codepoint being examined.
+ *
+ * \param codepoint A pointer to the first 0x10xxxxxx byte in the codepoint.
+ * \param length The length of the codepoint, excluding the first byte.
+ * \param end The last byte in the overall data stream being examined.
+ * \return Whether or not the given codepoint is a valid codepoint.
+ */
+bool isValidUTF8CodePoint(const uint8_t *&codepoint, std::size_t length,
+                          const uint8_t *end)
+{
+	if(length == 0)
+		return false;
+	const uint8_t *codepointEnd = codepoint + length;
+	if(codepointEnd > end)
+		return false;
+
+	// Skip the first byte in the codepoint; the caller should have
+	// already verified the first byte.
+	++codepoint;
+
+	for(const uint8_t *byte = codepoint; byte < codepointEnd; ++byte)
+	{
+		if((*byte & 0xC0) != 0x80)
+			return false;
+	}
+
+	codepoint = codepointEnd;
+	return true;
+}
+
+/**
+ * Determine whether or not the contents of the given file are valid UTF-8
+ * codepoints (which indicates that it is most likely a text file encoded
+ * with UTF-8).
+ *
+ * \param file The file whose contents will be examined.
+ * \return Whether or not the given file contains only valid UTF-8 codepoints.
+ */
+bool isValidUTF8(const qompose::MemoryMappedFile &file)
+{
+	// UTF-8 code points can be up to six bytes long. They follow one of
+	// the following formats:
+	//
+	// 0x0xxxxxxx
+	// 0x110xxxxx 0x10xxxxxx
+	// 0x1110xxxx 0x10xxxxxx 0x10xxxxxx
+	// 0x11110xxx 0x10xxxxxx 0x10xxxxxx 0x10xxxxxx
+	// 0x111110xx 0x10xxxxxx 0x10xxxxxx 0x10xxxxxx 0x10xxxxxx
+	// 0x1111110x 0x10xxxxxx 0x10xxxxxx 0x10xxxxxx 0x10xxxxxx 0x10xxxxxx
+	//
+	// If we encounter any sequence of bytes which do not follow this
+	// pattern, then we know that the given file contains non-UTF8 data.
+
+	const uint8_t *byte = file.getData();
+	const uint8_t *end = file.getData() + file.getLength();
+	while(byte < end)
+	{
+		if((*byte & 0x80) == 0x00) // 0x0xxxxxxx (1 byte)
+		{
+			++byte;
+		}
+		else if((*byte & 0xE0) == 0xC0) // 0x110xxxxx (2 bytes)
+		{
+			if(!isValidUTF8CodePoint(byte, 2, end))
+				return false;
+		}
+		else if((*byte & 0xF0) == 0xE0) // 0x1110xxxx (3 bytes)
+		{
+			if(!isValidUTF8CodePoint(byte, 3, end))
+				return false;
+		}
+		else if((*byte & 0xF8) == 0xF0) // 0x11110xxx (4 bytes)
+		{
+			if(!isValidUTF8CodePoint(byte, 4, end))
+				return false;
+		}
+		else if((*byte & 0xFC) == 0xF8) // 0x111110xx (5 bytes)
+		{
+			if(!isValidUTF8CodePoint(byte, 5, end))
+				return false;
+		}
+		else if((*byte & 0xFE) == 0xFC) // 0x1111110x (6 bytes)
+		{
+			if(!isValidUTF8CodePoint(byte, 6, end))
+				return false;
+		}
+		else
+		{
+			// Invalid first byte of sequence point.
+			return false;
+		}
+	}
+
+	return true;
+}
+}
 
 namespace qompose
 {
@@ -33,80 +168,29 @@ namespace encoding_utils
 {
 QString detectTextCodec(const QString &f)
 {
-	// Create our charset detector instance.
-
-	UErrorCode err = U_ZERO_ERROR;
-
-	std::shared_ptr<UCharsetDetector> detector(ucsdet_open(&err),
-	                                           [](UCharsetDetector *p)
-	                                           {
-		                                           ucsdet_close(p);
-		                                   });
-
-	if(U_FAILURE(err))
-		return QString();
-
-	// Read 1 KiB from our file for testing.
-
-	std::ifstream fs(f.toStdString().c_str());
-	std::shared_ptr<char> buf(new char[1024], [](char *p)
-	                          {
-		                          delete[] p;
-		                  });
-
-	fs.read(buf.get(), 1024);
-	size_t read = static_cast<size_t>(fs.gcount());
-
-	fs.close();
-
-	// Try to detect the charset.
-
-	ucsdet_setText(detector.get(), buf.get(), read, &err);
-
-	if(U_FAILURE(err))
-		return QString();
-
-	const UCharsetMatch *cs = ucsdet_detect(detector.get(), &err);
-
-	if(U_FAILURE(err) || (cs == NULL))
-		return QString();
-
-	// Get the match confidence & charset name.
-
-	int32_t confidence = ucsdet_getConfidence(cs, &err);
-
-	if(U_FAILURE(err))
-		return QString();
-
-	const char *csn = ucsdet_getName(cs, &err);
-
-	if(U_FAILURE(err))
-		return QString();
-
-	QString name(csn);
-
-	// Assuming we're confident enough, return the match.
-
-	if(confidence >= 10)
+	try
 	{
-		// Make sure the codec we detected is a valid QTextCodec.
+		MemoryMappedFile file(f.toStdString());
 
-		QList<QByteArray> codecs = QTextCodec::availableCodecs();
-
-		for(int i = 0; i < codecs.size(); ++i)
+		// First, test if a BOM is present in the given file.
+		for(const auto &bomPair : BOM_TYPES)
 		{
-			if(QString(codecs.at(i)) == name)
-			{
-				return name;
-			}
+			if(bomPresent(bomPair.second, file))
+				return bomPair.first;
 		}
 
-		return QString();
+		// I guess there's no BOM; see if the bytes in this file are
+		// valid UTF-8. Otherwise, we will just return no encoding.
+		if(isValidUTF8(file))
+			return QString("UTF-8");
+		else
+			return QString();
 	}
-	else
+	catch(...)
 	{
-		return QString();
 	}
+
+	return QString();
 }
 }
 }
