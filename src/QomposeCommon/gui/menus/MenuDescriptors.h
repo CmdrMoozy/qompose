@@ -27,7 +27,8 @@
 #include <QMenu>
 #include <QString>
 
-#include <boost/variant/static_visitor.hpp>
+#include <mapbox_variant/recursive_wrapper.hpp>
+#include <mapbox_variant/variant.hpp>
 
 #include "QomposeCommon/gui/GUIUtils.h"
 
@@ -50,10 +51,10 @@ void constructDescriptor(QObject *parent, QMenu *menu,
 /*!
  * \brief This class provides a variant visitor for a menu descriptor variant.
  *
- * This class provides a boost::variant visitor which will call the appropriate
+ * This class provides a variant visitor which will call the appropriate
  * constructDescriptor() function for the variant, depending on its type.
  */
-class MenuDescriptorVisitor : public boost::static_visitor<void>
+class MenuDescriptorVisitor : public mapbox::util::static_visitor<>
 {
 public:
 	/*!
@@ -65,11 +66,11 @@ public:
 	 */
 	MenuDescriptorVisitor(QObject *p, QMenu *m);
 
-	MenuDescriptorVisitor(const MenuDescriptorVisitor &) = delete;
+	MenuDescriptorVisitor(const MenuDescriptorVisitor &) = default;
 	~MenuDescriptorVisitor() = default;
 
 	MenuDescriptorVisitor &
-	operator=(const MenuDescriptorVisitor &) = delete;
+	operator=(const MenuDescriptorVisitor &) = default;
 
 	/*!
 	 * This call operator will construct a new object from the given

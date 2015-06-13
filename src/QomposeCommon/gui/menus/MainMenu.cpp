@@ -26,8 +26,8 @@
 #include <QMenu>
 #include <QObject>
 
-#include <boost/variant/apply_visitor.hpp>
-#include <boost/variant/variant.hpp>
+#include <mapbox_variant/recursive_wrapper.hpp>
+#include <mapbox_variant/variant.hpp>
 
 #include "QomposeCommon/Window.h"
 #include "QomposeCommon/editor/Buffer.h"
@@ -44,9 +44,7 @@ using qompose::menu_desc::MenuItemDescriptor;
 using qompose::menu_desc::RecentMenuDescriptor;
 using qompose::menu_desc::SeparatorDescriptor;
 
-typedef std::vector<boost::variant<MenuItemDescriptor, RecentMenuDescriptor,
-                                   EncodingMenuDescriptor, SeparatorDescriptor>>
-        DescriptorList;
+typedef std::vector<mapbox::util::variant<MenuItemDescriptor, RecentMenuDescriptor, EncodingMenuDescriptor, SeparatorDescriptor>> DescriptorList;
 
 template <typename VariantType>
 QMenu *buildMenu(QWidget *parent, const std::string &title,
@@ -55,9 +53,9 @@ QMenu *buildMenu(QWidget *parent, const std::string &title,
 	QMenu *menu = new QMenu(qompose::gui_utils::translate(title), parent);
 	for(const auto &item : items)
 	{
-		boost::apply_visitor(
-		        qompose::menu_desc::MenuDescriptorVisitor(parent, menu),
-		        item);
+		mapbox::util::apply_visitor(
+			qompose::menu_desc::MenuDescriptorVisitor(parent, menu),
+			item);
 	}
 	return menu;
 }
