@@ -42,9 +42,9 @@ struct FileDescriptor
 
 	FileDescriptor();
 	FileDescriptor(const QString &f, const QString &c);
-	FileDescriptor(const FileDescriptor &o);
 
-	FileDescriptor &operator=(const FileDescriptor &o);
+	FileDescriptor(const FileDescriptor &) = default;
+	FileDescriptor &operator=(const FileDescriptor &) = default;
 };
 
 /*!
@@ -57,9 +57,10 @@ struct ClosedBufferDescriptor
 
 	ClosedBufferDescriptor();
 	ClosedBufferDescriptor(FileDescriptor f, int c);
-	ClosedBufferDescriptor(const ClosedBufferDescriptor &o);
 
-	ClosedBufferDescriptor &operator=(const ClosedBufferDescriptor &o);
+	ClosedBufferDescriptor(const ClosedBufferDescriptor &) = default;
+	ClosedBufferDescriptor &
+	operator=(const ClosedBufferDescriptor &) = default;
 };
 }
 

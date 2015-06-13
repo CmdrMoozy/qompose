@@ -29,23 +29,6 @@ FileDescriptor::FileDescriptor(const QString &f, const QString &c)
 {
 }
 
-FileDescriptor::FileDescriptor(const FileDescriptor &o)
-        : fileName(), textCodec()
-{
-	*this = o;
-}
-
-FileDescriptor &FileDescriptor::operator=(const FileDescriptor &o)
-{
-	if(&o == this)
-		return *this;
-
-	fileName = o.fileName;
-	textCodec = o.textCodec;
-
-	return *this;
-}
-
 ClosedBufferDescriptor::ClosedBufferDescriptor() : file(), cursorPosition(0)
 {
 }
@@ -53,23 +36,5 @@ ClosedBufferDescriptor::ClosedBufferDescriptor() : file(), cursorPosition(0)
 ClosedBufferDescriptor::ClosedBufferDescriptor(FileDescriptor f, int c)
         : file(f), cursorPosition(c)
 {
-}
-
-ClosedBufferDescriptor::ClosedBufferDescriptor(const ClosedBufferDescriptor &o)
-        : file(), cursorPosition(0)
-{
-	*this = o;
-}
-
-ClosedBufferDescriptor &ClosedBufferDescriptor::
-operator=(const ClosedBufferDescriptor &o)
-{
-	if(&o == this)
-		return *this;
-
-	file = o.file;
-	cursorPosition = o.cursorPosition;
-
-	return *this;
 }
 }
