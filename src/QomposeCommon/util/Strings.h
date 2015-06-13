@@ -27,8 +27,6 @@
 #include <numeric>
 #include <string>
 
-#include <boost/utility/string_ref.hpp>
-
 namespace qompose
 {
 namespace string_utils
@@ -41,28 +39,6 @@ namespace string_utils
  * \return The converted string.
  */
 std::string wstringToString(const std::wstring &s);
-
-/*!
- * \brief This typedef denotes a boost::basic_string_ref of const char's.
- */
-typedef boost::basic_string_ref<const char> ConstStringRef;
-
-/*!
- * This function constructs a boost::basic_string_ref from the given start and
- * end pointers.
- *
- * \param s A pointer to the start of the string.
- * \param e A pointer to the char just after the end of the string.
- * \return A boost::basic_string_ref for the given string.
- */
-template <typename StringRef>
-StringRef toStringRef(typename StringRef::pointer s,
-                      typename StringRef::pointer e)
-{
-	auto l = e - s;
-	assert(l >= 0);
-	return StringRef(s, static_cast<typename StringRef::size_type>(l));
-}
 
 /*!
  * This function returns the size of the smallest string in the given iterator

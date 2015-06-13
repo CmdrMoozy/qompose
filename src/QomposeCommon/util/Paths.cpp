@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <fstream>
+#include <iterator>
 
 #include <QFile>
 #include <QFileInfo>
@@ -40,21 +41,15 @@ std::string getCommonParentPath(const std::vector<std::string> &paths)
 	std::size_t maxCommonSize =
 	        string_utils::getMaxCommonSize(paths.cbegin(), paths.cend());
 
-	const char *const refStart = paths.back().c_str();
+	const char *refStart = paths.back().c_str();
 	const char *refEnd = refStart + maxCommonSize;
 
 	while(refStart != refEnd)
 	{
-		auto refRef =
-		        string_utils::toStringRef<string_utils::ConstStringRef>(
-		                refStart, refEnd);
 		bool same = true;
 		for(auto it = paths.cbegin(); it != paths.cend() - 1; ++it)
 		{
-			auto sRef = string_utils::toStringRef<
-			        string_utils::ConstStringRef>(
-			        it->c_str(), it->c_str() + (refEnd - refStart));
-			if(refRef != sRef)
+			if(!std::equal(refStart, refEnd, it->c_str()))
 			{
 				same = false;
 				break;
