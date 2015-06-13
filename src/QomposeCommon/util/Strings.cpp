@@ -18,11 +18,7 @@
 
 #include "Strings.h"
 
-#include <cerrno>
-#include <cstring>
-#include <vector>
-
-#include <boost/locale/encoding_utf.hpp>
+#include <QString>
 
 namespace qompose
 {
@@ -30,8 +26,8 @@ namespace string_utils
 {
 std::string wstringToString(const std::wstring &s)
 {
-	return boost::locale::conv::utf_to_utf<char>(s.c_str(),
-	                                             s.c_str() + s.length());
+	QString str = QString::fromStdWString(s);
+	return str.toStdString();
 }
 }
 }
