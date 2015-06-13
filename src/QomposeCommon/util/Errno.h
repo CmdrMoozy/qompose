@@ -21,8 +21,6 @@
 
 #include <string>
 
-#include <boost/optional/optional.hpp>
-
 namespace qompose
 {
 namespace util
@@ -30,20 +28,20 @@ namespace util
 /*!
  * This function returns a human readable string for the given error number.
  *
- * \param error The error number to interpret. Defaults to errno.
+ * \param error The error number to interpret. Default is 0, meaning use errno.
  * \param defaultMessage The default error message to return.
  * \return A human readable error message for the given error.
  */
-std::string getErrnoError(boost::optional<int> error = boost::none,
+std::string getErrnoError(int error = 0,
                           const std::string &defaultMessage = "Unknown error.");
 
 /*!
  * Throw an exception with the getErrnoError() message for the given error.
  *
- * \param error The error number to interpret. Defaults to errno.
+ * \param error The error number to interpret. Default is 0, meaning use errno.
  * \param defaultMessage The default error message to return.
  */
-void throwErrnoError(boost::optional<int> error = boost::none,
+void throwErrnoError(int error = 0,
                      const std::string &defaultMessage = "Unknown error.");
 }
 }

@@ -26,20 +26,18 @@ namespace qompose
 {
 namespace util
 {
-std::string getErrnoError(boost::optional<int> error,
-                          const std::string &defaultMessage)
+std::string getErrnoError(int error, const std::string &defaultMessage)
 {
-	if(!error)
+	if(error == 0)
 		error = errno;
 
 	std::string errorString = defaultMessage;
 
 	char buf[1024];
-	return std::string(strerror_r(*error, buf, 1024));
+	return std::string(strerror_r(error, buf, 1024));
 }
 
-void throwErrnoError(boost::optional<int> error,
-                     const std::string &defaultMessage)
+void throwErrnoError(int error, const std::string &defaultMessage)
 {
 	throw std::runtime_error(getErrnoError(error, defaultMessage));
 }

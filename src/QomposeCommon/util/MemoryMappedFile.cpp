@@ -19,9 +19,12 @@
 #include "MemoryMappedFile.h"
 
 #include <fcntl.h>
+#include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
+#include <stdexcept>
 
 #include "QomposeCommon/util/Errno.h"
 #include "QomposeCommon/util/Paths.h"
