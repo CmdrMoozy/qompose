@@ -129,6 +129,8 @@ set(QomposeCommon_SOURCES
 	util/DocumentWriter.h
 	util/Encoding.cpp
 	util/Encoding.h
+	util/Errno.cpp
+	util/Errno.h
 	util/FindQuery.cpp
 	util/FindQuery.h
 	util/FontMetrics.cpp
@@ -137,6 +139,8 @@ set(QomposeCommon_SOURCES
 	util/Hotkey.h
 	util/HotkeyMap.cpp
 	util/HotkeyMap.h
+	util/MemoryMappedFile.cpp
+	util/MemoryMappedFile.h
 	util/Paths.cpp
 	util/Paths.h
 	util/ReplaceQuery.cpp

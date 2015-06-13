@@ -19,12 +19,12 @@
 #include "Paths.h"
 
 #include <algorithm>
-#include <cstddef>
 #include <fstream>
 
 #include <QFile>
 #include <QFileInfo>
 
+#include "QomposeCommon/util/Errno.h"
 #include "QomposeCommon/util/ScopeExit.h"
 #include "QomposeCommon/util/Strings.h"
 
@@ -91,6 +91,21 @@ QString getCanonicalPath(const QString &path)
 		std::ofstream out(path.toStdString(), std::ios_base::out);
 
 	return info.canonicalFilePath();
+}
+
+std::string stripSymlink(const std::string &path)
+{
+	QFileInfo info(QString::fromStdString(path));
+	if(info.isSymLink())
+		return info.symLinkTarget().toStdString();
+	else
+		return path;
+}
+
+std::size_t getSize(const std::string &file)
+{
+	QFileInfo info(QString::fromStdString(file));
+	return static_cast<std::size_t>(info.size());
 }
 }
 }
