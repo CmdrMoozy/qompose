@@ -97,10 +97,7 @@ endif()
 set(ENABLE_UNIT_TESTS FALSE)
 
 if(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
-	if(UNIX)
-		set(ENABLE_UNIT_TESTS TRUE)
-		add_subdirectory(vrfy)
-	endif()
+	set(ENABLE_UNIT_TESTS TRUE)
 endif()
 
 # Add the various targets.
