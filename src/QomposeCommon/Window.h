@@ -39,7 +39,6 @@ class GoToDialog;
 class MainMenu;
 class PreferencesDialog;
 class ReplaceDialog;
-class StatusBar;
 
 /*!
  * \brief This class implements one of our application's standard windows.
@@ -93,8 +92,6 @@ private:
 
 	BufferWidget *buffers;
 
-	StatusBar *statusBar;
-
 	BrowserDockWidget *browserWidget;
 
 	/*!
@@ -140,14 +137,6 @@ private Q_SLOTS:
 	 * changing, certain settings changing, etc.
 	 */
 	void doUpdateWindowTitle();
-
-	/*!
-	 * This slot handles one of our tab's paths being changed by updating
-	 * that tab's path label.
-	 *
-	 * \param p The new path for the current tab.
-	 */
-	void doTabPathChanged(const QString &p);
 
 	/*!
 	 * This slot handles our "print" action being triggered by displaying a

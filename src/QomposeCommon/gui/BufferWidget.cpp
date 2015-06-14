@@ -29,6 +29,7 @@
 
 #include "QomposeCommon/dialogs/FileDialog.h"
 #include "QomposeCommon/editor/Buffer.h"
+#include "QomposeCommon/editor/Pane.h"
 #include "QomposeCommon/util/FindQuery.h"
 #include "QomposeCommon/util/ReplaceQuery.h"
 
@@ -64,17 +65,23 @@ int BufferWidget::count() const
 
 Buffer *BufferWidget::bufferAt(int i) const
 {
-	return dynamic_cast<Buffer *>(tabWidget->widget(i));
+	Pane *pane = dynamic_cast<Pane *>(tabWidget->widget(i));
+	if(pane == nullptr)
+		return nullptr;
+	return pane->getBuffer();
 }
 
 Buffer *BufferWidget::currentBuffer() const
 {
-	return dynamic_cast<Buffer *>(tabWidget->currentWidget());
+	Pane *pane = dynamic_cast<Pane *>(tabWidget->currentWidget());
+	if(pane == nullptr)
+		return nullptr;
+	return pane->getBuffer();
 }
 
 bool BufferWidget::hasCurrentBuffer() const
 {
-	return (currentBuffer() != NULL);
+	return (currentBuffer() != nullptr);
 }
 
 void BufferWidget::setCurrentBuffer(int i)
@@ -160,49 +167,49 @@ std::string BufferWidget::getCommonParentPath() const
 	return path_utils::getCommonParentPath(getOpenPaths());
 }
 
-Buffer *BufferWidget::newBuffer()
+Pane *BufferWidget::newPane()
 {
-	Buffer *b = new Buffer(tabWidget);
+	Pane *p = new Pane(tabWidget);
 
-	QObject::connect(b, SIGNAL(titleChanged(const QString &)), this,
-	                 SLOT(doTabTitleChanged(const QString &)));
-	QObject::connect(b, SIGNAL(pathChanged(const QString &)), this,
-	                 SLOT(doTabPathChanged(const QString &)));
-	QObject::connect(b, SIGNAL(encodingChanged(const QByteArray &)), this,
-	                 SLOT(doBufferEncodingChanged(const QByteArray &)));
-	QObject::connect(b, SIGNAL(cursorPositionChanged()), this,
-	                 SLOT(doCursorPositionChanged()));
-	QObject::connect(b, SIGNAL(searchWrapped()), this,
-	                 SIGNAL(searchWrapped()));
+	QObject::connect(p->getBuffer(), &Buffer::titleChanged, this,
+	                 &BufferWidget::doTabTitleChanged);
+	QObject::connect(p->getBuffer(), &Buffer::pathChanged, this,
+	                 &BufferWidget::doTabPathChanged);
+	QObject::connect(p->getBuffer(), &Buffer::encodingChanged, this,
+	                 &BufferWidget::doBufferEncodingChanged);
+	QObject::connect(p->getBuffer(), &Buffer::cursorPositionChanged, this,
+	                 &BufferWidget::doCursorPositionChanged);
+	QObject::connect(p->getBuffer(), &Buffer::searchWrapped, this,
+	                 &BufferWidget::searchWrapped);
 
-	int i = tabWidget->addTab(b, b->getTitle());
+	int i = tabWidget->addTab(p, p->getBuffer()->getTitle());
 	tabWidget->setCurrentIndex(i);
 
-	tabs.insert(b);
+	tabs.insert(p);
 
-	return b;
+	return p;
 }
 
 void BufferWidget::removeCurrentBuffer()
 {
 	int i = tabWidget->currentIndex();
-	Buffer *b = currentBuffer();
+	Pane *pane = dynamic_cast<Pane *>(tabWidget->currentWidget());
+	if(pane == nullptr)
+		return;
 
 	tabWidget->removeTab(i);
-
-	tabs.remove(b);
-	delete b;
+	tabs.remove(pane);
+	delete pane;
 }
 
 void BufferWidget::moveBuffer(int f, int t)
 {
-	Buffer *b = dynamic_cast<Buffer *>(tabWidget->widget(f));
-
-	if(b == NULL)
+	Pane *p = dynamic_cast<Pane *>(tabWidget->widget(f));
+	if(p == nullptr)
 		return;
 
 	tabWidget->removeTab(f);
-	tabWidget->insertTab(t, b, b->getTitle());
+	tabWidget->insertTab(t, p, p->getBuffer()->getTitle());
 }
 
 QString BufferWidget::getDefaultDirectory() const
@@ -298,7 +305,7 @@ void BufferWidget::doSetEncoding(const QByteArray &e)
 
 void BufferWidget::doNew()
 {
-	newBuffer();
+	newPane();
 }
 
 void BufferWidget::doOpen()
@@ -672,16 +679,16 @@ void BufferWidget::doTabChanged(int i)
 {
 	Q_EMIT bufferChanged();
 
-	Buffer *b = dynamic_cast<Buffer *>(tabWidget->widget(i));
+	Pane *p = dynamic_cast<Pane *>(tabWidget->widget(i));
 
-	if(b != NULL)
+	if(p != nullptr)
 	{
-		QTextCursor curs = b->textCursor();
+		QTextCursor curs = p->getBuffer()->textCursor();
 
-		b->setFocus(Qt::OtherFocusReason);
+		p->getBuffer()->setFocus(Qt::OtherFocusReason);
 
-		Q_EMIT pathChanged(b->getPath());
-		Q_EMIT encodingChanged(b->getEncoding());
+		Q_EMIT pathChanged(p->getBuffer()->getPath());
+		Q_EMIT encodingChanged(p->getBuffer()->getEncoding());
 		Q_EMIT cursorPositionChanged(curs.blockNumber() + 1,
 		                             curs.positionInBlock() + 1);
 	}
@@ -701,16 +708,15 @@ void BufferWidget::doTabCloseRequested(int i)
 
 void BufferWidget::doTabClosing(int i)
 {
-	QWidget *t = tabWidget->widget(i);
-	Buffer *buf = dynamic_cast<Buffer *>(t);
-
-	if(buf == NULL)
+	Pane *p = dynamic_cast<Pane *>(tabWidget->widget(i));
+	if(p == nullptr)
 		return;
 
-	if(buf->hasBeenSaved())
+	if(p->getBuffer()->hasBeenSaved())
 	{
-		ClosedBufferDescriptor desc = {buf->getFileDescriptor(),
-		                               buf->textCursor().position()};
+		ClosedBufferDescriptor desc = {
+		        p->getBuffer()->getFileDescriptor(),
+		        p->getBuffer()->textCursor().position()};
 
 		closedTabs.push(desc);
 
@@ -722,13 +728,20 @@ void BufferWidget::doTabClosing(int i)
 void BufferWidget::doTabTitleChanged(const QString &t)
 {
 	Buffer *b = dynamic_cast<Buffer *>(sender());
+	if(b == nullptr)
+		return;
 
-	if(b != nullptr)
+	for(int i = 0; i < count(); ++i)
 	{
-		int i = tabWidget->indexOf(b);
+		Pane *p = dynamic_cast<Pane *>(tabWidget->widget(i));
+		if(p == nullptr)
+			continue;
 
-		if(i != -1)
+		if(p->getBuffer() == b)
+		{
 			tabWidget->setTabText(i, t);
+			break;
+		}
 	}
 }
 
@@ -765,14 +778,15 @@ Buffer *BufferWidget::doOpenDescriptor(const FileDescriptor &d)
 
 	if(tabs.count() == 1)
 	{
-		QSet<Buffer *>::iterator i = tabs.begin();
-		Buffer *b = *i;
-		int idx = tabWidget->indexOf(b);
+		QSet<Pane *>::iterator i = tabs.begin();
+		Pane *p = *i;
+		int idx = tabWidget->indexOf(p);
 
-		if((!b->hasBeenSaved()) && (!b->isModified()))
+		if((!p->getBuffer()->hasBeenSaved()) &&
+		   (!p->getBuffer()->isModified()))
 		{
 			tabWidget->removeTab(idx);
-			delete b;
+			delete p;
 			tabs.clear();
 		}
 	}
@@ -787,12 +801,12 @@ Buffer *BufferWidget::doOpenDescriptor(const FileDescriptor &d)
 		return nullptr;
 	}
 
-	Buffer *b = newBuffer();
-	b->open(d);
+	Pane *p = newPane();
+	p->getBuffer()->open(d);
 
 	Q_EMIT pathOpened(d.fileName);
 
-	return b;
+	return p->getBuffer();
 }
 
 void BufferWidget::doReopenBuffer(const ClosedBufferDescriptor &d)

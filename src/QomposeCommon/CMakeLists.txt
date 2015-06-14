@@ -55,6 +55,8 @@ set(QomposeCommon_SOURCES
 	editor/Editor.h
 	editor/Gutter.cpp
 	editor/Gutter.h
+	editor/Pane.cpp
+	editor/Pane.h
 
 	editor/spell/SpellChecker.cpp
 	editor/spell/SpellChecker.h

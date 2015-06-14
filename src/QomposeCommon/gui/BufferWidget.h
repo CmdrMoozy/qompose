@@ -38,9 +38,10 @@ class QPrinter;
 
 namespace qompose
 {
-class FindQuery;
-class ReplaceQuery;
 class Buffer;
+class FindQuery;
+class Pane;
+class ReplaceQuery;
 
 /*!
  * \brief This class provides high-level management of a set of buffers.
@@ -153,7 +154,7 @@ private:
 	QGridLayout *layout;
 	QTabWidget *tabWidget;
 
-	QSet<Buffer *> tabs;
+	QSet<Pane *> tabs;
 	QStack<ClosedBufferDescriptor> closedTabs;
 
 	/*!
@@ -163,7 +164,7 @@ private:
 	 *
 	 * \return The newly-created buffer widget.
 	 */
-	Buffer *newBuffer();
+	Pane *newPane();
 
 	/*!
 	 * This function removes the current buffer from our tab widget, and

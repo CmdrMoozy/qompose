@@ -36,7 +36,6 @@
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/GUIUtils.h"
-#include "QomposeCommon/gui/StatusBar.h"
 #include "QomposeCommon/gui/dock/BrowserDockWidget.h"
 #include "QomposeCommon/gui/menus/MainMenu.h"
 #include "QomposeCommon/util/FindQuery.h"
@@ -63,7 +62,6 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
           aboutDialog(nullptr),
           mainMenu(nullptr),
           buffers(nullptr),
-          statusBar(nullptr),
           browserWidget(nullptr)
 {
 	// Set some of our window's properties.
@@ -76,17 +74,12 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 	buffers->doNew();
 	setCentralWidget(buffers);
 
-	statusBar = new StatusBar(this);
-	setStatusBar(statusBar);
-
 	initializeDialogs();
 	initializeMenus();
 	initializeDockWidgets();
 
-	QObject::connect(buffers, SIGNAL(pathChanged(const QString &)), this,
-	                 SLOT(doTabPathChanged(const QString &)));
-	QObject::connect(buffers, SIGNAL(cursorPositionChanged(int, int)),
-	                 statusBar, SLOT(setCursorPosition(int, int)));
+	QObject::connect(buffers, &BufferWidget::pathChanged, this,
+	                 &Window::doUpdateWindowTitle);
 
 	// Apply any existing settings values to our UI.
 
@@ -306,12 +299,6 @@ void Window::doUpdateWindowTitle()
 #endif
 
 	setWindowTitle(title);
-}
-
-void Window::doTabPathChanged(const QString &p)
-{
-	doUpdateWindowTitle();
-	statusBar->setFilePath(p);
 }
 
 void Window::doPrint()
