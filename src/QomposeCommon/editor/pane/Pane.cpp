@@ -28,8 +28,12 @@
 
 namespace qompose
 {
-Pane::Pane(BufferWidget *p, Qt::WindowFlags f)
-        : QWidget(p, f), layout(nullptr), buffer(nullptr), statusBar(nullptr)
+Pane::Pane(BufferWidget *pc, QWidget *p, Qt::WindowFlags f)
+        : QWidget(p, f),
+          parentContainer(pc),
+          layout(nullptr),
+          buffer(nullptr),
+          statusBar(nullptr)
 {
 	layout = new QGridLayout(this);
 
@@ -52,10 +56,7 @@ Pane::Pane(BufferWidget *p, Qt::WindowFlags f)
 
 BufferWidget *Pane::getParentContainer() const
 {
-	BufferWidget *p = dynamic_cast<BufferWidget *>(parent());
-	if(p == nullptr)
-		throw std::runtime_error("Pane has no parent.");
-	return p;
+	return parentContainer;
 }
 
 Buffer *Pane::getBuffer() const

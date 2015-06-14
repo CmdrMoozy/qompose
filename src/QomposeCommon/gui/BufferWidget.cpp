@@ -163,56 +163,6 @@ std::vector<std::string> BufferWidget::getOpenPaths() const
 	return paths;
 }
 
-std::string BufferWidget::getCommonParentPath() const
-{
-	return path_utils::getCommonParentPath(getOpenPaths());
-}
-
-Pane *BufferWidget::newPane()
-{
-	Pane *p = new Pane(this);
-
-	QObject::connect(p->getBuffer(), &Buffer::titleChanged, this,
-	                 &BufferWidget::doTabTitleChanged);
-	QObject::connect(p->getBuffer(), &Buffer::pathChanged, this,
-	                 &BufferWidget::doTabPathChanged);
-	QObject::connect(p->getBuffer(), &Buffer::encodingChanged, this,
-	                 &BufferWidget::doBufferEncodingChanged);
-	QObject::connect(p->getBuffer(), &Buffer::cursorPositionChanged, this,
-	                 &BufferWidget::doCursorPositionChanged);
-	QObject::connect(p->getBuffer(), &Buffer::searchWrapped, this,
-	                 &BufferWidget::searchWrapped);
-
-	int i = tabWidget->addTab(p, p->getBuffer()->getTitle());
-	tabWidget->setCurrentIndex(i);
-
-	tabs.insert(p);
-
-	return p;
-}
-
-void BufferWidget::removeCurrentBuffer()
-{
-	int i = tabWidget->currentIndex();
-	Pane *pane = dynamic_cast<Pane *>(tabWidget->currentWidget());
-	if(pane == nullptr)
-		return;
-
-	tabWidget->removeTab(i);
-	tabs.remove(pane);
-	delete pane;
-}
-
-void BufferWidget::moveBuffer(int f, int t)
-{
-	Pane *p = dynamic_cast<Pane *>(tabWidget->widget(f));
-	if(p == nullptr)
-		return;
-
-	tabWidget->removeTab(f);
-	tabWidget->insertTab(t, p, p->getBuffer()->getTitle());
-}
-
 QString BufferWidget::getDefaultDirectory() const
 {
 	QString defaultDirectory = QDir::homePath();
@@ -274,6 +224,56 @@ QString BufferWidget::getDefaultDirectory() const
 	// Done!
 
 	return defaultDirectory;
+}
+
+std::string BufferWidget::getCommonParentPath() const
+{
+	return path_utils::getCommonParentPath(getOpenPaths());
+}
+
+Pane *BufferWidget::newPane()
+{
+	Pane *p = new Pane(this);
+
+	QObject::connect(p->getBuffer(), &Buffer::titleChanged, this,
+	                 &BufferWidget::doTabTitleChanged);
+	QObject::connect(p->getBuffer(), &Buffer::pathChanged, this,
+	                 &BufferWidget::doTabPathChanged);
+	QObject::connect(p->getBuffer(), &Buffer::encodingChanged, this,
+	                 &BufferWidget::doBufferEncodingChanged);
+	QObject::connect(p->getBuffer(), &Buffer::cursorPositionChanged, this,
+	                 &BufferWidget::doCursorPositionChanged);
+	QObject::connect(p->getBuffer(), &Buffer::searchWrapped, this,
+	                 &BufferWidget::searchWrapped);
+
+	int i = tabWidget->addTab(p, p->getBuffer()->getTitle());
+	tabWidget->setCurrentIndex(i);
+
+	tabs.insert(p);
+
+	return p;
+}
+
+void BufferWidget::removeCurrentBuffer()
+{
+	int i = tabWidget->currentIndex();
+	Pane *pane = dynamic_cast<Pane *>(tabWidget->currentWidget());
+	if(pane == nullptr)
+		return;
+
+	tabWidget->removeTab(i);
+	tabs.remove(pane);
+	delete pane;
+}
+
+void BufferWidget::moveBuffer(int f, int t)
+{
+	Pane *p = dynamic_cast<Pane *>(tabWidget->widget(f));
+	if(p == nullptr)
+		return;
+
+	tabWidget->removeTab(f);
+	tabWidget->insertTab(t, p, p->getBuffer()->getTitle());
 }
 
 void BufferWidget::doSetEncoding(const QByteArray &e)
@@ -362,44 +362,17 @@ void BufferWidget::doRevertAll()
 void BufferWidget::doSave()
 {
 	Buffer *buf = currentBuffer();
-
-	if(buf == NULL)
+	if(buf == nullptr)
 		return;
-
-	if(buf->hasBeenSaved())
-		buf->save();
-	else
-		doSaveAs();
+	buf->save();
 }
 
 void BufferWidget::doSaveAs()
 {
-	// Make sure the current buffer is valid.
-
 	Buffer *buf = currentBuffer();
-
-	if(buf == NULL)
+	if(buf == nullptr)
 		return;
-
-	// Open our save as dialog and, on accept, save the buffer.
-
-	QString path = getDefaultDirectory();
-
-	if(buf->hasBeenSaved())
-	{
-		if(!path.endsWith(QDir::separator()))
-			path.append(QDir::separator());
-
-		path.append(buf->getFile());
-	}
-
-	QString p = QFileDialog::getSaveFileName(this, tr("Save File"), path,
-	                                         QString(), nullptr, nullptr);
-
-	if(p.length() <= 0)
-		return;
-
-	buf->save(p);
+	buf->saveAs();
 }
 
 void BufferWidget::doClose()

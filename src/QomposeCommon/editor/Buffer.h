@@ -41,15 +41,19 @@ public:
 	 * This is our default constructor, which creates a new instance of
 	 * our buffer widget.
 	 *
-	 * \param p The parent widget for our buffer widget.
+	 * \param pp This buffer's parent Pane.
+	 * \param p This buffer's parent QWidget.
 	 */
-	Buffer(Pane *p);
+	Buffer(Pane *pp, QWidget *p = nullptr);
 
 	Buffer(const Buffer &) = delete;
 	virtual ~Buffer() = default;
 
 	Buffer &operator=(const Buffer &) = delete;
 
+	/*!
+	 * \return This Buffer's parent Pane object.
+	 */
 	Pane *getParentPane() const;
 
 	/*!
@@ -71,13 +75,17 @@ public:
 
 	/*!
 	 * This function attempts to save the current contents of our buffer to
-	 * a file. If the given path is QString(), then we will use our
-	 * existing internal path instead of saving to a brand new file.
-	 *
-	 * \param p The path to save our contents to.
-	 * \return True on success, or false otherwise.
+	 * a file. If there is no previously saved path, then we will display
+	 * a "Save As"-style dialog in order to pick a new one.
 	 */
-	bool save(const QString &p = QString());
+	void save();
+
+	/*!
+	 * This function attempts to save the current contents of our buffer
+	 * to a new file. A "Save As"-style dialog will be displayed, in order
+	 * to select thew new save path.
+	 */
+	void saveAs();
 
 	/*!
 	 * This function computes the "title" of our buffer, which is dependant
@@ -174,6 +182,8 @@ public Q_SLOTS:
 	void print(QPrinter *p);
 
 private:
+	Pane *parentPane;
+
 	QString path;
 	QString codec;
 

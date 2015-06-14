@@ -141,6 +141,18 @@ public:
 	std::vector<std::string> getOpenPaths() const;
 
 	/*!
+	 * This function tries to compute a default directory for, e.g., open
+	 * or save actions, based upon our current buffer list.
+	 *
+	 * We will use the first valid path of the current buffer's path, the
+	 * path of the nearest buffer to the left, the path of the nearest
+	 * buffer to the right, or the user's home directory.
+	 *
+	 * \return A default directory to use for open/save actions.
+	 */
+	QString getDefaultDirectory() const;
+
+	/*!
 	 * This function returns the deepest parent path which contains all of
 	 * the files currently open in this BufferWidget. If no such path
 	 * exists (because no files are open, or because they have no path in
@@ -182,18 +194,6 @@ private:
 	 * \param t The index to move the tab to.
 	 */
 	void moveBuffer(int f, int t);
-
-	/*!
-	 * This function tries to compute a default directory for, e.g., open
-	 * or save actions, based upon our current buffer list.
-	 *
-	 * We will use the first valid path of the current buffer's path, the
-	 * path of the nearest buffer to the left, the path of the nearest
-	 * buffer to the right, or the user's home directory.
-	 *
-	 * \return A default directory to use for open/save actions.
-	 */
-	QString getDefaultDirectory() const;
 
 public Q_SLOTS:
 	/*!

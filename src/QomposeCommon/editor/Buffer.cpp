@@ -18,27 +18,30 @@
 
 #include "Buffer.h"
 
-#include <QTextCodec>
-#include <QFile>
-#include <QTextStream>
-#include <QTextCursor>
-#include <QFileInfo>
 #include <QByteArray>
+#include <QDir>
+#include <QFile>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QPrinter>
 #include <QString>
 #include <QVariant>
-#include <QPrinter>
 #include <QTextBlock>
-#include <QDir>
+#include <QTextCodec>
+#include <QTextCursor>
+#include <QTextStream>
 
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/editor/pane/Pane.h"
+#include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/util/DocumentWriter.h"
 #include "QomposeCommon/util/Paths.h"
 #include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
-Buffer::Buffer(Pane *p) : Editor(p), path(QString()), codec("UTF-8")
+Buffer::Buffer(Pane *pp, QWidget *p)
+        : Editor(p), parentPane(pp), path(QString()), codec("UTF-8")
 {
 	// Load our initial settings, and connect our settings object.
 
@@ -89,10 +92,7 @@ Buffer::Buffer(Pane *p) : Editor(p), path(QString()), codec("UTF-8")
 
 Pane *Buffer::getParentPane() const
 {
-	Pane *p = dynamic_cast<Pane *>(parent());
-	if(p == nullptr)
-		throw std::runtime_error("Buffer has no parent.");
-	return p;
+	return parentPane;
 }
 
 bool Buffer::open(const FileDescriptor &f)
@@ -147,20 +147,35 @@ bool Buffer::revert()
 	return r;
 }
 
-bool Buffer::save(const QString &p)
+void Buffer::save()
 {
-	if(p.isNull())
-	{
-		if(!hasBeenSaved())
-			return false;
-
-		return write();
-	}
+	if(hasBeenSaved())
+		write();
 	else
+		saveAs();
+}
+
+void Buffer::saveAs()
+{
+	// Open a save dialog and, on accept, write to the new path.
+
+	QString defaultPath =
+	        getParentPane()->getParentContainer()->getDefaultDirectory();
+	if(hasBeenSaved())
 	{
-		setPath(p);
-		return write();
+		if(!defaultPath.endsWith(QDir::separator()))
+			defaultPath.append(QDir::separator());
+		defaultPath.append(getFile());
 	}
+
+	QString savePath = QFileDialog::getSaveFileName(this, tr("Save Buffer"),
+	                                                defaultPath, QString(),
+	                                                nullptr, nullptr);
+	if(savePath.length() <= 0)
+		return;
+
+	setPath(savePath);
+	write();
 }
 
 QString Buffer::getTitle() const

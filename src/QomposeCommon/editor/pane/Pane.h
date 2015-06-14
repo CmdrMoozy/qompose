@@ -34,7 +34,7 @@ class Pane : public QWidget
 	Q_OBJECT
 
 public:
-	Pane(BufferWidget *p, Qt::WindowFlags f = 0);
+	Pane(BufferWidget *pc, QWidget *p = nullptr, Qt::WindowFlags f = 0);
 
 	Pane(const Pane &) = delete;
 	~Pane() = default;
@@ -45,6 +45,8 @@ public:
 	Buffer *getBuffer() const;
 
 private:
+	BufferWidget *parentContainer;
+
 	QGridLayout *layout;
 	Buffer *buffer;
 	StatusBar *statusBar;
