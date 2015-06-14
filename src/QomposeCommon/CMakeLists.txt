@@ -95,8 +95,6 @@ set(QomposeCommon_SOURCES
 	gui/FontPickerButton.h
 	gui/GUIUtils.cpp
 	gui/GUIUtils.h
-	gui/NotificationLabel.cpp
-	gui/NotificationLabel.h
 	gui/StatusBar.cpp
 	gui/StatusBar.h
 
