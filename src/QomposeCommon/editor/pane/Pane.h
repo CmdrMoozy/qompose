@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSECOMMON_EDITOR_PANE_H
-#define INCLUDE_QOMPOSECOMMON_EDITOR_PANE_H
+#ifndef INCLUDE_QOMPOSECOMMON_EDITOR_PANE_PANE_H
+#define INCLUDE_QOMPOSECOMMON_EDITOR_PANE_PANE_H
 
 #include <QWidget>
 

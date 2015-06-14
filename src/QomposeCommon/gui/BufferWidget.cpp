@@ -29,7 +29,7 @@
 
 #include "QomposeCommon/dialogs/FileDialog.h"
 #include "QomposeCommon/editor/Buffer.h"
-#include "QomposeCommon/editor/Pane.h"
+#include "QomposeCommon/editor/pane/Pane.h"
 #include "QomposeCommon/util/FindQuery.h"
 #include "QomposeCommon/util/ReplaceQuery.h"
 
