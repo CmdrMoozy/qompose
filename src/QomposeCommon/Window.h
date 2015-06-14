@@ -150,12 +150,6 @@ private Q_SLOTS:
 	void doTabPathChanged(const QString &p);
 
 	/*!
-	 * This function handles the case when whatever find/replace operation
-	 * was being executed has wrapped to the opposite side of the document.
-	 */
-	void doSearchWrapped();
-
-	/*!
 	 * This slot handles our "print" action being triggered by displaying a
 	 * standard print dialog and, if it is accepted, printing our current
 	 * buffer using the printer object it configures.

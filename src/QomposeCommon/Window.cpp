@@ -87,8 +87,6 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 	                 SLOT(doTabPathChanged(const QString &)));
 	QObject::connect(buffers, SIGNAL(cursorPositionChanged(int, int)),
 	                 statusBar, SLOT(setCursorPosition(int, int)));
-	QObject::connect(buffers, SIGNAL(searchWrapped()), this,
-	                 SLOT(doSearchWrapped()));
 
 	// Apply any existing settings values to our UI.
 
@@ -314,11 +312,6 @@ void Window::doTabPathChanged(const QString &p)
 {
 	doUpdateWindowTitle();
 	statusBar->setFilePath(p);
-}
-
-void Window::doSearchWrapped()
-{
-	statusBar->displayNotification(tr("Search wrapped around buffer."));
 }
 
 void Window::doPrint()
