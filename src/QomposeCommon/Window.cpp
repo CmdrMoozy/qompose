@@ -85,8 +85,8 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
 
 	QObject::connect(buffers, SIGNAL(pathChanged(const QString &)), this,
 	                 SLOT(doTabPathChanged(const QString &)));
-	QObject::connect(buffers, SIGNAL(cursorPositionChanged(int, int)), this,
-	                 SLOT(doCursorPositionChanged(int, int)));
+	QObject::connect(buffers, SIGNAL(cursorPositionChanged(int, int)),
+	                 statusBar, SLOT(setCursorPosition(int, int)));
 	QObject::connect(buffers, SIGNAL(searchWrapped()), this,
 	                 SLOT(doSearchWrapped()));
 
@@ -313,13 +313,7 @@ void Window::doUpdateWindowTitle()
 void Window::doTabPathChanged(const QString &p)
 {
 	doUpdateWindowTitle();
-	statusBar->setCurrentTabPath(p);
-}
-
-void Window::doCursorPositionChanged(int l, int c)
-{
-	statusBar->setLine(l);
-	statusBar->setColumn(c);
+	statusBar->setFilePath(p);
 }
 
 void Window::doSearchWrapped()

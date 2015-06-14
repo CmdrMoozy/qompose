@@ -60,36 +60,28 @@ public:
 	 */
 	void displayNotification(const QString &n, bool c = false);
 
+public Q_SLOTS:
 	/*!
-	 * This function sets the "current tab path" that we're displaying.
-	 * This should be the absolute path to the file which is open in the
-	 * current tab, or an empty string if no valid absolute path exists.
+	 * This function sets the file path that we're displaying. This should
+	 * be the absolute path to the file which is open, or an empty string
+	 * if no valid absolute path exists.
 	 *
-	 * \param p The current tab path to display.
+	 * \param p The file path to display.
 	 */
-	void setCurrentTabPath(const QString &p);
+	void setFilePath(const QString &p);
 
 	/*!
-	 * This function sets the line number we'll display in the status bar.
-	 *
-	 * \param l The current line number.
+	 * \param l The new line number to display.
+	 * \param c The new column number to display.
 	 */
-	void setLine(int l);
-
-	/*!
-	 * This function sets the column number we'll display in the status
-	 * bar.
-	 *
-	 * \param c The current column number.
-	 */
-	void setColumn(int c);
+	void setCursorPosition(int l, int c);
 
 private:
 	QWidget *statusWidget;
 	QGridLayout *statusLayout;
 
 	NotificationLabel *notificationLabel;
-	EllipsizedLabel *tabPathLabel;
+	EllipsizedLabel *filePathLabel;
 	QLabel *lineLabel;
 	QLabel *columnLabel;
 

@@ -35,7 +35,7 @@ StatusBar::StatusBar(QWidget *p)
           statusWidget(nullptr),
           statusLayout(nullptr),
           notificationLabel(nullptr),
-          tabPathLabel(nullptr),
+          filePathLabel(nullptr),
           lineLabel(nullptr),
           columnLabel(nullptr)
 {
@@ -47,18 +47,16 @@ StatusBar::StatusBar(QWidget *p)
 
 	notificationLabel = new NotificationLabel(statusWidget);
 
-	tabPathLabel = new EllipsizedLabel(Qt::AlignRight, statusWidget);
+	filePathLabel = new EllipsizedLabel(Qt::AlignRight, statusWidget);
 
 	lineLabel = new QLabel(statusWidget, nullptr);
 	lineLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-	setLine(1);
-
 	columnLabel = new QLabel(statusWidget, nullptr);
 	columnLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-	setColumn(1);
+	setCursorPosition(1, 1);
 
 	statusLayout->addWidget(notificationLabel, 0, 0, 1, 1, nullptr);
-	statusLayout->addWidget(tabPathLabel, 0, 2, 1, 1, nullptr);
+	statusLayout->addWidget(filePathLabel, 0, 2, 1, 1, nullptr);
 	statusLayout->addWidget(lineLabel, 0, 3, 1, 1, nullptr);
 	statusLayout->addWidget(columnLabel, 0, 4, 1, 1, nullptr);
 	statusLayout->setColumnStretch(2, 1);
@@ -77,30 +75,26 @@ void StatusBar::displayNotification(const QString &n, bool c)
 	notificationLabel->displayNotification(n, c);
 }
 
-void StatusBar::setCurrentTabPath(const QString &p)
+void StatusBar::setFilePath(const QString &p)
 {
 	int l = p.trimmed().length();
 
 	if(l > 0)
 	{
-		tabPathLabel->setFrameStyle(QFrame::StyledPanel |
-		                            QFrame::Plain);
+		filePathLabel->setFrameStyle(QFrame::StyledPanel |
+		                             QFrame::Plain);
 	}
 	else
 	{
-		tabPathLabel->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
+		filePathLabel->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
 	}
 
-	tabPathLabel->setText(p.trimmed());
+	filePathLabel->setText(p.trimmed());
 }
 
-void StatusBar::setLine(int l)
+void StatusBar::setCursorPosition(int l, int c)
 {
 	lineLabel->setText(QString("L %1").arg(l));
-}
-
-void StatusBar::setColumn(int c)
-{
 	columnLabel->setText(QString("C %1").arg(c));
 }
 

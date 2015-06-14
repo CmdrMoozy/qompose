@@ -150,16 +150,6 @@ private Q_SLOTS:
 	void doTabPathChanged(const QString &p);
 
 	/*!
-	 * This slot handles one of our tab's cursor positions changing by
-	 * updating our status bar to display the current line and column
-	 * position.
-	 *
-	 * \param l The new cursor line number.
-	 * \param c The new cursor column number.
-	 */
-	void doCursorPositionChanged(int l, int c);
-
-	/*!
 	 * This function handles the case when whatever find/replace operation
 	 * was being executed has wrapped to the opposite side of the document.
 	 */
