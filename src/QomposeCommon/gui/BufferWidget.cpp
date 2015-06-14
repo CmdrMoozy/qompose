@@ -31,13 +31,11 @@
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/util/FindQuery.h"
 #include "QomposeCommon/util/ReplaceQuery.h"
-#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
-BufferWidget::BufferWidget(Settings *s, QWidget *p)
+BufferWidget::BufferWidget(QWidget *p)
         : QWidget(p, nullptr),
-          settings(s),
           layout(nullptr),
           tabWidget(nullptr),
           tabs(),
@@ -164,7 +162,7 @@ std::string BufferWidget::getCommonParentPath() const
 
 Buffer *BufferWidget::newBuffer()
 {
-	Buffer *b = new Buffer(settings, tabWidget);
+	Buffer *b = new Buffer(tabWidget);
 
 	QObject::connect(b, SIGNAL(titleChanged(const QString &)), this,
 	                 SLOT(doTabTitleChanged(const QString &)));

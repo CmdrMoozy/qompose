@@ -22,17 +22,20 @@
 
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/Window.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
 Application::Application(int &ac, char **av)
         : QApplication(ac, av), sappServer(nullptr), windows(QList<Window *>())
 {
+	Settings::initialize();
 }
 
 Application::~Application()
 {
 	clearServer();
+	Settings::destroy();
 }
 
 void Application::initializeLocalServer()

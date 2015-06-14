@@ -31,8 +31,6 @@ class QAction;
 
 namespace qompose
 {
-class Settings;
-
 /*!
  * \brief This object implements a "recently opened files" menu.
  */
@@ -44,12 +42,11 @@ public:
 	/*!
 	 * This is our default constructor, which creates a new instance of our
 	 * class. Our capacity and our contents will be automatically loaded
-	 * from the given settings instance.
+	 * from the global settings instance.
 	 *
-	 * \param s The settings instance to use.
 	 * \param p This menu's parent object.
 	 */
-	RecentMenu(Settings *s, QObject *p = nullptr);
+	RecentMenu(QObject *p = nullptr);
 
 	RecentMenu(const RecentMenu &) = delete;
 
@@ -79,8 +76,8 @@ public:
 	QMenu *getMenu() const;
 
 	/*!
-	 * This function saves our menu's current contents using the settings
-	 * instance given to our constructor.
+	 * This function saves our menu's current contents using the global
+	 * settings instance.
 	 */
 	void saveContents();
 
@@ -100,7 +97,6 @@ public Q_SLOTS:
 	void addPath(const QString &p);
 
 private:
-	Settings *settings;
 	int capacity;
 
 	QMenu *menu;
@@ -184,7 +180,6 @@ namespace menu_desc
  */
 struct RecentMenuDescriptor
 {
-	Settings *settings;
 	gui_utils::ConnectionList signalConnections;
 	gui_utils::ConnectionList slotConnections;
 
@@ -192,12 +187,10 @@ struct RecentMenuDescriptor
 	 * This constructor creates a new recent menu descriptor, connecting
 	 * its signal and slot to the given lists of connections.
 	 *
-	 * \param s The settings object for the recent menu to use.
 	 * \param sigc The connections for the recent menu's signal.
 	 * \param slotc The connections for the recent menu's slot.
 	 */
-	RecentMenuDescriptor(Settings *s,
-	                     const gui_utils::ConnectionList &sigc =
+	RecentMenuDescriptor(const gui_utils::ConnectionList &sigc =
 	                             gui_utils::ConnectionList(),
 	                     const gui_utils::ConnectionList &slotc =
 	                             gui_utils::ConnectionList());
@@ -206,12 +199,10 @@ struct RecentMenuDescriptor
 	 * This constructor creates a new recent menu descriptor, connecting
 	 * its signal and slot to the given connections, respectively.
 	 *
-	 * \param s The settings object for the recent menu to use.
 	 * \param sigc The connection for the recent menu's signal.
 	 * \param slotc The connection for the recent menu's slot.
 	 */
-	RecentMenuDescriptor(Settings *s,
-	                     const gui_utils::Connection &sigc =
+	RecentMenuDescriptor(const gui_utils::Connection &sigc =
 	                             gui_utils::Connection(nullptr, nullptr),
 	                     const gui_utils::Connection &slotc =
 	                             gui_utils::Connection(nullptr, nullptr));

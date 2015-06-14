@@ -24,7 +24,6 @@
 namespace qompose
 {
 class BufferWidget;
-class Settings;
 class Window;
 
 /*!
@@ -47,10 +46,9 @@ public:
 	/*!
 	 * This is our default constructor, which creates a new main menu.
 	 *
-	 * \param s The settings object to connect to menu items.
 	 * \param p The menu bar's parent widget.
 	 */
-	MainMenu(Settings *s, Window *p = nullptr);
+	MainMenu(Window *p = nullptr);
 
 	MainMenu(const MainMenu &) = delete;
 	virtual ~MainMenu() = default;
@@ -66,7 +64,6 @@ public:
 	void connectBufferWidget(const BufferWidget *b);
 
 private:
-	Settings *settings;
 	const BufferWidget *bufferWidget;
 
 private Q_SLOTS:

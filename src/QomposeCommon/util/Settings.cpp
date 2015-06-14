@@ -18,57 +18,74 @@
 
 #include "Settings.h"
 
-#include <QSettings>
-#include <QStringList>
+#include <stdexcept>
+#include <utility>
+#include <vector>
+
 #include <QByteArray>
-#include <QString>
-#include <QFont>
 #include <QColor>
+#include <QFont>
+#include <QSettings>
+#include <QString>
+#include <QStringList>
+#include <QVariant>
 
 namespace
 {
-typedef QPair<QString, QVariant> SettingPair;
+const std::vector<std::pair<QString, QVariant>> DEFAULT_SETTINGS = {
+        {"show-file-in-title", true},
+        {"show-status-bar", true},
+        {"recent-list-size", 10},
+        {"recent-list", QStringList()},
+        {"window-save-attributes", true},
+        {"show-gutter", true},
+        {"save-strip-trailing-spaces", true},
+        {"editor-font", QFont("Courier", 11)},
+        {"editor-indentation-width", 8},
+        {"editor-indentation-mode", QString("tabs")},
+        {"editor-wrap-guide-visible", true},
+        {"editor-wrap-guide-width", 90},
+        {"editor-wrap-guide-color", QColor(127, 127, 127)},
+        {"editor-foreground", QColor(255, 255, 255)},
+        {"editor-background", QColor(39, 40, 34)},
+        {"editor-current-line", QColor(70, 72, 61)},
+        {"gutter-foreground", QColor(Qt::white)},
+        {"gutter-background", QColor(Qt::black)},
+        {"show-file-browser", false},
+        {"window-geometry", QByteArray()},
+        {"window-state", QByteArray()}};
 }
 
 namespace qompose
 {
-// Load our default settings values into our static defaults list.
+std::mutex Settings::mutex;
+std::unique_ptr<Settings> Settings::settingsSingleton;
 
-const QList<QPair<QString, QVariant>> Settings::defaults =
-        (QList<QPair<QString, QVariant>>())
-        << SettingPair("show-file-in-title", true)
-        << SettingPair("show-status-bar", true)
-        << SettingPair("recent-list-size", 10)
-        << SettingPair("recent-list", QStringList())
-        << SettingPair("window-save-attributes", true)
-        << SettingPair("show-gutter", true)
-        << SettingPair("save-strip-trailing-spaces", true)
-        << SettingPair("editor-font", QFont("Courier", 11))
-        << SettingPair("editor-indentation-width", 8)
-        << SettingPair("editor-indentation-mode", QString("tabs"))
-        << SettingPair("editor-wrap-guide-visible", true)
-        << SettingPair("editor-wrap-guide-width", 90)
-        << SettingPair("editor-wrap-guide-color", QColor(127, 127, 127))
-        << SettingPair("editor-foreground", QColor(255, 255, 255))
-        << SettingPair("editor-background", QColor(39, 40, 34))
-        << SettingPair("editor-current-line", QColor(70, 72, 61))
-        << SettingPair("gutter-foreground", QColor(Qt::white))
-        << SettingPair("gutter-background", QColor(Qt::black))
-        << SettingPair("show-file-browser", false)
-        << SettingPair("window-geometry", QByteArray())
-        << SettingPair("window-state", QByteArray());
-
-Settings::Settings(QObject *p) : QObject(p), settings(nullptr)
+void Settings::initialize()
 {
-#ifdef QOMPOSE_DEBUG
-	settings = new QSettings(QSettings::UserScope, "Qompose",
-	                         "QomposeDebug", this);
-#else
-	settings =
-	        new QSettings(QSettings::UserScope, "Qompose", "Qompose", this);
-#endif
+	std::lock_guard<std::mutex> lock(mutex);
+	if(!!settingsSingleton)
+	{
+		throw std::runtime_error(
+		        "Settings singleton already initialized.");
+	}
+	settingsSingleton.reset(new Settings());
+}
 
-	initializeDefaults();
+void Settings::destroy()
+{
+	std::lock_guard<std::mutex> lock(mutex);
+	settingsSingleton.reset();
+}
+
+Settings &Settings::instance()
+{
+	std::lock_guard<std::mutex> lock(mutex);
+	if(!settingsSingleton)
+	{
+		throw std::runtime_error("Settings singleton not initialized.");
+	}
+	return *settingsSingleton;
 }
 
 int Settings::count() const
@@ -78,17 +95,17 @@ int Settings::count() const
 
 void Settings::resetDefaults()
 {
-	for(int i = 0; i < defaults.count(); ++i)
-		setSetting(defaults.at(i).first, defaults.at(i).second);
+	for(const auto &pair : DEFAULT_SETTINGS)
+		setSetting(pair.first, pair.second);
 }
 
 void Settings::resetDefault(const QString &k)
 {
-	for(int i = 0; i < defaults.count(); ++i)
+	for(const auto &pair : DEFAULT_SETTINGS)
 	{
-		if(defaults.at(i).first == k)
+		if(pair.first == k)
 		{
-			setSetting(k, defaults.at(i).second);
+			setSetting(k, pair.second);
 			break;
 		}
 	}
@@ -110,14 +127,25 @@ QVariant Settings::getSetting(const QString &k) const
 	return settings->value(k, QVariant());
 }
 
+Settings::Settings(QObject *p) : QObject(p), settings(nullptr)
+{
+#ifdef QOMPOSE_DEBUG
+	settings = new QSettings(QSettings::UserScope, "Qompose",
+	                         "QomposeDebug", this);
+#else
+	settings =
+	        new QSettings(QSettings::UserScope, "Qompose", "Qompose", this);
+#endif
+
+	initializeDefaults();
+}
+
 void Settings::initializeDefaults()
 {
-	for(int i = 0; i < defaults.count(); ++i)
+	for(const auto &pair : DEFAULT_SETTINGS)
 	{
-		if(!containsSetting(defaults.at(i).first))
-		{
-			setSetting(defaults.at(i).first, defaults.at(i).second);
-		}
+		if(!containsSetting(pair.first))
+			setSetting(pair.first, pair.second);
 	}
 }
 }

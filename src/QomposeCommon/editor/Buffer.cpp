@@ -37,36 +37,46 @@
 
 namespace qompose
 {
-Buffer::Buffer(Settings *s, QWidget *p)
-        : Editor(p), settings(s), path(QString()), codec("UTF-8")
+Buffer::Buffer(QWidget *p) : Editor(p), path(QString()), codec("UTF-8")
 {
 	// Load our initial settings, and connect our settings object.
 
-	setGutterVisible(settings->getSetting("show-gutter").toBool());
-	setFont(settings->getSetting("editor-font").value<QFont>());
-	setIndentationWidth(
-	        settings->getSetting("editor-indentation-width").toInt());
-	setIndentationMode(settings->getSetting("editor-indentation-mode")
+	setGutterVisible(
+	        Settings::instance().getSetting("show-gutter").toBool());
+	setFont(Settings::instance().getSetting("editor-font").value<QFont>());
+	setIndentationWidth(Settings::instance()
+	                            .getSetting("editor-indentation-width")
+	                            .toInt());
+	setIndentationMode(Settings::instance()
+	                           .getSetting("editor-indentation-mode")
 	                           .value<QString>());
-	setWrapGuideVisible(
-	        settings->getSetting("editor-wrap-guide-visible").toBool());
-	setWrapGuideColumnWidth(
-	        settings->getSetting("editor-wrap-guide-width").toInt());
-	setWrapGuideColor(settings->getSetting("editor-wrap-guide-color")
+	setWrapGuideVisible(Settings::instance()
+	                            .getSetting("editor-wrap-guide-visible")
+	                            .toBool());
+	setWrapGuideColumnWidth(Settings::instance()
+	                                .getSetting("editor-wrap-guide-width")
+	                                .toInt());
+	setWrapGuideColor(Settings::instance()
+	                          .getSetting("editor-wrap-guide-color")
 	                          .value<QColor>());
-	setEditorForeground(
-	        settings->getSetting("editor-foreground").value<QColor>());
-	setEditorBackground(
-	        settings->getSetting("editor-background").value<QColor>());
-	setCurrentLineColor(
-	        settings->getSetting("editor-current-line").value<QColor>());
-	setGutterForeground(
-	        settings->getSetting("gutter-foreground").value<QColor>());
-	setGutterBackground(
-	        settings->getSetting("gutter-background").value<QColor>());
+	setEditorForeground(Settings::instance()
+	                            .getSetting("editor-foreground")
+	                            .value<QColor>());
+	setEditorBackground(Settings::instance()
+	                            .getSetting("editor-background")
+	                            .value<QColor>());
+	setCurrentLineColor(Settings::instance()
+	                            .getSetting("editor-current-line")
+	                            .value<QColor>());
+	setGutterForeground(Settings::instance()
+	                            .getSetting("gutter-foreground")
+	                            .value<QColor>());
+	setGutterBackground(Settings::instance()
+	                            .getSetting("gutter-background")
+	                            .value<QColor>());
 
 	QObject::connect(
-	        settings,
+	        &Settings::instance(),
 	        SIGNAL(settingChanged(const QString &, const QVariant &)), this,
 	        SLOT(doSettingChanged(const QString &, const QVariant &)));
 
@@ -295,7 +305,9 @@ bool Buffer::write()
 
 	writer.setCodec(c);
 	writer.setWhitespaceTrimmed(
-	        settings->getSetting("save-strip-trailing-spaces").toBool());
+	        Settings::instance()
+	                .getSetting("save-strip-trailing-spaces")
+	                .toBool());
 
 	bool r = writer.write(document());
 

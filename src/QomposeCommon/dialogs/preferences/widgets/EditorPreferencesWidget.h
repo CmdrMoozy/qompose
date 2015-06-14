@@ -33,8 +33,6 @@ namespace qompose
 {
 class ColorPickerButton;
 class FontPickerButton;
-class Settings;
-
 /*!
  * \brief This class implements a widget to configure editor-related settings.
  */
@@ -45,11 +43,10 @@ public:
 	 * This is our default constructor, which creates a new instance of our
 	 * editor preferences widget.
 	 *
-	 * \param s The settings instance to use to save preferences values.
 	 * \param p The parent widget to use for this widget.
 	 * \param f The window flags to use for this widget.
 	 */
-	EditorPreferencesWidget(Settings *s, QWidget *p = nullptr,
+	EditorPreferencesWidget(QWidget *p = nullptr,
 	                        Qt::WindowFlags f = nullptr);
 
 	EditorPreferencesWidget(const EditorPreferencesWidget &) = delete;

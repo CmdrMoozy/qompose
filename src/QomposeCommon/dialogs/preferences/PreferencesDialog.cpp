@@ -33,9 +33,8 @@
 
 namespace qompose
 {
-PreferencesDialog::PreferencesDialog(Settings *s, QWidget *p, Qt::WindowFlags f)
+PreferencesDialog::PreferencesDialog(QWidget *p, Qt::WindowFlags f)
         : QDialog(p, f),
-          settings(s),
           layout(nullptr),
           generalPreferencesWidget(nullptr),
           editorPreferencesWidget(nullptr),
@@ -118,12 +117,11 @@ void PreferencesDialog::createPreferencesModel()
 {
 	preferencesModel = new PreferencesListModel(preferencesView);
 
-	generalPreferencesWidget = new GeneralPreferencesWidget(settings, this);
+	generalPreferencesWidget = new GeneralPreferencesWidget(this);
 
-	editorPreferencesWidget = new EditorPreferencesWidget(settings, this);
+	editorPreferencesWidget = new EditorPreferencesWidget(this);
 
-	openSavePreferencesWidget =
-	        new OpenSavePreferencesWidget(settings, this);
+	openSavePreferencesWidget = new OpenSavePreferencesWidget(this);
 
 	preferencesModel->addPreferencesWidget(generalPreferencesWidget);
 	preferencesModel->addPreferencesWidget(editorPreferencesWidget);
@@ -159,7 +157,7 @@ void PreferencesDialog::doDefaults()
 	if(ret != QMessageBox::Yes)
 		return;
 
-	settings->resetDefaults();
+	Settings::instance().resetDefaults();
 
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 		preferencesModel->widgetAt(i)->discardChanges();

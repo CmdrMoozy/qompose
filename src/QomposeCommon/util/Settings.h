@@ -19,12 +19,14 @@
 #ifndef INCLUDE_QOMPOSECOMMON_UTIL_SETTINGS_H
 #define INCLUDE_QOMPOSECOMMON_UTIL_SETTINGS_H
 
+#include <memory>
+#include <mutex>
+
 #include <QObject>
-#include <QPair>
-#include <QList>
 
 class QSettings;
 class QString;
+class QVariant;
 
 namespace qompose
 {
@@ -36,14 +38,10 @@ class Settings : public QObject
 	Q_OBJECT
 
 public:
-	/*!
-	 * This function initializes a new settings instance, with the given
-	 * parent. Note that, for settings which are currently unset, default
-	 * values will be automatically initialized.
-	 *
-	 * \param p Our parent object.
-	 */
-	Settings(QObject *p = nullptr);
+	static void initialize();
+	static void destroy();
+
+	static Settings &instance();
 
 	Settings(const Settings &) = delete;
 	virtual ~Settings() = default;
@@ -100,8 +98,19 @@ public:
 	QVariant getSetting(const QString &k) const;
 
 private:
-	static const QList<QPair<QString, QVariant>> defaults;
+	static std::mutex mutex;
+	static std::unique_ptr<Settings> settingsSingleton;
+
 	QSettings *settings;
+
+	/*!
+	 * This function initializes a new settings instance, with the given
+	 * parent. Note that, for settings which are currently unset, default
+	 * values will be automatically initialized.
+	 *
+	 * \param p Our parent object.
+	 */
+	Settings(QObject *p = nullptr);
 
 	/*!
 	 * This function initializes default values, for settings which have no

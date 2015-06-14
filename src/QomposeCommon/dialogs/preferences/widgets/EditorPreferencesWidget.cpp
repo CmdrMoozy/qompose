@@ -33,9 +33,8 @@
 
 namespace qompose
 {
-EditorPreferencesWidget::EditorPreferencesWidget(Settings *s, QWidget *p,
-                                                 Qt::WindowFlags f)
-        : PreferencesWidget(s, p, f),
+EditorPreferencesWidget::EditorPreferencesWidget(QWidget *p, Qt::WindowFlags f)
+        : PreferencesWidget(p, f),
           layout(nullptr),
           generalGroupBox(nullptr),
           generalLayout(nullptr),
@@ -79,74 +78,81 @@ void EditorPreferencesWidget::apply()
 {
 	// Show Gutter
 
-	getSettings()->setSetting(
+	Settings::instance().setSetting(
 	        "show-gutter",
 	        QVariant(showGutterCheckBox->checkState() == Qt::Checked));
 
 	// Editor Font
 
-	getSettings()->setSetting(
+	Settings::instance().setSetting(
 	        "editor-font", QVariant(editorFontButton->getSelectedFont()));
 
 	// Indentation Width
 
-	getSettings()->setSetting("editor-indentation-width",
-	                          QVariant(indentationWidthSpinBox->value()));
+	Settings::instance().setSetting(
+	        "editor-indentation-width",
+	        QVariant(indentationWidthSpinBox->value()));
 
 	// Indentation Mode
 
-	getSettings()->setSetting("editor-indentation-mode",
-	                          QVariant(getSelectedIndentationMode()));
+	Settings::instance().setSetting("editor-indentation-mode",
+	                                QVariant(getSelectedIndentationMode()));
 
 	// Wrap Guide Visible
 
-	getSettings()->setSetting(
+	Settings::instance().setSetting(
 	        "editor-wrap-guide-visible",
 	        QVariant(lineWrapGuideCheckBox->checkState() == Qt::Checked));
 
 	// Wrap Guide Width
 
-	getSettings()->setSetting("editor-wrap-guide-width",
-	                          QVariant(lineWrapGuideWidthSpinBox->value()));
+	Settings::instance().setSetting(
+	        "editor-wrap-guide-width",
+	        QVariant(lineWrapGuideWidthSpinBox->value()));
 
 	// Wrap Guide Color
 
-	getSettings()->setSetting(
+	Settings::instance().setSetting(
 	        "editor-wrap-guide-color",
 	        QVariant(lineWrapGuideColorButton->getSelectedColor()));
 
 	// Editor Foreground
 
-	getSettings()->setSetting("editor-foreground",
-	                          QVariant(editorFGButton->getSelectedColor()));
+	Settings::instance().setSetting(
+	        "editor-foreground",
+	        QVariant(editorFGButton->getSelectedColor()));
 
 	// Editor Background
 
-	getSettings()->setSetting("editor-background",
-	                          QVariant(editorBGButton->getSelectedColor()));
+	Settings::instance().setSetting(
+	        "editor-background",
+	        QVariant(editorBGButton->getSelectedColor()));
 
 	// Current Line Background
 
-	getSettings()->setSetting(
+	Settings::instance().setSetting(
 	        "editor-current-line",
 	        QVariant(currentLineBGButton->getSelectedColor()));
 
 	// Gutter Foreground
 
-	getSettings()->setSetting("gutter-foreground",
-	                          QVariant(gutterFGButton->getSelectedColor()));
+	Settings::instance().setSetting(
+	        "gutter-foreground",
+	        QVariant(gutterFGButton->getSelectedColor()));
 
 	// Gutter Background
 
-	getSettings()->setSetting("gutter-background",
-	                          QVariant(gutterBGButton->getSelectedColor()));
+	Settings::instance().setSetting(
+	        "gutter-background",
+	        QVariant(gutterBGButton->getSelectedColor()));
 }
 
 void EditorPreferencesWidget::discardChanges()
 {
 	// Show Gutter
 
-	bool showGutter = getSettings()->getSetting("show-gutter").toBool();
+	bool showGutter =
+	        Settings::instance().getSetting("show-gutter").toBool();
 
 	showGutterCheckBox->setCheckState(showGutter ? Qt::Checked
 	                                             : Qt::Unchecked);
@@ -154,24 +160,27 @@ void EditorPreferencesWidget::discardChanges()
 	// Editor Font
 
 	editorFontButton->setSelectedFont(
-	        getSettings()->getSetting("editor-font").value<QFont>());
+	        Settings::instance().getSetting("editor-font").value<QFont>());
 
 	// Indentation Width
 
 	indentationWidthSpinBox->setValue(
-	        getSettings()->getSetting("editor-indentation-width").toInt());
+	        Settings::instance()
+	                .getSetting("editor-indentation-width")
+	                .toInt());
 
 	// Indentation Mode
 
-	setSelectedIndentaionMode(
-	        getSettings()
-	                ->getSetting("editor-indentation-mode")
-	                .value<QString>());
+	setSelectedIndentaionMode(Settings::instance()
+	                                  .getSetting("editor-indentation-mode")
+	                                  .value<QString>());
 
 	// Wrap Guide Visible
 
 	bool showLineWrapGuide =
-	        getSettings()->getSetting("editor-wrap-guide-visible").toBool();
+	        Settings::instance()
+	                .getSetting("editor-wrap-guide-visible")
+	                .toBool();
 
 	lineWrapGuideCheckBox->setCheckState(showLineWrapGuide ? Qt::Checked
 	                                                       : Qt::Unchecked);
@@ -179,41 +188,51 @@ void EditorPreferencesWidget::discardChanges()
 	// Wrap Guide Width
 
 	lineWrapGuideWidthSpinBox->setValue(
-	        getSettings()->getSetting("editor-wrap-guide-width").toInt());
+	        Settings::instance()
+	                .getSetting("editor-wrap-guide-width")
+	                .toInt());
 
 	// Wrap Guide Color
 
 	lineWrapGuideColorButton->setSelectedColor(
-	        getSettings()
-	                ->getSetting("editor-wrap-guide-color")
+	        Settings::instance()
+	                .getSetting("editor-wrap-guide-color")
 	                .value<QColor>());
 
 	// Editor Foreground
 
 	editorFGButton->setSelectedColor(
-	        getSettings()->getSetting("editor-foreground").value<QColor>());
+	        Settings::instance()
+	                .getSetting("editor-foreground")
+	                .value<QColor>());
 
 	// Editor Background
 
 	editorBGButton->setSelectedColor(
-	        getSettings()->getSetting("editor-background").value<QColor>());
+	        Settings::instance()
+	                .getSetting("editor-background")
+	                .value<QColor>());
 
 	// Current Line Background
 
 	currentLineBGButton->setSelectedColor(
-	        getSettings()
-	                ->getSetting("editor-current-line")
+	        Settings::instance()
+	                .getSetting("editor-current-line")
 	                .value<QColor>());
 
 	// Gutter Foreground
 
 	gutterFGButton->setSelectedColor(
-	        getSettings()->getSetting("gutter-foreground").value<QColor>());
+	        Settings::instance()
+	                .getSetting("gutter-foreground")
+	                .value<QColor>());
 
 	// Gutter Background
 
 	gutterBGButton->setSelectedColor(
-	        getSettings()->getSetting("gutter-background").value<QColor>());
+	        Settings::instance()
+	                .getSetting("gutter-background")
+	                .value<QColor>());
 }
 
 void EditorPreferencesWidget::initializeGUI()

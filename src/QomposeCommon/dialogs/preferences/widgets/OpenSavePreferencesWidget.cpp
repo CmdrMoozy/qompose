@@ -28,9 +28,9 @@
 
 namespace qompose
 {
-OpenSavePreferencesWidget::OpenSavePreferencesWidget(Settings *s, QWidget *p,
+OpenSavePreferencesWidget::OpenSavePreferencesWidget(QWidget *p,
                                                      Qt::WindowFlags f)
-        : PreferencesWidget(s, p, f),
+        : PreferencesWidget(p, f),
           layout(nullptr),
           generalGroupBox(nullptr),
           generalLayout(nullptr),
@@ -46,7 +46,7 @@ void OpenSavePreferencesWidget::apply()
 {
 	// Strip Trailing Spaces
 
-	getSettings()->setSetting(
+	Settings::instance().setSetting(
 	        "save-strip-trailing-spaces",
 	        QVariant(stripTrailingSpacesCheckBox->checkState() ==
 	                 Qt::Checked));
@@ -56,8 +56,8 @@ void OpenSavePreferencesWidget::discardChanges()
 {
 	// Strip Trailing Spaces
 
-	bool stripSpaces = getSettings()
-	                           ->getSetting("save-strip-trailing-spaces")
+	bool stripSpaces = Settings::instance()
+	                           .getSetting("save-strip-trailing-spaces")
 	                           .toBool();
 
 	stripTrailingSpacesCheckBox->setCheckState(stripSpaces ? Qt::Checked

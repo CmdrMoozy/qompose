@@ -28,9 +28,9 @@
 
 namespace qompose
 {
-GeneralPreferencesWidget::GeneralPreferencesWidget(Settings *s, QWidget *p,
+GeneralPreferencesWidget::GeneralPreferencesWidget(QWidget *p,
                                                    Qt::WindowFlags f)
-        : PreferencesWidget(s, p, f),
+        : PreferencesWidget(p, f),
           layout(nullptr),
           showFileInTitleCheckBox(nullptr),
           statusBarCheckBox(nullptr),
@@ -48,24 +48,24 @@ void GeneralPreferencesWidget::apply()
 {
 	// Show File In Title
 
-	getSettings()->setSetting(
+	Settings::instance().setSetting(
 	        "show-file-in-title",
 	        QVariant(showFileInTitleCheckBox->checkState() == Qt::Checked));
 
 	// Show Status Bar
 
-	getSettings()->setSetting(
+	Settings::instance().setSetting(
 	        "show-status-bar",
 	        QVariant(statusBarCheckBox->checkState() == Qt::Checked));
 
 	// Recently Opened List Size
 
-	getSettings()->setSetting("recent-list-size",
-	                          QVariant(recentListSizeSpinBox->value()));
+	Settings::instance().setSetting(
+	        "recent-list-size", QVariant(recentListSizeSpinBox->value()));
 
 	// Save Window Attributes
 
-	getSettings()->setSetting(
+	Settings::instance().setSetting(
 	        "window-save-attributes",
 	        QVariant(saveWindowAttribsCheckBox->checkState() ==
 	                 Qt::Checked));
@@ -76,7 +76,7 @@ void GeneralPreferencesWidget::discardChanges()
 	// Show File In Title
 
 	bool showFileInTitle =
-	        getSettings()->getSetting("show-file-in-title").toBool();
+	        Settings::instance().getSetting("show-file-in-title").toBool();
 
 	showFileInTitleCheckBox->setCheckState(showFileInTitle ? Qt::Checked
 	                                                       : Qt::Unchecked);
@@ -84,7 +84,7 @@ void GeneralPreferencesWidget::discardChanges()
 	// Show Status Bar
 
 	bool showStatusBar =
-	        getSettings()->getSetting("show-status-bar").toBool();
+	        Settings::instance().getSetting("show-status-bar").toBool();
 
 	statusBarCheckBox->setCheckState(showStatusBar ? Qt::Checked
 	                                               : Qt::Unchecked);
@@ -92,12 +92,13 @@ void GeneralPreferencesWidget::discardChanges()
 	// Recently Opened List Size
 
 	recentListSizeSpinBox->setValue(
-	        getSettings()->getSetting("recent-list-size").toInt());
+	        Settings::instance().getSetting("recent-list-size").toInt());
 
 	// Save Window Attributes
 
-	bool saveWindowAttribs =
-	        getSettings()->getSetting("window-save-attributes").toBool();
+	bool saveWindowAttribs = Settings::instance()
+	                                 .getSetting("window-save-attributes")
+	                                 .toBool();
 
 	saveWindowAttribsCheckBox->setCheckState(
 	        saveWindowAttribs ? Qt::Checked : Qt::Unchecked);

@@ -27,8 +27,6 @@ class QCheckBox;
 
 namespace qompose
 {
-class Settings;
-
 /*!
  * \brief This widget provides a UI for configuring for open/save preferences.
  */
@@ -39,11 +37,10 @@ public:
 	 * This is our default constructor, which creates a new instance of our
 	 * open/save preferences widget.
 	 *
-	 * \param s The settings instance to use to save preferences values.
 	 * \param p The parent widget to use for this widget.
 	 * \param f The window flags to use for this widget.
 	 */
-	OpenSavePreferencesWidget(Settings *s, QWidget *p = nullptr,
+	OpenSavePreferencesWidget(QWidget *p = nullptr,
 	                          Qt::WindowFlags f = nullptr);
 
 	OpenSavePreferencesWidget(const OpenSavePreferencesWidget &) = delete;

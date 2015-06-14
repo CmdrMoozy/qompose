@@ -29,9 +29,8 @@
 
 namespace qompose
 {
-RecentMenu::RecentMenu(Settings *s, QObject *p)
+RecentMenu::RecentMenu(QObject *p)
         : QObject(p),
-          settings(s),
           capacity(0),
           menu(nullptr),
           menuActions(QList<QAction *>()),
@@ -42,17 +41,17 @@ RecentMenu::RecentMenu(Settings *s, QObject *p)
 	menu = new QMenu(tr("Open Recent"));
 	menu->setIcon(gui_utils::getIconFromTheme("document-open"));
 
-	// Load our list's size from our settings instance.
+	// Load our list's size from the settings instance.
 
 	bool ok;
-	QVariant vcap = settings->getSetting("recent-list-size");
+	QVariant vcap = Settings::instance().getSetting("recent-list-size");
 
 	int cap = vcap.toInt(&ok);
 
 	if(!ok)
 	{
-		settings->resetDefault("recent-list-size");
-		vcap = settings->getSetting("recent-list-size");
+		Settings::instance().resetDefault("recent-list-size");
+		vcap = Settings::instance().getSetting("recent-list-size");
 		cap = vcap.toInt(&ok);
 
 		if(!ok)
@@ -61,9 +60,9 @@ RecentMenu::RecentMenu(Settings *s, QObject *p)
 
 	setCapacity(cap);
 
-	// Load our list's contents from our settings instance.
+	// Load our list's contents from the settings instance.
 
-	QVariant vcontents = settings->getSetting("recent-list");
+	QVariant vcontents = Settings::instance().getSetting("recent-list");
 
 	if(vcontents.canConvert(QMetaType::QStringList))
 		setListContents(vcontents.toStringList());
@@ -91,7 +90,7 @@ void RecentMenu::saveContents()
 	for(int i = 0; i < recentList.count(); ++i)
 		l.append(recentList.at(i));
 
-	settings->setSetting("recent-list", QVariant(l));
+	Settings::instance().setSetting("recent-list", QVariant(l));
 }
 
 void RecentMenu::addPath(const QString &p)
@@ -257,16 +256,15 @@ void RecentMenu::doSettingChanged(const QString &k, const QVariant &v)
 namespace menu_desc
 {
 RecentMenuDescriptor::RecentMenuDescriptor(
-        Settings *s, const gui_utils::ConnectionList &sigc,
+        const gui_utils::ConnectionList &sigc,
         const gui_utils::ConnectionList &slotc)
-        : settings(s), signalConnections(sigc), slotConnections(slotc)
+        : signalConnections(sigc), slotConnections(slotc)
 {
 }
 
-RecentMenuDescriptor::RecentMenuDescriptor(Settings *s,
-                                           const gui_utils::Connection &sigc,
+RecentMenuDescriptor::RecentMenuDescriptor(const gui_utils::Connection &sigc,
                                            const gui_utils::Connection &slotc)
-        : settings(s), signalConnections(), slotConnections()
+        : signalConnections(), slotConnections()
 {
 	if(sigc.first != nullptr && sigc.second != nullptr)
 		signalConnections.push_back(sigc);
@@ -279,7 +277,7 @@ template <>
 void constructDescriptor(QObject *parent, QMenu *menu,
                          const RecentMenuDescriptor &descriptor)
 {
-	RecentMenu *recentMenu = new RecentMenu(descriptor.settings, parent);
+	RecentMenu *recentMenu = new RecentMenu(parent);
 
 	gui_utils::connectAll(recentMenu,
 	                      SIGNAL(recentClicked(const QString &)),

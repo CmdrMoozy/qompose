@@ -27,8 +27,6 @@ class QPrinter;
 
 namespace qompose
 {
-class Settings;
-
 /*!
  * \brief This class provides high-level buffer functionality for editors.
  */
@@ -41,10 +39,9 @@ public:
 	 * This is our default constructor, which creates a new instance of
 	 * our buffer widget.
 	 *
-	 * \param s The settings instance to get our preferences from.
 	 * \param p The parent widget for our buffer widget.
 	 */
-	Buffer(Settings *s, QWidget *p = NULL);
+	Buffer(QWidget *p = NULL);
 
 	Buffer(const Buffer &) = delete;
 	virtual ~Buffer() = default;
@@ -173,8 +170,6 @@ public Q_SLOTS:
 	void print(QPrinter *p);
 
 private:
-	Settings *settings;
-
 	QString path;
 	QString codec;
 

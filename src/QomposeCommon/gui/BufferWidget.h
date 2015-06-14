@@ -41,7 +41,6 @@ namespace qompose
 class FindQuery;
 class ReplaceQuery;
 class Buffer;
-class Settings;
 
 /*!
  * \brief This class provides high-level management of a set of buffers.
@@ -55,10 +54,9 @@ public:
 	 * This is our default constructor, which creates a new instance of our
 	 * buffers tab widget.
 	 *
-	 * \param s The settings instance to give to our buffers.
 	 * \param p The parent widget to use for this widget.
 	 */
-	BufferWidget(Settings *s, QWidget *p = nullptr);
+	BufferWidget(QWidget *p = nullptr);
 
 	BufferWidget(const BufferWidget &) = delete;
 	virtual ~BufferWidget() = default;
@@ -152,8 +150,6 @@ public:
 	std::string getCommonParentPath() const;
 
 private:
-	Settings *settings;
-
 	QGridLayout *layout;
 	QTabWidget *tabWidget;
 

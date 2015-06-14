@@ -44,7 +44,9 @@ using qompose::menu_desc::MenuItemDescriptor;
 using qompose::menu_desc::RecentMenuDescriptor;
 using qompose::menu_desc::SeparatorDescriptor;
 
-typedef std::vector<mapbox::util::variant<MenuItemDescriptor, RecentMenuDescriptor, EncodingMenuDescriptor, SeparatorDescriptor>> DescriptorList;
+typedef std::vector<mapbox::util::variant<
+        MenuItemDescriptor, RecentMenuDescriptor, EncodingMenuDescriptor,
+        SeparatorDescriptor>> DescriptorList;
 
 template <typename VariantType>
 QMenu *buildMenu(QWidget *parent, const std::string &title,
@@ -54,13 +56,13 @@ QMenu *buildMenu(QWidget *parent, const std::string &title,
 	for(const auto &item : items)
 	{
 		mapbox::util::apply_visitor(
-			qompose::menu_desc::MenuDescriptorVisitor(parent, menu),
-			item);
+		        qompose::menu_desc::MenuDescriptorVisitor(parent, menu),
+		        item);
 	}
 	return menu;
 }
 
-QMenu *createFileMenu(QWidget *parent, qompose::Settings *settings)
+QMenu *createFileMenu(QWidget *parent)
 {
 	qompose::gui_utils::ConnectionFunctor parentConn(parent);
 	const DescriptorList items(
@@ -75,7 +77,6 @@ QMenu *createFileMenu(QWidget *parent, qompose::Settings *settings)
 	                            parentConn(SIGNAL(openTriggered(bool))),
 	                            Qt::CTRL + Qt::Key_O, "document-open"),
 	         RecentMenuDescriptor(
-	                 settings,
 	                 parentConn(SIGNAL(recentTriggered(const QString &))),
 	                 parentConn(SIGNAL(pathOpened(const QString &)))),
 	         MenuItemDescriptor("Repoen Tab",
@@ -161,7 +162,7 @@ QMenu *createEditMenu(QWidget *parent)
 	return buildMenu(parent, "&Edit", items);
 }
 
-QMenu *createViewMenu(QWidget *parent, qompose::Settings *settings)
+QMenu *createViewMenu(QWidget *parent)
 {
 	qompose::gui_utils::ConnectionFunctor parentConn(parent);
 	const DescriptorList items(
@@ -174,7 +175,9 @@ QMenu *createViewMenu(QWidget *parent, qompose::Settings *settings)
 	                 "Show File &Browser",
 	                 parentConn(SLOT(doShowBrowser(bool))), QKeySequence(),
 	                 QString(), true,
-	                 settings->getSetting("show-file-browser").toBool(),
+	                 qompose::Settings::instance()
+	                         .getSetting("show-file-browser")
+	                         .toBool(),
 	                 parentConn(SIGNAL(
 	                         browserWidgetVisibilityChanged(bool))))});
 	return buildMenu(parent, "&View", items);
@@ -261,12 +264,11 @@ QMenu *createHelpMenu(QWidget *parent)
 
 namespace qompose
 {
-MainMenu::MainMenu(Settings *s, Window *p)
-        : QMenuBar(p), settings(s), bufferWidget(nullptr)
+MainMenu::MainMenu(Window *p) : QMenuBar(p), bufferWidget(nullptr)
 {
-	addMenu(createFileMenu(this, s));
+	addMenu(createFileMenu(this));
 	addMenu(createEditMenu(this));
-	addMenu(createViewMenu(this, settings));
+	addMenu(createViewMenu(this));
 	addMenu(createSearchMenu(this));
 	addMenu(createBuffersMenu(this));
 	addMenu(createEncodingMenu(this));
@@ -373,6 +375,6 @@ void MainMenu::doFileOpened(const QString &p)
 
 void MainMenu::doShowBrowser(bool s)
 {
-	settings->setSetting("show-file-browser", s);
+	Settings::instance().setSetting("show-file-browser", s);
 }
 }

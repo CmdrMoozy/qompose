@@ -28,8 +28,6 @@ class QSpinBox;
 
 namespace qompose
 {
-class Settings;
-
 /*!
  * \brief This class implements a widget to configure general options.
  */
@@ -40,11 +38,10 @@ public:
 	 * This is our default constructor, which creates a new instance of our
 	 * general preferences widget.
 	 *
-	 * \param s The settings instance to use to persist settings values.
 	 * \param p The parent widget to use for this widget.
 	 * \param f The window flags to use for this widget.
 	 */
-	GeneralPreferencesWidget(Settings *s, QWidget *p = nullptr,
+	GeneralPreferencesWidget(QWidget *p = nullptr,
 	                         Qt::WindowFlags f = nullptr);
 
 	GeneralPreferencesWidget(const GeneralPreferencesWidget &) = delete;

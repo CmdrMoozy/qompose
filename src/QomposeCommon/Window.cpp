@@ -56,7 +56,6 @@ void Window::openNewWindow()
 
 Window::Window(QWidget *p, Qt::WindowFlags f)
         : QMainWindow(p, f),
-          settings(nullptr),
           preferencesDialog(nullptr),
           findDialog(nullptr),
           replaceDialog(nullptr),
@@ -67,15 +66,13 @@ Window::Window(QWidget *p, Qt::WindowFlags f)
           statusBar(nullptr),
           browserWidget(nullptr)
 {
-	settings = new Settings(this);
-
 	// Set some of our window's properties.
 
 	setWindowIcon(QIcon(":/icons/qompose.png"));
 
 	// Initialize our window.
 
-	buffers = new BufferWidget(settings, this);
+	buffers = new BufferWidget(this);
 	buffers->doNew();
 	setCentralWidget(buffers);
 
@@ -108,11 +105,12 @@ void Window::closeEvent(QCloseEvent *e)
 	{
 		// Save our window geometry and state.
 
-		settings->setSetting("window-geometry",
-		                     QVariant(saveGeometry()));
+		Settings::instance().setSetting("window-geometry",
+		                                QVariant(saveGeometry()));
 
-		settings->setSetting("window-state",
-		                     QVariant(saveState(QOMPOSE_VERSION_MAJ)));
+		Settings::instance().setSetting(
+		        "window-state",
+		        QVariant(saveState(QOMPOSE_VERSION_MAJ)));
 
 		// Close the window.
 
@@ -128,7 +126,7 @@ void Window::initializeDialogs()
 {
 	// Create our dialog objects.
 
-	preferencesDialog = new PreferencesDialog(settings, this);
+	preferencesDialog = new PreferencesDialog(this);
 
 	findDialog = new FindDialog(this);
 
@@ -158,7 +156,7 @@ void Window::initializeMenus()
 {
 	// Create our main menu.
 
-	mainMenu = new MainMenu(settings, this);
+	mainMenu = new MainMenu(this);
 
 	setMenuBar(mainMenu);
 
@@ -200,7 +198,7 @@ void Window::initializeDockWidgets()
 	browserWidget = new BrowserDockWidget(this);
 	addDockWidget(Qt::RightDockWidgetArea, browserWidget);
 	browserWidget->setVisible(
-	        settings->getSetting("show-file-browser").toBool());
+	        Settings::instance().getSetting("show-file-browser").toBool());
 
 	QObject::connect(browserWidget, SIGNAL(visibilityChanged(bool)), this,
 	                 SLOT(doBrowserWidgetVisibilityChanged(bool)));
@@ -210,30 +208,40 @@ void Window::applyExistingSettings()
 {
 	// Load our initial settings, and connect our settings object.
 
-	statusBar->setVisible(settings->getSetting("show-status-bar").toBool());
+	statusBar->setVisible(
+	        Settings::instance().getSetting("show-status-bar").toBool());
 
 	QObject::connect(
-	        settings,
+	        &Settings::instance(),
 	        SIGNAL(settingChanged(const QString &, const QVariant &)), this,
 	        SLOT(doSettingChanged(const QString &, const QVariant &)));
 
 	// Restore our window's geometry and state.
 
-	QByteArray winGeometry =
-	        settings->getSetting("window-geometry").toByteArray();
+	QByteArray winGeometry = Settings::instance()
+	                                 .getSetting("window-geometry")
+	                                 .toByteArray();
 
 	if(!winGeometry.isNull())
+	{
 		if(!restoreGeometry(winGeometry))
-			settings->setSetting("window-geometry",
-			                     QVariant(QByteArray()));
+		{
+			Settings::instance().setSetting("window-geometry",
+			                                QVariant(QByteArray()));
+		}
+	}
 
 	QByteArray winState =
-	        settings->getSetting("window-state").toByteArray();
+	        Settings::instance().getSetting("window-state").toByteArray();
 
 	if(!winState.isNull())
+	{
 		if(!restoreState(winState, QOMPOSE_VERSION_MAJ))
-			settings->setSetting("window-state",
-			                     QVariant(QByteArray()));
+		{
+			Settings::instance().setSetting("window-state",
+			                                QVariant(QByteArray()));
+		}
+	}
 }
 
 void Window::handleFindResult(Editor::FindResult r)
@@ -279,7 +287,8 @@ void Window::doUpdateWindowTitle()
 {
 	QString title("Qompose");
 
-	bool showFile = settings->getSetting("show-file-in-title").toBool();
+	bool showFile =
+	        Settings::instance().getSetting("show-file-in-title").toBool();
 
 	if(showFile)
 	{
@@ -379,7 +388,7 @@ void Window::doShowBrowser(bool s)
 
 void Window::doBrowserWidgetVisibilityChanged(bool v)
 {
-	settings->setSetting("show-file-browser", v);
+	Settings::instance().setSetting("show-file-browser", v);
 	Q_EMIT browserWidgetVisibilityChanged(v);
 }
 

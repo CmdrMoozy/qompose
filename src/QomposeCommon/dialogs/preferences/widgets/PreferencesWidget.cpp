@@ -18,12 +18,10 @@
 
 #include "PreferencesWidget.h"
 
-#include "QomposeCommon/util/Settings.h"
-
 namespace qompose
 {
-PreferencesWidget::PreferencesWidget(Settings *s, QWidget *p, Qt::WindowFlags f)
-        : QWidget(p, f), settings(s), icon(QIcon()), title(QString())
+PreferencesWidget::PreferencesWidget(QWidget *p, Qt::WindowFlags f)
+        : QWidget(p, f), icon(QIcon()), title(QString())
 {
 }
 
@@ -45,10 +43,5 @@ QString PreferencesWidget::getPreferencesTitle() const
 void PreferencesWidget::setPreferencesTitle(const QString &t)
 {
 	title = t;
-}
-
-Settings *PreferencesWidget::getSettings() const
-{
-	return settings;
 }
 }

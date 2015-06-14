@@ -39,7 +39,6 @@ class GoToDialog;
 class MainMenu;
 class PreferencesDialog;
 class ReplaceDialog;
-class Settings;
 class StatusBar;
 
 /*!
@@ -84,8 +83,6 @@ protected:
 	void closeEvent(QCloseEvent *e);
 
 private:
-	Settings *settings;
-
 	PreferencesDialog *preferencesDialog;
 	FindDialog *findDialog;
 	ReplaceDialog *replaceDialog;

@@ -29,7 +29,6 @@ class QPushButton;
 
 namespace qompose
 {
-class Settings;
 class GeneralPreferencesWidget;
 class EditorPreferencesWidget;
 class OpenSavePreferencesWidget;
@@ -48,12 +47,10 @@ public:
 	 * This is our default constructor, which creates a new instance of our
 	 * preferences dialog.
 	 *
-	 * \param s The settings instance to use to persist settings.
 	 * \param p The parent widget for this dialog.
 	 * \param f The window flags for this dialog.
 	 */
-	PreferencesDialog(Settings *s, QWidget *p = nullptr,
-	                  Qt::WindowFlags f = nullptr);
+	PreferencesDialog(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 
 	PreferencesDialog(const PreferencesDialog &) = delete;
 	virtual ~PreferencesDialog() = default;
@@ -68,8 +65,6 @@ public:
 	void discardChanges();
 
 private:
-	Settings *settings;
-
 	QGridLayout *layout;
 
 	GeneralPreferencesWidget *generalPreferencesWidget;

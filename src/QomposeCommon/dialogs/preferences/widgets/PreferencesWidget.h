@@ -25,8 +25,6 @@
 
 namespace qompose
 {
-class Settings;
-
 /*!
  * \brief This class provides a common interface for all preferences widgets.
  */
@@ -37,12 +35,10 @@ public:
 	 * This is our default constructor, which creates a new, empty
 	 * preferences widget.
 	 *
-	 * \param s The settings instance to use to persist our settings.
 	 * \param p This widget's parent widget.
 	 * \param f The window flags to use for this widget.
 	 */
-	PreferencesWidget(Settings *s, QWidget *p = nullptr,
-	                  Qt::WindowFlags f = nullptr);
+	PreferencesWidget(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 
 	PreferencesWidget(const PreferencesWidget &) = delete;
 	virtual ~PreferencesWidget() = default;
@@ -98,18 +94,7 @@ public:
 	 */
 	virtual void discardChanges() = 0;
 
-protected:
-	/*!
-	 * This function returns the settings instance our widget is using to
-	 * persist settings.
-	 *
-	 * \return Our widget's settings instance.
-	 */
-	Settings *getSettings() const;
-
 private:
-	Settings *settings;
-
 	QIcon icon;
 	QString title;
 };
