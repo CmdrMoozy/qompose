@@ -50,6 +50,7 @@ BufferWidget::BufferWidget(QWidget *p)
 	tabWidget->setUsesScrollButtons(true);
 
 	layout->addWidget(tabWidget, 0, 0, 1, 1, nullptr);
+	layout->setContentsMargins(0, 0, 0, 0);
 	setLayout(layout);
 
 	QObject::connect(tabWidget, SIGNAL(currentChanged(int)), this,

@@ -25,7 +25,6 @@
 #include <QVariant>
 
 #include "QomposeCommon/gui/EllipsizedLabel.h"
-#include "QomposeCommon/gui/NotificationLabel.h"
 #include "QomposeCommon/util/Settings.h"
 
 namespace qompose
@@ -34,7 +33,6 @@ StatusBar::StatusBar(QWidget *p)
         : QStatusBar(p),
           statusWidget(nullptr),
           statusLayout(nullptr),
-          notificationLabel(nullptr),
           filePathLabel(nullptr),
           lineLabel(nullptr),
           columnLabel(nullptr)
@@ -42,10 +40,8 @@ StatusBar::StatusBar(QWidget *p)
 	statusWidget = new QWidget(this, nullptr);
 
 	statusLayout = new QGridLayout(statusWidget);
-	statusLayout->setContentsMargins(5, 0, 5, 0);
+	statusLayout->setContentsMargins(0, 0, 0, 0);
 	statusLayout->setSpacing(5);
-
-	notificationLabel = new NotificationLabel(statusWidget);
 
 	filePathLabel = new EllipsizedLabel(Qt::AlignRight, statusWidget);
 
@@ -55,11 +51,10 @@ StatusBar::StatusBar(QWidget *p)
 	columnLabel->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
 	setCursorPosition(1, 1);
 
-	statusLayout->addWidget(notificationLabel, 0, 0, 1, 1, nullptr);
-	statusLayout->addWidget(filePathLabel, 0, 2, 1, 1, nullptr);
-	statusLayout->addWidget(lineLabel, 0, 3, 1, 1, nullptr);
-	statusLayout->addWidget(columnLabel, 0, 4, 1, 1, nullptr);
-	statusLayout->setColumnStretch(2, 1);
+	statusLayout->addWidget(filePathLabel, 0, 0, 1, 1, nullptr);
+	statusLayout->addWidget(lineLabel, 0, 1, 1, 1, nullptr);
+	statusLayout->addWidget(columnLabel, 0, 2, 1, 1, nullptr);
+	statusLayout->setColumnStretch(0, 1);
 	statusWidget->setLayout(statusLayout);
 
 	addPermanentWidget(statusWidget, 1);
@@ -68,11 +63,6 @@ StatusBar::StatusBar(QWidget *p)
 
 	QObject::connect(&Settings::instance(), &Settings::settingChanged, this,
 	                 &StatusBar::doSettingChanged);
-}
-
-void StatusBar::displayNotification(const QString &n, bool c)
-{
-	notificationLabel->displayNotification(n, c);
 }
 
 void StatusBar::setFilePath(const QString &p)

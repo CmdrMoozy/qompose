@@ -29,7 +29,6 @@ class QVariant;
 namespace qompose
 {
 class EllipsizedLabel;
-class NotificationLabel;
 
 /*!
  * \brief This class implements a status bar widget for our application.
@@ -52,14 +51,6 @@ public:
 
 	StatusBar &operator=(const StatusBar &) = delete;
 
-	/*!
-	 * This function displays a notification in this status bar widget.
-	 *
-	 * \param n The notification to display.
-	 * \param c Whether or not the notification is critical.
-	 */
-	void displayNotification(const QString &n, bool c = false);
-
 public Q_SLOTS:
 	/*!
 	 * This function sets the file path that we're displaying. This should
@@ -80,7 +71,6 @@ private:
 	QWidget *statusWidget;
 	QGridLayout *statusLayout;
 
-	NotificationLabel *notificationLabel;
 	EllipsizedLabel *filePathLabel;
 	QLabel *lineLabel;
 	QLabel *columnLabel;

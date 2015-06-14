@@ -37,6 +37,8 @@ Pane::Pane(QWidget *p, Qt::WindowFlags f)
 	layout->addWidget(statusBar, 1, 0, 1, 1);
 	layout->setRowStretch(0, 1);
 	layout->setColumnStretch(0, 1);
+	layout->setContentsMargins(0, 0, 0, 0);
+	layout->setSpacing(0);
 	setLayout(layout);
 
 	QObject::connect(buffer, &Buffer::pathChanged, statusBar,
