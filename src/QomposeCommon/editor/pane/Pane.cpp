@@ -18,14 +18,17 @@
 
 #include "Pane.h"
 
+#include <stdexcept>
+
 #include <QGridLayout>
 
 #include "QomposeCommon/editor/Buffer.h"
+#include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/StatusBar.h"
 
 namespace qompose
 {
-Pane::Pane(QWidget *p, Qt::WindowFlags f)
+Pane::Pane(BufferWidget *p, Qt::WindowFlags f)
         : QWidget(p, f), layout(nullptr), buffer(nullptr), statusBar(nullptr)
 {
 	layout = new QGridLayout(this);
@@ -45,6 +48,14 @@ Pane::Pane(QWidget *p, Qt::WindowFlags f)
 	                 &StatusBar::setFilePath);
 	QObject::connect(buffer, &Buffer::cursorPositionChanged, this,
 	                 &Pane::doCursorPositionChanged);
+}
+
+BufferWidget *Pane::getParentContainer() const
+{
+	BufferWidget *p = dynamic_cast<BufferWidget *>(parent());
+	if(p == nullptr)
+		throw std::runtime_error("Pane has no parent.");
+	return p;
 }
 
 Buffer *Pane::getBuffer() const

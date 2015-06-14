@@ -170,7 +170,7 @@ std::string BufferWidget::getCommonParentPath() const
 
 Pane *BufferWidget::newPane()
 {
-	Pane *p = new Pane(tabWidget);
+	Pane *p = new Pane(this);
 
 	QObject::connect(p->getBuffer(), &Buffer::titleChanged, this,
 	                 &BufferWidget::doTabTitleChanged);

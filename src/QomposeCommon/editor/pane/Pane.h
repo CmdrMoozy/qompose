@@ -26,6 +26,7 @@ class QGridLayout;
 namespace qompose
 {
 class Buffer;
+class BufferWidget;
 class StatusBar;
 
 class Pane : public QWidget
@@ -33,11 +34,13 @@ class Pane : public QWidget
 	Q_OBJECT
 
 public:
-	Pane(QWidget *p = nullptr, Qt::WindowFlags f = 0);
+	Pane(BufferWidget *p, Qt::WindowFlags f = 0);
 
 	Pane(const Pane &) = delete;
 	~Pane() = default;
 	Pane &operator=(const Pane &) = delete;
+
+	BufferWidget *getParentContainer() const;
 
 	Buffer *getBuffer() const;
 

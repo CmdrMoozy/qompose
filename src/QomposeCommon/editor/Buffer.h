@@ -27,6 +27,8 @@ class QPrinter;
 
 namespace qompose
 {
+class Pane;
+
 /*!
  * \brief This class provides high-level buffer functionality for editors.
  */
@@ -41,12 +43,14 @@ public:
 	 *
 	 * \param p The parent widget for our buffer widget.
 	 */
-	Buffer(QWidget *p = NULL);
+	Buffer(Pane *p);
 
 	Buffer(const Buffer &) = delete;
 	virtual ~Buffer() = default;
 
 	Buffer &operator=(const Buffer &) = delete;
+
+	Pane *getParentPane() const;
 
 	/*!
 	 * This function attempts to open the file denoted by the given file

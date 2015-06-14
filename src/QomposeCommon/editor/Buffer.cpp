@@ -31,13 +31,14 @@
 #include <QDir>
 
 #include "QomposeCommon/Defines.h"
+#include "QomposeCommon/editor/pane/Pane.h"
 #include "QomposeCommon/util/DocumentWriter.h"
 #include "QomposeCommon/util/Paths.h"
 #include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
-Buffer::Buffer(QWidget *p) : Editor(p), path(QString()), codec("UTF-8")
+Buffer::Buffer(Pane *p) : Editor(p), path(QString()), codec("UTF-8")
 {
 	// Load our initial settings, and connect our settings object.
 
@@ -84,6 +85,14 @@ Buffer::Buffer(QWidget *p) : Editor(p), path(QString()), codec("UTF-8")
 
 	QObject::connect(this, SIGNAL(modificationChanged(bool)), this,
 	                 SLOT(doModificationChanged(bool)));
+}
+
+Pane *Buffer::getParentPane() const
+{
+	Pane *p = dynamic_cast<Pane *>(parent());
+	if(p == nullptr)
+		throw std::runtime_error("Buffer has no parent.");
+	return p;
 }
 
 bool Buffer::open(const FileDescriptor &f)
