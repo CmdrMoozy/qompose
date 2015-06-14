@@ -23,6 +23,8 @@
 
 class QGridLayout;
 class QLabel;
+class QString;
+class QVariant;
 
 namespace qompose
 {
@@ -90,6 +92,15 @@ private:
 	EllipsizedLabel *tabPathLabel;
 	QLabel *lineLabel;
 	QLabel *columnLabel;
+
+private Q_SLOTS:
+	/*!
+	 * This function handles a setting changed by applying that change.
+	 *
+	 * \param k The setting key that was changed.
+	 * \param v The new value for the given setting.
+	 */
+	void doSettingChanged(const QString &k, const QVariant &v);
 };
 }
 

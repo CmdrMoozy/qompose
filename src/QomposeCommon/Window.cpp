@@ -208,9 +208,6 @@ void Window::applyExistingSettings()
 {
 	// Load our initial settings, and connect our settings object.
 
-	statusBar->setVisible(
-	        Settings::instance().getSetting("show-status-bar").toBool());
-
 	QObject::connect(
 	        &Settings::instance(),
 	        SIGNAL(settingChanged(const QString &, const QVariant &)), this,
@@ -454,8 +451,6 @@ void Window::doSettingChanged(const QString &k, const QVariant &v)
 {
 	if(k == "show-file-in-title")
 		doUpdateWindowTitle();
-	else if(k == "show-status-bar")
-		statusBar->setVisible(v.toBool());
 	else if(k == "show-file-browser")
 		doShowBrowser(v.toBool());
 }

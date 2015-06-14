@@ -18,12 +18,15 @@
 
 #include "StatusBar.h"
 
+#include <QFrame>
 #include <QGridLayout>
 #include <QLabel>
-#include <QFrame>
+#include <QString>
+#include <QVariant>
 
 #include "QomposeCommon/gui/EllipsizedLabel.h"
 #include "QomposeCommon/gui/NotificationLabel.h"
+#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -62,6 +65,11 @@ StatusBar::StatusBar(QWidget *p)
 	statusWidget->setLayout(statusLayout);
 
 	addPermanentWidget(statusWidget, 1);
+
+	setVisible(Settings::instance().getSetting("show-status-bar").toBool());
+
+	QObject::connect(&Settings::instance(), &Settings::settingChanged, this,
+	                 &StatusBar::doSettingChanged);
 }
 
 void StatusBar::displayNotification(const QString &n, bool c)
@@ -94,5 +102,11 @@ void StatusBar::setLine(int l)
 void StatusBar::setColumn(int c)
 {
 	columnLabel->setText(QString("C %1").arg(c));
+}
+
+void StatusBar::doSettingChanged(const QString &k, const QVariant &v)
+{
+	if(k == "show-status-bar")
+		setVisible(v.toBool());
 }
 }
