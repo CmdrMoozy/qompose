@@ -279,28 +279,8 @@ void BufferWidget::moveBuffer(int f, int t)
 void BufferWidget::doSetEncoding(const QByteArray &e)
 {
 	Buffer *buf = currentBuffer();
-
 	if(buf == nullptr)
 		return;
-
-	if(buf->hasBeenSaved() && buf->isModified())
-	{
-		QMessageBox::StandardButton b = QMessageBox::question(
-		        this, tr("Qompose - Unsaved Changes"),
-		        tr("Really discard buffer changes to change encoding?"),
-		        QMessageBox::Yes | QMessageBox::Cancel,
-		        QMessageBox::Yes);
-
-		switch(b)
-		{
-		case QMessageBox::Cancel:
-			return;
-
-		default:
-			break;
-		};
-	}
-
 	buf->setEncoding(e);
 }
 

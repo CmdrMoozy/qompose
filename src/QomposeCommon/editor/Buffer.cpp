@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QMessageBox>
 #include <QPrinter>
 #include <QString>
 #include <QVariant>
@@ -256,8 +257,25 @@ QByteArray Buffer::getEncoding() const
 
 void Buffer::setEncoding(const QByteArray &e)
 {
-	codec = QString::fromLatin1(e);
+	if(hasBeenSaved() && isModified())
+	{
+		auto button = QMessageBox::question(
+		        this, tr("Qompose - Unsaved Changes"),
+		        tr("Really discard buffer changes to change encoding?"),
+		        QMessageBox::Yes | QMessageBox::Cancel,
+		        QMessageBox::Yes);
 
+		switch(button)
+		{
+		case QMessageBox::Cancel:
+			return;
+
+		default:
+			break;
+		};
+	}
+
+	codec = QString::fromLatin1(e);
 	if(hasBeenSaved())
 		revert();
 }
