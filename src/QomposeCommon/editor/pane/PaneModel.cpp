@@ -18,9 +18,54 @@
 
 #include "PaneModel.h"
 
+#include "QomposeCommon/editor/Buffer.h"
+#include "QomposeCommon/editor/pane/Pane.h"
+#include "QomposeCommon/util/Paths.h"
+
 namespace qompose
 {
-PaneModel::PaneModel(QObject *p) : QObject(p)
+PaneModel::PaneModel(QObject *p) : QObject(p), panes()
 {
+}
+
+std::size_t PaneModel::count() const
+{
+	return panes.size();
+}
+
+Pane *PaneModel::paneAt(std::size_t i) const
+{
+	if(i >= panes.size())
+		return nullptr;
+	return panes[i];
+}
+
+Pane *PaneModel::findPaneWithPath(const QString &p) const
+{
+	for(const auto &pane : panes)
+	{
+		if(p == pane->getBuffer()->getPath())
+			return pane;
+	}
+	return nullptr;
+}
+
+std::vector<std::string> PaneModel::getOpenPaths() const
+{
+	std::vector<std::string> ret;
+	for(const auto &pane : panes)
+	{
+		QString path = pane->getBuffer()->getPath();
+		if(path.isEmpty())
+			continue;
+		ret.push_back(path.toStdString());
+	}
+	return ret;
+}
+
+QString PaneModel::getCommonParentPath() const
+{
+	return QString::fromStdString(
+	        path_utils::getCommonParentPath(getOpenPaths()));
 }
 }
