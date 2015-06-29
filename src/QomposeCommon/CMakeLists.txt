@@ -58,6 +58,8 @@ set(QomposeCommon_SOURCES
 
 	editor/pane/Pane.cpp
 	editor/pane/Pane.h
+	editor/pane/PaneModel.cpp
+	editor/pane/PaneModel.h
 
 	editor/spell/SpellChecker.cpp
 	editor/spell/SpellChecker.h
