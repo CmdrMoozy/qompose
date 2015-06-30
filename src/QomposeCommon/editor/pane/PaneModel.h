@@ -79,6 +79,20 @@ public:
 	 */
 	QString getCommonParentPath() const;
 
+	/*!
+	 * This function will move the pane at the given "from" index to be at
+	 * the given "to" index in the model. No signal is emitted by this
+	 * function; it is assumed that the view is already aware of this
+	 * change, and has accounted for it correctly.
+	 *
+	 * The behavior is undefined if either index is invalid (both indexes
+	 * must be in the range 0 <= index < count()).
+	 *
+	 * \param f The index of the Pane to move.
+	 * \param t The new index for the specified pane.
+	 */
+	void movePane(std::size_t f, std::size_t t);
+
 private:
 	std::vector<Pane *> panes;
 };

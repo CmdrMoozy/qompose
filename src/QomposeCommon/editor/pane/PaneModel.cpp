@@ -18,6 +18,8 @@
 
 #include "PaneModel.h"
 
+#include <utility>
+
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/editor/pane/Pane.h"
 #include "QomposeCommon/util/Paths.h"
@@ -67,5 +69,24 @@ QString PaneModel::getCommonParentPath() const
 {
 	return QString::fromStdString(
 	        path_utils::getCommonParentPath(getOpenPaths()));
+}
+
+void PaneModel::movePane(std::size_t f, std::size_t t)
+{
+	if(f == t)
+		return;
+	Pane *p = panes[f];
+
+	int direction = f < t ? -1 : 1;
+	for(std::size_t idx =
+	            static_cast<std::size_t>(static_cast<int>(f) - direction);
+	    idx != t;
+	    idx = static_cast<std::size_t>(static_cast<int>(idx) + direction))
+	{
+		panes[static_cast<std::size_t>(static_cast<int>(idx) +
+		                               direction)] = panes[idx];
+	}
+
+	panes[t] = p;
 }
 }
