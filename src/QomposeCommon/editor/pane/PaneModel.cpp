@@ -18,7 +18,12 @@
 
 #include "PaneModel.h"
 
+#include <algorithm>
+#include <iterator>
 #include <utility>
+
+#include <QDir>
+#include <QFileInfo>
 
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/editor/pane/Pane.h"
@@ -44,9 +49,11 @@ Pane *PaneModel::paneAt(std::size_t i) const
 
 Pane *PaneModel::findPaneWithPath(const QString &p) const
 {
+	QFileInfo path(p);
 	for(const auto &pane : panes)
 	{
-		if(p == pane->getBuffer()->getPath())
+		QFileInfo panePath(pane->getBuffer()->getPath());
+		if(path == panePath)
 			return pane;
 	}
 	return nullptr;
@@ -71,6 +78,39 @@ QString PaneModel::getCommonParentPath() const
 	        path_utils::getCommonParentPath(getOpenPaths()));
 }
 
+QString PaneModel::getDefaultDirectory(Pane *current) const
+{
+	// If the current pane has a valid path, return it as-is.
+	if(current != nullptr)
+	{
+		if(!current->getBuffer()->getDirectory().isNull())
+			return current->getBuffer()->getDirectory();
+	}
+
+	auto currentIt = std::find(panes.begin(), panes.end(), current);
+	if(currentIt == panes.end())
+		currentIt = panes.begin();
+	std::reverse_iterator<decltype(currentIt)> currentRevIt(currentIt),
+	        currentRevEnd(panes.end());
+
+	// See if any panes before the current pane have a valid path.
+	for(; currentRevIt != currentRevEnd; ++currentRevIt)
+	{
+		if(!(*currentRevIt)->getBuffer()->getDirectory().isNull())
+			return (*currentRevIt)->getBuffer()->getDirectory();
+	}
+
+	// See if any panes after the current pane have a valid path.
+	for(; currentIt != panes.end(); ++currentIt)
+	{
+		if(!(*currentIt)->getBuffer()->getDirectory().isNull())
+			return (*currentIt)->getBuffer()->getDirectory();
+	}
+
+	// Instead, just return a reasonable default value.
+	return QDir::homePath();
+}
+
 void PaneModel::movePane(std::size_t f, std::size_t t)
 {
 	if(f == t)
@@ -88,5 +128,29 @@ void PaneModel::movePane(std::size_t f, std::size_t t)
 	}
 
 	panes[t] = p;
+}
+
+Pane *PaneModel::newPane()
+{
+	Pane *p = new Pane(nullptr);
+	panes.push_back(p);
+	Q_EMIT paneAdded(p, panes.size() - 1);
+	return p;
+}
+
+void PaneModel::removePane(std::size_t i)
+{
+	auto it = panes.begin();
+	std::advance(it, i);
+	panes.erase(it);
+	Q_EMIT paneRemoved(i);
+}
+
+void PaneModel::removePane(const Pane *p)
+{
+	auto it = std::find(panes.begin(), panes.end(), p);
+	if(it == panes.end())
+		return;
+	removePane(static_cast<std::size_t>(std::distance(panes.begin(), it)));
 }
 }

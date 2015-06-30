@@ -45,9 +45,45 @@ private:
 	QTabBar *tabBar;
 	QStackedLayout *currentTabLayout;
 
+	void connectPane(Pane *p) const;
+
 private Q_SLOTS:
+	void doPaneAdded(Pane *p, std::size_t i);
+	void doPaneRemoved(std::size_t i);
+
 	void doCurrentChanged(int index);
 	void doTabMoved(int from, int to);
 	void doCloseRequested(int index);
+
+	/*!
+	 * This slot handles a buffer's title being changed by updating the
+	 * text on its corresponding tab. The buffer whose title changed is
+	 * determined via the sender() function.
+	 *
+	 * \param t The new title for this buffer.
+	 */
+	void doTabTitleChanged(const QString &t);
+
+	/*!
+	 * This slot handles a buffer's path being changed by, if it is the
+	 * current buffer, notifying our listeners that our path has changed.
+	 * The buffer whose path changed is determined via the sender()
+	 * function.
+	 *
+	 * \param p The new path for this buffer.
+	 */
+	void doTabPathChanged(const QString &p);
+
+	/*!
+	 * This slot handles a buffer's encoding changing by emitting our own
+	 * encodingChanged signal, if the buffer that emitted this signal is
+	 * the current buffer.
+	 *
+	 * \param e The new encoding for the sender() buffer.
+	 */
+	void doBufferEncodingChanged(const QByteArray &e);
+
+Q_SIGNALS:
+	void searchWrapped();
 };
 }

@@ -50,5 +50,6 @@ bool PaneView::hasCurrentPane() const
 void PaneView::setCurrentPane(std::size_t i)
 {
 	current = model->paneAt(i);
+	Q_EMIT currentPaneChanged(model->paneAt(i));
 }
 }

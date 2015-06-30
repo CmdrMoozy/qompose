@@ -32,6 +32,8 @@ class Pane;
 
 class PaneModel : public QObject
 {
+	Q_OBJECT
+
 public:
 	PaneModel(QObject *p = nullptr);
 
@@ -70,6 +72,19 @@ public:
 	std::vector<std::string> getOpenPaths() const;
 
 	/*!
+	 * This function tries to compute a default directory for, e.g., open
+	 * or save actions, based upon our current buffer list.
+	 *
+	 * We will use the first valid path of the current buffer's path, the
+	 * path of the nearest buffer to the left, the path of the nearest
+	 * buffer to the right, or the user's home directory.
+	 *
+	 * \param current The "current" pane.
+	 * \return A default directory to use for open/save actions.
+	 */
+	QString getDefaultDirectory(Pane *current = nullptr) const;
+
+	/*!
 	 * This function returns the deepest parent path which contains all of
 	 * the files currently open in this model. If no such path exists
 	 * (because no files are open, or because they have no path in common),
@@ -93,8 +108,17 @@ public:
 	 */
 	void movePane(std::size_t f, std::size_t t);
 
+	Pane *newPane();
+
+	void removePane(std::size_t i);
+	void removePane(const Pane *p);
+
 private:
 	std::vector<Pane *> panes;
+
+Q_SIGNALS:
+	void paneAdded(Pane *, std::size_t);
+	void paneRemoved(std::size_t);
 };
 }
 

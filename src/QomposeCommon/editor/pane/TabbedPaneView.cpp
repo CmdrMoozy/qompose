@@ -24,6 +24,7 @@
 #include <QStackedLayout>
 #include <QTabBar>
 
+#include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/editor/pane/Pane.h"
 #include "QomposeCommon/editor/pane/PaneModel.h"
 
@@ -51,6 +52,28 @@ TabbedPaneView::TabbedPaneView(PaneModel *m, QWidget *p, Qt::WindowFlags f)
 	setLayout(layout);
 }
 
+void TabbedPaneView::connectPane(Pane *p) const
+{
+	QObject::connect(p->getBuffer(), &Buffer::titleChanged, this,
+	                 &TabbedPaneView::doTabTitleChanged);
+	QObject::connect(p->getBuffer(), &Buffer::pathChanged, this,
+	                 &TabbedPaneView::doTabPathChanged);
+	QObject::connect(p->getBuffer(), &Buffer::encodingChanged, this,
+	                 &TabbedPaneView::doBufferEncodingChanged);
+	QObject::connect(p->getBuffer(), &Buffer::searchWrapped, this,
+	                 &TabbedPaneView::searchWrapped);
+}
+
+void TabbedPaneView::doPaneAdded(Pane *p, std::size_t i)
+{
+	tabBar->insertTab(i, p->getBuffer()->getTitle());
+}
+
+void TabbedPaneView::doPaneRemoved(std::size_t i)
+{
+	tabBar->removeTab(i);
+}
+
 void TabbedPaneView::doCurrentChanged(int index)
 {
 	setCurrentPane(static_cast<std::size_t>(index));
@@ -64,6 +87,18 @@ void TabbedPaneView::doTabMoved(int from, int to)
 }
 
 void TabbedPaneView::doCloseRequested(int)
+{
+}
+
+void TabbedPaneView::doTabTitleChanged(const QString &)
+{
+}
+
+void TabbedPaneView::doTabPathChanged(const QString &)
+{
+}
+
+void TabbedPaneView::doBufferEncodingChanged(const QByteArray &)
 {
 }
 }
