@@ -241,8 +241,6 @@ Pane *BufferWidget::newPane()
 	                 &BufferWidget::doTabPathChanged);
 	QObject::connect(p->getBuffer(), &Buffer::encodingChanged, this,
 	                 &BufferWidget::doBufferEncodingChanged);
-	QObject::connect(p->getBuffer(), &Buffer::cursorPositionChanged, this,
-	                 &BufferWidget::doCursorPositionChanged);
 	QObject::connect(p->getBuffer(), &Buffer::searchWrapped, this,
 	                 &BufferWidget::searchWrapped);
 
@@ -643,14 +641,11 @@ void BufferWidget::doTabChanged(int i)
 
 		Q_EMIT pathChanged(p->getBuffer()->getPath());
 		Q_EMIT encodingChanged(p->getBuffer()->getEncoding());
-		Q_EMIT cursorPositionChanged(curs.blockNumber() + 1,
-		                             curs.positionInBlock() + 1);
 	}
 	else
 	{
 		Q_EMIT pathChanged("");
 		Q_EMIT encodingChanged("UTF-8");
-		Q_EMIT cursorPositionChanged(1, 1);
 	}
 }
 
@@ -708,20 +703,6 @@ void BufferWidget::doTabPathChanged(const QString &p)
 		if(b == currentBuffer())
 		{
 			Q_EMIT pathChanged(p);
-		}
-	}
-}
-
-void BufferWidget::doCursorPositionChanged()
-{
-	Buffer *b = dynamic_cast<Buffer *>(sender());
-
-	if(b != NULL)
-	{
-		if(b == currentBuffer())
-		{
-			Q_EMIT cursorPositionChanged(b->getCurrentLine(),
-			                             b->getCurrentColumn());
 		}
 	}
 }

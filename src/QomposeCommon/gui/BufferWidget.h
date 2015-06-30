@@ -472,14 +472,6 @@ private Q_SLOTS:
 	void doTabPathChanged(const QString &p);
 
 	/*!
-	 * This slot handles a buffer's cursor position changing by, if it is
-	 * the current buffer, notifying our listeners that our cursor position
-	 * has changed. The buffer whose cursor position changed is determined
-	 * via the sender() function.
-	 */
-	void doCursorPositionChanged();
-
-	/*!
 	 * This is a utility function which will create a new buffer containing
 	 * the contents of the file denoted by the given file descriptor.
 	 *
@@ -510,7 +502,6 @@ Q_SIGNALS:
 	void pathChanged(const QString &);
 	void pathOpened(const QString &);
 	void encodingChanged(const QByteArray &);
-	void cursorPositionChanged(int, int);
 	void searchWrapped();
 };
 }
