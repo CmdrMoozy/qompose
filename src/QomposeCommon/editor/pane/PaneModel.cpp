@@ -31,7 +31,7 @@
 
 namespace qompose
 {
-PaneModel::PaneModel(QObject *p) : QObject(p), panes()
+PaneModel::PaneModel(QObject *p) : QObject(p), panes(), closed()
 {
 }
 
@@ -138,12 +138,58 @@ Pane *PaneModel::newPane()
 	return p;
 }
 
+Pane *PaneModel::openDescriptor(const FileDescriptor &d)
+{
+	// If we only have one "Untitled" buffer, we'll replace it.
+	if(panes.size() == 1)
+	{
+		if(!panes[0]->getBuffer()->hasBeenSaved() &&
+		   !panes[0]->getBuffer()->isModified())
+		{
+			removePane(static_cast<std::size_t>(0));
+		}
+	}
+
+	// If the given file is already open, then stop.
+	Pane *existing = findPaneWithPath(d.fileName);
+	if(existing != nullptr)
+		return existing;
+
+	// Open the file descriptor.
+	Pane *p = newPane();
+	p->getBuffer()->open(d);
+	return p;
+}
+
+Pane *PaneModel::reopen()
+{
+	if(closed.empty())
+		return nullptr;
+
+	ClosedBufferDescriptor d = closed.back();
+	Pane *p = openDescriptor(d.file);
+	closed.pop_back();
+
+	QTextCursor curs = p->getBuffer()->textCursor();
+	curs.setPosition(d.cursorPosition);
+	p->getBuffer()->setTextCursor(curs);
+}
+
 void PaneModel::removePane(std::size_t i)
 {
 	auto it = panes.begin();
 	std::advance(it, i);
+
+	ClosedBufferDescriptor descriptor = {
+	        (*it)->getBuffer()->getFileDescriptor(),
+	        (*it)->getBuffer()->textCursor().position()};
+
 	panes.erase(it);
 	Q_EMIT paneRemoved(i);
+
+	closed.push_back(descriptor);
+	while(closed.size() > 20)
+		closed.pop_front();
 }
 
 void PaneModel::removePane(const Pane *p)

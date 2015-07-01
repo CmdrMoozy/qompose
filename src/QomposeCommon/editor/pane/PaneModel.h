@@ -20,11 +20,14 @@
 #define INCLUDE_QOMPOSECOMMON_EDITOR_PANE_PANE_MODEL_H
 
 #include <cstddef>
+#include <deque>
 #include <string>
 #include <vector>
 
 #include <QObject>
 #include <QString>
+
+#include "QomposeCommon/Types.h"
 
 namespace qompose
 {
@@ -110,11 +113,16 @@ public:
 
 	Pane *newPane();
 
+	Pane *openDescriptor(const FileDescriptor &d);
+
+	Pane *reopen();
+
 	void removePane(std::size_t i);
 	void removePane(const Pane *p);
 
 private:
 	std::vector<Pane *> panes;
+	std::deque<ClosedBufferDescriptor> closed;
 
 Q_SIGNALS:
 	void paneAdded(Pane *, std::size_t);
