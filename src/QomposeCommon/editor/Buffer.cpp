@@ -26,11 +26,11 @@
 #include <QMessageBox>
 #include <QPrinter>
 #include <QString>
-#include <QVariant>
 #include <QTextBlock>
 #include <QTextCodec>
 #include <QTextCursor>
 #include <QTextStream>
+#include <QVariant>
 
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/editor/pane/Pane.h"
@@ -177,6 +177,33 @@ void Buffer::saveAs()
 
 	setPath(savePath);
 	write();
+}
+
+bool Buffer::prepareToClose()
+{
+	if(!isModified())
+		return true;
+
+	QMessageBox::StandardButton b = QMessageBox::question(
+	        this, tr("Qompose - Unsaved Changes"),
+	        tr("Save changes to this buffer before closing?"),
+	        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+	        QMessageBox::Yes);
+
+	switch(b)
+	{
+	case QMessageBox::Yes:
+		save();
+		if(!isModified())
+			return true;
+		return false;
+
+	case QMessageBox::No:
+		return true;
+
+	default:
+		return false;
+	};
 }
 
 QString Buffer::getTitle() const

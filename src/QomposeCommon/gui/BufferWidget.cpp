@@ -18,14 +18,13 @@
 
 #include "BufferWidget.h"
 
-#include <QGridLayout>
-#include <QSet>
-#include <QMessageBox>
-#include <QFileDialog>
 #include <QDir>
-#include <QTabWidget>
-#include <QPrinter>
+#include <QFileDialog>
 #include <QFileInfo>
+#include <QGridLayout>
+#include <QPrinter>
+#include <QSet>
+#include <QTabWidget>
 
 #include "QomposeCommon/dialogs/FileDialog.h"
 #include "QomposeCommon/editor/Buffer.h"
@@ -95,39 +94,11 @@ bool BufferWidget::prepareCloseParent()
 	for(int i = 0; i < count(); ++i)
 	{
 		Buffer *buf = bufferAt(i);
-
-		if(buf == NULL)
+		if(buf == nullptr)
 			continue;
-
 		setCurrentBuffer(i);
-
-		if(buf->isModified())
-		{
-			QMessageBox::StandardButton b = QMessageBox::question(
-			        this, tr("Qompose - Unsaved Changes"),
-			        tr("Save changes before closing?"),
-			        QMessageBox::Yes | QMessageBox::No |
-			                QMessageBox::Cancel,
-			        QMessageBox::Yes);
-
-			switch(b)
-			{
-			case QMessageBox::Yes:
-				doSave();
-
-				if(buf->isModified())
-					return false;
-
-				break;
-
-			case QMessageBox::No:
-				continue;
-
-			case QMessageBox::Cancel:
-			default:
-				return false;
-			};
-		}
+		if(!buf->prepareToClose())
+			return false;
 	}
 
 	return true;
@@ -355,50 +326,13 @@ void BufferWidget::doSaveAs()
 
 void BufferWidget::doClose()
 {
-	bool remove = false;
 	Buffer *buf = currentBuffer();
-
-	if(buf == NULL)
+	if(buf == nullptr)
 		return;
 
-	if(buf->isModified())
-	{
-		QMessageBox::StandardButton b = QMessageBox::question(
-		        this, tr("Qompose - Unsaved Changes"),
-		        tr("Save changes to this buffer before closing?"),
-		        QMessageBox::Yes | QMessageBox::No |
-		                QMessageBox::Cancel,
-		        QMessageBox::Yes);
-
-		switch(b)
-		{
-		case QMessageBox::Yes:
-			doSave();
-
-			if(!buf->isModified())
-				remove = true;
-
-			break;
-
-		case QMessageBox::No:
-			remove = true;
-			break;
-
-		case QMessageBox::Cancel:
-		default:
-			return;
-			break;
-		};
-	}
-	else
-	{
-		remove = true;
-	}
-
-	if(remove)
+	if(buf->prepareToClose())
 	{
 		doTabClosing(tabWidget->indexOf(buf));
-
 		removeCurrentBuffer();
 	}
 }

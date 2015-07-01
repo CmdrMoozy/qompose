@@ -88,6 +88,18 @@ public:
 	void saveAs();
 
 	/*!
+	 * This function will prepare this buffer to be closed. In general,
+	 * this means saving any outstanding changes (if the user wants to).
+	 *
+	 * The return value indicates whether or not the close preparation was
+	 * successful. In general, if this function returns "false", then the
+	 * caller should cancel the close operation.
+	 *
+	 * \return True if this buffer can now be closed, or false otherwise.
+	 */
+	bool prepareToClose();
+
+	/*!
 	 * This function computes the "title" of our buffer, which is dependant
 	 * on our currently open filename, as well as whether or not our buffer
 	 * has ever been saved.
