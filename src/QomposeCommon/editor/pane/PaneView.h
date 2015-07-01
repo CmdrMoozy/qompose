@@ -46,23 +46,25 @@ public:
 
 	void setCurrentPane(std::size_t i);
 
+	/*!
+	 * This function prepares all of this view's buffers to be closed. See
+	 * Buffer::prepareToClose() for details on what this means for each
+	 * buffer.
+	 *
+	 * This function iterates over each buffer in the model, and stops
+	 * when any of those buffers return false. If all buffers are prepared
+	 * successfully, then true is returned.
+	 *
+	 * \return True if this buffer can now be closed, or false otherwise.
+	 */
+	bool prepareToClose();
+
 	template <typename Signaler, typename... Arg>
 	QMetaObject::Connection
 	connectToCurrentPane(const Signaler *signaler,
 	                     void (Signaler::*signal)(Arg...),
 	                     void (Pane::*slot)(Arg...),
-	                     Qt::ConnectionType type = Qt::AutoConnection)
-	{
-		QMetaObject::Connection connection = QObject::connect(
-		        signaler, signal, [this, slot](Arg... arg)
-		        {
-			        if(current == nullptr)
-				        return;
-			        ((current).*(slot))(std::forward<Arg>(arg)...);
-			});
-		connections.push_back(connection);
-		return connection;
-	}
+	                     Qt::ConnectionType type = Qt::AutoConnection);
 
 private:
 	PaneModel *model;
@@ -73,6 +75,22 @@ private:
 Q_SIGNALS:
 	void currentPaneChanged(Pane *);
 };
+
+template <typename Signaler, typename... Arg>
+QMetaObject::Connection PaneView::connectToCurrentPane(
+        const Signaler *signaler, void (Signaler::*signal)(Arg...),
+        void (Pane::*slot)(Arg...), Qt::ConnectionType type)
+{
+	QMetaObject::Connection connection = QObject::connect(
+	        signaler, signal, [this, slot](Arg... arg)
+	        {
+		        if(current == nullptr)
+			        return;
+		        ((current).*(slot))(std::forward<Arg>(arg)...);
+		});
+	connections.push_back(connection);
+	return connection;
+}
 }
 
 #endif

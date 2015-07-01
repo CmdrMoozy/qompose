@@ -18,6 +18,7 @@
 
 #include "PaneView.h"
 
+#include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/editor/pane/Pane.h"
 #include "QomposeCommon/editor/pane/PaneModel.h"
 
@@ -51,5 +52,17 @@ void PaneView::setCurrentPane(std::size_t i)
 {
 	current = model->paneAt(i);
 	Q_EMIT currentPaneChanged(model->paneAt(i));
+}
+
+bool PaneView::prepareToClose()
+{
+	for(std::size_t i = 0; i < model->count(); ++i)
+	{
+		setCurrentPane(i);
+		if(!model->paneAt(i)->getBuffer()->prepareToClose())
+			return false;
+	}
+
+	return true;
 }
 }
