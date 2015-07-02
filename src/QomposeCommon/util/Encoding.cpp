@@ -172,6 +172,10 @@ QString detectTextCodec(const QString &f)
 	{
 		MemoryMappedFile file(f.toStdString());
 
+		// If the file is empty, just default to UTF-8.
+		if(file.getLength() == 0)
+			return QString("UTF-8");
+
 		// First, test if a BOM is present in the given file.
 		for(const auto &bomPair : BOM_TYPES)
 		{
