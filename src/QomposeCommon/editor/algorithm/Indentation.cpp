@@ -157,15 +157,7 @@ void increaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
 		     });
 	cursor.endEditBlock();
 
-	// Set the cursor's selection to span all of the involved lines.
-	cursor.setPosition(state.startPosition, QTextCursor::MoveAnchor);
-	cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-	while(cursor.block().blockNumber() < state.endBlock)
-	{
-		cursor.movePosition(QTextCursor::NextBlock,
-		                    QTextCursor::KeepAnchor);
-	}
-	cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+	setNormalizedSelection(cursor, state);
 }
 
 void decreaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
@@ -180,15 +172,7 @@ void decreaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
 		dewhitespaceSelection(cursor, state, width);
 	cursor.endEditBlock();
 
-	// Set the cursor's selection to span all of the involved lines.
-	cursor.setPosition(state.startPosition, QTextCursor::MoveAnchor);
-	cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-	while(cursor.block().blockNumber() < state.endBlock)
-	{
-		cursor.movePosition(QTextCursor::NextBlock,
-		                    QTextCursor::KeepAnchor);
-	}
-	cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+	setNormalizedSelection(cursor, state);
 }
 
 void tab(QTextCursor &cursor, IndentationMode mode, std::size_t width)

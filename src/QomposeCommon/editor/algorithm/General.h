@@ -53,6 +53,19 @@ struct CursorSelectionState
 };
 
 /*!
+ * This function will set the given cursor's selection to a noramlized version
+ * of the given selection state. In particular, the anchor will be moved to
+ * the start of the block containing the state's start position, and then the
+ * cursor will be positioned at the end of the block containing the state's
+ * end position.
+ *
+ * \param cursor The cursor to modify.
+ * \param state The selection state to normalize and apply to the cursor.
+ */
+void setNormalizedSelection(QTextCursor &cursor,
+                            CursorSelectionState const &state);
+
+/*!
  * This is a utility function which applies the given other function to the
  * given number of blocks, starting with the block containing the given
  * absolute cursor position.

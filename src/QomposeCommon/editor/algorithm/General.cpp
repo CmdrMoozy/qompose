@@ -50,6 +50,15 @@ CursorSelectionState::CursorSelectionState(QTextCursor &cursor)
 	cursor.setPosition(originalAnchor, QTextCursor::MoveAnchor);
 	cursor.setPosition(originalPosition, QTextCursor::KeepAnchor);
 }
+
+void setNormalizedSelection(QTextCursor &cursor,
+                            CursorSelectionState const &state)
+{
+	cursor.setPosition(state.startPosition, QTextCursor::MoveAnchor);
+	cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+	cursor.setPosition(state.endPosition, QTextCursor::KeepAnchor);
+	cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+}
 }
 }
 }
