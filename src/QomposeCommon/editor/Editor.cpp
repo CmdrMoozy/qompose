@@ -39,6 +39,8 @@
 #include <QFontMetrics>
 #include <QRegExp>
 
+#include "QomposeCommon/editor/algorithm/General.h"
+#include "QomposeCommon/editor/algorithm/Indentation.h"
 #include "QomposeCommon/util/FindQuery.h"
 #include "QomposeCommon/util/Hotkey.h"
 #include "QomposeCommon/util/ReplaceQuery.h"
@@ -166,8 +168,9 @@ void Editor::doBackspace()
 		QString selectedText = curs.selectedText();
 		curs.setPosition(originalPosition, QTextCursor::MoveAnchor);
 
-		if((selectedText.length() % getIndentationWidth() == 0) &&
-		   (selectedText.length() >= getIndentationWidth()))
+		int indentWidth = static_cast<int>(getIndentationWidth());
+		if((selectedText.length() % indentWidth == 0) &&
+		   (selectedText.length() >= indentWidth))
 		{
 			bool onlySpaces = true;
 
@@ -232,17 +235,9 @@ void Editor::doNewline()
 
 void Editor::doTab()
 {
-	QTextCursor curs = textCursor();
-
-	if(!curs.hasSelection())
-	{
-		curs.insertText(getIndentString());
-		setTextCursor(curs);
-	}
-	else
-	{
-		increaseSelectionIndent();
-	}
+	editor::algorithm::applyAlgorithm(*this, editor::algorithm::tab,
+	                                  getIndentationMode(),
+	                                  getIndentationWidth());
 }
 
 void Editor::doMoveHome()
@@ -459,163 +454,16 @@ void Editor::deselect()
 
 void Editor::increaseSelectionIndent()
 {
-	QTextCursor curs = textCursor();
-
-	if(!curs.hasSelection())
-		return;
-
-	// Get the first and count of lines to indent.
-
-	int spos = curs.anchor();
-	int epos = curs.position();
-
-	if(spos > epos)
-		std::swap(spos, epos);
-
-	curs.setPosition(spos, QTextCursor::MoveAnchor);
-	int sblock = curs.block().blockNumber();
-
-	curs.setPosition(epos, QTextCursor::MoveAnchor);
-	int eblock = curs.block().blockNumber();
-
-	int blockdiff = eblock - sblock;
-
-	// Do the indent.
-
-	curs.setPosition(spos, QTextCursor::MoveAnchor);
-
-	curs.beginEditBlock();
-
-	for(int i = 0; i <= blockdiff; ++i)
-	{
-		curs.movePosition(QTextCursor::StartOfBlock,
-		                  QTextCursor::MoveAnchor);
-
-		curs.insertText(getIndentString());
-
-		curs.movePosition(QTextCursor::NextBlock,
-		                  QTextCursor::MoveAnchor);
-	}
-
-	curs.endEditBlock();
-
-	// Set our cursor's selection to span all of the involved lines.
-
-	curs.setPosition(spos, QTextCursor::MoveAnchor);
-	curs.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-
-	while(curs.block().blockNumber() < eblock)
-	{
-		curs.movePosition(QTextCursor::NextBlock,
-		                  QTextCursor::KeepAnchor);
-	}
-
-	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-	setTextCursor(curs);
+	editor::algorithm::applyAlgorithm(
+	        *this, editor::algorithm::increaseSelectionIndent,
+	        getIndentationMode(), getIndentationWidth());
 }
 
 void Editor::decreaseSelectionIndent()
 {
-	QTextCursor curs = textCursor();
-
-	if(!curs.hasSelection())
-		return;
-
-	// Get the first and count of lines to de-indent.
-
-	int spos = curs.anchor();
-	int epos = curs.position();
-
-	if(spos > epos)
-		std::swap(spos, epos);
-
-	curs.setPosition(spos, QTextCursor::MoveAnchor);
-	int sblock = curs.block().blockNumber();
-	int sblockpos = curs.block().position();
-
-	curs.setPosition(epos, QTextCursor::MoveAnchor);
-	int eblock = curs.block().blockNumber();
-
-	int blockdiff = eblock - sblock;
-
-	// Do the de-indent.
-
-	curs.setPosition(spos, QTextCursor::MoveAnchor);
-
-	curs.beginEditBlock();
-
-	bool foundIndent = false;
-
-	for(int i = 0; i <= blockdiff; ++i)
-	{
-		curs.movePosition(QTextCursor::StartOfBlock,
-		                  QTextCursor::MoveAnchor);
-
-		QString text = curs.block().text();
-
-		if(text.startsWith("\t"))
-		{
-			curs.deleteChar();
-			foundIndent = true;
-		}
-		else if(text.startsWith(QString(getIndentationWidth(), ' ')))
-		{
-			for(int j = 0; j < getIndentationWidth(); ++j)
-			{
-				curs.deleteChar();
-				foundIndent = true;
-			}
-		}
-
-		curs.movePosition(QTextCursor::NextBlock,
-		                  QTextCursor::MoveAnchor);
-	}
-
-	if(!foundIndent)
-	{
-		// If no lines were indented, try to remove any whitespace.
-
-		curs.setPosition(spos, QTextCursor::MoveAnchor);
-
-		for(int i = 0; i <= (eblock - sblock); ++i)
-		{
-			curs.movePosition(QTextCursor::StartOfBlock,
-			                  QTextCursor::MoveAnchor);
-
-			for(int j = 0; j < getIndentationWidth(); ++j)
-			{
-				QChar c = curs.block().text().at(0);
-
-				if(!c.isSpace())
-					break;
-
-				if((j > 0) && (c == '\t'))
-					break;
-
-				curs.deleteChar();
-			}
-
-			curs.movePosition(QTextCursor::NextBlock,
-			                  QTextCursor::MoveAnchor);
-		}
-	}
-
-	curs.endEditBlock();
-
-	// Set our cursor's selection to span all of the involved lines.
-
-	curs.setPosition(sblockpos, QTextCursor::MoveAnchor);
-
-	while(curs.block().blockNumber() < eblock)
-	{
-		curs.movePosition(QTextCursor::NextBlock,
-		                  QTextCursor::KeepAnchor);
-	}
-
-	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-	setTextCursor(curs);
+	editor::algorithm::applyAlgorithm(
+	        *this, editor::algorithm::decreaseSelectionIndent,
+	        getIndentationMode(), getIndentationWidth());
 }
 
 void Editor::doHome(bool moveAnchor)

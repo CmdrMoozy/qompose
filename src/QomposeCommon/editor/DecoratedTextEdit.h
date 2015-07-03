@@ -136,7 +136,7 @@ public:
 	 *
 	 * \return The editor's tab width.
 	 */
-	int getIndentationWidth() const;
+	std::size_t getIndentationWidth() const;
 
 	/*!
 	 * This function sets the width of our editor's tab stops, in spaces

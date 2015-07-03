@@ -166,9 +166,9 @@ void DecoratedTextEdit::resetFontZoom()
 	setFontZoom(0);
 }
 
-int DecoratedTextEdit::getIndentationWidth() const
+std::size_t DecoratedTextEdit::getIndentationWidth() const
 {
-	return indentationWidth;
+	return static_cast<std::size_t>(indentationWidth);
 }
 
 void DecoratedTextEdit::setIndentationWidth(int w)
