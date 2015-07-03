@@ -157,45 +157,9 @@ void Editor::doNoop()
 
 void Editor::doBackspace()
 {
-	QTextCursor curs = textCursor();
-	int originalPosition = curs.position();
-
-	if((getIndentationMode() == IndentationMode::Spaces) &&
-	   (!curs.hasSelection()))
-	{
-		curs.movePosition(QTextCursor::StartOfBlock,
-		                  QTextCursor::KeepAnchor, 1);
-		QString selectedText = curs.selectedText();
-		curs.setPosition(originalPosition, QTextCursor::MoveAnchor);
-
-		int indentWidth = static_cast<int>(getIndentationWidth());
-		if((selectedText.length() % indentWidth == 0) &&
-		   (selectedText.length() >= indentWidth))
-		{
-			bool onlySpaces = true;
-
-			for(int i = 0; i < selectedText.length(); ++i)
-			{
-				if(selectedText[i] != ' ')
-				{
-					onlySpaces = false;
-					break;
-				}
-			}
-
-			if(onlySpaces)
-			{
-				curs.movePosition(QTextCursor::Left,
-				                  QTextCursor::KeepAnchor,
-				                  getIndentationWidth() - 1);
-				curs.removeSelectedText();
-			}
-		}
-	}
-
-	curs.deletePreviousChar();
-
-	setTextCursor(curs);
+	editor::algorithm::applyAlgorithm(*this, editor::algorithm::backspace,
+	                                  getIndentationMode(),
+	                                  getIndentationWidth());
 }
 
 void Editor::doDelete()
