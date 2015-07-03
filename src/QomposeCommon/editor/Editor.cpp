@@ -164,37 +164,13 @@ void Editor::doBackspace()
 
 void Editor::doDelete()
 {
-	QTextCursor curs = textCursor();
-	curs.deleteChar();
-	setTextCursor(curs);
+	editor::algorithm::applyAlgorithm(*this,
+	                                  editor::algorithm::deleteCharacter);
 }
 
 void Editor::doNewline()
 {
-	// Compute the text to insert to preserve the previous line's indent.
-
-	QString insert = "\n";
-
-	QTextCursor l = textCursor();
-
-	if(l.hasSelection())
-		l.setPosition(l.selectionStart(), QTextCursor::MoveAnchor);
-
-	l.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-
-	QString line = l.selectedText();
-
-	line.replace(QRegExp("^([ \\t]*)\\S.*$", Qt::CaseSensitive,
-	                     QRegExp::RegExp2),
-	             "\\1");
-
-	insert.append(line);
-
-	// Insert that text, and set our text cursor.
-
-	QTextCursor curs = textCursor();
-	curs.insertText(insert);
-	setTextCursor(curs);
+	editor::algorithm::applyAlgorithm(*this, editor::algorithm::newline);
 }
 
 void Editor::doTab()
@@ -378,35 +354,8 @@ Editor::FindResult Editor::doBatchReplace(const ReplaceQuery *q, int start,
 
 void Editor::duplicateLine()
 {
-	// Save our cursor's initial state.
-
-	QTextCursor curs = textCursor();
-
-	int cpos = curs.position();
-	int apos = curs.anchor();
-
-	curs.beginEditBlock();
-
-	// Get into position, and copy this block (line).
-
-	curs.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-	QString line = curs.block().text();
-
-	// Duplicate the line.
-
-	curs.insertText("\n");
-	curs.insertText(line);
-
-	// End our edit block, and reset our cursor position.
-
-	curs.endEditBlock();
-
-	curs.setPosition(apos, QTextCursor::MoveAnchor);
-	curs.setPosition(cpos, QTextCursor::KeepAnchor);
-
-	// Done.
-
-	setTextCursor(curs);
+	editor::algorithm::applyAlgorithm(*this,
+	                                  editor::algorithm::duplicateBlock);
 }
 
 void Editor::deselect()
