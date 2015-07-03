@@ -128,6 +128,33 @@ void applyAlgorithm(E &editor, A algorithm, Arg... arg)
  * \param width The indentation width to use.
  */
 void backspace(QTextCursor &cursor, IndentationMode mode, std::size_t width);
+
+/*!
+ * This function performs a standard "delete" action, either by deleting the
+ * character after the cursor, or by deleting its current selection.
+ *
+ * \param cursor The cursor to operate on.
+ */
+void deleteCharacter(QTextCursor &cursor);
+
+/*!
+ * This function performs an indentation-sensitive "newline" action. This means
+ * inserting a newline character, and then preserving any leading whitespace
+ * from the previous line. The new cursor will be positioned right after this
+ * newly inserted whitespace, and it will not have a selection.
+ *
+ * \param cursor The cursor to operate on.
+ */
+void newline(QTextCursor &cursor);
+
+/*!
+ * This function will insert a copy of the cursor's current block immediately
+ * after the current block. The cursor's position, after this is done, will be
+ * unchanged.
+ *
+ * \param cursor The cursor to operate on.
+ */
+void duplicateBlock(QTextCursor &cursor);
 }
 }
 }

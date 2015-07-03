@@ -18,7 +18,9 @@
 
 #include "General.h"
 
+#include <algorithm>
 #include <cassert>
+#include <iterator>
 #include <utility>
 
 namespace qompose
@@ -102,6 +104,53 @@ void backspace(QTextCursor &cursor, IndentationMode mode, std::size_t width)
 	}
 
 	cursor.deletePreviousChar();
+}
+
+void deleteCharacter(QTextCursor &cursor)
+{
+	cursor.deleteChar();
+}
+
+void newline(QTextCursor &cursor)
+{
+	QString insert = "\n";
+
+	QTextCursor indentCursor(cursor);
+	if(indentCursor.hasSelection())
+	{
+		indentCursor.setPosition(indentCursor.selectionStart(),
+		                         QTextCursor::MoveAnchor);
+	}
+	indentCursor.movePosition(QTextCursor::StartOfLine,
+	                          QTextCursor::KeepAnchor);
+	QString lineStart = indentCursor.selectedText();
+
+	auto nonWhitespaceStart = std::find_if_not(
+	        lineStart.begin(), lineStart.end(), [](const QChar &c) -> bool
+	                                            {
+		                                            return c.isSpace();
+		                                    });
+	insert.resize(insert.length() +
+	              std::distance(lineStart.begin(), nonWhitespaceStart));
+	std::copy(lineStart.begin(), nonWhitespaceStart, insert.begin() + 1);
+
+	cursor.insertText(insert);
+}
+
+void duplicateBlock(QTextCursor &cursor)
+{
+	int position = cursor.position();
+	int anchor = cursor.anchor();
+
+	cursor.beginEditBlock();
+	cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+	QString block = cursor.block().text();
+	cursor.insertText("\n");
+	cursor.insertText(block);
+	cursor.endEditBlock();
+
+	cursor.setPosition(anchor, QTextCursor::MoveAnchor);
+	cursor.setPosition(position, QTextCursor::KeepAnchor);
 }
 }
 }
