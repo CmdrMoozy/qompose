@@ -58,6 +58,8 @@ set(QomposeCommon_SOURCES
 
 	editor/algorithm/General.cpp
 	editor/algorithm/General.h
+	editor/algorithm/Indentation.cpp
+	editor/algorithm/Indentation.h
 
 	editor/pane/Pane.cpp
 	editor/pane/Pane.h
