@@ -41,6 +41,7 @@
 
 #include "QomposeCommon/editor/algorithm/General.h"
 #include "QomposeCommon/editor/algorithm/Indentation.h"
+#include "QomposeCommon/editor/algorithm/Movement.h"
 #include "QomposeCommon/util/FindQuery.h"
 #include "QomposeCommon/util/Hotkey.h"
 #include "QomposeCommon/util/ReplaceQuery.h"
@@ -360,9 +361,7 @@ void Editor::duplicateLine()
 
 void Editor::deselect()
 {
-	QTextCursor curs = textCursor();
-	curs.setPosition(curs.position(), QTextCursor::MoveAnchor);
-	setTextCursor(curs);
+	editor::algorithm::applyAlgorithm(*this, editor::algorithm::deselect);
 }
 
 void Editor::increaseSelectionIndent()
@@ -381,91 +380,8 @@ void Editor::decreaseSelectionIndent()
 
 void Editor::doHome(bool moveAnchor)
 {
-	// Get the characters between the current cursor and the start-of-line.
-
-	QString line, trimmed;
-
-	{
-		QTextCursor l = textCursor();
-
-		if(l.hasSelection())
-			l.setPosition(l.selectionStart(),
-			              QTextCursor::MoveAnchor);
-
-		l.movePosition(QTextCursor::StartOfLine,
-		               QTextCursor::KeepAnchor);
-
-		line = l.selectedText();
-	}
-
-	// Get the leading whitespace from the line.
-
-	{
-		int idx = 0;
-
-		for(int i = 0; i < line.length(); ++i)
-		{
-			if(!line.at(i).isSpace())
-			{
-				idx = i;
-				break;
-			}
-		}
-
-		trimmed = line.left(idx);
-	}
-
-	// Move the cursor to its appropriate location.
-
-	if(trimmed == line)
-	{
-		// There is only whitespace in front of us - move to the
-		// start-of-line.
-
-		QTextCursor curs = textCursor();
-
-		if(moveAnchor)
-		{
-			curs.movePosition(QTextCursor::StartOfLine,
-			                  QTextCursor::MoveAnchor);
-		}
-		else
-		{
-			curs.movePosition(QTextCursor::StartOfLine,
-			                  QTextCursor::KeepAnchor);
-		}
-
-		setTextCursor(curs);
-	}
-	else
-	{
-		// There is non-whitespace in front - move to the end of the
-		// whitespace.
-
-		QTextCursor curs = textCursor();
-
-		int eos = qMax(curs.selectionStart(), curs.selectionEnd());
-
-		curs.movePosition(QTextCursor::StartOfLine,
-		                  QTextCursor::MoveAnchor);
-
-		int sol = curs.position();
-
-		if(moveAnchor)
-		{
-			curs.setPosition(sol + trimmed.length(),
-			                 QTextCursor::MoveAnchor);
-		}
-		else
-		{
-			curs.setPosition(eos, QTextCursor::MoveAnchor);
-
-			curs.setPosition(sol + trimmed.length(),
-			                 QTextCursor::KeepAnchor);
-		}
-
-		setTextCursor(curs);
-	}
+	editor::algorithm::applyAlgorithm(*this, editor::algorithm::home,
+	                                  moveAnchor);
 }
 
 Editor::FindResult Editor::findNext(const FindQuery *q)
@@ -553,14 +469,7 @@ Editor::FindResult Editor::replaceAll(const ReplaceQuery *q)
 
 void Editor::goToLine(int l)
 {
-	l = qMax(l, 1);
-
-	QTextCursor curs = textCursor();
-
-	curs.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-	curs.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor,
-	                  qMax(l - 1, 0));
-
-	setTextCursor(curs);
+	editor::algorithm::applyAlgorithm(*this, editor::algorithm::goToBlock,
+	                                  l - 1);
 }
 }
