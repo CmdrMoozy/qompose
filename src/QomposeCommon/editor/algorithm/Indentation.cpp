@@ -48,29 +48,27 @@ bool deindentSelection(
 	QString indentStr =
 	        qompose::editor::algorithm::getIndentationString(mode, width);
 
-	for(std::size_t i = 0; i <= state.blockCount; ++i)
-	{
-		cursor.movePosition(QTextCursor::StartOfBlock,
-		                    QTextCursor::MoveAnchor);
+	qompose::editor::algorithm::foreachBlock(
+	        cursor, state.startPosition, state.blockCount,
+	        [width, &indentStr, &foundIndent](QTextCursor &c)
+	        {
+		        // If this block starts with our indentation string, we
+		        // want to remove that one instance of it from the
+		        // block.
+		        if(static_cast<std::size_t>(c.block().length()) >=
+		           width)
+		        {
+			        c.movePosition(QTextCursor::NextCharacter,
+			                       QTextCursor::KeepAnchor, width);
+		        }
 
-		// If this block starts with our indentation string, we want
-		// to remove that one instance of it from the block.
-		if(static_cast<std::size_t>(cursor.block().length()) >= width)
-		{
-			cursor.movePosition(QTextCursor::NextCharacter,
-			                    QTextCursor::KeepAnchor, width);
-		}
+		        if(c.hasSelection() && (c.selectedText() == indentStr))
+		        {
+			        c.removeSelectedText();
+			        foundIndent = true;
+		        }
+		});
 
-		if(cursor.hasSelection() &&
-		   (cursor.selectedText() == indentStr))
-		{
-			cursor.removeSelectedText();
-			foundIndent = true;
-		}
-
-		cursor.movePosition(QTextCursor::NextBlock,
-		                    QTextCursor::MoveAnchor);
-	}
 	return foundIndent;
 }
 
@@ -92,32 +90,27 @@ void dewhitespaceSelection(
 {
 	// Try to remove up to the indentation width's number of whitespace
 	// characters.
-	cursor.setPosition(state.startPosition, QTextCursor::MoveAnchor);
-	for(std::size_t i = 0; i <= state.blockCount; ++i)
-	{
-		cursor.movePosition(QTextCursor::StartOfBlock,
-		                    QTextCursor::MoveAnchor);
+	qompose::editor::algorithm::foreachBlock(
+	        cursor, state.startPosition, state.blockCount,
+	        [width](QTextCursor &c)
+	        {
+		        for(int j = 0; j < static_cast<int>(width); ++j)
+		        {
+			        QChar chr = c.block().text().at(0);
 
-		for(int j = 0; j < static_cast<int>(width); ++j)
-		{
-			QChar c = cursor.block().text().at(0);
+			        // Stop at the first non-whitespace char.
+			        if(!chr.isSpace())
+				        break;
 
-			// Stop at the first non-whitespace char.
-			if(!c.isSpace())
-				break;
+			        // If this isn't the first char, and it's a
+			        // tab instead of a normal space, stop here.
+			        // We'll remove tabs on the next de-indent.
+			        if((j > 0) && (chr == '\t'))
+				        break;
 
-			// If this isn't the first char, and it's a
-			// tab instead of a normal space, stop here.
-			// We'll remove tabs on the next de-indent.
-			if((j > 0) && (c == '\t'))
-				break;
-
-			cursor.deleteChar();
-		}
-
-		cursor.movePosition(QTextCursor::NextBlock,
-		                    QTextCursor::MoveAnchor);
-	}
+			        c.deleteChar();
+		        }
+		});
 }
 }
 
