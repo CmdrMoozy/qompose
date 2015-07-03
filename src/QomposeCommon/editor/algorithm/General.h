@@ -25,6 +25,8 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
+#include "QomposeCommon/Types.h"
+
 namespace qompose
 {
 namespace editor
@@ -113,6 +115,19 @@ void applyAlgorithm(E &editor, A algorithm, Arg... arg)
 	algorithm(cursor, std::forward<Arg>(arg)...);
 	editor.setTextCursor(cursor);
 }
+
+/*!
+ * This function performs an indentation-sensitive "backspace" action. This is
+ * equivalent to the normal "delete one character before the cursor" behavior,
+ * except in the case of space indentation. In that case, if the text before
+ * the cursor is just a series of space-based indentations, one full indentaion
+ * will be removed (so, width spaces will be removed).
+ *
+ * \param cursor The cursor to operate on.
+ * \param mode The indentation mode to use.
+ * \param width The indentation width to use.
+ */
+void backspace(QTextCursor &cursor, IndentationMode mode, std::size_t width);
 }
 }
 }

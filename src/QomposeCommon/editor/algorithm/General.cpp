@@ -59,6 +59,50 @@ void setNormalizedSelection(QTextCursor &cursor,
 	cursor.setPosition(state.endPosition, QTextCursor::KeepAnchor);
 	cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 }
+
+void backspace(QTextCursor &cursor, IndentationMode mode, std::size_t width)
+{
+	if((mode == IndentationMode::Spaces) && !cursor.hasSelection())
+	{
+		// If we're using space indentation, and we don't have a
+		// selection, then we may want to remove "one indentation"
+		// worth of spaces (if the text before our cursor is a series
+		// of space indentations).
+
+		int originalPosition = cursor.position();
+		cursor.movePosition(QTextCursor::StartOfBlock,
+		                    QTextCursor::KeepAnchor);
+		QString selectedText = cursor.selectedText();
+		cursor.setPosition(originalPosition, QTextCursor::MoveAnchor);
+		std::size_t selectedLength =
+		        static_cast<std::size_t>(selectedText.length());
+
+		if((selectedLength % width == 0) && (selectedLength >= width))
+		{
+			bool onlySpaces = true;
+			for(std::size_t i = 0; i < selectedLength; ++i)
+			{
+				if(selectedText[static_cast<int>(i)] != ' ')
+				{
+					onlySpaces = false;
+					break;
+				}
+			}
+
+			if(onlySpaces)
+			{
+				// Select one indentation's spaces, so the
+				// following deletePreviousChar() call will
+				// remove the one full indentation.
+				cursor.movePosition(QTextCursor::Left,
+				                    QTextCursor::KeepAnchor,
+				                    width);
+			}
+		}
+	}
+
+	cursor.deletePreviousChar();
+}
 }
 }
 }
