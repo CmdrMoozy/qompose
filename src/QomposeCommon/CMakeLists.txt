@@ -56,6 +56,9 @@ set(QomposeCommon_SOURCES
 	editor/Gutter.cpp
 	editor/Gutter.h
 
+	editor/algorithm/General.cpp
+	editor/algorithm/General.h
+
 	editor/pane/Pane.cpp
 	editor/pane/Pane.h
 	editor/pane/PaneModel.cpp
