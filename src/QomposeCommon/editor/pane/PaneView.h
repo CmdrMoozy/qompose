@@ -82,12 +82,14 @@ QMetaObject::Connection PaneView::connectToCurrentPane(
         void (Pane::*slot)(Arg...), Qt::ConnectionType type)
 {
 	QMetaObject::Connection connection = QObject::connect(
-	        signaler, signal, [this, slot](Arg... arg)
+	        signaler, signal,
+	        [this, slot](Arg... arg)
 	        {
 		        if(current == nullptr)
 			        return;
 		        ((current).*(slot))(std::forward<Arg>(arg)...);
-		});
+		},
+	        type);
 	connections.push_back(connection);
 	return connection;
 }

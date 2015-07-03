@@ -173,6 +173,8 @@ Pane *PaneModel::reopen()
 	QTextCursor curs = p->getBuffer()->textCursor();
 	curs.setPosition(d.cursorPosition);
 	p->getBuffer()->setTextCursor(curs);
+
+	return p;
 }
 
 void PaneModel::removePane(std::size_t i)
