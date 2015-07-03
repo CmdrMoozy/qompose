@@ -18,12 +18,38 @@
 
 #include "General.h"
 
+#include <cassert>
+#include <utility>
+
 namespace qompose
 {
 namespace editor
 {
 namespace algorithm
 {
+CursorSelectionState::CursorSelectionState(QTextCursor &cursor)
+        : startPosition(cursor.anchor()),
+          endPosition(cursor.position()),
+          startBlock(0),
+          endBlock(0),
+          blockCount(0)
+{
+	if(startPosition > endPosition)
+		std::swap(startPosition, endPosition);
+
+	int originalAnchor = cursor.anchor();
+	int originalPosition = cursor.position();
+
+	cursor.setPosition(startPosition, QTextCursor::MoveAnchor);
+	startBlock = cursor.block().blockNumber();
+	cursor.setPosition(endPosition, QTextCursor::MoveAnchor);
+	endBlock = cursor.block().blockNumber();
+	assert(endBlock >= startBlock);
+	blockCount = static_cast<std::size_t>(endBlock - startBlock) + 1;
+
+	cursor.setPosition(originalAnchor, QTextCursor::MoveAnchor);
+	cursor.setPosition(originalPosition, QTextCursor::KeepAnchor);
+}
 }
 }
 }

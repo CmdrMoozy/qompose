@@ -32,6 +32,27 @@ namespace editor
 namespace algorithm
 {
 /*!
+ * \brief This structure encapsulates information about a cursor's selection.
+ */
+struct CursorSelectionState
+{
+	int startPosition;
+	int endPosition;
+	int startBlock;
+	int endBlock;
+	std::size_t blockCount;
+
+	/*!
+	 * Construct a new CursorSelectionState from the given cursor. The
+	 * given cursor's position and anchor will not be modified by this
+	 * constructor.
+	 *
+	 * \param cursor The cursor to inspect.
+	 */
+	CursorSelectionState(QTextCursor &cursor);
+};
+
+/*!
  * This is a utility function which applies the given other function to the
  * given number of blocks, starting with the block containing the given
  * absolute cursor position.

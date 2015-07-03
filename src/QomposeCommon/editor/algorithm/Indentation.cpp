@@ -27,48 +27,6 @@
 
 namespace
 {
-struct SelectionIndentationState
-{
-	int startPosition;
-	int endPosition;
-	int startBlock;
-	int endBlock;
-	int blockCount;
-};
-
-/*!
- * This function computes the selection indentation state for the given
- * cursor. If the given cursor doesn't have a selection, then this function's
- * behavior is undefined.
- *
- * After this function is finished, the cursor will be positioned at the
- * start of the selection block, and it will no longer have a selection.
- *
- * \param cursor The cursor to inspect and move.
- * \return The state of the given cursor.
- */
-SelectionIndentationState getSelectionState(QTextCursor &cursor)
-{
-	assert(cursor.hasSelection());
-
-	SelectionIndentationState state;
-
-	state.startPosition = cursor.anchor();
-	state.endPosition = cursor.position();
-	if(state.startPosition > state.endPosition)
-		std::swap(state.startPosition, state.endPosition);
-
-	cursor.setPosition(state.startPosition, QTextCursor::MoveAnchor);
-	state.startBlock = cursor.block().blockNumber();
-	cursor.setPosition(state.endPosition, QTextCursor::MoveAnchor);
-	state.endBlock = cursor.block().blockNumber();
-	state.blockCount = state.endBlock - state.startBlock + 1;
-
-	cursor.setPosition(state.startPosition, QTextCursor::MoveAnchor);
-
-	return state;
-}
-
 /*!
  * This function performs the first step of decreaseSelectionIndent. Namely,
  * we try to remove at most one full indentation string from the beginning of
@@ -81,15 +39,16 @@ SelectionIndentationState getSelectionState(QTextCursor &cursor)
  * \param width The indentation width to use.
  * \return True if at least one block was successfully de-indented.
  */
-bool deindentSelection(QTextCursor &cursor,
-                       SelectionIndentationState const &state,
-                       qompose::IndentationMode mode, std::size_t width)
+bool deindentSelection(
+        QTextCursor &cursor,
+        qompose::editor::algorithm::CursorSelectionState const &state,
+        qompose::IndentationMode mode, std::size_t width)
 {
 	bool foundIndent = false;
 	QString indentStr =
 	        qompose::editor::algorithm::getIndentationString(mode, width);
 
-	for(int i = 0; i <= state.blockCount; ++i)
+	for(std::size_t i = 0; i <= state.blockCount; ++i)
 	{
 		cursor.movePosition(QTextCursor::StartOfBlock,
 		                    QTextCursor::MoveAnchor);
@@ -126,14 +85,15 @@ bool deindentSelection(QTextCursor &cursor,
  * \param state The cursor's original selection state.
  * \param width The indentation width to use.
  */
-void dewhitespaceSelection(QTextCursor &cursor,
-                           SelectionIndentationState const &state,
-                           std::size_t width)
+void dewhitespaceSelection(
+        QTextCursor &cursor,
+        qompose::editor::algorithm::CursorSelectionState const &state,
+        std::size_t width)
 {
 	// Try to remove up to the indentation width's number of whitespace
 	// characters.
 	cursor.setPosition(state.startPosition, QTextCursor::MoveAnchor);
-	for(int i = 0; i <= state.blockCount; ++i)
+	for(std::size_t i = 0; i <= state.blockCount; ++i)
 	{
 		cursor.movePosition(QTextCursor::StartOfBlock,
 		                    QTextCursor::MoveAnchor);
@@ -185,7 +145,7 @@ void increaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
 {
 	if(!cursor.hasSelection())
 		return;
-	SelectionIndentationState state = getSelectionState(cursor);
+	CursorSelectionState state(cursor);
 
 	// Do the indent.
 	cursor.beginEditBlock();
@@ -213,7 +173,7 @@ void decreaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
 {
 	if(!cursor.hasSelection())
 		return;
-	SelectionIndentationState state = getSelectionState(cursor);
+	CursorSelectionState state(cursor);
 
 	cursor.beginEditBlock();
 	if(!deindentSelection(cursor, state, mode, width))
