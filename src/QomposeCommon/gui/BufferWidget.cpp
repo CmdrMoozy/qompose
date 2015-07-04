@@ -447,52 +447,53 @@ void BufferWidget::doLineWrapping(bool enabled)
 	buf->setLineWrapping(enabled);
 }
 
-Editor::FindResult BufferWidget::doFindNext(const FindQuery *q)
+editor::search::FindResult BufferWidget::doFindNext(const FindQuery *q)
 {
 	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
-		return Editor::NoDocument;
+		return editor::search::FindResult::NoDocument;
 
 	return buf->findNext(q);
 }
 
-Editor::FindResult BufferWidget::doFindPrevious(const FindQuery *q)
+editor::search::FindResult BufferWidget::doFindPrevious(const FindQuery *q)
 {
 	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
-		return Editor::NoDocument;
+		return editor::search::FindResult::NoDocument;
 
 	return buf->findPrevious(q);
 }
 
-Editor::FindResult BufferWidget::doReplace(const ReplaceQuery *q)
+editor::search::FindResult BufferWidget::doReplace(const ReplaceQuery *q)
 {
 	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
-		return Editor::NoDocument;
+		return editor::search::FindResult::NoDocument;
 
 	return buf->replace(q);
 }
 
-Editor::FindResult BufferWidget::doReplaceSelection(const ReplaceQuery *q)
+editor::search::FindResult
+BufferWidget::doReplaceSelection(const ReplaceQuery *q)
 {
 	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
-		return Editor::NoDocument;
+		return editor::search::FindResult::NoDocument;
 
 	return buf->replaceSelection(q);
 }
 
-Editor::FindResult BufferWidget::doReplaceAll(const ReplaceQuery *q)
+editor::search::FindResult BufferWidget::doReplaceAll(const ReplaceQuery *q)
 {
 	Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
-		return Editor::NoDocument;
+		return editor::search::FindResult::NoDocument;
 
 	return buf->replaceAll(q);
 }

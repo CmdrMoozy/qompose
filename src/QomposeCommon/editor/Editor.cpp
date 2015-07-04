@@ -191,7 +191,7 @@ void Editor::doSelectHome()
 	doHome(false);
 }
 
-Editor::FindResult Editor::doFind(bool f, const FindQuery *q)
+editor::search::FindResult Editor::doFind(bool f, const FindQuery *q)
 {
 	// Prepare our find flags.
 
@@ -220,7 +220,7 @@ Editor::FindResult Editor::doFind(bool f, const FindQuery *q)
 		              QRegExp::RegExp2);
 
 		if(!regex.isValid())
-			return BadRegularExpression;
+			return editor::search::FindResult::BadRegularExpression;
 
 		QTextCursor found = document()->find(regex, current, flags);
 
@@ -238,7 +238,7 @@ Editor::FindResult Editor::doFind(bool f, const FindQuery *q)
 		if(!found.isNull())
 		{
 			setTextCursor(found);
-			return Found;
+			return editor::search::FindResult::Found;
 		}
 	}
 	else
@@ -263,15 +263,15 @@ Editor::FindResult Editor::doFind(bool f, const FindQuery *q)
 		if(!found.isNull())
 		{
 			setTextCursor(found);
-			return Found;
+			return editor::search::FindResult::Found;
 		}
 	}
 
-	return NoMatches;
+	return editor::search::FindResult::NoMatches;
 }
 
-Editor::FindResult Editor::doBatchReplace(const ReplaceQuery *q, int start,
-                                          int end)
+editor::search::FindResult Editor::doBatchReplace(const ReplaceQuery *q,
+                                                  int start, int end)
 {
 	// If we weren't given a start position, use the current cursor.
 
@@ -304,12 +304,12 @@ Editor::FindResult Editor::doBatchReplace(const ReplaceQuery *q, int start,
 	// Replace each match we find after our start position.
 
 	curs = textCursor();
-	Editor::FindResult r = findNext(&query);
+	editor::search::FindResult r = findNext(&query);
 	bool found = false;
 
 	curs.beginEditBlock();
 
-	while(r == Editor::Found)
+	while(r == editor::search::FindResult::Found)
 	{
 		// Make sure this match is good to go.
 
@@ -348,7 +348,7 @@ Editor::FindResult Editor::doBatchReplace(const ReplaceQuery *q, int start,
 	// Return an appropriate find result.
 
 	if(found)
-		return Editor::Found;
+		return editor::search::FindResult::Found;
 	else
 		return r;
 }
@@ -384,7 +384,7 @@ void Editor::doHome(bool moveAnchor)
 	                                  moveAnchor);
 }
 
-Editor::FindResult Editor::findNext(const FindQuery *q)
+editor::search::FindResult Editor::findNext(const FindQuery *q)
 {
 	bool forward = true;
 
@@ -394,7 +394,7 @@ Editor::FindResult Editor::findNext(const FindQuery *q)
 	return doFind(forward, q);
 }
 
-Editor::FindResult Editor::findPrevious(const FindQuery *q)
+editor::search::FindResult Editor::findPrevious(const FindQuery *q)
 {
 	bool forward = false;
 
@@ -404,7 +404,7 @@ Editor::FindResult Editor::findPrevious(const FindQuery *q)
 	return doFind(forward, q);
 }
 
-Editor::FindResult Editor::replace(const ReplaceQuery *q)
+editor::search::FindResult Editor::replace(const ReplaceQuery *q)
 {
 	// Reset our cursor's position.
 
@@ -417,11 +417,11 @@ Editor::FindResult Editor::replace(const ReplaceQuery *q)
 
 	// Try to find the next match.
 
-	Editor::FindResult r = findNext(q);
+	editor::search::FindResult r = findNext(q);
 
 	// If we got a match, replace it with our replace value.
 
-	if(r == Editor::Found)
+	if(r == editor::search::FindResult::Found)
 	{
 		curs = textCursor();
 
@@ -449,12 +449,12 @@ Editor::FindResult Editor::replace(const ReplaceQuery *q)
 	return r;
 }
 
-Editor::FindResult Editor::replaceSelection(const ReplaceQuery *q)
+editor::search::FindResult Editor::replaceSelection(const ReplaceQuery *q)
 {
 	QTextCursor curs = textCursor();
 
 	if(!curs.hasSelection())
-		return Editor::NoMatches;
+		return editor::search::FindResult::NoMatches;
 
 	int start = qMin(curs.anchor(), curs.position());
 	int end = qMax(curs.anchor(), curs.position());
@@ -462,7 +462,7 @@ Editor::FindResult Editor::replaceSelection(const ReplaceQuery *q)
 	return doBatchReplace(q, start, end);
 }
 
-Editor::FindResult Editor::replaceAll(const ReplaceQuery *q)
+editor::search::FindResult Editor::replaceAll(const ReplaceQuery *q)
 {
 	return doBatchReplace(q, 0);
 }

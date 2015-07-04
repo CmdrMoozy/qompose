@@ -25,6 +25,7 @@
 #include <QIcon>
 
 #include "QomposeCommon/editor/Editor.h"
+#include "QomposeCommon/editor/search/Find.h"
 
 class QCloseEvent;
 class QPrinter;
@@ -128,7 +129,7 @@ private:
 	 *
 	 * \param r The find result to process.
 	 */
-	void handleFindResult(Editor::FindResult r);
+	void handleFindResult(editor::search::FindResult r);
 
 private Q_SLOTS:
 	/*!

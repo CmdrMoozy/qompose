@@ -30,6 +30,7 @@
 
 #include "QomposeCommon/Types.h"
 #include "QomposeCommon/editor/Editor.h"
+#include "QomposeCommon/editor/search/Find.h"
 #include "QomposeCommon/util/Paths.h"
 
 class QGridLayout;
@@ -342,7 +343,7 @@ public Q_SLOTS:
 	 * \param q The find query to execute.
 	 * \return The result of this find action.
 	 */
-	Editor::FindResult doFindNext(const FindQuery *q);
+	editor::search::FindResult doFindNext(const FindQuery *q);
 
 	/*!
 	 * This slot executes a "find previous" action by instructing our
@@ -351,7 +352,7 @@ public Q_SLOTS:
 	 * \param q The find query to execute.
 	 * \return The result of this find action.
 	 */
-	Editor::FindResult doFindPrevious(const FindQuery *q);
+	editor::search::FindResult doFindPrevious(const FindQuery *q);
 
 	/*!
 	 * This slot executes a "replace" action by instructing our current
@@ -360,7 +361,7 @@ public Q_SLOTS:
 	 * \param q The replace query to execute.
 	 * \return The result of this replace action.
 	 */
-	Editor::FindResult doReplace(const ReplaceQuery *q);
+	editor::search::FindResult doReplace(const ReplaceQuery *q);
 
 	/*!
 	 * This slot executes a "replace in selection" action by instructing
@@ -369,7 +370,7 @@ public Q_SLOTS:
 	 * \param q The replace query to execute.
 	 * \return The result of this "replace in selection" action.
 	 */
-	Editor::FindResult doReplaceSelection(const ReplaceQuery *q);
+	editor::search::FindResult doReplaceSelection(const ReplaceQuery *q);
 
 	/*!
 	 * This slot executes a "replace all" action by instructing our current
@@ -378,7 +379,7 @@ public Q_SLOTS:
 	 * \param q The replace query to execute.
 	 * \return The result of this "replace all" action.
 	 */
-	Editor::FindResult doReplaceAll(const ReplaceQuery *q);
+	editor::search::FindResult doReplaceAll(const ReplaceQuery *q);
 
 	/*!
 	 * This slot executes a "go to" action by instructing our current

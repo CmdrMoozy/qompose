@@ -232,13 +232,13 @@ void Window::applyExistingSettings()
 	}
 }
 
-void Window::handleFindResult(Editor::FindResult r)
+void Window::handleFindResult(editor::search::FindResult r)
 {
 	// Deal with the find result.
 
 	switch(r)
 	{
-	case Editor::BadRegularExpression:
+	case editor::search::FindResult::BadRegularExpression:
 		QMessageBox::critical(
 		        this, tr("Invalid Regular Expression"),
 		        tr("The regular expression you were trying "
@@ -246,7 +246,7 @@ void Window::handleFindResult(Editor::FindResult r)
 		        QMessageBox::Ok, QMessageBox::Ok);
 		break;
 
-	case Editor::NoMatches:
+	case editor::search::FindResult::NoMatches:
 		QMessageBox::information(this, tr("No Matches Found"),
 		                         tr("No more matches could be found."),
 		                         QMessageBox::Ok, QMessageBox::Ok);
