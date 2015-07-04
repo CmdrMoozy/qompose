@@ -27,8 +27,6 @@
 #include <QPushButton>
 #include <QShowEvent>
 
-#include "QomposeCommon/util/ReplaceQuery.h"
-
 namespace qompose
 {
 ReplaceDialog::ReplaceDialog(QWidget *p, Qt::WindowFlags f)

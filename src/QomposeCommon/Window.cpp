@@ -38,8 +38,6 @@
 #include "QomposeCommon/gui/GUIUtils.h"
 #include "QomposeCommon/gui/dock/BrowserDockWidget.h"
 #include "QomposeCommon/gui/menus/MainMenu.h"
-#include "QomposeCommon/util/FindQuery.h"
-#include "QomposeCommon/util/ReplaceQuery.h"
 #include "QomposeCommon/util/Settings.h"
 
 namespace qompose

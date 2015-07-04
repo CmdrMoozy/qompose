@@ -28,7 +28,6 @@
 #include <QShowEvent>
 
 #include "QomposeCommon/Defines.h"
-#include "QomposeCommon/util/FindQuery.h"
 
 namespace qompose
 {
