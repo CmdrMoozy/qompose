@@ -192,70 +192,8 @@ void Editor::doSelectHome()
 editor::search::FindResult Editor::doFind(bool f,
                                           editor::search::FindQuery const &q)
 {
-	QTextDocument::FindFlags flags = q.getFindFlags(f);
-	QTextCursor current = textCursor();
-	QTextCursor restart = textCursor();
-
-	if(f)
-		restart.movePosition(QTextCursor::Start,
-		                     QTextCursor::MoveAnchor);
-	else
-		restart.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-
-	// Execute the find query, based on type.
-
-	if(q.isRegex)
-	{
-		QRegExp regex(q.expression, Qt::CaseSensitive,
-		              QRegExp::RegExp2);
-
-		if(!regex.isValid())
-			return editor::search::FindResult::BadRegularExpression;
-
-		QTextCursor found = document()->find(regex, current, flags);
-
-		if(found.isNull())
-		{
-			if(q.wrap)
-			{
-				found = document()->find(regex, restart, flags);
-
-				if(!found.isNull())
-					Q_EMIT searchWrapped();
-			}
-		}
-
-		if(!found.isNull())
-		{
-			setTextCursor(found);
-			return editor::search::FindResult::Found;
-		}
-	}
-	else
-	{
-		QTextCursor found =
-		        document()->find(q.expression, current, flags);
-
-		if(found.isNull())
-		{
-			if(q.wrap)
-			{
-				found = document()->find(q.expression, restart,
-				                         flags);
-
-				if(!found.isNull())
-					Q_EMIT searchWrapped();
-			}
-		}
-
-		if(!found.isNull())
-		{
-			setTextCursor(found);
-			return editor::search::FindResult::Found;
-		}
-	}
-
-	return editor::search::FindResult::NoMatches;
+	return editor::search::applyAlgorithm(*this, editor::search::find, f,
+	                                      q);
 }
 
 editor::search::FindResult

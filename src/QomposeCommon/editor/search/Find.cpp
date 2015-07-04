@@ -22,6 +22,16 @@
 
 namespace
 {
+/*!
+ * Find a string in a document.
+ *
+ * \param cursor The cursor to start searching from.
+ * \param wrapCursor The cursor to restart at if wrapping is enabled.
+ * \param document The document to search.
+ * \param query The find query to execute.
+ * \param flags The find flags to use to perform the search.
+ * \return The result of the find operation.
+ */
 qompose::editor::search::FindResult
 findString(QTextCursor &cursor, QTextCursor &wrapCursor,
            QTextDocument const &document,
@@ -41,6 +51,16 @@ findString(QTextCursor &cursor, QTextCursor &wrapCursor,
 	return qompose::editor::search::FindResult::NoMatches;
 }
 
+/*!
+ * Find a regular expression in a document.
+ *
+ * \param cursor The cursor to start searching from.
+ * \param wrapCursor The cursor to restart at if wrapping is enabled.
+ * \param document The document to search.
+ * \param query The find query to execute.
+ * \param flags The find flags to use to perform the search.
+ * \return The result of the find operation.
+ */
 qompose::editor::search::FindResult
 findRegularExpression(QTextCursor &cursor, QTextCursor &wrapCursor,
                       QTextDocument const &document,

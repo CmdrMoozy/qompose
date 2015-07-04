@@ -47,7 +47,7 @@ namespace search
  * \return The result of the search algorithm.
  */
 template <typename E, typename A, typename... Arg>
-FindResult applySearchAlgorithm(E &editor, A algorithm, Arg... arg)
+FindResult applyAlgorithm(E &editor, A algorithm, Arg... arg)
 {
 	QTextCursor cursor = editor.textCursor();
 	FindResult result = algorithm(cursor, *editor.document(),
@@ -56,6 +56,16 @@ FindResult applySearchAlgorithm(E &editor, A algorithm, Arg... arg)
 	return result;
 }
 
+/*!
+ * This function performs a typical "find" action using the given cursor and
+ * the given document.
+ *
+ * \param cursor The initial cursor to start searching from.
+ * \param document The text document to search.
+ * \param forward True means "find next", false means "find previous".
+ * \param query The find query to execute.
+ * \return The result of this find operation.
+ */
 FindResult find(QTextCursor &cursor, QTextDocument const &document,
                 bool forward, FindQuery const &query);
 }
