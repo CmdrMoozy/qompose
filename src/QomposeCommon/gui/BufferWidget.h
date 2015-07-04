@@ -31,6 +31,7 @@
 #include "QomposeCommon/Types.h"
 #include "QomposeCommon/editor/Editor.h"
 #include "QomposeCommon/editor/search/Find.h"
+#include "QomposeCommon/editor/search/Query.h"
 #include "QomposeCommon/util/Paths.h"
 
 class QGridLayout;
@@ -40,9 +41,7 @@ class QPrinter;
 namespace qompose
 {
 class Buffer;
-class FindQuery;
 class Pane;
-class ReplaceQuery;
 
 /*!
  * \brief This class provides high-level management of a set of buffers.
@@ -343,7 +342,8 @@ public Q_SLOTS:
 	 * \param q The find query to execute.
 	 * \return The result of this find action.
 	 */
-	editor::search::FindResult doFindNext(const FindQuery *q);
+	editor::search::FindResult
+	doFindNext(editor::search::FindQuery const &q);
 
 	/*!
 	 * This slot executes a "find previous" action by instructing our
@@ -352,7 +352,8 @@ public Q_SLOTS:
 	 * \param q The find query to execute.
 	 * \return The result of this find action.
 	 */
-	editor::search::FindResult doFindPrevious(const FindQuery *q);
+	editor::search::FindResult
+	doFindPrevious(editor::search::FindQuery const &q);
 
 	/*!
 	 * This slot executes a "replace" action by instructing our current
@@ -361,7 +362,8 @@ public Q_SLOTS:
 	 * \param q The replace query to execute.
 	 * \return The result of this replace action.
 	 */
-	editor::search::FindResult doReplace(const ReplaceQuery *q);
+	editor::search::FindResult
+	doReplace(editor::search::ReplaceQuery const &q);
 
 	/*!
 	 * This slot executes a "replace in selection" action by instructing
@@ -370,7 +372,8 @@ public Q_SLOTS:
 	 * \param q The replace query to execute.
 	 * \return The result of this "replace in selection" action.
 	 */
-	editor::search::FindResult doReplaceSelection(const ReplaceQuery *q);
+	editor::search::FindResult
+	doReplaceSelection(editor::search::ReplaceQuery const &q);
 
 	/*!
 	 * This slot executes a "replace all" action by instructing our current
@@ -379,7 +382,8 @@ public Q_SLOTS:
 	 * \param q The replace query to execute.
 	 * \return The result of this "replace all" action.
 	 */
-	editor::search::FindResult doReplaceAll(const ReplaceQuery *q);
+	editor::search::FindResult
+	doReplaceAll(editor::search::ReplaceQuery const &q);
 
 	/*!
 	 * This slot executes a "go to" action by instructing our current

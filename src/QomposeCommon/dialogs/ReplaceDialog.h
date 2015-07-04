@@ -21,6 +21,8 @@
 
 #include <QDialog>
 
+#include "QomposeCommon/editor/search/Query.h"
+
 class QGridLayout;
 class QLabel;
 class QLineEdit;
@@ -32,8 +34,6 @@ class QShowEvent;
 
 namespace qompose
 {
-class ReplaceQuery;
-
 /*!
  * \brief This class implements a dialog to configure a replace query.
  */
@@ -63,7 +63,7 @@ public:
 	 *
 	 * \return The replace query containing our dialog's selected data.
 	 */
-	const ReplaceQuery *getQuery() const;
+	editor::search::ReplaceQuery getQuery() const;
 
 protected:
 	/*!
@@ -77,7 +77,7 @@ protected:
 	virtual void showEvent(QShowEvent *e);
 
 private:
-	ReplaceQuery *query;
+	editor::search::ReplaceQuery query;
 
 	QGridLayout *layout;
 

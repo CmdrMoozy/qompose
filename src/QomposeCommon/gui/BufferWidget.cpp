@@ -29,8 +29,6 @@
 #include "QomposeCommon/dialogs/FileDialog.h"
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/editor/pane/Pane.h"
-#include "QomposeCommon/util/FindQuery.h"
-#include "QomposeCommon/util/ReplaceQuery.h"
 
 namespace qompose
 {
@@ -447,7 +445,8 @@ void BufferWidget::doLineWrapping(bool enabled)
 	buf->setLineWrapping(enabled);
 }
 
-editor::search::FindResult BufferWidget::doFindNext(const FindQuery *q)
+editor::search::FindResult
+BufferWidget::doFindNext(editor::search::FindQuery const &q)
 {
 	Buffer *buf = currentBuffer();
 
@@ -457,7 +456,8 @@ editor::search::FindResult BufferWidget::doFindNext(const FindQuery *q)
 	return buf->findNext(q);
 }
 
-editor::search::FindResult BufferWidget::doFindPrevious(const FindQuery *q)
+editor::search::FindResult
+BufferWidget::doFindPrevious(editor::search::FindQuery const &q)
 {
 	Buffer *buf = currentBuffer();
 
@@ -467,7 +467,8 @@ editor::search::FindResult BufferWidget::doFindPrevious(const FindQuery *q)
 	return buf->findPrevious(q);
 }
 
-editor::search::FindResult BufferWidget::doReplace(const ReplaceQuery *q)
+editor::search::FindResult
+BufferWidget::doReplace(editor::search::ReplaceQuery const &q)
 {
 	Buffer *buf = currentBuffer();
 
@@ -478,7 +479,7 @@ editor::search::FindResult BufferWidget::doReplace(const ReplaceQuery *q)
 }
 
 editor::search::FindResult
-BufferWidget::doReplaceSelection(const ReplaceQuery *q)
+BufferWidget::doReplaceSelection(editor::search::ReplaceQuery const &q)
 {
 	Buffer *buf = currentBuffer();
 
@@ -488,7 +489,8 @@ BufferWidget::doReplaceSelection(const ReplaceQuery *q)
 	return buf->replaceSelection(q);
 }
 
-editor::search::FindResult BufferWidget::doReplaceAll(const ReplaceQuery *q)
+editor::search::FindResult
+BufferWidget::doReplaceAll(editor::search::ReplaceQuery const &q)
 {
 	Buffer *buf = currentBuffer();
 

@@ -33,7 +33,7 @@ namespace qompose
 {
 ReplaceDialog::ReplaceDialog(QWidget *p, Qt::WindowFlags f)
         : QDialog(p, f),
-          query(new ReplaceQuery(this)),
+          query(),
           layout(nullptr),
           findLabel(nullptr),
           findTextEdit(nullptr),
@@ -61,7 +61,7 @@ ReplaceDialog::ReplaceDialog(QWidget *p, Qt::WindowFlags f)
 	setMinimumWidth(450);
 }
 
-const ReplaceQuery *ReplaceDialog::getQuery() const
+editor::search::ReplaceQuery ReplaceDialog::getQuery() const
 {
 	return query;
 }
@@ -71,25 +71,24 @@ void ReplaceDialog::showEvent(QShowEvent *e)
 	// Setup our line text edit.
 
 	findTextEdit->setFocus();
-	findTextEdit->setText(query->getExpression());
+	findTextEdit->setText(query.expression);
 	findTextEdit->selectAll();
 
-	replaceTextEdit->setText(query->getReplaceValue());
+	replaceTextEdit->setText(query.replaceValue);
 
-	wrapCheckBox->setCheckState(query->isWrapping() ? Qt::Checked
-	                                                : Qt::Unchecked);
+	wrapCheckBox->setCheckState(query.wrap ? Qt::Checked : Qt::Unchecked);
 
-	wholeWordsCheckBox->setCheckState(
-	        query->isWholeWords() ? Qt::Checked : Qt::Unchecked);
-
-	caseSensitiveCheckBox->setCheckState(
-	        query->isCaseSensitive() ? Qt::Checked : Qt::Unchecked);
-
-	reverseCheckBox->setCheckState(query->isReversed() ? Qt::Checked
+	wholeWordsCheckBox->setCheckState(query.wholeWords ? Qt::Checked
 	                                                   : Qt::Unchecked);
 
-	regexCheckBox->setCheckState(
-	        query->isRegularExpression() ? Qt::Checked : Qt::Unchecked);
+	caseSensitiveCheckBox->setCheckState(
+	        query.caseSensitive ? Qt::Checked : Qt::Unchecked);
+
+	reverseCheckBox->setCheckState(query.reverse ? Qt::Checked
+	                                             : Qt::Unchecked);
+
+	regexCheckBox->setCheckState(query.isRegex ? Qt::Checked
+	                                           : Qt::Unchecked);
 
 	// Bring our dialog to the front.
 
@@ -193,14 +192,14 @@ void ReplaceDialog::initializeGUI()
 
 void ReplaceDialog::applyValues()
 {
-	query->setExpression(findTextEdit->text());
-	query->setReplaceValue(replaceTextEdit->text());
-	query->setWrapping(wrapCheckBox->checkState() == Qt::Checked);
-	query->setWholeWords(wholeWordsCheckBox->checkState() == Qt::Checked);
-	query->setCaseSensitive(caseSensitiveCheckBox->checkState() ==
-	                        Qt::Checked);
-	query->setReversed(reverseCheckBox->checkState() == Qt::Checked);
-	query->setRegularExpression(regexCheckBox->checkState() == Qt::Checked);
+	query.expression = findTextEdit->text();
+	query.replaceValue = replaceTextEdit->text();
+	query.wrap = wrapCheckBox->checkState() == Qt::Checked;
+	query.wholeWords = wholeWordsCheckBox->checkState() == Qt::Checked;
+	query.caseSensitive =
+	        caseSensitiveCheckBox->checkState() == Qt::Checked;
+	query.reverse = reverseCheckBox->checkState() == Qt::Checked;
+	query.isRegex = regexCheckBox->checkState() == Qt::Checked;
 }
 
 void ReplaceDialog::doReplace()

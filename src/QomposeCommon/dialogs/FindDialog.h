@@ -21,6 +21,8 @@
 
 #include <QDialog>
 
+#include "QomposeCommon/editor/search/Query.h"
+
 class QGridLayout;
 class QLabel;
 class QLineEdit;
@@ -32,8 +34,6 @@ class QShowEvent;
 
 namespace qompose
 {
-class FindQuery;
-
 /*!
  * \brief This class implements a dialog to configure a find query.
  */
@@ -63,7 +63,7 @@ public:
 	 *
 	 * \return The find query containing our dialog's selected data.
 	 */
-	const FindQuery *getQuery() const;
+	editor::search::FindQuery getQuery() const;
 
 protected:
 	/*!
@@ -77,7 +77,7 @@ protected:
 	virtual void showEvent(QShowEvent *e);
 
 private:
-	FindQuery *query;
+	editor::search::FindQuery query;
 
 	QGridLayout *layout;
 

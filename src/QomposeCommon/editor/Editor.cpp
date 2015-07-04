@@ -42,9 +42,7 @@
 #include "QomposeCommon/editor/algorithm/General.h"
 #include "QomposeCommon/editor/algorithm/Indentation.h"
 #include "QomposeCommon/editor/algorithm/Movement.h"
-#include "QomposeCommon/util/FindQuery.h"
 #include "QomposeCommon/util/Hotkey.h"
-#include "QomposeCommon/util/ReplaceQuery.h"
 
 namespace qompose
 {
@@ -191,19 +189,11 @@ void Editor::doSelectHome()
 	doHome(false);
 }
 
-editor::search::FindResult Editor::doFind(bool f, const FindQuery *q)
+editor::search::FindResult Editor::doFind(bool f,
+                                          editor::search::FindQuery const &q)
 {
-	// Prepare our find flags.
-
-	QTextDocument::FindFlags flags = q->getFindFlags();
-
-	if(!f)
-		flags |= QTextDocument::FindBackward;
-
-	// Prepare our cursors.
-
+	QTextDocument::FindFlags flags = q.getFindFlags(f);
 	QTextCursor current = textCursor();
-
 	QTextCursor restart = textCursor();
 
 	if(f)
@@ -214,9 +204,9 @@ editor::search::FindResult Editor::doFind(bool f, const FindQuery *q)
 
 	// Execute the find query, based on type.
 
-	if(q->isRegularExpression())
+	if(q.isRegex)
 	{
-		QRegExp regex(q->getExpression(), Qt::CaseSensitive,
+		QRegExp regex(q.expression, Qt::CaseSensitive,
 		              QRegExp::RegExp2);
 
 		if(!regex.isValid())
@@ -226,7 +216,7 @@ editor::search::FindResult Editor::doFind(bool f, const FindQuery *q)
 
 		if(found.isNull())
 		{
-			if(q->isWrapping())
+			if(q.wrap)
 			{
 				found = document()->find(regex, restart, flags);
 
@@ -243,16 +233,14 @@ editor::search::FindResult Editor::doFind(bool f, const FindQuery *q)
 	}
 	else
 	{
-		QString expression = q->getExpression();
-
 		QTextCursor found =
-		        document()->find(expression, current, flags);
+		        document()->find(q.expression, current, flags);
 
 		if(found.isNull())
 		{
-			if(q->isWrapping())
+			if(q.wrap)
 			{
-				found = document()->find(expression, restart,
+				found = document()->find(q.expression, restart,
 				                         flags);
 
 				if(!found.isNull())
@@ -270,8 +258,9 @@ editor::search::FindResult Editor::doFind(bool f, const FindQuery *q)
 	return editor::search::FindResult::NoMatches;
 }
 
-editor::search::FindResult Editor::doBatchReplace(const ReplaceQuery *q,
-                                                  int start, int end)
+editor::search::FindResult
+Editor::doBatchReplace(editor::search::ReplaceQuery const &q, int start,
+                       int end)
 {
 	// If we weren't given a start position, use the current cursor.
 
@@ -283,17 +272,14 @@ editor::search::FindResult Editor::doBatchReplace(const ReplaceQuery *q,
 
 	// Create a query with "replace in selection"-compatible properties.
 
-	ReplaceQuery query;
-
-	query.setExpression(q->getExpression());
-	query.setReplaceValue(q->getReplaceValue());
-	query.setWrapping(false);
-	query.setWholeWords(q->isWholeWords());
-	query.setCaseSensitive(q->isCaseSensitive());
-	query.setReversed(false);
-	query.setRegularExpression(q->isRegularExpression());
-
-	q = nullptr;
+	editor::search::ReplaceQuery query;
+	query.expression = q.expression;
+	query.replaceValue = q.replaceValue;
+	query.wrap = false;
+	query.wholeWords = q.wholeWords;
+	query.caseSensitive = q.caseSensitive;
+	query.reverse = false;
+	query.isRegex = q.isRegex;
 
 	// Move our cursor to our start position.
 
@@ -304,7 +290,7 @@ editor::search::FindResult Editor::doBatchReplace(const ReplaceQuery *q,
 	// Replace each match we find after our start position.
 
 	curs = textCursor();
-	editor::search::FindResult r = findNext(&query);
+	editor::search::FindResult r = findNext(query);
 	bool found = false;
 
 	curs.beginEditBlock();
@@ -329,16 +315,16 @@ editor::search::FindResult Editor::doBatchReplace(const ReplaceQuery *q,
 
 		int anchor = qMin(curs.anchor(), curs.position());
 
-		curs.insertText(query.getReplaceValue());
+		curs.insertText(query.replaceValue);
 
 		curs.setPosition(anchor, QTextCursor::MoveAnchor);
 		curs.movePosition(QTextCursor::NextCharacter,
 		                  QTextCursor::KeepAnchor,
-		                  query.getReplaceValue().length());
+		                  query.replaceValue.length());
 
 		// Find the next match!
 
-		r = findNext(&query);
+		r = findNext(query);
 	}
 
 	curs.endEditBlock();
@@ -384,27 +370,29 @@ void Editor::doHome(bool moveAnchor)
 	                                  moveAnchor);
 }
 
-editor::search::FindResult Editor::findNext(const FindQuery *q)
+editor::search::FindResult Editor::findNext(editor::search::FindQuery const &q)
 {
 	bool forward = true;
 
-	if(q->isReversed())
+	if(q.reverse)
 		forward = false;
 
 	return doFind(forward, q);
 }
 
-editor::search::FindResult Editor::findPrevious(const FindQuery *q)
+editor::search::FindResult
+Editor::findPrevious(editor::search::FindQuery const &q)
 {
 	bool forward = false;
 
-	if(q->isReversed())
+	if(q.reverse)
 		forward = true;
 
 	return doFind(forward, q);
 }
 
-editor::search::FindResult Editor::replace(const ReplaceQuery *q)
+editor::search::FindResult
+Editor::replace(editor::search::ReplaceQuery const &q)
 {
 	// Reset our cursor's position.
 
@@ -430,9 +418,9 @@ editor::search::FindResult Editor::replace(const ReplaceQuery *q)
 			curs.beginEditBlock();
 
 			int anchor = qMin(curs.anchor(), curs.position());
-			int length = qMax(q->getReplaceValue().length(), 0);
+			int length = qMax(q.replaceValue.length(), 0);
 
-			curs.insertText(q->getReplaceValue());
+			curs.insertText(q.replaceValue);
 
 			curs.setPosition(anchor, QTextCursor::MoveAnchor);
 			curs.movePosition(QTextCursor::NextCharacter,
@@ -449,7 +437,8 @@ editor::search::FindResult Editor::replace(const ReplaceQuery *q)
 	return r;
 }
 
-editor::search::FindResult Editor::replaceSelection(const ReplaceQuery *q)
+editor::search::FindResult
+Editor::replaceSelection(editor::search::ReplaceQuery const &q)
 {
 	QTextCursor curs = textCursor();
 
@@ -462,7 +451,8 @@ editor::search::FindResult Editor::replaceSelection(const ReplaceQuery *q)
 	return doBatchReplace(q, start, end);
 }
 
-editor::search::FindResult Editor::replaceAll(const ReplaceQuery *q)
+editor::search::FindResult
+Editor::replaceAll(editor::search::ReplaceQuery const &q)
 {
 	return doBatchReplace(q, 0);
 }

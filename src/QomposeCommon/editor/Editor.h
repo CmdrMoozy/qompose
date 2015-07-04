@@ -21,6 +21,7 @@
 
 #include "QomposeCommon/editor/DecoratedTextEdit.h"
 #include "QomposeCommon/editor/search/Find.h"
+#include "QomposeCommon/editor/search/Query.h"
 #include "QomposeCommon/util/HotkeyMap.h"
 
 #include <QSize>
@@ -33,9 +34,6 @@ class QMouseEvent;
 
 namespace qompose
 {
-class FindQuery;
-class ReplaceQuery;
-
 /*!
  * \brief This class implements our main text editor widget.
  *
@@ -178,7 +176,8 @@ private:
 	 * \param q The query to execute.
 	 * \return The results of executing this find query.
 	 */
-	editor::search::FindResult doFind(bool f, const FindQuery *q);
+	editor::search::FindResult doFind(bool f,
+	                                  editor::search::FindQuery const &q);
 
 	/*!
 	 * This is a utility function which will replace ever match of the
@@ -197,8 +196,9 @@ private:
 	 * \param end The cursor position to stop searching at.
 	 * \return The result of this replacement's find operation.
 	 */
-	editor::search::FindResult doBatchReplace(const ReplaceQuery *q,
-	                                          int start = -1, int end = -1);
+	editor::search::FindResult
+	doBatchReplace(editor::search::ReplaceQuery const &q, int start = -1,
+	               int end = -1);
 
 public Q_SLOTS:
 	/*!
@@ -276,7 +276,7 @@ public Q_SLOTS:
 	 * \param q The query to execute.
 	 * \return The result of the find query's execution.
 	 */
-	editor::search::FindResult findNext(const FindQuery *q);
+	editor::search::FindResult findNext(editor::search::FindQuery const &q);
 
 	/*!
 	 * This slot moves to the previous find match based upon the given find
@@ -285,7 +285,8 @@ public Q_SLOTS:
 	 * \param q The query to execute.
 	 * \return The result of the find query's execution.
 	 */
-	editor::search::FindResult findPrevious(const FindQuery *q);
+	editor::search::FindResult
+	findPrevious(editor::search::FindQuery const &q);
 
 	/*!
 	 * This slot performs a single replace operation. We will replace the
@@ -296,7 +297,8 @@ public Q_SLOTS:
 	 * \param q The replace query to execute.
 	 * \return The result of this replacement's find operation.
 	 */
-	editor::search::FindResult replace(const ReplaceQuery *q);
+	editor::search::FindResult
+	replace(editor::search::ReplaceQuery const &q);
 
 	/*!
 	 * This slot performs a "replace in selection" operation. We will
@@ -310,7 +312,8 @@ public Q_SLOTS:
 	 * \param q The replace query to execute.
 	 * \return The result of this replacement's find operation.
 	 */
-	editor::search::FindResult replaceSelection(const ReplaceQuery *q);
+	editor::search::FindResult
+	replaceSelection(editor::search::ReplaceQuery const &q);
 
 	/*!
 	 * This slot performs a "replace all" operation. We will replace every
@@ -322,7 +325,8 @@ public Q_SLOTS:
 	 * \param q The replace query to execute.
 	 * \return The result of this replacement's find operation.
 	 */
-	editor::search::FindResult replaceAll(const ReplaceQuery *q);
+	editor::search::FindResult
+	replaceAll(editor::search::ReplaceQuery const &q);
 
 	/*!
 	 * This function will move our cursor to the very beginning of the
