@@ -72,6 +72,8 @@ set(QomposeCommon_SOURCES
 	editor/pane/TabbedPaneView.cpp
 	editor/pane/TabbedPaneView.h
 
+	editor/search/Find.cpp
+	editor/search/Find.h
 	editor/search/Query.cpp
 	editor/search/Query.h
 

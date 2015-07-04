@@ -34,10 +34,13 @@ FindQuery::FindQuery()
 {
 }
 
-QTextDocument::FindFlags FindQuery::getFindFlags(bool includeReverse) const
+QTextDocument::FindFlags FindQuery::getFindFlags(bool forward) const
 {
+	if(reverse)
+		forward = !forward;
+
 	QTextDocument::FindFlags f = 0;
-	if(includeReverse && reverse)
+	if(!forward)
 		f |= QTextDocument::FindBackward;
 	if(caseSensitive)
 		f |= QTextDocument::FindCaseSensitively;

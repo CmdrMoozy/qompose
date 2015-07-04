@@ -28,6 +28,17 @@ namespace editor
 {
 namespace search
 {
+/*!
+ * \brief This enum denotes the possible results of a search operation.
+ */
+enum class FindResult
+{
+	NoDocument,
+	BadRegularExpression,
+	NoMatches,
+	Found
+};
+
 struct FindQuery
 {
 	QString expression;
@@ -42,8 +53,11 @@ struct FindQuery
 	~FindQuery() = default;
 	FindQuery &operator=(const FindQuery &) = default;
 
-	QTextDocument::FindFlags
-	getFindFlags(bool includeReverse = false) const;
+	/*!
+	 * \param forward True if this query is for a "find next" action.
+	 * \return The QTextDocument find flags for this query.
+	 */
+	QTextDocument::FindFlags getFindFlags(bool forward) const;
 };
 
 struct ReplaceQuery : public FindQuery
