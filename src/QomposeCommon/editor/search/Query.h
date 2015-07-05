@@ -45,7 +45,6 @@ struct FindQuery
 	bool wrap;
 	bool wholeWords;
 	bool caseSensitive;
-	bool reverse;
 	bool isRegex;
 
 	FindQuery();

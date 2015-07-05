@@ -42,7 +42,6 @@ ReplaceDialog::ReplaceDialog(QWidget *p, Qt::WindowFlags f)
           wrapCheckBox(nullptr),
           wholeWordsCheckBox(nullptr),
           caseSensitiveCheckBox(nullptr),
-          reverseCheckBox(nullptr),
           regexCheckBox(nullptr),
           buttonsWidget(nullptr),
           buttonsLayout(nullptr),
@@ -81,9 +80,6 @@ void ReplaceDialog::showEvent(QShowEvent *e)
 
 	caseSensitiveCheckBox->setCheckState(
 	        query.caseSensitive ? Qt::Checked : Qt::Unchecked);
-
-	reverseCheckBox->setCheckState(query.reverse ? Qt::Checked
-	                                             : Qt::Unchecked);
 
 	regexCheckBox->setCheckState(query.isRegex ? Qt::Checked
 	                                           : Qt::Unchecked);
@@ -126,18 +122,14 @@ void ReplaceDialog::initializeGUI()
 	caseSensitiveCheckBox =
 	        new QCheckBox(tr("Case sensitive?"), optionsGroupBox);
 
-	reverseCheckBox =
-	        new QCheckBox(tr("Reverse search direction?"), optionsGroupBox);
-
 	regexCheckBox = new QCheckBox(tr("Regular expression search?"),
 	                              optionsGroupBox);
 
 	optionsLayout->addWidget(wrapCheckBox, 0, 0, 1, 1, nullptr);
 	optionsLayout->addWidget(wholeWordsCheckBox, 1, 0, 1, 1, nullptr);
 	optionsLayout->addWidget(caseSensitiveCheckBox, 2, 0, 1, 1, nullptr);
-	optionsLayout->addWidget(reverseCheckBox, 3, 0, 1, 1, nullptr);
-	optionsLayout->addWidget(regexCheckBox, 4, 0, 1, 1, nullptr);
-	optionsLayout->setRowStretch(5, 1);
+	optionsLayout->addWidget(regexCheckBox, 3, 0, 1, 1, nullptr);
+	optionsLayout->setRowStretch(4, 1);
 	optionsGroupBox->setLayout(optionsLayout);
 
 	// Create our buttons widget.
@@ -196,7 +188,6 @@ void ReplaceDialog::applyValues()
 	query.wholeWords = wholeWordsCheckBox->checkState() == Qt::Checked;
 	query.caseSensitive =
 	        caseSensitiveCheckBox->checkState() == Qt::Checked;
-	query.reverse = reverseCheckBox->checkState() == Qt::Checked;
 	query.isRegex = regexCheckBox->checkState() == Qt::Checked;
 }
 

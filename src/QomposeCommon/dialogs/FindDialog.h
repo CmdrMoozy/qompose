@@ -89,7 +89,6 @@ private:
 	QCheckBox *wrapCheckBox;
 	QCheckBox *wholeWordsCheckBox;
 	QCheckBox *caseSensitiveCheckBox;
-	QCheckBox *reverseCheckBox;
 	QCheckBox *regexCheckBox;
 
 	QWidget *buttonsWidget;

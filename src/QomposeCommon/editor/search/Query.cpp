@@ -29,16 +29,12 @@ FindQuery::FindQuery()
           wrap(false),
           wholeWords(false),
           caseSensitive(false),
-          reverse(false),
           isRegex(false)
 {
 }
 
 QTextDocument::FindFlags FindQuery::getFindFlags(bool forward) const
 {
-	if(reverse)
-		forward = !forward;
-
 	QTextDocument::FindFlags f = 0;
 	if(!forward)
 		f |= QTextDocument::FindBackward;

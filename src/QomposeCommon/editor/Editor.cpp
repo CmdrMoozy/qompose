@@ -216,7 +216,6 @@ Editor::doBatchReplace(editor::search::ReplaceQuery const &q, int start,
 	query.wrap = false;
 	query.wholeWords = q.wholeWords;
 	query.caseSensitive = q.caseSensitive;
-	query.reverse = false;
 	query.isRegex = q.isRegex;
 
 	// Move our cursor to our start position.
@@ -310,23 +309,13 @@ void Editor::doHome(bool moveAnchor)
 
 editor::search::FindResult Editor::findNext(editor::search::FindQuery const &q)
 {
-	bool forward = true;
-
-	if(q.reverse)
-		forward = false;
-
-	return doFind(forward, q);
+	return doFind(true, q);
 }
 
 editor::search::FindResult
 Editor::findPrevious(editor::search::FindQuery const &q)
 {
-	bool forward = false;
-
-	if(q.reverse)
-		forward = true;
-
-	return doFind(forward, q);
+	return doFind(false, q);
 }
 
 editor::search::FindResult
