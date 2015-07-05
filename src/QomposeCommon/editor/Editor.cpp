@@ -332,47 +332,8 @@ Editor::findPrevious(editor::search::FindQuery const &q)
 editor::search::FindResult
 Editor::replace(editor::search::ReplaceQuery const &q)
 {
-	// Reset our cursor's position.
-
-	QTextCursor curs = textCursor();
-
-	curs.setPosition(qMin(curs.anchor(), curs.position()),
-	                 QTextCursor::MoveAnchor);
-
-	setTextCursor(curs);
-
-	// Try to find the next match.
-
-	editor::search::FindResult r = findNext(q);
-
-	// If we got a match, replace it with our replace value.
-
-	if(r == editor::search::FindResult::Found)
-	{
-		curs = textCursor();
-
-		if(curs.hasSelection())
-		{
-			curs.beginEditBlock();
-
-			int anchor = qMin(curs.anchor(), curs.position());
-			int length = qMax(q.replaceValue.length(), 0);
-
-			curs.insertText(q.replaceValue);
-
-			curs.setPosition(anchor, QTextCursor::MoveAnchor);
-			curs.movePosition(QTextCursor::NextCharacter,
-			                  QTextCursor::KeepAnchor, length);
-
-			curs.endEditBlock();
-
-			setTextCursor(curs);
-		}
-	}
-
-	// Done!
-
-	return r;
+	return editor::search::applyAlgorithm(*this, editor::search::replace,
+	                                      q);
 }
 
 editor::search::FindResult
