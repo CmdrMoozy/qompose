@@ -21,6 +21,7 @@
 #include <cstddef>
 #include <functional>
 #include <utility>
+#include <experimental/optional>
 
 #include <QGridLayout>
 #include <QPainter>
@@ -187,86 +188,6 @@ editor::search::FindResult Editor::doFind(bool f,
 	                                      q);
 }
 
-editor::search::FindResult
-Editor::doBatchReplace(editor::search::ReplaceQuery const &q, int start,
-                       int end)
-{
-	// If we weren't given a start position, use the current cursor.
-
-	if(start < 0)
-	{
-		QTextCursor curs = textCursor();
-		start = qMin(curs.anchor(), curs.position());
-	}
-
-	// Create a query with "replace in selection"-compatible properties.
-
-	editor::search::ReplaceQuery query;
-	query.expression = q.expression;
-	query.replaceValue = q.replaceValue;
-	query.wrap = false;
-	query.wholeWords = q.wholeWords;
-	query.caseSensitive = q.caseSensitive;
-	query.isRegex = q.isRegex;
-
-	// Move our cursor to our start position.
-
-	QTextCursor curs = textCursor();
-	curs.setPosition(start, QTextCursor::MoveAnchor);
-	setTextCursor(curs);
-
-	// Replace each match we find after our start position.
-
-	curs = textCursor();
-	editor::search::FindResult r = findNext(query);
-	bool found = false;
-
-	curs.beginEditBlock();
-
-	while(r == editor::search::FindResult::Found)
-	{
-		// Make sure this match is good to go.
-
-		int finda = textCursor().anchor(),
-		    findp = textCursor().position();
-
-		if(end >= 0)
-			if(qMax(finda, findp) > end)
-				break;
-
-		curs.setPosition(finda, QTextCursor::MoveAnchor);
-		curs.setPosition(findp, QTextCursor::KeepAnchor);
-
-		found = true;
-
-		// Replace this match.
-
-		int anchor = qMin(curs.anchor(), curs.position());
-
-		curs.insertText(query.replaceValue);
-
-		curs.setPosition(anchor, QTextCursor::MoveAnchor);
-		curs.movePosition(QTextCursor::NextCharacter,
-		                  QTextCursor::KeepAnchor,
-		                  query.replaceValue.length());
-
-		// Find the next match!
-
-		r = findNext(query);
-	}
-
-	curs.endEditBlock();
-
-	setTextCursor(curs);
-
-	// Return an appropriate find result.
-
-	if(found)
-		return editor::search::FindResult::Found;
-	else
-		return r;
-}
-
 void Editor::duplicateLine()
 {
 	editor::algorithm::applyAlgorithm(*this,
@@ -319,21 +240,19 @@ Editor::replace(editor::search::ReplaceQuery const &q)
 editor::search::FindResult
 Editor::replaceSelection(editor::search::ReplaceQuery const &q)
 {
-	QTextCursor curs = textCursor();
-
-	if(!curs.hasSelection())
-		return editor::search::FindResult::NoMatches;
-
-	int start = qMin(curs.anchor(), curs.position());
-	int end = qMax(curs.anchor(), curs.position());
-
-	return doBatchReplace(q, start, end);
+	QTextCursor c = textCursor();
+	return editor::search::applyAlgorithm(
+	        *this, editor::search::batchReplace, q,
+	        std::min(c.anchor(), c.position()),
+	        std::max(c.anchor(), c.position()));
 }
 
 editor::search::FindResult
 Editor::replaceAll(editor::search::ReplaceQuery const &q)
 {
-	return doBatchReplace(q, 0);
+	return editor::search::applyAlgorithm(*this,
+	                                      editor::search::batchReplace, q,
+	                                      0, std::experimental::nullopt);
 }
 
 void Editor::goToLine(int l)

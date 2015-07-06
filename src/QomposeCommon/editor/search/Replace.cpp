@@ -18,6 +18,8 @@
 
 #include "Replace.h"
 
+#include <algorithm>
+
 #include "QomposeCommon/editor/search/Find.h"
 
 namespace qompose
@@ -46,6 +48,61 @@ FindResult replace(QTextCursor &cursor, QTextDocument const &document,
 	}
 
 	return result;
+}
+
+FindResult batchReplace(QTextCursor &cursor, QTextDocument const &document,
+                        ReplaceQuery const &query,
+                        std::experimental::optional<int> start,
+                        std::experimental::optional<int> end)
+{
+	// If we weren't given a start position, use the current cursor.
+	if(!start)
+		start = std::min(cursor.anchor(), cursor.position());
+
+	// We can't enable wrapping, when replacing inside a specific range.
+	ReplaceQuery rangeQuery = query;
+	rangeQuery.wrap = false;
+
+	// Replace each match we find after our start position.
+
+	cursor.setPosition(*start, QTextCursor::MoveAnchor);
+	FindResult result = find(cursor, document, true, rangeQuery);
+	bool foundAny = false;
+	cursor.beginEditBlock();
+
+	while(result == FindResult::Found)
+	{
+		// Make sure this match is in range.
+		int foundAnchor = cursor.anchor();
+		int foundPosition = cursor.position();
+		if(!!end && (std::max(foundAnchor, foundPosition) > *end))
+			break;
+
+		foundAny = true;
+
+		// Replace this match, and move the cursor after it. We also
+		// need to update the "end" value, since we may have changed
+		// the length of the document.
+		if(!!end)
+		{
+			int selectionLength = cursor.selectedText().length();
+			end = *end + (rangeQuery.replaceValue.length() -
+			              selectionLength);
+		}
+		cursor.insertText(rangeQuery.replaceValue);
+		cursor.setPosition(std::min(foundAnchor, foundPosition),
+		                   QTextCursor::MoveAnchor);
+		cursor.movePosition(QTextCursor::NextCharacter,
+		                    QTextCursor::KeepAnchor,
+		                    rangeQuery.replaceValue.length());
+
+		// Find the next match (if any).
+		result = find(cursor, document, true, rangeQuery);
+	};
+
+	cursor.endEditBlock();
+
+	return foundAny ? FindResult::Found : result;
 }
 }
 }

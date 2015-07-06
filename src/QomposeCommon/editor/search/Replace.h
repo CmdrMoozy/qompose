@@ -19,6 +19,8 @@
 #ifndef INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_REPLACE_H
 #define INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_REPLACE_H
 
+#include <experimental/optional>
+
 #include <QTextCursor>
 #include <QTextDocument>
 
@@ -41,6 +43,25 @@ namespace search
  */
 FindResult replace(QTextCursor &cursor, QTextDocument const &document,
                    ReplaceQuery const &query);
+
+/*!
+ * This function will replace all matches for the given query in the given
+ * range. If no range start is given, then the given cursor's selection start
+ * is used instead. If no range end is given, then the end of the document is
+ * used instead.
+ *
+ * \param cursor The cursor to use for replacing.
+ * \param document The document to modify.
+ * \param query The query to search for.
+ * \param start The start of the range to replace in.
+ * \param end The end of the range to replace in.
+ * \return Found if any matches were found, or the first find result otherwise.
+ */
+FindResult batchReplace(
+        QTextCursor &cursor, QTextDocument const &document,
+        ReplaceQuery const &query,
+        std::experimental::optional<int> start = std::experimental::nullopt,
+        std::experimental::optional<int> end = std::experimental::nullopt);
 }
 }
 }

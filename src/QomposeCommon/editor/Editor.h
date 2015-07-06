@@ -170,27 +170,6 @@ private:
 	editor::search::FindResult doFind(bool f,
 	                                  editor::search::FindQuery const &q);
 
-	/*!
-	 * This is a utility function which will replace ever match of the
-	 * given replace query from the given start position until the given
-	 * end position.
-	 *
-	 * If the start position is omitted, then we will simply use the
-	 * starting position from the current cursor (the smaller of its anchor
-	 * and position).
-	 *
-	 * If the end position is omitted, then we will simply continue until
-	 * the end of the document.
-	 *
-	 * \param q The replace query to execute.
-	 * \param start The cursor position to start searching from.
-	 * \param end The cursor position to stop searching at.
-	 * \return The result of this replacement's find operation.
-	 */
-	editor::search::FindResult
-	doBatchReplace(editor::search::ReplaceQuery const &q, int start = -1,
-	               int end = -1);
-
 public Q_SLOTS:
 	/*!
 	 * This slot duplicates the current line. The new line is inserted
