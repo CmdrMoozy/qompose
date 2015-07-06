@@ -29,7 +29,6 @@ function(qomposeSetCompileFlags)
 		set(F_WARN "${F_WARN} -Wctor-dtor-privacy")
 
 		set(F_DBG "${F_WARN} -std=c++11 -g -O0 -fsanitize=address")
-		set(F_DBG "${F_DBG} -fsanitize=undefined")
 
 		set(F_REL "${F_WARN} -std=c++11 -O2 -fomit-frame-pointer")
 		set(F_REL "${F_REL} -fstack-protector-strong")
