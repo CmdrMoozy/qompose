@@ -18,6 +18,8 @@
 
 #include <catch/catch.hpp>
 
+#include <vector>
+
 #include <QString>
 #include <QTextBlock>
 #include <QTextCursor>
@@ -46,6 +48,10 @@ TEST_CASE("Test goToBlock() algorithm behavior", "[Movement]")
 		QTextCursor cursor(&document);
 		qompose::editor::algorithm::goToBlock(cursor, -10);
 		REQUIRE(cursor.block().blockNumber() == 0);
+		int position = cursor.position();
+		cursor.movePosition(QTextCursor::StartOfBlock,
+		                    QTextCursor::MoveAnchor);
+		REQUIRE(cursor.position() == position);
 	}
 
 	{
@@ -53,6 +59,10 @@ TEST_CASE("Test goToBlock() algorithm behavior", "[Movement]")
 		qompose::editor::algorithm::goToBlock(cursor, 10);
 		REQUIRE(cursor.block().blockNumber() ==
 		        TEST_DOCUMENT_BLOCK_COUNT - 1);
+		int position = cursor.position();
+		cursor.movePosition(QTextCursor::StartOfBlock,
+		                    QTextCursor::MoveAnchor);
+		REQUIRE(cursor.position() == position);
 	}
 
 	for(int i = 0; i < TEST_DOCUMENT_BLOCK_COUNT; ++i)
@@ -60,9 +70,49 @@ TEST_CASE("Test goToBlock() algorithm behavior", "[Movement]")
 		QTextCursor cursor(&document);
 		qompose::editor::algorithm::goToBlock(cursor, i);
 		REQUIRE(cursor.block().blockNumber() == i);
+		int position = cursor.position();
+		cursor.movePosition(QTextCursor::StartOfBlock,
+		                    QTextCursor::MoveAnchor);
+		REQUIRE(cursor.position() == position);
 	}
+}
+
+namespace
+{
+struct HomeTestDescriptor
+{
+	int block;
+	int firstPosition;
+	int secondPosition;
+
+	HomeTestDescriptor(int b, int f, int s)
+	        : block(b), firstPosition(f), secondPosition(s)
+	{
+	}
+};
+
+const std::vector<HomeTestDescriptor> HOME_TESTS = {
+        HomeTestDescriptor(0, 0, 0), HomeTestDescriptor(1, 6, 0),
+        HomeTestDescriptor(2, 5, 0), HomeTestDescriptor(3, 4, 0),
+        HomeTestDescriptor(4, 0, 0), HomeTestDescriptor(5, 0, 0)};
 }
 
 TEST_CASE("Test home() algorithm behavior", "[Movement]")
 {
+	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+
+	for(const auto &test : HOME_TESTS)
+	{
+		QTextCursor cursor(&document);
+		qompose::editor::algorithm::goToBlock(cursor, test.block);
+		int position = cursor.position();
+		qompose::editor::algorithm::home(cursor, true);
+		REQUIRE(cursor.position() == position);
+		cursor.movePosition(QTextCursor::EndOfBlock,
+		                    QTextCursor::MoveAnchor);
+		qompose::editor::algorithm::home(cursor, true);
+		REQUIRE(cursor.position() == position + test.firstPosition);
+		qompose::editor::algorithm::home(cursor, true);
+		REQUIRE(cursor.position() == position + test.secondPosition);
+	}
 }
