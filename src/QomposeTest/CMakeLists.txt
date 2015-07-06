@@ -6,6 +6,8 @@ set(QomposeTest_SOURCES
 	HotkeyTest.cpp
 	QomposeTest.cpp
 
+	editor/algorithm/MovementTest.cpp
+
 )
 
 add_executable(QomposeTest ${QomposeTest_SOURCES})
