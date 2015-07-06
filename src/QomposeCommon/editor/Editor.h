@@ -21,7 +21,7 @@
 
 #include "QomposeCommon/editor/DecoratedTextEdit.h"
 #include "QomposeCommon/editor/search/Query.h"
-#include "QomposeCommon/hotkey/HotkeyMap.h"
+#include "QomposeCommon/hotkey/HotkeyedWidget.h"
 
 #include <QSize>
 
@@ -39,8 +39,52 @@ namespace qompose
  * We depend on our decorated text edit for the various editor decorations we
  * support, while we add advanced editor functionality like improved line
  * indentation semantics, find and replace, and etc.
+ *
+ * We implement the following hotkeys:
+ *
+ * Custom hotkeys implemented by this class:
+ *      Backspace        Deletes the char to the left of the cursor.
+ *      Delete           Deletes the char to the right of the cursor.
+ * 	Return           Move to a new line, maintaining indent.
+ * 	Enter            Move to a new line, maintaining indent.
+ * 	Tab              Increase indent on selection.
+ * 	Shift+Backtab    Decrease indent on selection.
+ *      Shift+Tab        Decrease indent on selection.
+ * 	Home             Move to non-indent start, or to line start.
+ *      Shift+Home       Select to non-indent start, or to line start.
+ *      Ctrl+D           Duplicate the current line.
+ *      Shift+Return     The same as Return.
+ *      Shift+Ender      The same as Enter.
+ *      Ctrl+(Zero)      Reset text zoom to default level.
+ *
+ * Inherited from QPlainTextEdit:
+ * 	Ctrl+C           Copy selected text to clipboard.
+ * 	Ctrl+V           Paste clipboard into text edit.
+ * 	Ctrl+X           Deletes selected text + copies to clipboard.
+ * 	Ctrl+Z           Undo.
+ * 	Ctrl+Y           Redo.
+ * 	Left             Moves the cursor one character left.
+ * 	Ctrl+Left        Moves the cursor one word left.
+ * 	Right            Moves the cursor one character right.
+ * 	Ctrl+Right       Moves the cursor one word right.
+ * 	Up               Moves the cursor one line up.
+ * 	Down             Moves the cursor one line down.
+ * 	PageUp           Moves the cursor one page up.
+ * 	PageDown         Moves the cursor one page down.
+ * 	Ctrl+Home        Moves the cursor to the document start.
+ * 	End              Moves the cursor to the end of the line.
+ * 	Ctrl+End         Moves the cursor to the end of the document.
+ * 	Alt+Wheel        Scrolls the page horizontally.
+ *
+ * Inherited, but ignored by this class:
+ *      Ctrl+Shift+Left  Select to beginning of line.
+ *      Ctrl+Shift+Right Select to end of line.
+ * 	Ctrl+Insert      Copy selected text to clipboard.
+ * 	Ctrl+K           Deletes to the end of the line.
+ * 	Shift+Insert     Paste clipboard into text edit.
+ * 	Shift+Delete     Deletes selected text + copies to clipboard.
  */
-class Editor : public DecoratedTextEdit
+class Editor : public hotkey::HotkeyedWidget<DecoratedTextEdit>
 {
 	Q_OBJECT
 
@@ -58,59 +102,7 @@ public:
 
 	Editor &operator=(const Editor &) = delete;
 
-protected:
-	/*!
-	 * We implement the following hotkeys:
-	 *
-	 * Custom hotkeys implemented by this class:
-	 *      Backspace        Deletes the char to the left of the cursor.
-	 *      Delete           Deletes the char to the right of the cursor.
-	 * 	Return           Move to a new line, maintaining indent.
-	 * 	Enter            Move to a new line, maintaining indent.
-	 * 	Tab              Increase indent on selection.
-	 * 	Shift+Backtab    Decrease indent on selection.
-	 *      Shift+Tab        Decrease indent on selection.
-	 * 	Home             Move to non-indent start, or to line start.
-	 *      Shift+Home       Select to non-indent start, or to line start.
-	 *      Ctrl+D           Duplicate the current line.
-	 *      Shift+Return     The same as Return.
-	 *      Shift+Ender      The same as Enter.
-	 *      Ctrl+(Zero)      Reset text zoom to default level.
-	 *
-	 * Inherited from QPlainTextEdit:
-	 * 	Ctrl+C           Copy selected text to clipboard.
-	 * 	Ctrl+V           Paste clipboard into text edit.
-	 * 	Ctrl+X           Deletes selected text + copies to clipboard.
-	 * 	Ctrl+Z           Undo.
-	 * 	Ctrl+Y           Redo.
-	 * 	Left             Moves the cursor one character left.
-	 * 	Ctrl+Left        Moves the cursor one word left.
-	 * 	Right            Moves the cursor one character right.
-	 * 	Ctrl+Right       Moves the cursor one word right.
-	 * 	Up               Moves the cursor one line up.
-	 * 	Down             Moves the cursor one line down.
-	 * 	PageUp           Moves the cursor one page up.
-	 * 	PageDown         Moves the cursor one page down.
-	 * 	Ctrl+Home        Moves the cursor to the document start.
-	 * 	End              Moves the cursor to the end of the line.
-	 * 	Ctrl+End         Moves the cursor to the end of the document.
-	 * 	Alt+Wheel        Scrolls the page horizontally.
-	 *
-	 * Inherited, but ignored by this class:
-	 *      Ctrl+Shift+Left  Select to beginning of line.
-	 *      Ctrl+Shift+Right Select to end of line.
-	 * 	Ctrl+Insert      Copy selected text to clipboard.
-	 * 	Ctrl+K           Deletes to the end of the line.
-	 * 	Shift+Insert     Paste clipboard into text edit.
-	 * 	Shift+Delete     Deletes selected text + copies to clipboard.
-	 *
-	 * \param e The event being handled.
-	 */
-	virtual void keyPressEvent(QKeyEvent *e);
-
 private:
-	HotkeyMap hotkeys;
-
 	/*!
 	 * This function initializes our hotkeys map, which is used by our
 	 * keyPressEvent handler to decide what action to take when a given

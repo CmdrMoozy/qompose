@@ -138,6 +138,7 @@ set(QomposeCommon_SOURCES
 
 	hotkey/Hotkey.cpp
 	hotkey/Hotkey.h
+	hotkey/HotkeyedWidget.h
 	hotkey/HotkeyMap.cpp
 	hotkey/HotkeyMap.h
 
