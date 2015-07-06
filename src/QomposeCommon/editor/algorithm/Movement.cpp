@@ -58,9 +58,9 @@ void home(QTextCursor &cursor, bool moveAnchor)
 	}
 	else
 	{
-		cursor.setPosition(QTextCursor::StartOfBlock,
-		                   moveAnchor ? QTextCursor::MoveAnchor
-		                              : QTextCursor::KeepAnchor);
+		cursor.movePosition(QTextCursor::StartOfBlock,
+		                    moveAnchor ? QTextCursor::MoveAnchor
+		                               : QTextCursor::KeepAnchor);
 	}
 }
 
