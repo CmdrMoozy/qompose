@@ -72,10 +72,13 @@ set(QomposeCommon_SOURCES
 	editor/pane/TabbedPaneView.cpp
 	editor/pane/TabbedPaneView.h
 
+	editor/search/applyAlgorithm.h
 	editor/search/Find.cpp
 	editor/search/Find.h
 	editor/search/Query.cpp
 	editor/search/Query.h
+	editor/search/Replace.cpp
+	editor/search/Replace.h
 
 	editor/spell/SpellChecker.cpp
 	editor/spell/SpellChecker.h

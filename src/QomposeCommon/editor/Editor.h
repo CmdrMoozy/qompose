@@ -20,7 +20,6 @@
 #define INCLUDE_QOMPOSECOMMON_EDITOR_EDITOR_H
 
 #include "QomposeCommon/editor/DecoratedTextEdit.h"
-#include "QomposeCommon/editor/search/Find.h"
 #include "QomposeCommon/editor/search/Query.h"
 #include "QomposeCommon/util/HotkeyMap.h"
 

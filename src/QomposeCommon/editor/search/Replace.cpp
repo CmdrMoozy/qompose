@@ -16,13 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_FIND_H
-#define INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_FIND_H
+#include "Replace.h"
 
-#include <QTextCursor>
-#include <QTextDocument>
-
-#include "QomposeCommon/editor/search/Query.h"
+#include "QomposeCommon/editor/search/Find.h"
 
 namespace qompose
 {
@@ -30,20 +26,27 @@ namespace editor
 {
 namespace search
 {
-/*!
- * This function performs a typical "find" action using the given cursor and
- * the given document.
- *
- * \param cursor The initial cursor to start searching from.
- * \param document The text document to search.
- * \param forward True means "find next", false means "find previous".
- * \param query The find query to execute.
- * \return The result of this find operation.
- */
-FindResult find(QTextCursor &cursor, QTextDocument const &document,
-                bool forward, FindQuery const &query);
-}
-}
-}
+FindResult replace(QTextCursor &cursor, QTextDocument const &document,
+                   ReplaceQuery const &query)
+{
+	cursor.setPosition(cursor.selectionStart(), QTextCursor::MoveAnchor);
+	FindResult result = find(cursor, document, true, query);
 
-#endif
+	if((result == FindResult::Found) && cursor.hasSelection())
+	{
+		cursor.beginEditBlock();
+		int start = cursor.selectionStart();
+		int length = query.replaceValue.length();
+
+		cursor.insertText(query.replaceValue);
+		cursor.setPosition(start, QTextCursor::MoveAnchor);
+		cursor.movePosition(QTextCursor::NextCharacter,
+		                    QTextCursor::KeepAnchor, length);
+		cursor.endEditBlock();
+	}
+
+	return result;
+}
+}
+}
+}

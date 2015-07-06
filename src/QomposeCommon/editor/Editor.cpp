@@ -42,6 +42,9 @@
 #include "QomposeCommon/editor/algorithm/General.h"
 #include "QomposeCommon/editor/algorithm/Indentation.h"
 #include "QomposeCommon/editor/algorithm/Movement.h"
+#include "QomposeCommon/editor/search/applyAlgorithm.h"
+#include "QomposeCommon/editor/search/Find.h"
+#include "QomposeCommon/editor/search/Replace.h"
 #include "QomposeCommon/util/Hotkey.h"
 
 namespace qompose

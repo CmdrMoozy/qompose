@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_FIND_H
-#define INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_FIND_H
+#ifndef INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_REPLACE_H
+#define INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_REPLACE_H
 
 #include <QTextCursor>
 #include <QTextDocument>
@@ -31,17 +31,16 @@ namespace editor
 namespace search
 {
 /*!
- * This function performs a typical "find" action using the given cursor and
+ * This function performs a typical "revere" action using the given cursor and
  * the given document.
  *
  * \param cursor The initial cursor to start searching from.
  * \param document The text document to search.
- * \param forward True means "find next", false means "find previous".
- * \param query The find query to execute.
- * \return The result of this find operation.
+ * \param query The replace query to execute.
+ * \return The result of this replace operation.
  */
-FindResult find(QTextCursor &cursor, QTextDocument const &document,
-                bool forward, FindQuery const &query);
+FindResult replace(QTextCursor &cursor, QTextDocument const &document,
+                   ReplaceQuery const &query);
 }
 }
 }

@@ -121,28 +121,6 @@ FindResult find(QTextCursor &cursor, QTextDocument const &document,
 		return findString(cursor, wrapCursor, document, query, flags);
 	}
 }
-
-FindResult replace(QTextCursor &cursor, QTextDocument const &document,
-                   ReplaceQuery const &query)
-{
-	cursor.setPosition(cursor.selectionStart(), QTextCursor::MoveAnchor);
-	FindResult result = find(cursor, document, true, query);
-
-	if((result == FindResult::Found) && cursor.hasSelection())
-	{
-		cursor.beginEditBlock();
-		int start = cursor.selectionStart();
-		int length = query.replaceValue.length();
-
-		cursor.insertText(query.replaceValue);
-		cursor.setPosition(start, QTextCursor::MoveAnchor);
-		cursor.movePosition(QTextCursor::NextCharacter,
-		                    QTextCursor::KeepAnchor, length);
-		cursor.endEditBlock();
-	}
-
-	return result;
-}
 }
 }
 }
