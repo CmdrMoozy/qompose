@@ -19,7 +19,7 @@
 #ifndef INCLUDE_QOMPOSECOMMON_EDITOR_BUFFER_H
 #define INCLUDE_QOMPOSECOMMON_EDITOR_BUFFER_H
 
-#include "QomposeCommon/editor/DecoratedTextEdit.h"
+#include "QomposeCommon/editor/Editor.h"
 
 #include "QomposeCommon/Types.h"
 
@@ -34,7 +34,7 @@ namespace editor
 /*!
  * \brief This class provides high-level buffer functionality for editors.
  */
-class Buffer : public DecoratedTextEdit
+class Buffer : public Editor
 {
 	Q_OBJECT
 

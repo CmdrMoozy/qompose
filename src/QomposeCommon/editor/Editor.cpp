@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "DecoratedTextEdit.h"
+#include "Editor.h"
 
 #include <QPainter>
 #include <QTextBlock>
@@ -34,7 +34,7 @@ namespace qompose
 {
 namespace editor
 {
-DecoratedTextEdit::DecoratedTextEdit(QWidget *p)
+Editor::Editor(QWidget *p)
         : hotkey::HotkeyedWidget<QPlainTextEdit>(p),
           gutter(nullptr),
           gutterVisible(false),
@@ -88,19 +88,19 @@ DecoratedTextEdit::DecoratedTextEdit(QWidget *p)
 	highlightCurrentLine();
 }
 
-void DecoratedTextEdit::setGutterVisible(bool v)
+void Editor::setGutterVisible(bool v)
 {
 	gutterVisible = v;
 	gutter->setVisible(v);
 	updateGutterWidth();
 }
 
-bool DecoratedTextEdit::isGutterVisible()
+bool Editor::isGutterVisible()
 {
 	return gutterVisible;
 }
 
-QFont DecoratedTextEdit::font() const
+QFont Editor::font() const
 {
 	// Return a font identical to ours, with a size excluding scaling.
 
@@ -110,7 +110,7 @@ QFont DecoratedTextEdit::font() const
 	return f;
 }
 
-void DecoratedTextEdit::setFont(const QFont &f)
+void Editor::setFont(const QFont &f)
 {
 	// Make sure we aren't given a pixel-sized font.
 
@@ -135,12 +135,12 @@ void DecoratedTextEdit::setFont(const QFont &f)
 	fullUpdate();
 }
 
-int DecoratedTextEdit::fontZoom() const
+int Editor::fontZoom() const
 {
 	return currentFontZoom;
 }
 
-qreal DecoratedTextEdit::fontZoomSize() const
+qreal Editor::fontZoomSize() const
 {
 	qreal scale = static_cast<qreal>(fontZoom()) / 100.0;
 	qreal fsize = originalFontSize + (scale * originalFontSize);
@@ -148,7 +148,7 @@ qreal DecoratedTextEdit::fontZoomSize() const
 	return qMax(fsize, 0.0);
 }
 
-void DecoratedTextEdit::setFontZoom(int z)
+void Editor::setFontZoom(int z)
 {
 	// Update the current font zoom factor.
 
@@ -169,17 +169,17 @@ void DecoratedTextEdit::setFontZoom(int z)
 	setIndentationWidth(indentationWidth);
 }
 
-void DecoratedTextEdit::resetFontZoom()
+void Editor::resetFontZoom()
 {
 	setFontZoom(0);
 }
 
-std::size_t DecoratedTextEdit::getIndentationWidth() const
+std::size_t Editor::getIndentationWidth() const
 {
 	return static_cast<std::size_t>(indentationWidth);
 }
 
-void DecoratedTextEdit::setIndentationWidth(int w)
+void Editor::setIndentationWidth(int w)
 {
 	indentationWidth = qAbs(w);
 
@@ -191,12 +191,12 @@ void DecoratedTextEdit::setIndentationWidth(int w)
 	document()->setDefaultTextOption(opt);
 }
 
-IndentationMode DecoratedTextEdit::getIndentationMode() const
+IndentationMode Editor::getIndentationMode() const
 {
 	return indentationMode;
 }
 
-void DecoratedTextEdit::setIndentationMode(const QString &mode)
+void Editor::setIndentationMode(const QString &mode)
 {
 	IndentationMode m = IndentationMode::Tabs;
 
@@ -208,64 +208,64 @@ void DecoratedTextEdit::setIndentationMode(const QString &mode)
 	setIndentationMode(m);
 }
 
-void DecoratedTextEdit::setIndentationMode(IndentationMode mode)
+void Editor::setIndentationMode(IndentationMode mode)
 {
 	indentationMode = mode;
 }
 
-bool DecoratedTextEdit::isWrapGuideVisible() const
+bool Editor::isWrapGuideVisible() const
 {
 	return wrapGuideVisible;
 }
 
-void DecoratedTextEdit::setWrapGuideVisible(bool v)
+void Editor::setWrapGuideVisible(bool v)
 {
 	wrapGuideVisible = v;
 
 	fullUpdate();
 }
 
-int DecoratedTextEdit::getWrapGuideColumnWidth() const
+int Editor::getWrapGuideColumnWidth() const
 {
 	return wrapGuideWidth;
 }
 
-void DecoratedTextEdit::setWrapGuideColumnWidth(int w)
+void Editor::setWrapGuideColumnWidth(int w)
 {
 	wrapGuideWidth = qAbs(w);
 
 	fullUpdate();
 }
 
-QColor DecoratedTextEdit::getWrapGuideColor() const
+QColor Editor::getWrapGuideColor() const
 {
 	return wrapGuideColor;
 }
 
-void DecoratedTextEdit::setWrapGuideColor(const QColor &c)
+void Editor::setWrapGuideColor(const QColor &c)
 {
 	wrapGuideColor = c;
 
 	fullUpdate();
 }
 
-bool DecoratedTextEdit::getLineWrapping() const
+bool Editor::getLineWrapping() const
 {
 	return lineWrapMode() == QPlainTextEdit::WidgetWidth;
 }
 
-void DecoratedTextEdit::setLineWrapping(bool enabled)
+void Editor::setLineWrapping(bool enabled)
 {
 	setLineWrapMode(enabled ? QPlainTextEdit::WidgetWidth
 	                        : QPlainTextEdit::NoWrap);
 }
 
-QColor DecoratedTextEdit::getEditorForeground() const
+QColor Editor::getEditorForeground() const
 {
 	return palette().color(QPalette::Text);
 }
 
-void DecoratedTextEdit::setEditorForeground(const QColor &c)
+void Editor::setEditorForeground(const QColor &c)
 {
 	QPalette p = palette();
 
@@ -280,12 +280,12 @@ void DecoratedTextEdit::setEditorForeground(const QColor &c)
 	setPalette(p);
 }
 
-QColor DecoratedTextEdit::getEditorBackground() const
+QColor Editor::getEditorBackground() const
 {
 	return palette().color(QPalette::Active, QPalette::Base);
 }
 
-void DecoratedTextEdit::setEditorBackground(const QColor &c)
+void Editor::setEditorBackground(const QColor &c)
 {
 	QPalette p = palette();
 
@@ -295,48 +295,48 @@ void DecoratedTextEdit::setEditorBackground(const QColor &c)
 	setPalette(p);
 }
 
-QColor DecoratedTextEdit::getCurrentLineColor() const
+QColor Editor::getCurrentLineColor() const
 {
 	return currentLineHighlight;
 }
 
-void DecoratedTextEdit::setCurrentLineColor(const QColor &c)
+void Editor::setCurrentLineColor(const QColor &c)
 {
 	currentLineHighlight = c;
 
 	highlightCurrentLine();
 }
 
-QColor DecoratedTextEdit::getGutterForeground() const
+QColor Editor::getGutterForeground() const
 {
 	return gutterForeground;
 }
 
-void DecoratedTextEdit::setGutterForeground(const QColor &c)
+void Editor::setGutterForeground(const QColor &c)
 {
 	gutterForeground = c;
 
 	gutter->update();
 }
 
-QColor DecoratedTextEdit::getGutterBackground() const
+QColor Editor::getGutterBackground() const
 {
 	return gutterBackground;
 }
 
-void DecoratedTextEdit::setGutterBackground(const QColor &c)
+void Editor::setGutterBackground(const QColor &c)
 {
 	gutterBackground = c;
 
 	gutter->update();
 }
 
-int DecoratedTextEdit::getCurrentLine() const
+int Editor::getCurrentLine() const
 {
 	return textCursor().blockNumber() + 1;
 }
 
-int DecoratedTextEdit::getCurrentColumn() const
+int Editor::getCurrentColumn() const
 {
 	FontMetrics metrics(currentFont);
 
@@ -351,7 +351,7 @@ int DecoratedTextEdit::getCurrentColumn() const
 	return qRound(xoff) + 1;
 }
 
-void DecoratedTextEdit::paintEvent(QPaintEvent *e)
+void Editor::paintEvent(QPaintEvent *e)
 {
 	// Let our superclass do its painting, and prepare to do our own.
 
@@ -404,19 +404,19 @@ void DecoratedTextEdit::paintEvent(QPaintEvent *e)
 	}
 }
 
-void DecoratedTextEdit::focusInEvent(QFocusEvent *e)
+void Editor::focusInEvent(QFocusEvent *e)
 {
 	highlightCurrentLine();
 	QPlainTextEdit::focusInEvent(e);
 }
 
-void DecoratedTextEdit::focusOutEvent(QFocusEvent *e)
+void Editor::focusOutEvent(QFocusEvent *e)
 {
 	highlightCurrentLine();
 	QPlainTextEdit::focusOutEvent(e);
 }
 
-void DecoratedTextEdit::resizeEvent(QResizeEvent *e)
+void Editor::resizeEvent(QResizeEvent *e)
 {
 	QPlainTextEdit::resizeEvent(e);
 
@@ -425,7 +425,7 @@ void DecoratedTextEdit::resizeEvent(QResizeEvent *e)
 	        QRect(cr.left(), cr.top(), gutterWidth(), cr.height()));
 }
 
-void DecoratedTextEdit::wheelEvent(QWheelEvent *e)
+void Editor::wheelEvent(QWheelEvent *e)
 {
 	if(e->modifiers() == Qt::ControlModifier)
 	{
@@ -448,7 +448,7 @@ void DecoratedTextEdit::wheelEvent(QWheelEvent *e)
 	}
 }
 
-void DecoratedTextEdit::mouseReleaseEvent(QMouseEvent *e)
+void Editor::mouseReleaseEvent(QMouseEvent *e)
 {
 	highlightCurrentLine();
 
@@ -457,7 +457,7 @@ void DecoratedTextEdit::mouseReleaseEvent(QMouseEvent *e)
 	QPlainTextEdit::mouseReleaseEvent(e);
 }
 
-QString DecoratedTextEdit::getIndentString() const
+QString Editor::getIndentString() const
 {
 	switch(getIndentationMode())
 	{
@@ -470,30 +470,30 @@ QString DecoratedTextEdit::getIndentString() const
 	}
 }
 
-qreal DecoratedTextEdit::contentMargin() const
+qreal Editor::contentMargin() const
 {
 	return static_cast<qreal>(contentOffset().x()) +
 	       static_cast<qreal>(document()->documentMargin());
 }
 
-qreal DecoratedTextEdit::singleColumnWidth() const
+qreal Editor::singleColumnWidth() const
 {
 	FontMetrics metrics(currentFont);
 	return metrics.getColumnWidthF(1);
 }
 
-qreal DecoratedTextEdit::columnOffset(int column) const
+qreal Editor::columnOffset(int column) const
 {
 	return singleColumnWidth() * static_cast<qreal>(column) +
 	       contentMargin();
 }
 
-qreal DecoratedTextEdit::wrapGuideOffset() const
+qreal Editor::wrapGuideOffset() const
 {
 	return columnOffset(getWrapGuideColumnWidth());
 }
 
-void DecoratedTextEdit::initializeHotkeys()
+void Editor::initializeHotkeys()
 {
 	// Backspace
 
@@ -584,7 +584,7 @@ void DecoratedTextEdit::initializeHotkeys()
 	// Ctrl+(Zero)
 
 	addHotkey(Hotkey(Qt::Key_0, Qt::ControlModifier),
-	          std::bind(&DecoratedTextEdit::resetFontZoom, this));
+	          std::bind(&Editor::resetFontZoom, this));
 
 	// Ctrl+Shift+Left
 
@@ -626,7 +626,7 @@ void DecoratedTextEdit::initializeHotkeys()
 		  });
 }
 
-void DecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
+void Editor::gutterPaintEvent(QPaintEvent *e)
 {
 	QPainter painter(gutter);
 
@@ -661,7 +661,7 @@ void DecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 	}
 }
 
-int DecoratedTextEdit::gutterWidth()
+int Editor::gutterWidth()
 {
 	if(!isGutterVisible())
 		return 0;
@@ -680,7 +680,7 @@ int DecoratedTextEdit::gutterWidth()
 	return space;
 }
 
-void DecoratedTextEdit::fullUpdate()
+void Editor::fullUpdate()
 {
 	updateGutterWidth();
 
@@ -690,7 +690,7 @@ void DecoratedTextEdit::fullUpdate()
 	highlightCurrentLine();
 }
 
-void DecoratedTextEdit::fullRepaint()
+void Editor::fullRepaint()
 {
 	repaint();
 	viewport()->repaint();
@@ -698,45 +698,44 @@ void DecoratedTextEdit::fullRepaint()
 	highlightCurrentLine();
 }
 
-void DecoratedTextEdit::duplicateLine()
+void Editor::duplicateLine()
 {
 	algorithm::applyAlgorithm(*this, algorithm::duplicateBlock);
 }
 
-void DecoratedTextEdit::deselect()
+void Editor::deselect()
 {
 	algorithm::applyAlgorithm(*this, algorithm::deselect);
 }
 
-void DecoratedTextEdit::increaseSelectionIndent()
+void Editor::increaseSelectionIndent()
 {
 	algorithm::applyAlgorithm(*this, algorithm::increaseSelectionIndent,
 	                          getIndentationMode(), getIndentationWidth());
 }
 
-void DecoratedTextEdit::decreaseSelectionIndent()
+void Editor::decreaseSelectionIndent()
 {
 	algorithm::applyAlgorithm(*this, algorithm::decreaseSelectionIndent,
 	                          getIndentationMode(), getIndentationWidth());
 }
 
-search::FindResult DecoratedTextEdit::findNext(search::FindQuery const &q)
+search::FindResult Editor::findNext(search::FindQuery const &q)
 {
 	return search::applyAlgorithm(*this, search::find, true, q);
 }
 
-search::FindResult DecoratedTextEdit::findPrevious(search::FindQuery const &q)
+search::FindResult Editor::findPrevious(search::FindQuery const &q)
 {
 	return search::applyAlgorithm(*this, search::find, false, q);
 }
 
-search::FindResult DecoratedTextEdit::replace(search::ReplaceQuery const &q)
+search::FindResult Editor::replace(search::ReplaceQuery const &q)
 {
 	return search::applyAlgorithm(*this, search::replace, q);
 }
 
-search::FindResult
-DecoratedTextEdit::replaceSelection(search::ReplaceQuery const &q)
+search::FindResult Editor::replaceSelection(search::ReplaceQuery const &q)
 {
 	QTextCursor c = textCursor();
 	return search::applyAlgorithm(*this, search::batchReplace, q,
@@ -744,18 +743,18 @@ DecoratedTextEdit::replaceSelection(search::ReplaceQuery const &q)
 	                              std::max(c.anchor(), c.position()));
 }
 
-search::FindResult DecoratedTextEdit::replaceAll(search::ReplaceQuery const &q)
+search::FindResult Editor::replaceAll(search::ReplaceQuery const &q)
 {
 	return search::applyAlgorithm(*this, search::batchReplace, q, 0,
 	                              std::experimental::nullopt);
 }
 
-void DecoratedTextEdit::goToLine(int l)
+void Editor::goToLine(int l)
 {
 	algorithm::applyAlgorithm(*this, algorithm::goToBlock, l - 1);
 }
 
-void DecoratedTextEdit::highlightCurrentLine()
+void Editor::highlightCurrentLine()
 {
 	QList<QTextEdit::ExtraSelection> es;
 	QTextEdit::ExtraSelection selection;
@@ -770,12 +769,12 @@ void DecoratedTextEdit::highlightCurrentLine()
 	setExtraSelections(es);
 }
 
-void DecoratedTextEdit::updateGutterWidth()
+void Editor::updateGutterWidth()
 {
 	setViewportMargins(gutterWidth(), 0, 0, 0);
 }
 
-void DecoratedTextEdit::updateGutter(const QRect &r, int dy)
+void Editor::updateGutter(const QRect &r, int dy)
 {
 	if(dy)
 		gutter->scroll(0, dy);

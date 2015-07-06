@@ -44,7 +44,7 @@ namespace qompose
 namespace editor
 {
 Buffer::Buffer(Pane *pp, QWidget *p)
-        : DecoratedTextEdit(p), parentPane(pp), path(QString()), codec("UTF-8")
+        : Editor(p), parentPane(pp), path(QString()), codec("UTF-8")
 {
 	// Load our initial settings, and connect our settings object.
 

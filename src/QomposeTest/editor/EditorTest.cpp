@@ -26,46 +26,45 @@
 #include <QColor>
 #include <QString>
 
-#include "QomposeCommon/editor/DecoratedTextEdit.h"
+#include "QomposeCommon/editor/Editor.h"
 
 namespace
 {
 /*!
- * \brief This subclass exposes DecoratedTextEdit functions useful for testing.
+ * \brief This subclass exposes Editor functions useful for testing.
  */
-class TestableDecoratedTextEdit : public qompose::editor::DecoratedTextEdit
+class TestableEditor : public qompose::editor::Editor
 {
 public:
-	TestableDecoratedTextEdit()
-	        : qompose::editor::DecoratedTextEdit(nullptr)
+	TestableEditor() : qompose::editor::Editor(nullptr)
 	{
 	}
 
 	virtual qreal contentMargin() const
 	{
-		return qompose::editor::DecoratedTextEdit::contentMargin();
+		return qompose::editor::Editor::contentMargin();
 	}
 
 	virtual qreal singleColumnWidth() const
 	{
-		return qompose::editor::DecoratedTextEdit::singleColumnWidth();
+		return qompose::editor::Editor::singleColumnWidth();
 	}
 
 	virtual qreal columnOffset(int column) const
 	{
-		return qompose::editor::DecoratedTextEdit::columnOffset(column);
+		return qompose::editor::Editor::columnOffset(column);
 	}
 
 	virtual qreal wrapGuideOffset() const
 	{
-		return qompose::editor::DecoratedTextEdit::wrapGuideOffset();
+		return qompose::editor::Editor::wrapGuideOffset();
 	}
 };
 }
 
-TEST_CASE("Verify DecoratedTextEdit default state", "[DecoratedTextEdit]")
+TEST_CASE("Verify Editor default state", "[Editor]")
 {
-	auto editor = std::make_shared<qompose::editor::DecoratedTextEdit>();
+	auto editor = std::make_shared<qompose::editor::Editor>();
 
 	REQUIRE(editor->isGutterVisible());
 	REQUIRE(editor->font().family() == QString("Courier"));
@@ -87,10 +86,9 @@ TEST_CASE("Verify DecoratedTextEdit default state", "[DecoratedTextEdit]")
 	REQUIRE(editor->getCurrentColumn() == 1);
 }
 
-TEST_CASE("Verify DecoratedTextEdit font zooming functionality",
-          "[DecoratedTextEdit]")
+TEST_CASE("Verify Editor font zooming functionality", "[Editor]")
 {
-	auto editor = std::make_shared<TestableDecoratedTextEdit>();
+	auto editor = std::make_shared<TestableEditor>();
 
 	// Set a non-default wrap guide column width.
 

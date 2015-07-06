@@ -29,7 +29,7 @@ class SpellCheckerWorker;
 
 namespace editor
 {
-class DecoratedTextEdit;
+class Editor;
 }
 
 /*!
@@ -44,11 +44,11 @@ class SpellChecker : public QObject
 	Q_OBJECT
 
 public:
-	SpellChecker(editor::DecoratedTextEdit *);
+	SpellChecker(editor::Editor *);
 	virtual ~SpellChecker();
 
 private:
-	editor::DecoratedTextEdit *editor;
+	editor::Editor *editor;
 	SpellCheckerWorker *worker;
 	QThread *thread;
 

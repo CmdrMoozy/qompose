@@ -20,17 +20,17 @@
 
 #include <QPaintEvent>
 
-#include "QomposeCommon/editor/DecoratedTextEdit.h"
+#include "QomposeCommon/editor/Editor.h"
 
 namespace qompose
 {
 namespace editor
 {
-Gutter::Gutter(DecoratedTextEdit *e) : QWidget(e, nullptr), editor(e)
+Gutter::Gutter(Editor *e) : QWidget(e, nullptr), editor(e)
 {
 }
 
-void Gutter::setEditor(DecoratedTextEdit *e)
+void Gutter::setEditor(Editor *e)
 {
 	editor = e;
 }

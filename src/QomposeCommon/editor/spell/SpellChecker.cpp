@@ -20,12 +20,12 @@
 
 #include <QThread>
 
-#include "QomposeCommon/editor/DecoratedTextEdit.h"
+#include "QomposeCommon/editor/Editor.h"
 #include "QomposeCommon/editor/spell/SpellCheckerWorker.h"
 
 namespace qompose
 {
-SpellChecker::SpellChecker(editor::DecoratedTextEdit *e)
+SpellChecker::SpellChecker(editor::Editor *e)
         : QObject(e), editor(e), worker(nullptr), thread(nullptr)
 {
 	worker = new SpellCheckerWorker();

@@ -1,8 +1,9 @@
 set(QomposeTest_SOURCES
 
-	DecoratedTextEditTest.cpp
 	FontMetricsTest.cpp
 	QomposeTest.cpp
+
+	editor/EditorTest.cpp
 
 	editor/algorithm/MovementTest.cpp
 

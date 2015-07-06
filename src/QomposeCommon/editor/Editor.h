@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSECOMMON_EDITOR_DECORATED_TEXT_EDIT
-#define INCLUDE_QOMPOSECOMMON_EDITOR_DECORATED_TEXT_EDIT
+#ifndef INCLUDE_QOMPOSECOMMON_EDITOR_EDITOR_H
+#define INCLUDE_QOMPOSECOMMON_EDITOR_EDITOR_H
 
 #include <QPlainTextEdit>
 
@@ -40,7 +40,7 @@ class Gutter;
  *
  * This class should be subclassed to implement editor functionality.
  */
-class DecoratedTextEdit : public hotkey::HotkeyedWidget<QPlainTextEdit>
+class Editor : public hotkey::HotkeyedWidget<QPlainTextEdit>
 {
 	friend class Gutter;
 
@@ -53,12 +53,12 @@ public:
 	 *
 	 * \param p Our parent widget.
 	 */
-	DecoratedTextEdit(QWidget *p = nullptr);
+	Editor(QWidget *p = nullptr);
 
-	DecoratedTextEdit(const DecoratedTextEdit &) = delete;
-	virtual ~DecoratedTextEdit() = default;
+	Editor(const Editor &) = delete;
+	virtual ~Editor() = default;
 
-	DecoratedTextEdit &operator=(const DecoratedTextEdit &) = delete;
+	Editor &operator=(const Editor &) = delete;
 
 	/*!
 	 * This function sets whether or not our gutter is visible.

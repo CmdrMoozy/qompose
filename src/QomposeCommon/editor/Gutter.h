@@ -28,7 +28,7 @@ namespace qompose
 {
 namespace editor
 {
-class DecoratedTextEdit;
+class Editor;
 
 /*!
  * \brief This class implements our gutter widget.
@@ -42,7 +42,7 @@ public:
 	 *
 	 * \param e The editor this gutter is attached to.
 	 */
-	Gutter(DecoratedTextEdit *e);
+	Gutter(Editor *e);
 
 	Gutter(const Gutter &) = delete;
 	virtual ~Gutter() = default;
@@ -54,7 +54,7 @@ public:
 	 *
 	 * \param e The editor we should attach ourself to.
 	 */
-	void setEditor(DecoratedTextEdit *e);
+	void setEditor(Editor *e);
 
 	/*!
 	 * This function returns the width of our gutter.
@@ -82,7 +82,7 @@ protected:
 	virtual void paintEvent(QPaintEvent *e);
 
 private:
-	DecoratedTextEdit *editor;
+	Editor *editor;
 };
 }
 }
