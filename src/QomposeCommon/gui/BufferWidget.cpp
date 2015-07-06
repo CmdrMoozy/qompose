@@ -61,7 +61,7 @@ int BufferWidget::count() const
 	return tabWidget->count();
 }
 
-Buffer *BufferWidget::bufferAt(int i) const
+editor::Buffer *BufferWidget::bufferAt(int i) const
 {
 	Pane *pane = dynamic_cast<Pane *>(tabWidget->widget(i));
 	if(pane == nullptr)
@@ -69,7 +69,7 @@ Buffer *BufferWidget::bufferAt(int i) const
 	return pane->getBuffer();
 }
 
-Buffer *BufferWidget::currentBuffer() const
+editor::Buffer *BufferWidget::currentBuffer() const
 {
 	Pane *pane = dynamic_cast<Pane *>(tabWidget->currentWidget());
 	if(pane == nullptr)
@@ -91,7 +91,7 @@ bool BufferWidget::prepareCloseParent()
 {
 	for(int i = 0; i < count(); ++i)
 	{
-		Buffer *buf = bufferAt(i);
+		editor::Buffer *buf = bufferAt(i);
 		if(buf == nullptr)
 			continue;
 		setCurrentBuffer(i);
@@ -108,7 +108,7 @@ int BufferWidget::findBufferWithPath(const QString &p)
 
 	for(int i = 0; i < count(); ++i)
 	{
-		Buffer *buf = bufferAt(i);
+		editor::Buffer *buf = bufferAt(i);
 		QFileInfo bufFile(buf->getPath());
 
 		if(file == bufFile)
@@ -123,7 +123,7 @@ std::vector<std::string> BufferWidget::getOpenPaths() const
 	std::vector<std::string> paths;
 	for(int i = 0; i < count(); ++i)
 	{
-		Buffer *buf = bufferAt(i);
+		editor::Buffer *buf = bufferAt(i);
 		QString path = buf->getPath();
 		if(!path.isEmpty())
 			continue;
@@ -137,7 +137,7 @@ QString BufferWidget::getDefaultDirectory() const
 	QString defaultDirectory = QDir::homePath();
 	bool found = false;
 
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 	int ci = tabWidget->indexOf(buf);
 
 	// See if the current buffer has a valid default path.
@@ -204,13 +204,13 @@ Pane *BufferWidget::newPane()
 {
 	Pane *p = new Pane(this);
 
-	QObject::connect(p->getBuffer(), &Buffer::titleChanged, this,
+	QObject::connect(p->getBuffer(), &editor::Buffer::titleChanged, this,
 	                 &BufferWidget::doTabTitleChanged);
-	QObject::connect(p->getBuffer(), &Buffer::pathChanged, this,
+	QObject::connect(p->getBuffer(), &editor::Buffer::pathChanged, this,
 	                 &BufferWidget::doTabPathChanged);
-	QObject::connect(p->getBuffer(), &Buffer::encodingChanged, this,
+	QObject::connect(p->getBuffer(), &editor::Buffer::encodingChanged, this,
 	                 &BufferWidget::doBufferEncodingChanged);
-	QObject::connect(p->getBuffer(), &Buffer::searchWrapped, this,
+	QObject::connect(p->getBuffer(), &editor::Buffer::searchWrapped, this,
 	                 &BufferWidget::searchWrapped);
 
 	int i = tabWidget->addTab(p, p->getBuffer()->getTitle());
@@ -245,7 +245,7 @@ void BufferWidget::moveBuffer(int f, int t)
 
 void BufferWidget::doSetEncoding(const QByteArray &e)
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 	if(buf == nullptr)
 		return;
 	buf->setEncoding(e);
@@ -287,7 +287,7 @@ void BufferWidget::doReopen()
 
 void BufferWidget::doRevert()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -299,7 +299,7 @@ void BufferWidget::doRevertAll()
 {
 	for(int i = 0; i < tabWidget->count(); ++i)
 	{
-		Buffer *buf = bufferAt(i);
+		editor::Buffer *buf = bufferAt(i);
 
 		if(buf != NULL)
 			buf->revert();
@@ -308,7 +308,7 @@ void BufferWidget::doRevertAll()
 
 void BufferWidget::doSave()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 	if(buf == nullptr)
 		return;
 	buf->save();
@@ -316,7 +316,7 @@ void BufferWidget::doSave()
 
 void BufferWidget::doSaveAs()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 	if(buf == nullptr)
 		return;
 	buf->saveAs();
@@ -324,7 +324,7 @@ void BufferWidget::doSaveAs()
 
 void BufferWidget::doClose()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 	if(buf == nullptr)
 		return;
 
@@ -337,7 +337,7 @@ void BufferWidget::doClose()
 
 void BufferWidget::doUndo()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -347,7 +347,7 @@ void BufferWidget::doUndo()
 
 void BufferWidget::doRedo()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -357,7 +357,7 @@ void BufferWidget::doRedo()
 
 void BufferWidget::doCut()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -367,7 +367,7 @@ void BufferWidget::doCut()
 
 void BufferWidget::doCopy()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -377,7 +377,7 @@ void BufferWidget::doCopy()
 
 void BufferWidget::doPaste()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -387,7 +387,7 @@ void BufferWidget::doPaste()
 
 void BufferWidget::doDuplicateLine()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -397,7 +397,7 @@ void BufferWidget::doDuplicateLine()
 
 void BufferWidget::doSelectAll()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -407,7 +407,7 @@ void BufferWidget::doSelectAll()
 
 void BufferWidget::doDeselect()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -417,7 +417,7 @@ void BufferWidget::doDeselect()
 
 void BufferWidget::doIncreaseIndent()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -427,7 +427,7 @@ void BufferWidget::doIncreaseIndent()
 
 void BufferWidget::doDecreaseIndent()
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -437,7 +437,7 @@ void BufferWidget::doDecreaseIndent()
 
 void BufferWidget::doLineWrapping(bool enabled)
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -448,7 +448,7 @@ void BufferWidget::doLineWrapping(bool enabled)
 editor::search::FindResult
 BufferWidget::doFindNext(editor::search::FindQuery const &q)
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return editor::search::FindResult::NoDocument;
@@ -459,7 +459,7 @@ BufferWidget::doFindNext(editor::search::FindQuery const &q)
 editor::search::FindResult
 BufferWidget::doFindPrevious(editor::search::FindQuery const &q)
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return editor::search::FindResult::NoDocument;
@@ -470,7 +470,7 @@ BufferWidget::doFindPrevious(editor::search::FindQuery const &q)
 editor::search::FindResult
 BufferWidget::doReplace(editor::search::ReplaceQuery const &q)
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return editor::search::FindResult::NoDocument;
@@ -481,7 +481,7 @@ BufferWidget::doReplace(editor::search::ReplaceQuery const &q)
 editor::search::FindResult
 BufferWidget::doReplaceSelection(editor::search::ReplaceQuery const &q)
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return editor::search::FindResult::NoDocument;
@@ -492,7 +492,7 @@ BufferWidget::doReplaceSelection(editor::search::ReplaceQuery const &q)
 editor::search::FindResult
 BufferWidget::doReplaceAll(editor::search::ReplaceQuery const &q)
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return editor::search::FindResult::NoDocument;
@@ -502,7 +502,7 @@ BufferWidget::doReplaceAll(editor::search::ReplaceQuery const &q)
 
 void BufferWidget::doGoTo(int l)
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -556,7 +556,7 @@ void BufferWidget::doMoveBufferRight()
 
 void BufferWidget::doPrint(QPrinter *p)
 {
-	Buffer *buf = currentBuffer();
+	editor::Buffer *buf = currentBuffer();
 
 	if(buf == NULL)
 		return;
@@ -613,7 +613,7 @@ void BufferWidget::doTabClosing(int i)
 
 void BufferWidget::doTabTitleChanged(const QString &t)
 {
-	Buffer *b = dynamic_cast<Buffer *>(sender());
+	editor::Buffer *b = dynamic_cast<editor::Buffer *>(sender());
 	if(b == nullptr)
 		return;
 
@@ -633,7 +633,7 @@ void BufferWidget::doTabTitleChanged(const QString &t)
 
 void BufferWidget::doTabPathChanged(const QString &p)
 {
-	Buffer *b = dynamic_cast<Buffer *>(sender());
+	editor::Buffer *b = dynamic_cast<editor::Buffer *>(sender());
 
 	if(b != NULL)
 	{
@@ -644,7 +644,7 @@ void BufferWidget::doTabPathChanged(const QString &p)
 	}
 }
 
-Buffer *BufferWidget::doOpenDescriptor(const FileDescriptor &d)
+editor::Buffer *BufferWidget::doOpenDescriptor(const FileDescriptor &d)
 {
 	// If we only have one "Untitled" buffer, we'll replace it.
 
@@ -683,7 +683,7 @@ Buffer *BufferWidget::doOpenDescriptor(const FileDescriptor &d)
 
 void BufferWidget::doReopenBuffer(const ClosedBufferDescriptor &d)
 {
-	Buffer *b = doOpenDescriptor(d.file);
+	editor::Buffer *b = doOpenDescriptor(d.file);
 
 	if(b)
 	{
@@ -697,11 +697,12 @@ void BufferWidget::doReopenBuffer(const ClosedBufferDescriptor &d)
 
 void BufferWidget::doBufferEncodingChanged(const QByteArray &e)
 {
-	const Buffer *b = dynamic_cast<const Buffer *>(sender());
+	const editor::Buffer *b =
+	        dynamic_cast<const editor::Buffer *>(sender());
 	if(b == nullptr)
 		return;
 
-	const Buffer *current = currentBuffer();
+	const editor::Buffer *current = currentBuffer();
 
 	if(b == current)
 		Q_EMIT(encodingChanged(e));

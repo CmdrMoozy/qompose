@@ -51,8 +51,6 @@ set(QomposeCommon_SOURCES
 	editor/Buffer.h
 	editor/DecoratedTextEdit.cpp
 	editor/DecoratedTextEdit.h
-	editor/Editor.cpp
-	editor/Editor.h
 	editor/Gutter.cpp
 	editor/Gutter.h
 

@@ -25,7 +25,7 @@
 
 namespace qompose
 {
-SpellChecker::SpellChecker(DecoratedTextEdit *e)
+SpellChecker::SpellChecker(editor::DecoratedTextEdit *e)
         : QObject(e), editor(e), worker(nullptr), thread(nullptr)
 {
 	worker = new SpellCheckerWorker();

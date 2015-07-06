@@ -25,9 +25,13 @@ class QGridLayout;
 
 namespace qompose
 {
-class Buffer;
 class BufferWidget;
 class StatusBar;
+
+namespace editor
+{
+class Buffer;
+}
 
 class Pane : public QWidget
 {
@@ -42,13 +46,13 @@ public:
 
 	BufferWidget *getParentContainer() const;
 
-	Buffer *getBuffer() const;
+	editor::Buffer *getBuffer() const;
 
 private:
 	BufferWidget *parentContainer;
 
 	QGridLayout *layout;
-	Buffer *buffer;
+	editor::Buffer *buffer;
 	StatusBar *statusBar;
 
 private Q_SLOTS:

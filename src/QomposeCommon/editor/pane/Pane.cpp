@@ -37,7 +37,7 @@ Pane::Pane(BufferWidget *pc, QWidget *p, Qt::WindowFlags f)
 {
 	layout = new QGridLayout(this);
 
-	buffer = new Buffer(this);
+	buffer = new editor::Buffer(this);
 	statusBar = new StatusBar(this);
 
 	layout->addWidget(buffer, 0, 0, 1, 1);
@@ -48,9 +48,9 @@ Pane::Pane(BufferWidget *pc, QWidget *p, Qt::WindowFlags f)
 	layout->setSpacing(0);
 	setLayout(layout);
 
-	QObject::connect(buffer, &Buffer::pathChanged, statusBar,
+	QObject::connect(buffer, &editor::Buffer::pathChanged, statusBar,
 	                 &StatusBar::setFilePath);
-	QObject::connect(buffer, &Buffer::cursorPositionChanged, this,
+	QObject::connect(buffer, &editor::Buffer::cursorPositionChanged, this,
 	                 &Pane::doCursorPositionChanged);
 }
 
@@ -59,7 +59,7 @@ BufferWidget *Pane::getParentContainer() const
 	return parentContainer;
 }
 
-Buffer *Pane::getBuffer() const
+editor::Buffer *Pane::getBuffer() const
 {
 	return buffer;
 }

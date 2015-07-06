@@ -363,7 +363,7 @@ void MainMenu::doBufferChanged()
 {
 	assert(QObject::sender() == bufferWidget);
 
-	Buffer *buffer = bufferWidget->currentBuffer();
+	editor::Buffer *buffer = bufferWidget->currentBuffer();
 	if(buffer != nullptr)
 		Q_EMIT lineWrappingChanged(buffer->getLineWrapping());
 }

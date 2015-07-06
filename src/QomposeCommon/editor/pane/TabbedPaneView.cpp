@@ -54,13 +54,13 @@ TabbedPaneView::TabbedPaneView(PaneModel *m, QWidget *p, Qt::WindowFlags f)
 
 void TabbedPaneView::connectPane(Pane *p) const
 {
-	QObject::connect(p->getBuffer(), &Buffer::titleChanged, this,
+	QObject::connect(p->getBuffer(), &editor::Buffer::titleChanged, this,
 	                 &TabbedPaneView::doTabTitleChanged);
-	QObject::connect(p->getBuffer(), &Buffer::pathChanged, this,
+	QObject::connect(p->getBuffer(), &editor::Buffer::pathChanged, this,
 	                 &TabbedPaneView::doTabPathChanged);
-	QObject::connect(p->getBuffer(), &Buffer::encodingChanged, this,
+	QObject::connect(p->getBuffer(), &editor::Buffer::encodingChanged, this,
 	                 &TabbedPaneView::doBufferEncodingChanged);
-	QObject::connect(p->getBuffer(), &Buffer::searchWrapped, this,
+	QObject::connect(p->getBuffer(), &editor::Buffer::searchWrapped, this,
 	                 &TabbedPaneView::searchWrapped);
 }
 

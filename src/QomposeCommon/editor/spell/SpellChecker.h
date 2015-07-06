@@ -25,8 +25,12 @@ class QThread;
 
 namespace qompose
 {
-class DecoratedTextEdit;
 class SpellCheckerWorker;
+
+namespace editor
+{
+class DecoratedTextEdit;
+}
 
 /*!
  * \brief This class implements a spell checker for a decorated text edit.
@@ -40,11 +44,11 @@ class SpellChecker : public QObject
 	Q_OBJECT
 
 public:
-	SpellChecker(DecoratedTextEdit *);
+	SpellChecker(editor::DecoratedTextEdit *);
 	virtual ~SpellChecker();
 
 private:
-	DecoratedTextEdit *editor;
+	editor::DecoratedTextEdit *editor;
 	SpellCheckerWorker *worker;
 	QThread *thread;
 

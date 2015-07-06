@@ -29,7 +29,6 @@
 #include <QStack>
 
 #include "QomposeCommon/Types.h"
-#include "QomposeCommon/editor/Editor.h"
 #include "QomposeCommon/editor/search/Find.h"
 #include "QomposeCommon/editor/search/Query.h"
 #include "QomposeCommon/util/Paths.h"
@@ -40,8 +39,12 @@ class QPrinter;
 
 namespace qompose
 {
-class Buffer;
 class Pane;
+
+namespace editor
+{
+class Buffer;
+}
 
 /*!
  * \brief This class provides high-level management of a set of buffers.
@@ -80,7 +83,7 @@ public:
 	 * \param i The index of the desired buffer.
 	 * \return The buffer at the given index.
 	 */
-	Buffer *bufferAt(int i) const;
+	editor::Buffer *bufferAt(int i) const;
 
 	/*!
 	 * This function returns our current buffer (i.e., the visible one), or
@@ -88,7 +91,7 @@ public:
 	 *
 	 * \return Our widget's current buffer.
 	 */
-	Buffer *currentBuffer() const;
+	editor::Buffer *currentBuffer() const;
 
 	/*!
 	 * This function returns whether or not our buffers widget has a valid
@@ -483,7 +486,7 @@ private Q_SLOTS:
 	 * \param d The file descriptor to open.
 	 * \return A pointer to the newly-opened buffer, or nullptr if none.
 	 */
-	Buffer *doOpenDescriptor(const FileDescriptor &d);
+	editor::Buffer *doOpenDescriptor(const FileDescriptor &d);
 
 	/*!
 	 * This is a utility function which attempts to reopen a closed buffer,

@@ -41,8 +41,10 @@
 
 namespace qompose
 {
+namespace editor
+{
 Buffer::Buffer(Pane *pp, QWidget *p)
-        : Editor(p), parentPane(pp), path(QString()), codec("UTF-8")
+        : DecoratedTextEdit(p), parentPane(pp), path(QString()), codec("UTF-8")
 {
 	// Load our initial settings, and connect our settings object.
 
@@ -419,5 +421,6 @@ void Buffer::doSettingChanged(const QString &k, const QVariant &v)
 		setGutterForeground(v.value<QColor>());
 	else if(k == "gutter-background")
 		setGutterBackground(v.value<QColor>());
+}
 }
 }

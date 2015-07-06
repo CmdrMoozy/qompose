@@ -24,7 +24,6 @@
 #include <QMainWindow>
 #include <QIcon>
 
-#include "QomposeCommon/editor/Editor.h"
 #include "QomposeCommon/editor/search/Find.h"
 
 class QCloseEvent;

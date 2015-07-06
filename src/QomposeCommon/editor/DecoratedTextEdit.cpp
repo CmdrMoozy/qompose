@@ -22,12 +22,20 @@
 #include <QTextBlock>
 
 #include "QomposeCommon/editor/Gutter.h"
+#include "QomposeCommon/editor/algorithm/General.h"
+#include "QomposeCommon/editor/algorithm/Indentation.h"
+#include "QomposeCommon/editor/algorithm/Movement.h"
+#include "QomposeCommon/editor/search/applyAlgorithm.h"
+#include "QomposeCommon/editor/search/Find.h"
+#include "QomposeCommon/editor/search/Replace.h"
 #include "QomposeCommon/util/FontMetrics.h"
 
 namespace qompose
 {
+namespace editor
+{
 DecoratedTextEdit::DecoratedTextEdit(QWidget *p)
-        : QPlainTextEdit(p),
+        : hotkey::HotkeyedWidget<QPlainTextEdit>(p),
           gutter(nullptr),
           gutterVisible(false),
           currentFont(QFont("Courier")),
@@ -485,6 +493,139 @@ qreal DecoratedTextEdit::wrapGuideOffset() const
 	return columnOffset(getWrapGuideColumnWidth());
 }
 
+void DecoratedTextEdit::initializeHotkeys()
+{
+	// Backspace
+
+	addHotkey(Hotkey(Qt::Key_Backspace, nullptr,
+	                 ~Qt::KeyboardModifiers(nullptr)),
+	          [this]()
+	          {
+		          algorithm::applyAlgorithm(*this, algorithm::backspace,
+		                                    getIndentationMode(),
+		                                    getIndentationWidth());
+		  });
+
+	// Delete
+
+	addHotkey(Hotkey(Qt::Key_Delete, nullptr,
+	                 ~Qt::KeyboardModifiers(nullptr)),
+	          [this]()
+	          {
+		          algorithm::applyAlgorithm(*this,
+		                                    algorithm::deleteCharacter);
+		  });
+
+	// Enter
+
+	addHotkey(Hotkey(Qt::Key_Return, nullptr,
+	                 ~Qt::KeyboardModifiers(nullptr)),
+	          [this]()
+	          {
+		          algorithm::applyAlgorithm(*this, algorithm::newline);
+		  });
+
+	addHotkey(
+	        Hotkey(Qt::Key_Enter, nullptr, ~Qt::KeyboardModifiers(nullptr)),
+	        [this]()
+	        {
+		        algorithm::applyAlgorithm(*this, algorithm::newline);
+		});
+
+	// Tab
+
+	addHotkey(Hotkey(Qt::Key_Tab), [this]()
+	          {
+		          algorithm::applyAlgorithm(*this, algorithm::tab,
+		                                    getIndentationMode(),
+		                                    getIndentationWidth());
+		  });
+
+	// Shift + Tab
+
+	addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier), [this]()
+	          {
+		          algorithm::applyAlgorithm(
+		                  *this, algorithm::decreaseSelectionIndent,
+		                  getIndentationMode(), getIndentationWidth());
+		  });
+
+	addHotkey(Hotkey(Qt::Key_Backtab, Qt::ShiftModifier), [this]()
+	          {
+		          algorithm::applyAlgorithm(
+		                  *this, algorithm::decreaseSelectionIndent,
+		                  getIndentationMode(), getIndentationWidth());
+		  });
+
+	// Home
+
+	addHotkey(Hotkey(Qt::Key_Home), [this]()
+	          {
+		          algorithm::applyAlgorithm(*this, algorithm::home,
+		                                    false);
+		  });
+
+	// Shift + Home
+
+	addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier), [this]()
+	          {
+		          algorithm::applyAlgorithm(*this, algorithm::home,
+		                                    true);
+		  });
+
+	// Ctrl+D
+
+	addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier), [this]()
+	          {
+		          algorithm::applyAlgorithm(*this,
+		                                    algorithm::duplicateBlock);
+		  });
+
+	// Ctrl+(Zero)
+
+	addHotkey(Hotkey(Qt::Key_0, Qt::ControlModifier),
+	          std::bind(&DecoratedTextEdit::resetFontZoom, this));
+
+	// Ctrl+Shift+Left
+
+	addHotkey(Hotkey(Qt::Key_Left, Qt::ControlModifier | Qt::ShiftModifier),
+	          []()
+	          {
+		  });
+
+	// Ctrl+Shift+Right
+
+	addHotkey(
+	        Hotkey(Qt::Key_Right, Qt::ControlModifier | Qt::ShiftModifier),
+	        []()
+	        {
+		});
+
+	// Ctrl+Insert
+
+	addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier), []()
+	          {
+		  });
+
+	// Ctrl+K
+
+	addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier), []()
+	          {
+		  });
+
+	// Shift+Insert
+
+	addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier), []()
+	          {
+		  });
+
+	// Shift+Delete
+
+	addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier), []()
+	          {
+		  });
+}
+
 void DecoratedTextEdit::gutterPaintEvent(QPaintEvent *e)
 {
 	QPainter painter(gutter);
@@ -557,6 +698,63 @@ void DecoratedTextEdit::fullRepaint()
 	highlightCurrentLine();
 }
 
+void DecoratedTextEdit::duplicateLine()
+{
+	algorithm::applyAlgorithm(*this, algorithm::duplicateBlock);
+}
+
+void DecoratedTextEdit::deselect()
+{
+	algorithm::applyAlgorithm(*this, algorithm::deselect);
+}
+
+void DecoratedTextEdit::increaseSelectionIndent()
+{
+	algorithm::applyAlgorithm(*this, algorithm::increaseSelectionIndent,
+	                          getIndentationMode(), getIndentationWidth());
+}
+
+void DecoratedTextEdit::decreaseSelectionIndent()
+{
+	algorithm::applyAlgorithm(*this, algorithm::decreaseSelectionIndent,
+	                          getIndentationMode(), getIndentationWidth());
+}
+
+search::FindResult DecoratedTextEdit::findNext(search::FindQuery const &q)
+{
+	return search::applyAlgorithm(*this, search::find, true, q);
+}
+
+search::FindResult DecoratedTextEdit::findPrevious(search::FindQuery const &q)
+{
+	return search::applyAlgorithm(*this, search::find, false, q);
+}
+
+search::FindResult DecoratedTextEdit::replace(search::ReplaceQuery const &q)
+{
+	return search::applyAlgorithm(*this, search::replace, q);
+}
+
+search::FindResult
+DecoratedTextEdit::replaceSelection(search::ReplaceQuery const &q)
+{
+	QTextCursor c = textCursor();
+	return search::applyAlgorithm(*this, search::batchReplace, q,
+	                              std::min(c.anchor(), c.position()),
+	                              std::max(c.anchor(), c.position()));
+}
+
+search::FindResult DecoratedTextEdit::replaceAll(search::ReplaceQuery const &q)
+{
+	return search::applyAlgorithm(*this, search::batchReplace, q, 0,
+	                              std::experimental::nullopt);
+}
+
+void DecoratedTextEdit::goToLine(int l)
+{
+	algorithm::applyAlgorithm(*this, algorithm::goToBlock, l - 1);
+}
+
 void DecoratedTextEdit::highlightCurrentLine()
 {
 	QList<QTextEdit::ExtraSelection> es;
@@ -586,5 +784,6 @@ void DecoratedTextEdit::updateGutter(const QRect &r, int dy)
 
 	if(r.contains(viewport()->rect()))
 		updateGutterWidth();
+}
 }
 }

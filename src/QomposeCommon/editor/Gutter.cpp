@@ -24,6 +24,8 @@
 
 namespace qompose
 {
+namespace editor
+{
 Gutter::Gutter(DecoratedTextEdit *e) : QWidget(e, nullptr), editor(e)
 {
 }
@@ -48,5 +50,6 @@ void Gutter::paintEvent(QPaintEvent *e)
 {
 	if(editor != NULL)
 		editor->gutterPaintEvent(e);
+}
 }
 }

@@ -278,7 +278,7 @@ void Window::doUpdateWindowTitle()
 
 	if(showFile)
 	{
-		Buffer *buf = buffers->currentBuffer();
+		editor::Buffer *buf = buffers->currentBuffer();
 
 		if(buf != nullptr)
 		{

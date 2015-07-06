@@ -26,6 +26,8 @@ class QPaintEvent;
 
 namespace qompose
 {
+namespace editor
+{
 class DecoratedTextEdit;
 
 /*!
@@ -82,6 +84,7 @@ protected:
 private:
 	DecoratedTextEdit *editor;
 };
+}
 }
 
 #endif

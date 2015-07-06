@@ -33,38 +33,39 @@ namespace
 /*!
  * \brief This subclass exposes DecoratedTextEdit functions useful for testing.
  */
-class TestableDecoratedTextEdit : public qompose::DecoratedTextEdit
+class TestableDecoratedTextEdit : public qompose::editor::DecoratedTextEdit
 {
 public:
-	TestableDecoratedTextEdit() : qompose::DecoratedTextEdit(nullptr)
+	TestableDecoratedTextEdit()
+	        : qompose::editor::DecoratedTextEdit(nullptr)
 	{
 	}
 
 	virtual qreal contentMargin() const
 	{
-		return qompose::DecoratedTextEdit::contentMargin();
+		return qompose::editor::DecoratedTextEdit::contentMargin();
 	}
 
 	virtual qreal singleColumnWidth() const
 	{
-		return qompose::DecoratedTextEdit::singleColumnWidth();
+		return qompose::editor::DecoratedTextEdit::singleColumnWidth();
 	}
 
 	virtual qreal columnOffset(int column) const
 	{
-		return qompose::DecoratedTextEdit::columnOffset(column);
+		return qompose::editor::DecoratedTextEdit::columnOffset(column);
 	}
 
 	virtual qreal wrapGuideOffset() const
 	{
-		return qompose::DecoratedTextEdit::wrapGuideOffset();
+		return qompose::editor::DecoratedTextEdit::wrapGuideOffset();
 	}
 };
 }
 
 TEST_CASE("Verify DecoratedTextEdit default state", "[DecoratedTextEdit]")
 {
-	auto editor = std::make_shared<qompose::DecoratedTextEdit>();
+	auto editor = std::make_shared<qompose::editor::DecoratedTextEdit>();
 
 	REQUIRE(editor->isGutterVisible());
 	REQUIRE(editor->font().family() == QString("Courier"));

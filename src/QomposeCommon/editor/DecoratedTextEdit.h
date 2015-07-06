@@ -22,8 +22,12 @@
 #include <QPlainTextEdit>
 
 #include "QomposeCommon/Types.h"
+#include "QomposeCommon/editor/search/Query.h"
+#include "QomposeCommon/hotkey/HotkeyedWidget.h"
 
 namespace qompose
+{
+namespace editor
 {
 class Gutter;
 
@@ -36,7 +40,7 @@ class Gutter;
  *
  * This class should be subclassed to implement editor functionality.
  */
-class DecoratedTextEdit : public QPlainTextEdit
+class DecoratedTextEdit : public hotkey::HotkeyedWidget<QPlainTextEdit>
 {
 	friend class Gutter;
 
@@ -451,6 +455,13 @@ private:
 	QColor gutterBackground;
 
 	/*!
+	 * This function initializes our hotkeys map, which is used by our
+	 * keyPressEvent handler to decide what action to take when a given
+	 * hotkey is pressed.
+	 */
+	void initializeHotkeys();
+
+	/*!
 	 * This function handles a paint event passed up to us by our gutter by
 	 * rendering the gutter according to our editor's current state.
 	 *
@@ -481,6 +492,127 @@ public Q_SLOTS:
 	 */
 	void fullRepaint();
 
+	/*!
+	 * This slot duplicates the current line. The new line is inserted
+	 * below the current line, without altering our cursor position. Note
+	 * that this entire operation is a single "edit block," for undo/redo
+	 * operations.
+	 */
+	void duplicateLine();
+
+	/*!
+	 * This slot clears any selection our editor may have. This is done by
+	 * simply discarding the "anchor" portion of the current cursor,
+	 * leaving its actual "position" where it was.
+	 */
+	void deselect();
+
+	/*!
+	 * This slot increases the indent of all the lines in the current
+	 * selection. Partially selected lines are included. This function will
+	 * insert a single tab character at the beginning of each included
+	 * line.
+	 *
+	 * The resulting selection will have an anchor at the beginning of the
+	 * first line, and a cursor position at the end of the last line.
+	 *
+	 * Also note that this operation is done in a single "edit block," for
+	 * undo/redo actions.
+	 */
+	void increaseSelectionIndent();
+
+	/*!
+	 * This slot decreases the indent of all the lines in the current
+	 * selection. Partially selected lines are included.
+	 *
+	 * This slot considers tabs and sets of spaces the same length as the
+	 * tab width to be a single "indentation." This function will remove
+	 * one indentation from each line in the selection. If no indentations
+	 * are present, then we will instead look for any arbitrary leading
+	 * spaces to remove.
+	 *
+	 * The resulting selection will have an anchor at the beginning of the
+	 * first line, and a cursor position at the end of the last line.
+	 *
+	 * Also note that this operation is done in a single "edit block," for
+	 * undo/redo actions.
+	 */
+	void decreaseSelectionIndent();
+
+	/*!
+	 * This slot moves to the next match based upon the given find query
+	 * and the current cursor location.
+	 *
+	 * \param q The query to execute.
+	 * \return The result of the find query's execution.
+	 */
+	editor::search::FindResult findNext(editor::search::FindQuery const &q);
+
+	/*!
+	 * This slot moves to the previous find match based upon the given find
+	 * query and the current cursor location.
+	 *
+	 * \param q The query to execute.
+	 * \return The result of the find query's execution.
+	 */
+	editor::search::FindResult
+	findPrevious(editor::search::FindQuery const &q);
+
+	/*!
+	 * This slot performs a single replace operation. We will replace the
+	 * very next match of the given query with the query's replace value.
+	 * Note that we will begin searching at the start of the current
+	 * cursor's selection (or its position, if it has no selection).
+	 *
+	 * \param q The replace query to execute.
+	 * \return The result of this replacement's find operation.
+	 */
+	editor::search::FindResult
+	replace(editor::search::ReplaceQuery const &q);
+
+	/*!
+	 * This slot performs a "replace in selection" operation. We will
+	 * replace every single match of the given query in our editor's
+	 * current selection. If we do not have any selection, then we will
+	 * return NoMatches instead.
+	 *
+	 * Note that we will return Found if at least one match is replaced, or
+	 * NoMatches otherwise.
+	 *
+	 * \param q The replace query to execute.
+	 * \return The result of this replacement's find operation.
+	 */
+	editor::search::FindResult
+	replaceSelection(editor::search::ReplaceQuery const &q);
+
+	/*!
+	 * This slot performs a "replace all" operation. We will replace every
+	 * single match of the given query in our editor's document.
+	 *
+	 * Note that we will return Found if at least one match is replaced, or
+	 * NoMatches otherwise.
+	 *
+	 * \param q The replace query to execute.
+	 * \return The result of this replacement's find operation.
+	 */
+	editor::search::FindResult
+	replaceAll(editor::search::ReplaceQuery const &q);
+
+	/*!
+	 * This function will move our cursor to the very beginning of the
+	 * given line number. Note that the resulting cursor will be at the
+	 * very beginning of the block (i.e., line), and it will have no
+	 * selection.
+	 *
+	 * Line numbers less than 1 will result in the cursor being positioned
+	 * at the very beginning of the document, and line numbers larger than
+	 * our document's last line will result in the cursor being positioned
+	 * at the beginning of the very last line in the document.
+	 *
+	 * \param l The destination line number.
+	 */
+	void goToLine(int l);
+
 private Q_SLOTS:
 	/*!
 	 * This function handles highlighting the current line in our editor.
@@ -501,7 +633,11 @@ private Q_SLOTS:
 	 * \param dy The editor's current y scroll offset.
 	 */
 	void updateGutter(const QRect &r, int dy);
+
+Q_SIGNALS:
+	void searchWrapped();
 };
+}
 }
 
 #endif
