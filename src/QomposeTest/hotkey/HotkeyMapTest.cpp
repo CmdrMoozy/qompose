@@ -22,7 +22,7 @@
 
 #include <QKeyEvent>
 
-#include "QomposeCommon/util/HotkeyMap.h"
+#include "QomposeCommon/hotkey/HotkeyMap.h"
 
 namespace
 {

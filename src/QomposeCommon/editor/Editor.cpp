@@ -45,7 +45,7 @@
 #include "QomposeCommon/editor/search/applyAlgorithm.h"
 #include "QomposeCommon/editor/search/Find.h"
 #include "QomposeCommon/editor/search/Replace.h"
-#include "QomposeCommon/util/Hotkey.h"
+#include "QomposeCommon/hotkey/Hotkey.h"
 
 namespace qompose
 {

@@ -21,7 +21,7 @@
 
 #include "QomposeCommon/editor/DecoratedTextEdit.h"
 #include "QomposeCommon/editor/search/Query.h"
-#include "QomposeCommon/util/HotkeyMap.h"
+#include "QomposeCommon/hotkey/HotkeyMap.h"
 
 #include <QSize>
 

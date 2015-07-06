@@ -20,7 +20,7 @@
 
 #include <QKeyEvent>
 
-#include "QomposeCommon/util/Hotkey.h"
+#include "QomposeCommon/hotkey/Hotkey.h"
 
 TEST_CASE("Verify hotkey construction behavior", "[Hotkey]")
 {

@@ -136,6 +136,11 @@ set(QomposeCommon_SOURCES
 	gui/menus/RecentMenu.cpp
 	gui/menus/RecentMenu.h
 
+	hotkey/Hotkey.cpp
+	hotkey/Hotkey.h
+	hotkey/HotkeyMap.cpp
+	hotkey/HotkeyMap.h
+
 	syntax/Lexer.cpp
 	syntax/Lexer.h
 	syntax/SyntaxHighlighter.cpp
@@ -155,10 +160,6 @@ set(QomposeCommon_SOURCES
 	util/Errno.h
 	util/FontMetrics.cpp
 	util/FontMetrics.h
-	util/Hotkey.cpp
-	util/Hotkey.h
-	util/HotkeyMap.cpp
-	util/HotkeyMap.h
 	util/MemoryMappedFile.cpp
 	util/MemoryMappedFile.h
 	util/Paths.cpp

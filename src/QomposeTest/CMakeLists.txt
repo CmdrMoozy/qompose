@@ -2,11 +2,12 @@ set(QomposeTest_SOURCES
 
 	DecoratedTextEditTest.cpp
 	FontMetricsTest.cpp
-	HotkeyMapTest.cpp
-	HotkeyTest.cpp
 	QomposeTest.cpp
 
 	editor/algorithm/MovementTest.cpp
+
+	hotkey/HotkeyMapTest.cpp
+	hotkey/HotkeyTest.cpp
 
 )
 

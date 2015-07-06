@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSECOMMON_UTIL_HOTKEY_H
-#define INCLUDE_QOMPOSECOMMON_UTIL_HOTKEY_H
+#ifndef INCLUDE_QOMPOSECOMMON_HOTKEY_HOTKEY_H
+#define INCLUDE_QOMPOSECOMMON_HOTKEY_HOTKEY_H
 
 #include <Qt>
 

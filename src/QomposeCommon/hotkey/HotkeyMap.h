@@ -16,15 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSECOMMON_UTIL_HOTKEY_MAP_H
-#define INCLUDE_QOMPOSECOMMON_UTIL_HOTKEY_MAP_H
+#ifndef INCLUDE_QOMPOSECOMMON_HOTKEY_HOTKEY_MAP_H
+#define INCLUDE_QOMPOSECOMMON_HOTKEY_HOTKEY_MAP_H
 
 #include <exception>
 #include <functional>
 #include <map>
 #include <utility>
 
-#include "QomposeCommon/util/Hotkey.h"
+#include "QomposeCommon/hotkey/Hotkey.h"
 
 namespace qompose
 {
