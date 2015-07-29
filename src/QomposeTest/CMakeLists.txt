@@ -10,6 +10,7 @@ set(QomposeTest_SOURCES
 	hotkey/HotkeyMapTest.cpp
 	hotkey/HotkeyTest.cpp
 
+	util/EncodingTest.cpp
 	util/TemporaryStorageTest.cpp
 
 )

@@ -37,21 +37,25 @@ MemoryMappedFile::MemoryMappedFile(const std::string &path)
 	std::string stripped = path_utils::stripSymlink(path);
 	length = path_utils::getSize(stripped);
 
-	fileDescriptor = open(stripped.c_str(), O_RDONLY | O_NOFOLLOW);
-	if(fileDescriptor == -1)
-		throw std::runtime_error("Opening the specified file failed.");
-
-	void *f = mmap(nullptr, length, PROT_READ, MAP_PRIVATE, fileDescriptor,
-	               0);
-	if(f == MAP_FAILED)
+	if(length > 0)
 	{
-		int ret = close(fileDescriptor);
-		if(ret != 0)
-			util::throwErrnoError();
+		fileDescriptor = open(stripped.c_str(), O_RDONLY | O_NOFOLLOW);
+		if(fileDescriptor == -1)
+			throw std::runtime_error(
+			        "Opening the specified file failed.");
 
-		util::throwErrnoError();
+		void *f = mmap(nullptr, length, PROT_READ, MAP_PRIVATE,
+		               fileDescriptor, 0);
+		if(f == MAP_FAILED)
+		{
+			int ret = close(fileDescriptor);
+			if(ret != 0)
+				util::throwErrnoError();
+
+			util::throwErrnoError();
+		}
+		file = reinterpret_cast<uint8_t *>(f);
 	}
-	file = reinterpret_cast<uint8_t *>(f);
 }
 
 MemoryMappedFile::~MemoryMappedFile()
