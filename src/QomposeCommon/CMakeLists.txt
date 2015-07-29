@@ -169,6 +169,8 @@ set(QomposeCommon_SOURCES
 	util/Settings.h
 	util/Strings.cpp
 	util/Strings.h
+	util/TemporaryStorage.cpp
+	util/TemporaryStorage.h
 	util/Windows.h
 
 )

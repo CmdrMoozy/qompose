@@ -10,6 +10,8 @@ set(QomposeTest_SOURCES
 	hotkey/HotkeyMapTest.cpp
 	hotkey/HotkeyTest.cpp
 
+	util/TemporaryStorageTest.cpp
+
 )
 
 add_executable(QomposeTest ${QomposeTest_SOURCES})
