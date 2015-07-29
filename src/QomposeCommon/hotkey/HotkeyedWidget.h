@@ -61,9 +61,7 @@ protected:
 
 	bool addHotkey(Hotkey const &h, std::function<void()> const &f)
 	{
-		return hotkeys.addHotkey(
-		        std::forward<Hotkey const &>(h),
-		        std::forward<std::function<void()> const &>(f));
+		return hotkeys.addHotkey(h, f);
 	}
 
 private:

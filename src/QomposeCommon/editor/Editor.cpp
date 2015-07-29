@@ -50,6 +50,8 @@ Editor::Editor(QWidget *p)
           gutterForeground(QColor(255, 255, 255)),
           gutterBackground(QColor(0, 0, 0))
 {
+	initializeHotkeys();
+
 	// Set our editor's default font and color scheme.
 
 	setFont(QFont("Courier", 11));
@@ -497,8 +499,7 @@ void Editor::initializeHotkeys()
 {
 	// Backspace
 
-	addHotkey(Hotkey(Qt::Key_Backspace, nullptr,
-	                 ~Qt::KeyboardModifiers(nullptr)),
+	addHotkey(Hotkey(Qt::Key_Backspace, 0, ~Qt::KeyboardModifiers(0)),
 	          [this]()
 	          {
 		          algorithm::applyAlgorithm(*this, algorithm::backspace,
@@ -508,9 +509,7 @@ void Editor::initializeHotkeys()
 
 	// Delete
 
-	addHotkey(Hotkey(Qt::Key_Delete, nullptr,
-	                 ~Qt::KeyboardModifiers(nullptr)),
-	          [this]()
+	addHotkey(Hotkey(Qt::Key_Delete, 0, ~Qt::KeyboardModifiers(0)), [this]()
 	          {
 		          algorithm::applyAlgorithm(*this,
 		                                    algorithm::deleteCharacter);
@@ -518,19 +517,15 @@ void Editor::initializeHotkeys()
 
 	// Enter
 
-	addHotkey(Hotkey(Qt::Key_Return, nullptr,
-	                 ~Qt::KeyboardModifiers(nullptr)),
-	          [this]()
+	addHotkey(Hotkey(Qt::Key_Return, 0, ~Qt::KeyboardModifiers(0)), [this]()
 	          {
 		          algorithm::applyAlgorithm(*this, algorithm::newline);
 		  });
 
-	addHotkey(
-	        Hotkey(Qt::Key_Enter, nullptr, ~Qt::KeyboardModifiers(nullptr)),
-	        [this]()
-	        {
-		        algorithm::applyAlgorithm(*this, algorithm::newline);
-		});
+	addHotkey(Hotkey(Qt::Key_Enter, 0, ~Qt::KeyboardModifiers(0)), [this]()
+	          {
+		          algorithm::applyAlgorithm(*this, algorithm::newline);
+		  });
 
 	// Tab
 
