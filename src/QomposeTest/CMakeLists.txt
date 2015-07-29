@@ -11,6 +11,7 @@ set(QomposeTest_SOURCES
 	hotkey/HotkeyTest.cpp
 
 	util/EncodingTest.cpp
+	util/MemoryMappedFileTest.cpp
 	util/TemporaryStorageTest.cpp
 
 )
