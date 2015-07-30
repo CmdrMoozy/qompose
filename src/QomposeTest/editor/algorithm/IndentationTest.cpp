@@ -18,9 +18,11 @@
 
 #include <catch/catch.hpp>
 
+#include <algorithm>
 #include <cstddef>
 
 #include <QString>
+#include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>
 
@@ -106,10 +108,152 @@ TEST_CASE("Test increasing full forward selection tab indent", "[Indentation]")
 	// of tabs were added to the document.
 	int originalCharacterCount = document.characterCount();
 	qompose::editor::algorithm::increaseSelectionIndent(
-	        cursor, qompose::IndentationMode::Tabs, 8);
+	        cursor, qompose::IndentationMode::Tabs, TEST_INDENTATION_WIDTH);
 	int charactersAdded =
 	        document.characterCount() - originalCharacterCount;
 	CHECK(INDENT_SELECTION_BLOCK_COUNT == charactersAdded);
+
+	// Verify that the new cursor anchor and position are correct.
+	int anchorPosition = cursor.anchor();
+	int cursorPosition = cursor.position();
+	CHECK(anchorPosition <= cursorPosition);
+	cursor.setPosition(anchorPosition, QTextCursor::MoveAnchor);
+	CHECK(cursor.atBlockStart());
+	CHECK(INDENT_SELECTION_START_BLOCK == cursor.blockNumber());
+	cursor.setPosition(cursorPosition, QTextCursor::MoveAnchor);
+
+	CHECK(cursor.atBlockEnd());
+	CHECK(INDENT_SELECTION_END_BLOCK == cursor.blockNumber());
+}
+
+TEST_CASE("Test increasing partial forward selection tab indent",
+          "[Indentation]")
+{
+	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
+
+	QTextCursor cursor(&document);
+
+	// Move the anchor to the middle of the first block, and the cursor to
+	// the middle of the last block.
+	qompose::editor::algorithm::goToBlock(cursor,
+	                                      INDENT_SELECTION_END_BLOCK);
+	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
+	                    std::max(1, cursor.block().length() / 2));
+	REQUIRE(INDENT_SELECTION_END_BLOCK == cursor.blockNumber());
+	REQUIRE(!cursor.atBlockStart());
+	REQUIRE(!cursor.atBlockEnd());
+	int endPosition = cursor.position();
+	qompose::editor::algorithm::goToBlock(cursor,
+	                                      INDENT_SELECTION_START_BLOCK);
+	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
+	                    std::max(1, cursor.block().length() / 2));
+	REQUIRE(INDENT_SELECTION_START_BLOCK == cursor.blockNumber());
+	REQUIRE(!cursor.atBlockStart());
+	REQUIRE(!cursor.atBlockEnd());
+	cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+
+	// Indent the blocks in the selection. Check that the expected number
+	// of tabs were added to the document.
+	int originalCharacterCount = document.characterCount();
+	qompose::editor::algorithm::increaseSelectionIndent(
+	        cursor, qompose::IndentationMode::Tabs, TEST_INDENTATION_WIDTH);
+	int charactersAdded =
+	        document.characterCount() - originalCharacterCount;
+	CHECK(INDENT_SELECTION_BLOCK_COUNT == charactersAdded);
+
+	// Verify that the new cursor anchor and position are correct.
+	int anchorPosition = cursor.anchor();
+	int cursorPosition = cursor.position();
+	CHECK(anchorPosition <= cursorPosition);
+	cursor.setPosition(anchorPosition, QTextCursor::MoveAnchor);
+	CHECK(cursor.atBlockStart());
+	CHECK(INDENT_SELECTION_START_BLOCK == cursor.blockNumber());
+	cursor.setPosition(cursorPosition, QTextCursor::MoveAnchor);
+
+	CHECK(cursor.atBlockEnd());
+	CHECK(INDENT_SELECTION_END_BLOCK == cursor.blockNumber());
+}
+
+TEST_CASE("Test increasing full forward selection space indent",
+          "[Indentation]")
+{
+	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
+
+	QTextCursor cursor(&document);
+
+	// Move the anchor to the start of the first block, and the cursor to
+	// the end of the last block.
+	qompose::editor::algorithm::goToBlock(cursor,
+	                                      INDENT_SELECTION_END_BLOCK);
+	cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+	int endPosition = cursor.position();
+	qompose::editor::algorithm::goToBlock(cursor,
+	                                      INDENT_SELECTION_START_BLOCK);
+	cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+
+	// Indent the blocks in the selection. Check that the expected number
+	// of tabs were added to the document.
+	int originalCharacterCount = document.characterCount();
+	qompose::editor::algorithm::increaseSelectionIndent(
+	        cursor, qompose::IndentationMode::Spaces,
+	        TEST_INDENTATION_WIDTH);
+	int charactersAdded =
+	        document.characterCount() - originalCharacterCount;
+	CHECK((INDENT_SELECTION_BLOCK_COUNT * TEST_INDENTATION_WIDTH) ==
+	      charactersAdded);
+
+	// Verify that the new cursor anchor and position are correct.
+	int anchorPosition = cursor.anchor();
+	int cursorPosition = cursor.position();
+	CHECK(anchorPosition <= cursorPosition);
+	cursor.setPosition(anchorPosition, QTextCursor::MoveAnchor);
+	CHECK(cursor.atBlockStart());
+	CHECK(INDENT_SELECTION_START_BLOCK == cursor.blockNumber());
+	cursor.setPosition(cursorPosition, QTextCursor::MoveAnchor);
+
+	CHECK(cursor.atBlockEnd());
+	CHECK(INDENT_SELECTION_END_BLOCK == cursor.blockNumber());
+}
+
+TEST_CASE("Test increasing partial forward selection space indent",
+          "[Indentation]")
+{
+	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
+
+	QTextCursor cursor(&document);
+
+	// Move the anchor to the middle of the first block, and the cursor to
+	// the middle of the last block.
+	qompose::editor::algorithm::goToBlock(cursor,
+	                                      INDENT_SELECTION_END_BLOCK);
+	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
+	                    std::max(1, cursor.block().length() / 2));
+	REQUIRE(INDENT_SELECTION_END_BLOCK == cursor.blockNumber());
+	REQUIRE(!cursor.atBlockStart());
+	REQUIRE(!cursor.atBlockEnd());
+	int endPosition = cursor.position();
+	qompose::editor::algorithm::goToBlock(cursor,
+	                                      INDENT_SELECTION_START_BLOCK);
+	cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
+	                    std::max(1, cursor.block().length() / 2));
+	REQUIRE(INDENT_SELECTION_START_BLOCK == cursor.blockNumber());
+	REQUIRE(!cursor.atBlockStart());
+	REQUIRE(!cursor.atBlockEnd());
+	cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+
+	// Indent the blocks in the selection. Check that the expected number
+	// of tabs were added to the document.
+	int originalCharacterCount = document.characterCount();
+	qompose::editor::algorithm::increaseSelectionIndent(
+	        cursor, qompose::IndentationMode::Spaces,
+	        TEST_INDENTATION_WIDTH);
+	int charactersAdded =
+	        document.characterCount() - originalCharacterCount;
+	CHECK((INDENT_SELECTION_BLOCK_COUNT * TEST_INDENTATION_WIDTH) ==
+	      charactersAdded);
 
 	// Verify that the new cursor anchor and position are correct.
 	int anchorPosition = cursor.anchor();
