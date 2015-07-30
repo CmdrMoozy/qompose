@@ -557,7 +557,7 @@ void Editor::initializeHotkeys()
 	addHotkey(Hotkey(Qt::Key_Home), [this]()
 	          {
 		          algorithm::applyAlgorithm(*this, algorithm::home,
-		                                    false);
+		                                    true);
 		  });
 
 	// Shift + Home
@@ -565,7 +565,7 @@ void Editor::initializeHotkeys()
 	addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier), [this]()
 	          {
 		          algorithm::applyAlgorithm(*this, algorithm::home,
-		                                    true);
+		                                    false);
 		  });
 
 	// Ctrl+D
