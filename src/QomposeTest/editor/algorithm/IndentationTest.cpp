@@ -34,7 +34,7 @@ namespace
 constexpr std::size_t TEST_INDENTATION_WIDTH = 8;
 
 // clang-format off
-const QString TEST_DOCUMENT_CONTENTS(
+const QString TEST_DOCUMENT_CONTENTS_TABS(
 	"/*!\n"
 	" * This function performs the first step of decreaseSelectionIndent. Namely,\n"
 	" * we try to remove at most one full indentation string from the beginning of\n"
@@ -78,6 +78,10 @@ const QString TEST_DOCUMENT_CONTENTS(
 	"}\n"
 );
 // clang-format on
+
+const QString TEST_DOCUMENT_CONTENTS_SPACES(
+        QString(TEST_DOCUMENT_CONTENTS_TABS)
+                .replace('\t', QString(TEST_INDENTATION_WIDTH, ' ')));
 
 constexpr int TEST_DOCUMENT_BLOCK_COUNT = 45;
 
@@ -186,7 +190,7 @@ bool postIndentSelectionCursorIsCorrect(QTextCursor const &c)
 
 TEST_CASE("Test increasing full forward selection tab indent", "[Indentation]")
 {
-	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	QTextDocument document(TEST_DOCUMENT_CONTENTS_TABS);
 	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
 
 	QTextCursor cursor(&document);
@@ -204,7 +208,7 @@ TEST_CASE("Test increasing full forward selection tab indent", "[Indentation]")
 TEST_CASE("Test increasing partial forward selection tab indent",
           "[Indentation]")
 {
-	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	QTextDocument document(TEST_DOCUMENT_CONTENTS_TABS);
 	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
 
 	QTextCursor cursor(&document);
@@ -226,7 +230,7 @@ TEST_CASE("Test increasing partial forward selection tab indent",
 TEST_CASE("Test increasing full forward selection space indent",
           "[Indentation]")
 {
-	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	QTextDocument document(TEST_DOCUMENT_CONTENTS_SPACES);
 	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
 
 	QTextCursor cursor(&document);
@@ -244,7 +248,7 @@ TEST_CASE("Test increasing full forward selection space indent",
 TEST_CASE("Test increasing partial forward selection space indent",
           "[Indentation]")
 {
-	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	QTextDocument document(TEST_DOCUMENT_CONTENTS_SPACES);
 	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
 
 	QTextCursor cursor(&document);
@@ -265,7 +269,7 @@ TEST_CASE("Test increasing partial forward selection space indent",
 
 TEST_CASE("Test increasing full backward selection tab indent", "[Indentation]")
 {
-	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	QTextDocument document(TEST_DOCUMENT_CONTENTS_TABS);
 	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
 
 	QTextCursor cursor(&document);
@@ -283,7 +287,7 @@ TEST_CASE("Test increasing full backward selection tab indent", "[Indentation]")
 TEST_CASE("Test increasing partial backward selection tab indent",
           "[Indentation]")
 {
-	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	QTextDocument document(TEST_DOCUMENT_CONTENTS_TABS);
 	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
 
 	QTextCursor cursor(&document);
@@ -305,7 +309,7 @@ TEST_CASE("Test increasing partial backward selection tab indent",
 TEST_CASE("Test increasing full backward selection space indent",
           "[Indentation]")
 {
-	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	QTextDocument document(TEST_DOCUMENT_CONTENTS_SPACES);
 	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
 
 	QTextCursor cursor(&document);
@@ -323,7 +327,7 @@ TEST_CASE("Test increasing full backward selection space indent",
 TEST_CASE("Test increasing partial backward selection space indent",
           "[Indentation]")
 {
-	QTextDocument document(TEST_DOCUMENT_CONTENTS);
+	QTextDocument document(TEST_DOCUMENT_CONTENTS_SPACES);
 	REQUIRE(TEST_DOCUMENT_BLOCK_COUNT == document.blockCount());
 
 	QTextCursor cursor(&document);
