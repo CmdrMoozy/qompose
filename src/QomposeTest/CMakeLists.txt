@@ -5,6 +5,7 @@ set(QomposeTest_SOURCES
 
 	editor/EditorTest.cpp
 
+	editor/algorithm/IndentationTest.cpp
 	editor/algorithm/MovementTest.cpp
 
 	hotkey/HotkeyMapTest.cpp

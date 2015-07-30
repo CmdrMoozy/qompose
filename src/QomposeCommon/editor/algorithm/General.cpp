@@ -23,6 +23,8 @@
 #include <iterator>
 #include <utility>
 
+#include "QomposeCommon/editor/algorithm/Movement.h"
+
 namespace qompose
 {
 namespace editor
@@ -56,10 +58,12 @@ CursorSelectionState::CursorSelectionState(QTextCursor &cursor)
 void setNormalizedSelection(QTextCursor &cursor,
                             CursorSelectionState const &state)
 {
-	cursor.setPosition(state.startPosition, QTextCursor::MoveAnchor);
-	cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-	cursor.setPosition(state.endPosition, QTextCursor::KeepAnchor);
-	cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+	goToBlock(cursor, state.endBlock);
+	cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+	int endPosition = cursor.position();
+
+	goToBlock(cursor, state.startBlock);
+	cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
 }
 
 void backspace(QTextCursor &cursor, IndentationMode mode, std::size_t width)
