@@ -96,7 +96,13 @@ void dewhitespaceSelection(
 	        {
 		        for(int j = 0; j < static_cast<int>(width); ++j)
 		        {
-			        QChar chr = c.block().text().at(0);
+			        QString text = c.block().text();
+
+			        // If this block is already empty, just stop.
+			        if(text.length() <= 0)
+				        break;
+
+			        QChar chr = text.at(0);
 
 			        // Stop at the first non-whitespace char.
 			        if(!chr.isSpace())
