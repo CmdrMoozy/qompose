@@ -49,14 +49,6 @@ public:
 	Settings &operator=(const Settings &) = delete;
 
 	/*!
-	 * This function returns the total number of settings keys our object
-	 * is storing.
-	 *
-	 * \return The total number of settings keys.
-	 */
-	int count() const;
-
-	/*!
 	 * This function resets ALL of our settings to their default values.
 	 * Any existing data will be overwritten.
 	 */

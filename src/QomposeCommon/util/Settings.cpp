@@ -88,11 +88,6 @@ Settings &Settings::instance()
 	return *settingsSingleton;
 }
 
-int Settings::count() const
-{
-	return settings->allKeys().count();
-}
-
 void Settings::resetDefaults()
 {
 	for(const auto &pair : DEFAULT_SETTINGS)
