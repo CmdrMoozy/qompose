@@ -149,6 +149,11 @@ set(QomposeCommon_SOURCES
 	hotkey/HotkeyMap.cpp
 	hotkey/HotkeyMap.h
 
+	settings/Deserializer.cpp
+	settings/Deserializer.h
+	settings/Serializer.cpp
+	settings/Serializer.h
+
 	syntax/Lexer.cpp
 	syntax/Lexer.h
 	syntax/SyntaxHighlighter.cpp
