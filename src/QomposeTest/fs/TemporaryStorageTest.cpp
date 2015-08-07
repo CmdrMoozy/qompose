@@ -23,7 +23,7 @@
 #include <QFileInfo>
 #include <QString>
 
-#include "QomposeCommon/util/TemporaryStorage.h"
+#include "QomposeCommon/fs/TemporaryStorage.h"
 
 namespace
 {

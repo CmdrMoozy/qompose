@@ -27,7 +27,7 @@
 
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/editor/pane/Pane.h"
-#include "QomposeCommon/util/Paths.h"
+#include "QomposeCommon/fs/Paths.h"
 
 namespace qompose
 {

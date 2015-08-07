@@ -34,9 +34,9 @@
 
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/editor/pane/Pane.h"
+#include "QomposeCommon/fs/DocumentWriter.h"
+#include "QomposeCommon/fs/Paths.h"
 #include "QomposeCommon/gui/BufferWidget.h"
-#include "QomposeCommon/util/DocumentWriter.h"
-#include "QomposeCommon/util/Paths.h"
 #include "QomposeCommon/util/Settings.h"
 
 namespace qompose

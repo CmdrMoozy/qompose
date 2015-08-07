@@ -18,8 +18,8 @@
 
 #include <catch/catch.hpp>
 
+#include "QomposeCommon/fs/TemporaryStorage.h"
 #include "QomposeCommon/util/Encoding.h"
-#include "QomposeCommon/util/TemporaryStorage.h"
 
 TEST_CASE("Test empty files default to UTF-8 encoding", "[Encoding]")
 {

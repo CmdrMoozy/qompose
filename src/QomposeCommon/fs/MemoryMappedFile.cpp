@@ -26,8 +26,8 @@
 
 #include <stdexcept>
 
+#include "QomposeCommon/fs/Paths.h"
 #include "QomposeCommon/util/Errno.h"
-#include "QomposeCommon/util/Paths.h"
 
 namespace qompose
 {

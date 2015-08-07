@@ -22,8 +22,8 @@
 
 #include <QFileInfo>
 
-#include "QomposeCommon/util/MemoryMappedFile.h"
-#include "QomposeCommon/util/TemporaryStorage.h"
+#include "QomposeCommon/fs/MemoryMappedFile.h"
+#include "QomposeCommon/fs/TemporaryStorage.h"
 
 TEST_CASE("Memory mapping an empty file should work as expected",
           "[MemoryMappedFile]")

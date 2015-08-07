@@ -8,12 +8,13 @@ set(QomposeTest_SOURCES
 	editor/algorithm/IndentationTest.cpp
 	editor/algorithm/MovementTest.cpp
 
+	fs/MemoryMappedFileTest.cpp
+	fs/TemporaryStorageTest.cpp
+
 	hotkey/HotkeyMapTest.cpp
 	hotkey/HotkeyTest.cpp
 
 	util/EncodingTest.cpp
-	util/MemoryMappedFileTest.cpp
-	util/TemporaryStorageTest.cpp
 
 )
 

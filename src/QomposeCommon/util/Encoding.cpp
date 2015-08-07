@@ -23,7 +23,7 @@
 #include <utility>
 #include <vector>
 
-#include "QomposeCommon/util/MemoryMappedFile.h"
+#include "QomposeCommon/fs/MemoryMappedFile.h"
 
 namespace
 {

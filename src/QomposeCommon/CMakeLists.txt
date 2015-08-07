@@ -85,6 +85,15 @@ set(QomposeCommon_SOURCES
 	editor/spell/Utils.cpp
 	editor/spell/Utils.h
 
+	fs/DocumentWriter.cpp
+	fs/DocumentWriter.h
+	fs/MemoryMappedFile.cpp
+	fs/MemoryMappedFile.h
+	fs/Paths.cpp
+	fs/Paths.h
+	fs/TemporaryStorage.cpp
+	fs/TemporaryStorage.h
+
 	git/AbstractGitObject.h
 	git/Buffer.cpp
 	git/Buffer.h
@@ -151,26 +160,18 @@ set(QomposeCommon_SOURCES
 	thread/Utils.cpp
 	thread/Utils.h
 
-	util/DocumentWriter.cpp
-	util/DocumentWriter.h
 	util/Encoding.cpp
 	util/Encoding.h
 	util/Errno.cpp
 	util/Errno.h
 	util/FontMetrics.cpp
 	util/FontMetrics.h
-	util/MemoryMappedFile.cpp
-	util/MemoryMappedFile.h
-	util/Paths.cpp
-	util/Paths.h
 	util/ScopeExit.cpp
 	util/ScopeExit.h
 	util/Settings.cpp
 	util/Settings.h
 	util/Strings.cpp
 	util/Strings.h
-	util/TemporaryStorage.cpp
-	util/TemporaryStorage.h
 	util/Windows.h
 
 )
