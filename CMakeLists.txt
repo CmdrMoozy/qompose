@@ -24,7 +24,7 @@ cmake_policy(SET CMP0043 NEW)
 # See: http://www.cmake.org/cmake/help/v3.0/policy/CMP0020.html
 cmake_policy(SET CMP0020 NEW)
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # Allow for custom Qt prefixes, for e.g. developer builds.
 
@@ -48,6 +48,7 @@ string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
 
 set(CMAKE_AUTOMOC ON)
 
+find_package(Leveldb REQUIRED)
 find_package(HUNSPELL REQUIRED)
 find_package(Libgit2 REQUIRED)
 find_package(Qt5Core REQUIRED)
@@ -56,9 +57,13 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 
+# Define CMake options.
+
+option(USE_UNIT_TESTS "enable unit tests")
+
 # Setup our compile flags.
 
-include(${CMAKE_SOURCE_DIR}/CMake/SetFlags.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/SetFlags.cmake)
 qomposeSetCompileFlags()
 
 add_definitions(-DQT_NO_KEYWORDS)
@@ -74,8 +79,7 @@ include_directories(SYSTEM "3rdparty/include")
 
 set(Qompose_LIBS
 
-	m
-	QomposeCommon
+	${LEVELDB_LIBRARIES}
 	${HUNSPELL_LIBRARIES}
 	${LIBGIT2_LIBRARIES}
 	${Qt5Core_LIBRARIES}
@@ -83,19 +87,12 @@ set(Qompose_LIBS
 	${Qt5Widgets_LIBRARIES}
 	${Qt5Network_LIBRARIES}
 	${Qt5PrintSupport_LIBRARIES}
+	QomposeCommon
 
 )
 
 if(UNIX)
-	set(Qompose_LIBS ${Qompose_LIBS} m)
-endif()
-
-# Add in libvrfy, if applicable.
-
-set(ENABLE_UNIT_TESTS FALSE)
-
-if(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
-	set(ENABLE_UNIT_TESTS TRUE)
+	set(Qompose_LIBS m ${Qompose_LIBS})
 endif()
 
 # Add the various targets.
@@ -103,7 +100,7 @@ endif()
 add_subdirectory(src/QomposeCommon)
 add_subdirectory(src/Qompose)
 
-if(ENABLE_UNIT_TESTS)
+if(USE_UNIT_TESTS)
 	enable_testing()
 	add_subdirectory(src/QomposeTest)
 endif()
