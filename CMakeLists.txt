@@ -59,7 +59,7 @@ find_package(Qt5PrintSupport REQUIRED)
 
 # Define CMake options.
 
-option(USE_UNIT_TESTS "enable unit tests")
+option(USE_UNIT_TESTS "enable unit tests" ON)
 
 # Setup our compile flags.
 
