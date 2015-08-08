@@ -142,3 +142,9 @@ TEST_CASE("Test string list round tripping", "[Settings]")
 	auto pair = performRoundTripTest(TEST_VALUE);
 	CHECK(pair.first == pair.second);
 }
+
+TEST_CASE("Test empty string list round tripping", "[Settings]")
+{
+	auto pair = performRoundTripTest(std::vector<std::string>());
+	CHECK(pair.first == pair.second);
+}

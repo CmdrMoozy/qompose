@@ -78,7 +78,7 @@ operator()(std::vector<std::string> const &v) const
 	                {
 		                return total + s.length();
 		        });
-	assert(oss.tellp() > 0);
+	assert(oss.tellp() >= 0);
 	assert(static_cast<std::string::size_type>(oss.tellp()) ==
 	       (totalLength + sizeof(uint64_t) * v.size()));
 #endif
