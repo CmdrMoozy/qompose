@@ -151,6 +151,8 @@ set(QomposeCommon_SOURCES
 
 	settings/Deserializer.cpp
 	settings/Deserializer.h
+	settings/RecentList.cpp
+	settings/RecentList.h
 	settings/Serializer.cpp
 	settings/Serializer.h
 	settings/Settings.cpp
