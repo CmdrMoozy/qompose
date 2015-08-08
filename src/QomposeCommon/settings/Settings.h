@@ -22,6 +22,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <experimental/optional>
 
 #include "QomposeCommon/settings/Deserializer.h"
 #include "QomposeCommon/settings/Serializer.h"
@@ -50,9 +51,13 @@ public:
 
 	bool contains(std::string const &k) const;
 
+	std::experimental::optional<std::string>
+	tryGet(std::string const &k) const;
 	std::string get(std::string const &k) const;
 
 	template <typename T> T getAs(std::string const &k) const;
+	template <typename T>
+	T getAsOr(std::string const &k, T const &defaultValue) const;
 
 	void put(std::string const &k, std::string const &v);
 
@@ -77,6 +82,16 @@ template <typename T> T Settings::getAs(std::string const &k) const
 {
 	Deserializer<T> d;
 	return d(get(k));
+}
+
+template <typename T>
+T Settings::getAsOr(std::string const &k, T const &defaultValue) const
+{
+	auto v = tryGet(k);
+	if(!v)
+		return defaultValue;
+	Deserializer<T> d;
+	return d(*v);
 }
 
 template <typename T> void Settings::putAs(std::string const &k, T const &v)

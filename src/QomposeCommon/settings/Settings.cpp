@@ -172,18 +172,27 @@ bool Settings::contains(std::string const &k) const
 	return s.ok();
 }
 
-std::string Settings::get(std::string const &k) const
+std::experimental::optional<std::string>
+Settings::tryGet(std::string const &k) const
 {
 	std::string v;
 	leveldb::Status s = impl->db->Get(leveldb::ReadOptions(), k, &v);
 	if(!s.ok())
+		return std::experimental::nullopt;
+	return v;
+}
+
+std::string Settings::get(std::string const &k) const
+{
+	auto v = tryGet(k);
+	if(!v)
 	{
 		std::ostringstream oss;
 		oss << "Retrieving value for settings key '" << k
 		    << "' failed.";
 		throw std::runtime_error(oss.str());
 	}
-	return v;
+	return *v;
 }
 
 void Settings::put(std::string const &k, std::string const &v)
