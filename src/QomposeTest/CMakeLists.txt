@@ -15,6 +15,7 @@ set(QomposeTest_SOURCES
 	hotkey/HotkeyTest.cpp
 
 	settings/RoundTripTest.cpp
+	settings/SettingsTest.cpp
 
 	util/EncodingTest.cpp
 

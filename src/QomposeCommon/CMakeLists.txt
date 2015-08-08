@@ -153,6 +153,8 @@ set(QomposeCommon_SOURCES
 	settings/Deserializer.h
 	settings/Serializer.cpp
 	settings/Serializer.h
+	settings/Settings.cpp
+	settings/Settings.h
 
 	syntax/Lexer.cpp
 	syntax/Lexer.h
