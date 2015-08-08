@@ -21,6 +21,7 @@
 
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include <QByteArray>
 #include <QColor>
@@ -59,6 +60,11 @@ template <> struct Deserializer<QByteArray>
 template <> struct Deserializer<QFont>
 {
 	QFont operator()(std::string const &s) const;
+};
+
+template <> struct Deserializer<std::vector<std::string>>
+{
+	std::vector<std::string> operator()(std::string const &s) const;
 };
 }
 }

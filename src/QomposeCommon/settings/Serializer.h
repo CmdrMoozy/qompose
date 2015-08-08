@@ -23,6 +23,7 @@
 #include <sstream>
 #include <string>
 #include <type_traits>
+#include <vector>
 
 #include <QByteArray>
 #include <QColor>
@@ -89,6 +90,11 @@ template <> struct Serializer<QByteArray>
 template <> struct Serializer<QFont>
 {
 	std::string operator()(QFont const &v) const;
+};
+
+template <> struct Serializer<std::vector<std::string>>
+{
+	std::string operator()(std::vector<std::string> const &v) const;
 };
 
 struct SerializedValue

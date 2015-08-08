@@ -18,6 +18,7 @@
 
 #include "Deserializer.h"
 
+#include <cstdint>
 #include <stdexcept>
 
 #include <QDataStream>
@@ -64,6 +65,36 @@ QFont Deserializer<QFont>::operator()(std::string const &s) const
 	QFont f;
 	stream >> f;
 	return f;
+}
+
+std::vector<std::string> Deserializer<std::vector<std::string>>::
+operator()(std::string const &s) const
+{
+	std::istringstream iss(s);
+	std::vector<std::string> v;
+	while(iss.good())
+	{
+		uint64_t l;
+		iss.read(reinterpret_cast<char *>(&l), sizeof(uint64_t));
+		if(iss.eof())
+			break;
+		if(iss.gcount() != sizeof(uint64_t))
+		{
+			throw std::runtime_error(
+			        std::to_string(l) +
+			        "Deserializing length string list failed.");
+		}
+
+		std::vector<char> chars(l);
+		iss.read(chars.data(), static_cast<std::streamsize>(l));
+		if(static_cast<uint64_t>(iss.gcount()) != l)
+		{
+			throw std::runtime_error(
+			        "Deserializing string list failed.");
+		}
+		v.emplace_back(chars.data(), l);
+	}
+	return v;
 }
 }
 }

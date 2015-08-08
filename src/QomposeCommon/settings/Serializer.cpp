@@ -18,6 +18,13 @@
 
 #include "Serializer.h"
 
+#include <cstdint>
+
+#ifdef QOMPOSE_DEBUG
+#include <cassert>
+#include <numeric>
+#endif
+
 #include <QDataStream>
 
 namespace qompose
@@ -50,6 +57,33 @@ std::string Serializer<QFont>::operator()(QFont const &v) const
 
 	Serializer<QByteArray> serializer;
 	return serializer(bytes);
+}
+
+std::string Serializer<std::vector<std::string>>::
+operator()(std::vector<std::string> const &v) const
+{
+	std::ostringstream oss;
+	for(auto const &s : v)
+	{
+		uint64_t l = s.length();
+		oss.write(reinterpret_cast<char const *>(&l), sizeof(uint64_t));
+		oss.write(s.data(), static_cast<std::streamsize>(s.length()));
+	}
+
+#ifdef QOMPOSE_DEBUG
+	std::string::size_type totalLength =
+	        std::accumulate<decltype(v.begin()), std::string::size_type>(
+	                v.begin(), v.end(), 0,
+	                [](std::string::size_type total, std::string const &s)
+	                {
+		                return total + s.length();
+		        });
+	assert(oss.tellp() > 0);
+	assert(static_cast<std::string::size_type>(oss.tellp()) ==
+	       (totalLength + sizeof(uint64_t) * v.size()));
+#endif
+
+	return oss.str();
 }
 }
 }
