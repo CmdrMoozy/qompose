@@ -79,15 +79,15 @@ include_directories(SYSTEM "3rdparty/include")
 
 set(Qompose_LIBS
 
-	${LEVELDB_LIBRARIES}
-	${HUNSPELL_LIBRARIES}
-	${LIBGIT2_LIBRARIES}
+	QomposeCommon
 	${Qt5Core_LIBRARIES}
 	${Qt5Gui_LIBRARIES}
 	${Qt5Widgets_LIBRARIES}
 	${Qt5Network_LIBRARIES}
 	${Qt5PrintSupport_LIBRARIES}
-	QomposeCommon
+	${LEVELDB_LIBRARIES}
+	${HUNSPELL_LIBRARIES}
+	${LIBGIT2_LIBRARIES}
 
 )
 
