@@ -19,11 +19,10 @@
 #ifndef INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_REPLACE_H
 #define INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_REPLACE_H
 
-#include <experimental/optional>
-
 #include <QTextCursor>
 #include <QTextDocument>
 
+#include "QomposeCommon/compat/Optional.h"
 #include "QomposeCommon/editor/search/Query.h"
 
 namespace qompose

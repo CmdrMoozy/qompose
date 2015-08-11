@@ -22,8 +22,8 @@
 #include <memory>
 #include <mutex>
 #include <string>
-#include <experimental/optional>
 
+#include "QomposeCommon/compat/Optional.h"
 #include "QomposeCommon/settings/Deserializer.h"
 #include "QomposeCommon/settings/Serializer.h"
 

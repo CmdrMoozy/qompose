@@ -18,10 +18,9 @@
 
 #include <catch/catch.hpp>
 
-#include <experimental/optional>
-
 #include <QDir>
 
+#include "QomposeCommon/compat/Optional.h"
 #include "QomposeCommon/fs/TemporaryStorage.h"
 #include "QomposeCommon/settings/Settings.h"
 #include "QomposeCommon/util/ScopeExit.h"

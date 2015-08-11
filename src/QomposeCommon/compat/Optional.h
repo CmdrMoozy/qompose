@@ -16,25 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <catch/catch.hpp>
-
-#include <QFileInfo>
-
-#include "QomposeCommon/compat/Optional.h"
-#include "QomposeCommon/fs/MemoryMappedFile.h"
-#include "QomposeCommon/fs/TemporaryStorage.h"
-
-TEST_CASE("Memory mapping an empty file should work as expected",
-          "[MemoryMappedFile]")
-{
-	qompose::TemporaryStorage file(qompose::TemporaryStorageType::FILE);
-	QFileInfo info(file.getPath());
-	CHECK(info.exists());
-	CHECK(info.isFile());
-	CHECK(info.size() == 0);
-
-	std::experimental::optional<qompose::MemoryMappedFile> memoryFile;
-	CHECK_NOTHROW(memoryFile.emplace(file.getPath().toStdString()));
-	CHECK(nullptr == memoryFile->getData());
-	CHECK(0 == memoryFile->getLength());
-}
+#if defined(_MSC_VER) && (_MSC_VER <= 1900)
+#include <compat_optional/optional.hpp>
+#else
+#include <experimental/optional>
+#endif

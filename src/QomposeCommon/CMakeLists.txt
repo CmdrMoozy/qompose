@@ -16,6 +16,8 @@ set(QomposeCommon_SOURCES
 	Window.cpp
 	Window.h
 
+	compat/Optional.h
+
 	dialogs/AboutDialog.cpp
 	dialogs/AboutDialog.h
 	dialogs/EncodingDialog.cpp
