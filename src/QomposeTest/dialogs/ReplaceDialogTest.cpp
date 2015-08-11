@@ -16,38 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Query.h"
+#include <catch/catch.hpp>
 
-namespace qompose
-{
-namespace editor
-{
-namespace search
-{
-FindQuery::FindQuery()
-        : expression(""),
-          wrap(true),
-          wholeWords(false),
-          caseSensitive(false),
-          isRegex(false)
-{
-}
+#include "QomposeCommon/dialogs/ReplaceDialog.h"
 
-QTextDocument::FindFlags FindQuery::getFindFlags(bool forward) const
+TEST_CASE("Test replace dialog default selection", "[Dialogs]")
 {
-	QTextDocument::FindFlags f = 0;
-	if(!forward)
-		f |= QTextDocument::FindBackward;
-	if(caseSensitive)
-		f |= QTextDocument::FindCaseSensitively;
-	if(wholeWords)
-		f |= QTextDocument::FindWholeWords;
-	return f;
-}
+	qompose::ReplaceDialog dialog;
+	auto query = dialog.getQuery();
 
-ReplaceQuery::ReplaceQuery() : FindQuery(), replaceValue("")
-{
-}
-}
-}
+	CHECK(query.replaceValue.length() == 0);
+	CHECK(query.expression.length() == 0);
+	CHECK(query.wrap);
+	CHECK(!query.wholeWords);
+	CHECK(!query.caseSensitive);
+	CHECK(!query.isRegex);
 }

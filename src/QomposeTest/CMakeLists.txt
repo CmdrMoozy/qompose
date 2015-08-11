@@ -3,6 +3,9 @@ set(QomposeTest_SOURCES
 	FontMetricsTest.cpp
 	QomposeTest.cpp
 
+	dialogs/FindDialogTest.cpp
+	dialogs/ReplaceDialogTest.cpp
+
 	editor/EditorTest.cpp
 
 	editor/algorithm/IndentationTest.cpp
