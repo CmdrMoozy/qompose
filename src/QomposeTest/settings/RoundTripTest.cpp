@@ -53,7 +53,7 @@ bool almostEqual(double a, double b)
 
 TEST_CASE("Test integer round tripping", "[Settings]")
 {
-	constexpr std::initializer_list<uint64_t> TEST_CASES{
+	const std::initializer_list<uint64_t> TEST_CASES{
 	        0, std::numeric_limits<uint64_t>::max() / 2,
 	        std::numeric_limits<uint64_t>::max()};
 
@@ -66,8 +66,8 @@ TEST_CASE("Test integer round tripping", "[Settings]")
 
 TEST_CASE("Test floating point round tripping", "[Settings]")
 {
-	constexpr std::initializer_list<double> TEST_CASES{0.0, -12345.54321,
-	                                                   12345.54321};
+	const std::initializer_list<double> TEST_CASES{0.0, -12345.54321,
+	                                               12345.54321};
 
 	for(auto const &v : TEST_CASES)
 	{
@@ -79,7 +79,7 @@ TEST_CASE("Test floating point round tripping", "[Settings]")
 
 TEST_CASE("Test boolean round tripping", "[Settings]")
 {
-	constexpr std::initializer_list<bool> TEST_CASES{true, false};
+	const std::initializer_list<bool> TEST_CASES{true, false};
 
 	for(auto const &v : TEST_CASES)
 	{
