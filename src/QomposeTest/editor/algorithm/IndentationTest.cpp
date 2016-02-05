@@ -132,7 +132,7 @@ void goToBlock(QTextCursor &cursor, int block,
 		                            QTextCursor::MoveAnchor);
 		break;
 
-	default:
+	case BlockRelativePosition::START:
 		break;
 	}
 	int position = positionFinder.position();

@@ -34,4 +34,8 @@ BrowserDockWidget::BrowserDockWidget(QWidget *p, Qt::WindowFlags f)
 	assert(!isVisible());
 	setWidget(view);
 }
+
+BrowserDockWidget::~BrowserDockWidget()
+{
+}
 }

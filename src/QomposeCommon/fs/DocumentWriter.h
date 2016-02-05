@@ -50,7 +50,8 @@ public:
 	DocumentWriter(QIODevice *d);
 
 	DocumentWriter(const DocumentWriter &) = delete;
-	virtual ~DocumentWriter() = default;
+
+	virtual ~DocumentWriter();
 
 	DocumentWriter &operator=(const DocumentWriter &) = delete;
 
@@ -123,8 +124,9 @@ private:
 	/*!
 	 * This is a utility function which trims the trailing whitespace from
 	 * each line in the given string. The given string is split into lines
-	 * ending with one of \n, \r\n or \r, and then each line is stripped of
-	 * trailing whitespace (i.e., any QChars where isSpace() returns true).
+	 * ending with one of the various platform-dependent newlines, and
+	 * then each line is stripped of trailing whitespace (i.e., any
+	 * QChars where isSpace() returns true).
 	 *
 	 * Note that the given string isn't modified; a new string is returned
 	 * instead.

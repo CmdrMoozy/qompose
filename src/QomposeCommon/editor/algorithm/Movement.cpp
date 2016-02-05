@@ -52,9 +52,9 @@ void home(QTextCursor &cursor, bool moveAnchor)
 		cursor.movePosition(QTextCursor::Left,
 		                    moveAnchor ? QTextCursor::MoveAnchor
 		                               : QTextCursor::KeepAnchor,
-		                    preCursorText.length() -
+		                    static_cast<int>(preCursorText.length() -
 		                            std::distance(preCursorText.begin(),
-		                                          whitespaceEnd));
+		                                          whitespaceEnd)));
 	}
 	else
 	{

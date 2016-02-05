@@ -192,20 +192,18 @@ bool Buffer::prepareToClose()
 	        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
 	        QMessageBox::Yes);
 
-	switch(b)
+	if(b == QMessageBox::Yes)
 	{
-	case QMessageBox::Yes:
 		save();
 		if(!isModified())
 			return true;
-		return false;
-
-	case QMessageBox::No:
+	}
+	else if(b == QMessageBox::No)
+	{
 		return true;
+	}
 
-	default:
-		return false;
-	};
+	return false;
 }
 
 QString Buffer::getTitle() const
@@ -294,14 +292,8 @@ void Buffer::setEncoding(const QByteArray &e)
 		        QMessageBox::Yes | QMessageBox::Cancel,
 		        QMessageBox::Yes);
 
-		switch(button)
-		{
-		case QMessageBox::Cancel:
+		if(button == QMessageBox::Cancel)
 			return;
-
-		default:
-			break;
-		};
 	}
 
 	codec = QString::fromLatin1(e);

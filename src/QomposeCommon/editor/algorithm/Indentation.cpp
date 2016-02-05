@@ -59,7 +59,7 @@ bool deindentSelection(
 		           width)
 		        {
 			        c.movePosition(QTextCursor::NextCharacter,
-			                       QTextCursor::KeepAnchor, width);
+			                       QTextCursor::KeepAnchor, static_cast<int>(width));
 		        }
 
 		        if(c.hasSelection() && (c.selectedText() == indentStr))
@@ -131,10 +131,9 @@ QString getIndentationString(IndentationMode mode, std::size_t width)
 	switch(mode)
 	{
 	case IndentationMode::Spaces:
-		return QString(" ").repeated(width);
+		return QString(" ").repeated(static_cast<int>(width));
 
 	case IndentationMode::Tabs:
-	default:
 		return QString("\t");
 	}
 }

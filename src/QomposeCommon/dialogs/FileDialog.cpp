@@ -34,6 +34,10 @@ FileDialog::FileDialog(QWidget *p, Qt::WindowFlags f) : QFileDialog(p, f)
 {
 }
 
+FileDialog::~FileDialog()
+{
+}
+
 FileDescriptor FileDialog::getNullDescriptor()
 {
 	FileDescriptor desc = {QString(), QString()};

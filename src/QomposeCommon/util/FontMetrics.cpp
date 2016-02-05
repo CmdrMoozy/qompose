@@ -27,6 +27,10 @@ FontMetrics::FontMetrics(const QFont &f) : font(f)
 {
 }
 
+FontMetrics::~FontMetrics()
+{
+}
+
 QFont FontMetrics::getFont() const
 {
 	return font;

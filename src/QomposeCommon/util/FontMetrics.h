@@ -38,7 +38,8 @@ public:
 	FontMetrics(const QFont &f);
 
 	FontMetrics(const FontMetrics &) = default;
-	virtual ~FontMetrics() = default;
+
+	virtual ~FontMetrics();
 
 	FontMetrics &operator=(const FontMetrics &) = default;
 

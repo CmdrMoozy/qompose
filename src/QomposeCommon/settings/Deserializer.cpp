@@ -53,7 +53,7 @@ QColor Deserializer<QColor>::operator()(std::string const &s) const
 
 QByteArray Deserializer<QByteArray>::operator()(std::string const &s) const
 {
-	return QByteArray(s.data(), s.length());
+	return QByteArray(s.data(), static_cast<int>(s.length()));
 }
 
 QFont Deserializer<QFont>::operator()(std::string const &s) const

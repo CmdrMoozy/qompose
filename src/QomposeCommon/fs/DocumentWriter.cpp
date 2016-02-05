@@ -36,6 +36,10 @@ DocumentWriter::DocumentWriter(QIODevice *d)
 	setDevice(d);
 }
 
+DocumentWriter::~DocumentWriter()
+{
+}
+
 QIODevice *DocumentWriter::getDevice() const
 {
 	return stream.device();

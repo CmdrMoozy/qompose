@@ -73,9 +73,6 @@ TemporaryStorage::TemporaryStorage(TemporaryStorageType t) : type(t), path()
 		}
 	}
 	break;
-
-	default:
-		throw std::runtime_error("Invalid TemporaryStorageType.");
 	}
 }
 
@@ -93,9 +90,6 @@ TemporaryStorage::~TemporaryStorage()
 		d.removeRecursively();
 	}
 	break;
-
-	default:
-		assert(false && "Invalid TemporaryStorageType.");
 	}
 }
 

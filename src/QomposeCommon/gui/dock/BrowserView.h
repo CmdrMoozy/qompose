@@ -32,8 +32,9 @@ public:
 	BrowserView(QWidget * = nullptr, Qt::WindowFlags = nullptr);
 
 	BrowserView(const BrowserView &) = delete;
-	virtual ~BrowserView() = default;
 	BrowserView &operator=(const BrowserView &) = delete;
+
+	virtual ~BrowserView();
 
 private:
 	QGridLayout *layout;

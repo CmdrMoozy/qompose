@@ -46,9 +46,12 @@ public:
 	}
 
 	AbstractGitObject(const AbstractGitObject &) = default;
+	AbstractGitObject(AbstractGitObject &&) = default;
+
 	virtual ~AbstractGitObject() = default;
 
 	AbstractGitObject &operator=(const AbstractGitObject &) = default;
+	AbstractGitObject &operator=(AbstractGitObject &&) = default;
 
 	/*!
 	 * This function returns a pointer to this object's internal Git

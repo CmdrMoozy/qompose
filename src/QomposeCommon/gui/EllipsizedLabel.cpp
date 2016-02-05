@@ -87,7 +87,7 @@ void EllipsizedLabel::setText(const QString &t)
 	lastWidth = -1;
 	ellipsizedText.clear();
 
-	int minw = getMinimumEllipsizedWidth(font(), t);
+	int minw = static_cast<int>(getMinimumEllipsizedWidth(font(), t));
 	minw += contentsMargins().left() + contentsMargins().right();
 	minw += frameWidth() * 2;
 	setMinimumWidth(minw);

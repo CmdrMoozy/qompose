@@ -37,7 +37,7 @@ public:
 	RecentList &operator=(RecentList const &) = delete;
 	RecentList &operator=(RecentList &&) = delete;
 
-	virtual ~RecentList() = default;
+	~RecentList() = default;
 
 	std::size_t getCapacity() const;
 

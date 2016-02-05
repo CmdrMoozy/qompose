@@ -63,8 +63,8 @@ option(USE_UNIT_TESTS "enable unit tests" ON)
 
 # Setup our compile flags.
 
-include(${CMAKE_SOURCE_DIR}/cmake/SetFlags.cmake)
-qomposeSetCompileFlags()
+include(${CMAKE_SOURCE_DIR}/3rdparty/cmu/cmake/SetFlags.cmake)
+cmuSetCompileFlags()
 
 add_definitions(-DQT_NO_KEYWORDS)
 

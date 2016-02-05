@@ -45,6 +45,11 @@ public:
 	 */
 	static Reference head(const Repository &repository);
 
+	Reference(Reference const&) = default;
+	Reference(Reference &&) = default;
+	Reference &operator=(Reference const&) = default;
+	Reference &operator=(Reference &&) = default;
+
 	virtual ~Reference() = default;
 
 	/*!
@@ -93,7 +98,7 @@ protected:
 	 * This constructor creates a new object from the given raw Git
 	 * pointer. The resulting object takes ownership of the pointer.
 	 *
-	 * \param p The pointer to create an object wrapper for.
+	 * \param r The pointer to create an object wrapper for.
 	 */
 	Reference(git_reference *r);
 

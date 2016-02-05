@@ -36,17 +36,17 @@ namespace qompose
 namespace thread_utils
 {
 #ifdef __linux__
-int ioprio_get(int which, int who)
+long ioprio_get(IOPrioWho which, int who)
 {
-	int r = syscall(SYS_ioprio_get, which, who);
+	long r = syscall(SYS_ioprio_get, which, who);
 	if(r == -1)
 		util::throwErrnoError();
 	return r;
 }
 
-void ioprio_set(int which, int who, int ioprio)
+void ioprio_set(IOPrioWho which, int who, int ioprio)
 {
-	int r = syscall(SYS_ioprio_set, which, who, ioprio);
+	long r = syscall(SYS_ioprio_set, which, who, ioprio);
 	if(r != 0)
 		util::throwErrnoError();
 }

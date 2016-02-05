@@ -57,15 +57,12 @@ QVariant PreferencesListModel::data(const QModelIndex &i, int r) const
 	{
 	case Qt::DisplayRole:
 		return widget->getPreferencesTitle();
-		break;
 
 	case Qt::DecorationRole:
 		return widget->getPreferencesIcon();
-		break;
 
 	default:
 		return QVariant(QVariant::Invalid);
-		break;
 	};
 }
 

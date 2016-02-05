@@ -33,4 +33,8 @@ BrowserView::BrowserView(QWidget *p, Qt::WindowFlags f)
 	layout->addWidget(treeView, 0, 0, 1, 1);
 	setLayout(layout);
 }
+
+BrowserView::~BrowserView()
+{
+}
 }

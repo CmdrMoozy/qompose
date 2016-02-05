@@ -54,7 +54,7 @@ std::string getErrnoError(int error, const std::string &defaultMessage)
 	return std::string(strerror_r(error, buf, 1024));
 }
 
-void throwErrnoError(int error, const std::string &defaultMessage)
+[[noreturn]] void throwErrnoError(int error, const std::string &defaultMessage)
 {
 	throw std::runtime_error(getErrnoError(error, defaultMessage));
 }

@@ -67,13 +67,13 @@ void TabbedPaneView::connectPane(Pane *p) const
 void TabbedPaneView::doPaneAdded(Pane *p, std::size_t i)
 {
 	connectPane(p);
-	tabBar->insertTab(i, p->getBuffer()->getTitle());
+	tabBar->insertTab(static_cast<int>(i), p->getBuffer()->getTitle());
 	setCurrentPane(i);
 }
 
 void TabbedPaneView::doPaneRemoved(std::size_t i)
 {
-	tabBar->removeTab(i);
+	tabBar->removeTab(static_cast<int>(i));
 }
 
 void TabbedPaneView::doCurrentChanged(int index)

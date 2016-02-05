@@ -25,6 +25,10 @@ PreferencesWidget::PreferencesWidget(QWidget *p, Qt::WindowFlags f)
 {
 }
 
+PreferencesWidget::~PreferencesWidget()
+{
+}
+
 QIcon PreferencesWidget::getPreferencesIcon() const
 {
 	return icon;

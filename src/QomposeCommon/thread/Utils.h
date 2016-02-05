@@ -43,7 +43,7 @@ namespace thread_utils
  * \param who The thread(s) on which the system call will operate.
  * \return The highest ioprio value of any of the specified thread(s).
  */
-int ioprio_get(IOPrioWho which, int who);
+long ioprio_get(IOPrioWho which, int who);
 
 /*!
  * This function is simply a syscall() wrapper for ioprio_set. See

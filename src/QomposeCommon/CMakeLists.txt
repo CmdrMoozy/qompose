@@ -84,8 +84,6 @@ set(QomposeCommon_SOURCES
 	editor/spell/SpellChecker.h
 	editor/spell/SpellCheckerWorker.cpp
 	editor/spell/SpellCheckerWorker.h
-	editor/spell/Utils.cpp
-	editor/spell/Utils.h
 
 	fs/DocumentWriter.cpp
 	fs/DocumentWriter.h

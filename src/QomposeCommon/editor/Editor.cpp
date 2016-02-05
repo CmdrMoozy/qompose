@@ -368,13 +368,13 @@ void Editor::paintEvent(QPaintEvent *e)
 #ifdef QOMPOSE_DEBUG
 	painter.setPen(QPen(QColor(255, 0, 0)));
 
-	painter.drawLine(contentOffset().x(), eventRect.top(),
-	                 contentOffset().x(), eventRect.bottom());
+	painter.drawLine(static_cast<int>(contentOffset().x()), eventRect.top(),
+	                 static_cast<int>(contentOffset().x()), eventRect.bottom());
 
 	painter.setPen(QPen(QColor(0, 255, 0)));
 
-	painter.drawLine(document()->documentMargin(), eventRect.top(),
-	                 document()->documentMargin(), eventRect.bottom());
+	painter.drawLine(static_cast<int>(document()->documentMargin()), eventRect.top(),
+	                 static_cast<int>(document()->documentMargin()), eventRect.bottom());
 #endif
 
 // Draw lines at each character column, if debugging is enabled.
@@ -389,7 +389,7 @@ void Editor::paintEvent(QPaintEvent *e)
 		coff += contentOffset().x();
 		coff += document()->documentMargin();
 
-		painter.drawLine(coff, eventRect.top(), coff,
+		painter.drawLine(static_cast<int>(coff), eventRect.top(), static_cast<int>(coff),
 		                 eventRect.bottom());
 	}
 #endif
@@ -401,7 +401,7 @@ void Editor::paintEvent(QPaintEvent *e)
 		qreal offset = wrapGuideOffset();
 
 		painter.setPen(QPen(getWrapGuideColor()));
-		painter.drawLine(offset, eventRect.top(), offset,
+		painter.drawLine(static_cast<int>(offset), eventRect.top(), static_cast<int>(offset),
 		                 eventRect.bottom());
 	}
 }
@@ -464,10 +464,9 @@ QString Editor::getIndentString() const
 	switch(getIndentationMode())
 	{
 	case IndentationMode::Spaces:
-		return QString(" ").repeated(getIndentationWidth());
+		return QString(" ").repeated(static_cast<int>(getIndentationWidth()));
 
 	case IndentationMode::Tabs:
-	default:
 		return QString("\t");
 	}
 }

@@ -47,7 +47,7 @@ public:
 
 	AboutDialog(const AboutDialog &) = delete;
 
-	virtual ~AboutDialog() = default;
+	virtual ~AboutDialog();
 
 	AboutDialog &operator=(const AboutDialog &) = delete;
 

@@ -102,7 +102,7 @@ void backspace(QTextCursor &cursor, IndentationMode mode, std::size_t width)
 				// remove the one full indentation.
 				cursor.movePosition(QTextCursor::Left,
 				                    QTextCursor::KeepAnchor,
-				                    width);
+				                    static_cast<int>(width));
 			}
 		}
 	}
@@ -134,8 +134,8 @@ void newline(QTextCursor &cursor)
 	                                            {
 		                                            return c.isSpace();
 		                                    });
-	insert.resize(insert.length() +
-	              std::distance(lineStart.begin(), nonWhitespaceStart));
+	insert.resize(static_cast<int>(insert.length() +
+	              std::distance(lineStart.begin(), nonWhitespaceStart)));
 	std::copy(lineStart.begin(), nonWhitespaceStart, insert.begin() + 1);
 
 	cursor.insertText(insert);

@@ -250,7 +250,8 @@ void Window::handleFindResult(editor::search::FindResult r)
 		                         QMessageBox::Ok, QMessageBox::Ok);
 		break;
 
-	default:
+	case editor::search::FindResult::NoDocument:
+	case editor::search::FindResult::Found:
 		break;
 	};
 

@@ -98,16 +98,16 @@ TEST_CASE("Verify Editor font zooming functionality", "[Editor]")
 
 	// Make sure that offsets are always evenly divisible by column widths.
 
-	auto computeOffsetColumnRemainder = [&](int column) -> long double
+	auto computeOffsetColumnRemainder = [&](int column) -> double
 	{
-		long double offset = static_cast<long double>(
+		double offset = static_cast<double>(
 		        editor->columnOffset(column) - editor->contentMargin());
-		long double single =
-		        static_cast<long double>(editor->singleColumnWidth());
+		double single =
+		        static_cast<double>(editor->singleColumnWidth());
 		return std::fmod(offset, single);
 	};
 
-	auto computeTestOffsetColumnRemainders = [&]() -> std::list<long double>
+	auto computeTestOffsetColumnRemainders = [&]() -> std::list<double>
 	{
 		return {computeOffsetColumnRemainder(80),
 		        computeOffsetColumnRemainder(40),

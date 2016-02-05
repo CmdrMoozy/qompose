@@ -108,7 +108,7 @@ struct MenuItemDescriptor
 	 * properties and connections for its triggered(bool) signal.
 	 *
 	 * \param t The text for this menu item.
-	 * \param c The connections for this item's triggered(bool) signal.
+	 * \param sigc The connections for this item's triggered(bool) signal.
 	 * \param s The hotkey for this menu item.
 	 * \param i The icon for this menu item (see getIconFromTheme).
 	 * \param chk Whether or not this item should be checkable.

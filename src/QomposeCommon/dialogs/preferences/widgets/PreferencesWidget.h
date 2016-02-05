@@ -41,7 +41,8 @@ public:
 	PreferencesWidget(QWidget *p = nullptr, Qt::WindowFlags f = nullptr);
 
 	PreferencesWidget(const PreferencesWidget &) = delete;
-	virtual ~PreferencesWidget() = default;
+
+	virtual ~PreferencesWidget();
 
 	PreferencesWidget &operator=(const PreferencesWidget &) = delete;
 

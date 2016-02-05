@@ -162,7 +162,7 @@ private Q_SLOTS:
 	/*!
 	 * This slot shows or hides the file browser dock widget.
 	 *
-	 * \param show Whether or not the file browser widget should be shown.
+	 * \param s Whether or not the file browser widget should be shown.
 	 */
 	void doShowBrowser(bool s);
 

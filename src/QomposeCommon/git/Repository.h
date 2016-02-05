@@ -44,6 +44,11 @@ public:
 	 */
 	Repository(const std::string &p);
 
+	Repository(Repository const&) = default;
+	Repository(Repository &&) = default;
+	Repository &operator=(Repository const&) = default;
+	Repository &operator=(Repository &&) = default;
+
 	virtual ~Repository() = default;
 
 	/*!

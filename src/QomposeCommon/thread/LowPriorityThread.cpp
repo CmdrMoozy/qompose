@@ -88,9 +88,6 @@ void setLowPriority(const std::initializer_list<qompose::PriorityType> &types)
 		case qompose::PriorityType::IO:
 			setLowIOPriority();
 			break;
-
-		default:
-			throw std::runtime_error("Invalid PriorityType.");
 		}
 	}
 }
@@ -110,12 +107,9 @@ public:
 	 *
 	 * \param t The low priority types for this thread.
 	 */
-	LowPriorityThreadImpl(const std::initializer_list<PriorityType> &t)
-	        : QThread(), priorityTypes(t)
-	{
-	}
+	LowPriorityThreadImpl(const std::initializer_list<PriorityType> &t);
 
-	virtual ~LowPriorityThreadImpl() = default;
+	virtual ~LowPriorityThreadImpl();
 
 	/*!
 	 * This function returns this thread's priority. This is
@@ -123,38 +117,72 @@ public:
 	 *
 	 * \return This thread's priority.
 	 */
-	virtual Priority priority() const
-	{
-		return QThread::LowestPriority;
-	}
+	virtual Priority priority() const;
 
 	/*!
 	 * We override setPriority() to enforce that it is not implemented for
 	 * this QThread subclass. If this function is called, an exception is
 	 * thrown and no action is taken.
-	 *
-	 * \param p The new priority for this thread.
 	 */
-	virtual void setPriority(Priority)
-	{
-		throw std::runtime_error(
-		        "setPriority() isn't supported for this subclass.");
-	}
+	virtual void setPriority(Priority);
 
 protected:
 	/*!
 	 * This QThread's run method simply sets the thread priority
 	 * appropriately, and then begins event processing.
 	 */
-	virtual void run()
-	{
-		setLowPriority(priorityTypes);
-		exec();
-	}
+	virtual void run();
 
 private:
 	std::initializer_list<PriorityType> priorityTypes;
 };
+
+/*!
+* This constructor creates a new low priority thread, which has low
+* priority for all of the given priority types.
+*
+* \param t The low priority types for this thread.
+*/
+LowPriorityThreadImpl::LowPriorityThreadImpl(const std::initializer_list<PriorityType> &t)
+ : QThread(), priorityTypes(t)
+{
+}
+
+LowPriorityThreadImpl::~LowPriorityThreadImpl()
+{
+}
+
+/*!
+* This function returns this thread's priority. This is
+* LowestPriority, by definition.
+*
+* \return This thread's priority.
+*/
+QThread::Priority LowPriorityThreadImpl::priority() const
+{
+	return QThread::LowestPriority;
+}
+
+/*!
+* We override setPriority() to enforce that it is not implemented for
+* this QThread subclass. If this function is called, an exception is
+* thrown and no action is taken.
+*/
+void LowPriorityThreadImpl::setPriority(Priority)
+{
+	throw std::runtime_error(
+	        "setPriority() isn't supported for this subclass.");
+}
+
+/*!
+* This QThread's run method simply sets the thread priority
+* appropriately, and then begins event processing.
+*/
+void LowPriorityThreadImpl::run()
+{
+	setLowPriority(priorityTypes);
+	exec();
+}
 
 LowPriorityThread::LowPriorityThread(
         const std::initializer_list<PriorityType> &t)

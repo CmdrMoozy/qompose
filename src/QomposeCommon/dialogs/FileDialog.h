@@ -43,7 +43,8 @@ public:
 	FileDialog(QWidget *p, Qt::WindowFlags f);
 
 	FileDialog(const FileDialog &) = delete;
-	virtual ~FileDialog() = default;
+
+	virtual ~FileDialog();
 
 	FileDialog &operator=(const FileDialog &) = delete;
 

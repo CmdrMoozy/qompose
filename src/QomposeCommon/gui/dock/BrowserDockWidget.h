@@ -31,8 +31,9 @@ public:
 	BrowserDockWidget(QWidget * = nullptr, Qt::WindowFlags = nullptr);
 
 	BrowserDockWidget(const BrowserDockWidget &) = delete;
-	virtual ~BrowserDockWidget() = default;
 	BrowserDockWidget &operator=(const BrowserDockWidget &) = delete;
+
+	virtual ~BrowserDockWidget();
 
 private:
 	BrowserView *view;

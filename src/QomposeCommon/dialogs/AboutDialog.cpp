@@ -53,6 +53,10 @@ AboutDialog::AboutDialog(QWidget *p, Qt::WindowFlags f)
 	resize(500, 500);
 }
 
+AboutDialog::~AboutDialog()
+{
+}
+
 void AboutDialog::initializeGUI()
 {
 	layout = new QGridLayout(this);

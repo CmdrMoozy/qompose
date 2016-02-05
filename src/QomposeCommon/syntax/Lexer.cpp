@@ -48,9 +48,6 @@ QString Lexer::getSettingKey(Token t)
 
 	case NumberToken:
 		return "token-number";
-
-	default:
-		return QString();
 	};
 }
 
