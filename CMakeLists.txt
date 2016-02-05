@@ -48,6 +48,7 @@ string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
 
 set(CMAKE_AUTOMOC ON)
 
+find_package(Boost REQUIRED)
 find_package(Leveldb REQUIRED)
 find_package(HUNSPELL REQUIRED)
 find_package(Libgit2 REQUIRED)
@@ -99,8 +100,10 @@ endif()
 
 add_subdirectory(src/QomposeCommon)
 add_subdirectory(src/Qompose)
+add_subdirectory(src/core)
 
 if(USE_UNIT_TESTS)
 	enable_testing()
 	add_subdirectory(src/QomposeTest)
+	add_subdirectory(src/core-test)
 endif()
