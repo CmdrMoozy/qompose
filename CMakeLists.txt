@@ -78,9 +78,8 @@ include_directories(SYSTEM "3rdparty/include")
 
 # Define the libraries Qompose uses.
 
-set(Qompose_LIBS
+set(qompose_LIBRARIES
 
-	QomposeCommon
 	${Qt5Core_LIBRARIES}
 	${Qt5Gui_LIBRARIES}
 	${Qt5Widgets_LIBRARIES}
@@ -93,7 +92,7 @@ set(Qompose_LIBS
 )
 
 if(UNIX)
-	set(Qompose_LIBS m ${Qompose_LIBS})
+	set(qompose_LIBRARIES m ${qompose_LIBRARIES})
 endif()
 
 # Add the various targets.

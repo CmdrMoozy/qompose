@@ -25,8 +25,7 @@ set(QomposeTest_SOURCES
 )
 
 add_executable(QomposeTest ${QomposeTest_SOURCES})
-target_link_libraries(QomposeTest ${Qompose_LIBS})
-
+target_link_libraries(QomposeTest QomposeCommon ${qompose_LIBRARIES})
 qt5_use_modules(QomposeTest Core Gui Widgets Network PrintSupport)
 
 add_test(QomposeTest QomposeTest)
