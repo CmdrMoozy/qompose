@@ -97,6 +97,7 @@ endif()
 
 # Add the various targets.
 
+add_subdirectory(3rdparty/bdrck)
 add_subdirectory(src/QomposeCommon)
 add_subdirectory(src/Qompose)
 add_subdirectory(src/core)
