@@ -1,5 +1,7 @@
 set(qompose-core_SOURCES
 
+	Utf8Iterator.cpp
+	Utf8Iterator.hpp
 	Utf8String.cpp
 	Utf8String.hpp
 

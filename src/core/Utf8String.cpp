@@ -18,12 +18,59 @@
 
 #include "Utf8String.hpp"
 
+#include <iterator>
+
+namespace
+{
+/*!
+ * Find the "real" begin pointer for the given UTF8-encoded byte range.
+ * This deals with skipping a BOM, if one is present.
+ *
+ * \param begin The "raw" begin pointer of the range.
+ * \param end The "raw" end pointer of the range.
+ */
+uint8_t const *getRealUtf8BeginPointer(uint8_t const *begin, uint8_t const *end)
+{
+	if(begin + 3 <= end)
+	{
+		if(*begin == 0xEFU && *(begin + 1) == 0xBBU &&
+		   *(begin + 2) == 0xBFU)
+		{
+			return begin + 3;
+		}
+	}
+
+	return begin;
+}
+}
+
 namespace qompose
 {
 namespace core
 {
-Utf8String::Utf8String() : bytes(), characterLength(0)
+Utf8String::Utf8String() noexcept : bytes(), characterLength(0)
 {
+}
+
+Utf8String::Utf8String(bdrck::string::StringRef const &str)
+        : Utf8String(
+                  reinterpret_cast<uint8_t const *>(str.data()),
+                  reinterpret_cast<uint8_t const *>(str.data() + str.length()))
+{
+}
+
+Utf8String::Utf8String(uint8_t const *begin, uint8_t const *end)
+        : bytes(getRealUtf8BeginPointer(begin, end), end),
+          characterLength(static_cast<std::size_t>(std::distance(
+                  const_iterator(bytes.get().data(),
+                                 bytes.get().data() + bytes.get().size()),
+                  const_iterator())))
+{
+}
+
+bool Utf8String::empty() const
+{
+	return bytes.get().empty();
 }
 
 std::size_t Utf8String::length() const
@@ -33,7 +80,18 @@ std::size_t Utf8String::length() const
 
 std::size_t Utf8String::size() const
 {
-	return characterLength;
+	return length();
+}
+
+Utf8String::const_iterator Utf8String::begin() const
+{
+	return const_iterator(bytes.get().data(),
+	                      bytes.get().data() + bytes.get().size());
+}
+
+Utf8String::const_iterator Utf8String::end() const
+{
+	return const_iterator();
 }
 }
 }

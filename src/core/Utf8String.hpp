@@ -25,6 +25,10 @@
 
 #include <boost/flyweight.hpp>
 
+#include <bdrck/string/StringRef.hpp>
+
+#include "core/Utf8Iterator.hpp"
+
 namespace qompose
 {
 namespace core
@@ -32,7 +36,18 @@ namespace core
 class Utf8String
 {
 public:
-	Utf8String();
+	typedef Utf8Iterator iterator;
+	typedef Utf8Iterator const_iterator;
+
+	Utf8String() noexcept;
+
+	Utf8String(bdrck::string::StringRef const &str);
+
+	/*!
+	 * Construct a UTF-8 string from the given bytes. Throws an
+	 * exception if the given bytes are not a valid UTF-8 sequence.
+	 */
+	Utf8String(uint8_t const *begin, uint8_t const *end);
 
 	Utf8String(Utf8String const &) = default;
 	Utf8String(Utf8String &&) = default;
@@ -41,8 +56,16 @@ public:
 
 	~Utf8String() = default;
 
+	/*!
+	 * \return Whether or not this string is empty, in O(1) time.
+	 */
+	bool empty() const;
+
 	std::size_t length() const;
 	std::size_t size() const;
+
+	const_iterator begin() const;
+	const_iterator end() const;
 
 private:
 	const boost::flyweights::flyweight<std::vector<uint8_t>> bytes;
