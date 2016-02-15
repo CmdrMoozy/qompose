@@ -61,9 +61,7 @@ Utf8String::Utf8String(uint8_t const *begin, uint8_t const *end)
         : bytes(getRealUtf8BeginPointer(begin, end), end),
           bytesBegin(bytes.get().data()),
           bytesEnd(bytes.get().data() + bytes.get().size()),
-          characterLength(static_cast<std::size_t>(std::distance(
-                  const_iterator(bytesBegin, bytesEnd),
-                  const_iterator(bytesBegin, bytesEnd, bytesEnd))))
+          characterLength(std::experimental::nullopt)
 {
 }
 
@@ -108,7 +106,13 @@ bool Utf8String::empty() const
 
 Utf8String::size_type Utf8String::length() const
 {
-	return characterLength;
+	if(!characterLength)
+	{
+		characterLength.emplace(
+		        static_cast<size_type>(std::distance(begin(), end())));
+	}
+
+	return *characterLength;
 }
 
 Utf8String::size_type Utf8String::size() const

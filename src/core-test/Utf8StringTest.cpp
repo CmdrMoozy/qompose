@@ -442,8 +442,8 @@ TEST_CASE("Test malformed UTF8 sequences", "[Utf8String]")
 
 	for(auto const &testCase : TEST_CASES)
 	{
-		std::experimental::optional<qompose::core::Utf8String> str;
-		CHECK_THROWS(str.emplace(testCase.data(),
-		                         testCase.data() + testCase.size()));
+		qompose::core::Utf8String str(
+		        testCase.data(), testCase.data() + testCase.size());
+		CHECK_THROWS(str.length());
 	}
 }

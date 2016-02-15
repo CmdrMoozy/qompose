@@ -22,6 +22,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <vector>
+#include <experimental/optional>
 
 #include <boost/flyweight.hpp>
 
@@ -43,11 +44,16 @@ public:
 	typedef Utf8ReverseIterator reverse_iterator;
 	typedef Utf8ReverseIterator const_reverse_iterator;
 
+	/*!
+	 * Construct an empty UTF-8 string. Because Utf8String is
+	 * immutable, this is most often not a useful thing to do.
+	 */
 	Utf8String() noexcept;
 
 	/*!
-	 * Construct a UTF-8 string from the given bytes. Throws an
-	 * exception if the given bytes are not a valid UTF-8 sequence.
+	 * Construct a UTF-8 string from the given bytes. The sequence is
+	 * evaluated lazily, so this constructor will not throw on an
+	 * invalid UTF-8 sequence, but e.g. iteration or length() will.
 	 */
 	Utf8String(uint8_t const *begin, uint8_t const *end);
 
@@ -84,6 +90,13 @@ public:
 	bool empty() const;
 
 	/*!
+	 * Returns the length of the string, in decoded UTF-8 characters.
+	 * This length is computed lazily, so the first call to this
+	 * function is O(n). Subsequent results are cached, and are O(1).
+	 *
+	 * If the UTF-8 sequence contains any invalid data, then this
+	 * function can throw on the first call.
+	 *
 	 * \return The length of the string, in decoded characters.
 	 */
 	size_type length() const;
@@ -123,7 +136,7 @@ private:
 	const boost::flyweights::flyweight<std::vector<uint8_t>> bytes;
 	uint8_t const *const bytesBegin;
 	uint8_t const *const bytesEnd;
-	const std::size_t characterLength;
+	mutable std::experimental::optional<const size_type> characterLength;
 };
 }
 }
