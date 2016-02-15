@@ -31,6 +31,8 @@ TEST_CASE("Test default construction", "[Utf8String]")
 	CHECK(str.empty());
 	CHECK(str.length() == 0);
 	CHECK(str.size() == 0);
+	CHECK(str.begin() == str.end());
+	CHECK(str.rbegin() == str.rend());
 }
 
 TEST_CASE("Test empty string length", "[Utf8String]")
@@ -39,6 +41,8 @@ TEST_CASE("Test empty string length", "[Utf8String]")
 	CHECK(str.empty());
 	CHECK(str.length() == 0);
 	CHECK(str.size() == 0);
+	CHECK(str.begin() == str.end());
+	CHECK(str.rbegin() == str.rend());
 }
 
 TEST_CASE("Test ASCII string length and iterating", "[Utf8String]")
@@ -51,13 +55,94 @@ TEST_CASE("Test ASCII string length and iterating", "[Utf8String]")
 	CHECK(str.length() == TEST_STRING_LENGTH);
 	CHECK(str.size() == TEST_STRING_LENGTH);
 
-	std::vector<uint8_t> iterated;
+	std::vector<char> iterated;
 	for(auto it = str.begin(); it != str.end(); ++it)
-		iterated.emplace_back(*it);
+		iterated.emplace_back(static_cast<char>(*it));
 
 	REQUIRE(iterated.size() == TEST_STRING_LENGTH);
 	CHECK(std::equal(TEST_STRING, TEST_STRING + TEST_STRING_LENGTH,
-	                 reinterpret_cast<char const *>(iterated.data())));
+	                 iterated.data()));
+
+	std::vector<char> reverseIterated;
+	for(auto it = str.rbegin(); it != str.rend(); ++it)
+		reverseIterated.emplace_back(static_cast<char>(*it));
+
+	REQUIRE(reverseIterated.size() == TEST_STRING_LENGTH);
+	CHECK(std::equal(reverseIterated.begin(), reverseIterated.end(),
+	                 iterated.rbegin()));
+}
+
+TEST_CASE("Test iterator definition", "[Utf8String]")
+{
+	static const std::vector<uint8_t> TEST_STRING{
+	        0xCEU, 0xBAU, 0xE1U, 0xBDU, 0xB9U, 0xCFU,
+	        0x83U, 0xCEU, 0xBCU, 0xCEU, 0xB5U};
+	static const std::vector<uint32_t> TEST_DECODED_CHARACTERS{
+	        0x3BAU, 0x1F79U, 0x3C3U, 0x3BCU, 0x3B5U};
+
+	qompose::core::Utf8String str(TEST_STRING.data(),
+	                              TEST_STRING.data() + TEST_STRING.size());
+
+	qompose::core::Utf8String::iterator it = str.begin();
+	qompose::core::Utf8String::reverse_iterator rit = str.rbegin();
+
+	// Test copy construction, copy assignment, equality / inequality,
+	// and dereferenceability as an rvalue.
+	{
+		qompose::core::Utf8String::iterator copyA(it);
+		CHECK(copyA == it);
+		CHECK(!(copyA != it));
+		CHECK(*copyA == *it);
+		CHECK(*copyA.operator->() == *it.operator->());
+
+		qompose::core::Utf8String::iterator copyB;
+		CHECK(copyB != it);
+		CHECK(!(copyB == it));
+		copyB = it;
+		CHECK(copyB == it);
+		CHECK(!(copyB != it));
+		CHECK(*copyB == *it);
+		CHECK(*copyB.operator->() == *it.operator->());
+
+		qompose::core::Utf8String::reverse_iterator revCopyA(rit);
+		CHECK(revCopyA == rit);
+		CHECK(!(revCopyA != rit));
+		CHECK(*revCopyA == *rit);
+		CHECK(*revCopyA.operator->() == *rit.operator->());
+
+		qompose::core::Utf8String::reverse_iterator revCopyB;
+		CHECK(revCopyB != rit);
+		CHECK(!(revCopyB == rit));
+		revCopyB = rit;
+		CHECK(revCopyB == rit);
+		CHECK(!(revCopyB != rit));
+		CHECK(*revCopyB == *rit);
+		CHECK(*revCopyB.operator->() == *rit.operator->());
+	}
+
+	// Must be incrementable.
+	CHECK(*it == TEST_DECODED_CHARACTERS[0]);
+	++it;
+	CHECK(*it == TEST_DECODED_CHARACTERS[1]);
+	it++;
+	CHECK(*it == TEST_DECODED_CHARACTERS[2]);
+	CHECK(*rit ==
+	      TEST_DECODED_CHARACTERS[TEST_DECODED_CHARACTERS.size() - 1]);
+	++rit;
+	CHECK(*rit ==
+	      TEST_DECODED_CHARACTERS[TEST_DECODED_CHARACTERS.size() - 2]);
+	rit++;
+	CHECK(*rit ==
+	      TEST_DECODED_CHARACTERS[TEST_DECODED_CHARACTERS.size() - 3]);
+
+	// Must be default-constructible. End iterators are always equal.
+	{
+		qompose::core::Utf8String::iterator defaultIt;
+		CHECK(defaultIt == str.end());
+
+		qompose::core::Utf8String::reverse_iterator defaultRevIt;
+		CHECK(defaultRevIt == str.rend());
+	}
 }
 
 TEST_CASE("Test UTF8 string length and iterating", "[Utf8String]")
@@ -65,6 +150,8 @@ TEST_CASE("Test UTF8 string length and iterating", "[Utf8String]")
 	static const std::vector<uint8_t> TEST_STRING{
 	        0xCEU, 0xBAU, 0xE1U, 0xBDU, 0xB9U, 0xCFU,
 	        0x83U, 0xCEU, 0xBCU, 0xCEU, 0xB5U};
+	static const std::vector<uint32_t> TEST_DECODED_CHARACTERS{
+	        0x3BAU, 0x1F79U, 0x3C3U, 0x3BCU, 0x3B5U};
 	constexpr std::size_t TEST_STRING_LENGTH = 5;
 
 	qompose::core::Utf8String str(TEST_STRING.data(),
@@ -72,6 +159,22 @@ TEST_CASE("Test UTF8 string length and iterating", "[Utf8String]")
 	CHECK(!str.empty());
 	CHECK(str.length() == TEST_STRING_LENGTH);
 	CHECK(str.size() == TEST_STRING_LENGTH);
+
+	std::vector<uint32_t> iterated;
+	for(auto it = str.begin(); it != str.end(); ++it)
+		iterated.push_back(*it);
+
+	REQUIRE(iterated.size() == TEST_STRING_LENGTH);
+	CHECK(std::equal(TEST_DECODED_CHARACTERS.begin(),
+	                 TEST_DECODED_CHARACTERS.end(), iterated.begin()));
+
+	std::vector<uint32_t> reverseIterated;
+	for(auto it = str.rbegin(); it != str.rend(); ++it)
+		reverseIterated.push_back(*it);
+
+	REQUIRE(reverseIterated.size() == iterated.size());
+	CHECK(std::equal(reverseIterated.begin(), reverseIterated.end(),
+	                 iterated.rbegin()));
 }
 
 TEST_CASE("Test first possible UTF8 sequences of a length", "[Utf8String]")

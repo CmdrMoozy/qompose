@@ -64,7 +64,9 @@ Utf8String::Utf8String(uint8_t const *begin, uint8_t const *end)
           characterLength(static_cast<std::size_t>(std::distance(
                   const_iterator(bytes.get().data(),
                                  bytes.get().data() + bytes.get().size()),
-                  const_iterator())))
+                  const_iterator(bytes.get().data(),
+                                 bytes.get().data() + bytes.get().size(),
+                                 bytes.get().data() + bytes.get().size()))))
 {
 }
 
@@ -91,7 +93,19 @@ Utf8String::const_iterator Utf8String::begin() const
 
 Utf8String::const_iterator Utf8String::end() const
 {
-	return const_iterator();
+	return const_iterator(bytes.get().data(),
+	                      bytes.get().data() + bytes.get().size(),
+	                      bytes.get().data() + bytes.get().size());
+}
+
+Utf8String::const_reverse_iterator Utf8String::rbegin() const
+{
+	return const_reverse_iterator(end());
+}
+
+Utf8String::const_reverse_iterator Utf8String::rend() const
+{
+	return const_reverse_iterator(begin());
 }
 }
 }

@@ -38,6 +38,8 @@ class Utf8String
 public:
 	typedef Utf8Iterator iterator;
 	typedef Utf8Iterator const_iterator;
+	typedef Utf8ReverseIterator reverse_iterator;
+	typedef Utf8ReverseIterator const_reverse_iterator;
 
 	Utf8String() noexcept;
 
@@ -66,6 +68,8 @@ public:
 
 	const_iterator begin() const;
 	const_iterator end() const;
+	const_reverse_iterator rbegin() const;
+	const_reverse_iterator rend() const;
 
 private:
 	const boost::flyweights::flyweight<std::vector<uint8_t>> bytes;
