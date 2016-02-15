@@ -19,6 +19,7 @@
 #include "Utf8String.hpp"
 
 #include <iterator>
+#include <stdexcept>
 
 namespace
 {
@@ -48,7 +49,21 @@ namespace qompose
 {
 namespace core
 {
-Utf8String::Utf8String() noexcept : bytes(), characterLength(0)
+Utf8String::Utf8String() noexcept
+        : bytes(),
+          bytesBegin(bytes.get().data()),
+          bytesEnd(bytes.get().data() + bytes.get().size()),
+          characterLength(0)
+{
+}
+
+Utf8String::Utf8String(uint8_t const *begin, uint8_t const *end)
+        : bytes(getRealUtf8BeginPointer(begin, end), end),
+          bytesBegin(bytes.get().data()),
+          bytesEnd(bytes.get().data() + bytes.get().size()),
+          characterLength(static_cast<std::size_t>(std::distance(
+                  const_iterator(bytesBegin, bytesEnd),
+                  const_iterator(bytesBegin, bytesEnd, bytesEnd))))
 {
 }
 
@@ -59,15 +74,31 @@ Utf8String::Utf8String(bdrck::string::StringRef const &str)
 {
 }
 
-Utf8String::Utf8String(uint8_t const *begin, uint8_t const *end)
-        : bytes(getRealUtf8BeginPointer(begin, end), end),
-          characterLength(static_cast<std::size_t>(std::distance(
-                  const_iterator(bytes.get().data(),
-                                 bytes.get().data() + bytes.get().size()),
-                  const_iterator(bytes.get().data(),
-                                 bytes.get().data() + bytes.get().size(),
-                                 bytes.get().data() + bytes.get().size()))))
+bool Utf8String::operator==(Utf8String const &o) const
 {
+	if((bytesEnd - bytesBegin) != (o.bytesEnd - o.bytesBegin))
+		return false;
+	return std::equal(bytesBegin, bytesEnd, o.bytesBegin);
+}
+
+bool Utf8String::operator!=(Utf8String const &o) const
+{
+	return !(*this == o);
+}
+
+uint8_t const *Utf8String::data() const
+{
+	return bytesBegin;
+}
+
+Utf8String::size_type Utf8String::dataLength() const
+{
+	return static_cast<size_type>(bytesEnd - bytesBegin);
+}
+
+Utf8String::size_type Utf8String::dataSize() const
+{
+	return dataLength();
 }
 
 bool Utf8String::empty() const
@@ -75,12 +106,12 @@ bool Utf8String::empty() const
 	return bytes.get().empty();
 }
 
-std::size_t Utf8String::length() const
+Utf8String::size_type Utf8String::length() const
 {
 	return characterLength;
 }
 
-std::size_t Utf8String::size() const
+Utf8String::size_type Utf8String::size() const
 {
 	return length();
 }
@@ -106,6 +137,33 @@ Utf8String::const_reverse_iterator Utf8String::rbegin() const
 Utf8String::const_reverse_iterator Utf8String::rend() const
 {
 	return const_reverse_iterator(begin());
+}
+
+Utf8String::iterator::reference Utf8String::at(size_type pos) const
+{
+	if(pos >= length())
+	{
+		throw std::out_of_range(
+		        "The specified character position is out of range.");
+	}
+	return (*this)[pos];
+}
+
+Utf8String::iterator::reference Utf8String::operator[](size_type pos) const
+{
+	auto it = begin();
+	std::advance(it, pos);
+	return *it;
+}
+
+Utf8String::iterator::reference Utf8String::front() const
+{
+	return *begin();
+}
+
+Utf8String::iterator::reference Utf8String::back() const
+{
+	return *rbegin();
 }
 }
 }

@@ -36,6 +36,8 @@ namespace core
 class Utf8String
 {
 public:
+	typedef std::size_t size_type;
+
 	typedef Utf8Iterator iterator;
 	typedef Utf8Iterator const_iterator;
 	typedef Utf8ReverseIterator reverse_iterator;
@@ -43,13 +45,13 @@ public:
 
 	Utf8String() noexcept;
 
-	Utf8String(bdrck::string::StringRef const &str);
-
 	/*!
 	 * Construct a UTF-8 string from the given bytes. Throws an
 	 * exception if the given bytes are not a valid UTF-8 sequence.
 	 */
 	Utf8String(uint8_t const *begin, uint8_t const *end);
+
+	Utf8String(bdrck::string::StringRef const &str);
 
 	Utf8String(Utf8String const &) = default;
 	Utf8String(Utf8String &&) = default;
@@ -58,21 +60,69 @@ public:
 
 	~Utf8String() = default;
 
+	bool operator==(Utf8String const &o) const;
+	bool operator!=(Utf8String const &o) const;
+
+	/*!
+	 * Return a pointer to the beginning of the string's encoded data.
+	 */
+	uint8_t const *data() const;
+
+	/*!
+	 * \return The length of the string's encoded data, in bytes.
+	 */
+	size_type dataLength() const;
+
+	/*!
+	 * A synonym for dataLength().
+	 */
+	size_type dataSize() const;
+
 	/*!
 	 * \return Whether or not this string is empty, in O(1) time.
 	 */
 	bool empty() const;
 
-	std::size_t length() const;
-	std::size_t size() const;
+	/*!
+	 * \return The length of the string, in decoded characters.
+	 */
+	size_type length() const;
+
+	/*!
+	 * A synonym for length().
+	 */
+	size_type size() const;
 
 	const_iterator begin() const;
 	const_iterator end() const;
 	const_reverse_iterator rbegin() const;
 	const_reverse_iterator rend() const;
 
+	/*!
+	 * Random character access function, with bounds checking. Beware
+	 * that each call to this function is O(n), so using iterators
+	 * instead is much more efficient.
+	 *
+	 * \param pos The position of the desired character.
+	 * \return The character at the given position in the string.
+	 */
+	iterator::reference at(size_type pos) const;
+
+	/*!
+	 * A version of at() without bounds checking.
+	 *
+	 * \param pos The position of the desired character.
+	 * \return The character at the given position in the string.
+	 */
+	iterator::reference operator[](size_type pos) const;
+
+	iterator::reference front() const;
+	iterator::reference back() const;
+
 private:
 	const boost::flyweights::flyweight<std::vector<uint8_t>> bytes;
+	uint8_t const *const bytesBegin;
+	uint8_t const *const bytesEnd;
 	const std::size_t characterLength;
 };
 }
