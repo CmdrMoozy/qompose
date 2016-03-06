@@ -44,9 +44,9 @@ public:
 	 */
 	static Diff diffHEAD(const Repository &repository);
 
-	Diff(Diff const&) = default;
+	Diff(Diff const &) = default;
 	Diff(Diff &&) = default;
-	Diff &operator=(Diff const&) = default;
+	Diff &operator=(Diff const &) = default;
 	Diff &operator=(Diff &&) = default;
 
 	virtual ~Diff() = default;

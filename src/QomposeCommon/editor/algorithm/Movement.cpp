@@ -41,20 +41,20 @@ void home(QTextCursor &cursor, bool moveAnchor)
 	        std::find_if_not(preCursorText.begin(), preCursorText.end(),
 	                         [](const QChar &c) -> bool
 	                         {
-		                         return c.isSpace();
-		                 });
+		        return c.isSpace();
+		});
 
 	// Move the cursor to the end of the whitespace if there are any
 	// non-whitespace characters before it, or to the start of the block
 	// otherwise.
 	if(whitespaceEnd != preCursorText.end())
 	{
-		cursor.movePosition(QTextCursor::Left,
-		                    moveAnchor ? QTextCursor::MoveAnchor
-		                               : QTextCursor::KeepAnchor,
-		                    static_cast<int>(preCursorText.length() -
-		                            std::distance(preCursorText.begin(),
-		                                          whitespaceEnd)));
+		cursor.movePosition(
+		        QTextCursor::Left, moveAnchor ? QTextCursor::MoveAnchor
+		                                      : QTextCursor::KeepAnchor,
+		        static_cast<int>(preCursorText.length() -
+		                         std::distance(preCursorText.begin(),
+		                                       whitespaceEnd)));
 	}
 	else
 	{

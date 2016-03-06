@@ -252,7 +252,7 @@ QMenu *createHelpMenu(QWidget *parent)
 	                            parentConn(SIGNAL(aboutQtTriggered(bool))),
 	                            QKeySequence(), "help-about")
 #ifdef QOMPOSE_DEBUG
-	                 ,
+	         ,
 	         SeparatorDescriptor(),
 	         MenuItemDescriptor("Debugging...",
 	                            parentConn(SIGNAL(debugTriggered(bool))))

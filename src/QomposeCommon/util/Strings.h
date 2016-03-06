@@ -58,8 +58,8 @@ std::size_t getMaxCommonSize(Iterator s, Iterator e)
 	std::accumulate(s, e, maxCommonSize,
 	                [](std::size_t max, const std::string &str)
 	                {
-		                return std::min(max, str.length());
-		        });
+		return std::min(max, str.length());
+	});
 	return maxCommonSize;
 }
 }

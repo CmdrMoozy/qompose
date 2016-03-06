@@ -45,9 +45,9 @@ public:
 	 */
 	static Reference head(const Repository &repository);
 
-	Reference(Reference const&) = default;
+	Reference(Reference const &) = default;
 	Reference(Reference &&) = default;
-	Reference &operator=(Reference const&) = default;
+	Reference &operator=(Reference const &) = default;
 	Reference &operator=(Reference &&) = default;
 
 	virtual ~Reference() = default;

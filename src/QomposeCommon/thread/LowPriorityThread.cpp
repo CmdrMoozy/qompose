@@ -143,8 +143,9 @@ private:
 *
 * \param t The low priority types for this thread.
 */
-LowPriorityThreadImpl::LowPriorityThreadImpl(const std::initializer_list<PriorityType> &t)
- : QThread(), priorityTypes(t)
+LowPriorityThreadImpl::LowPriorityThreadImpl(
+        const std::initializer_list<PriorityType> &t)
+        : QThread(), priorityTypes(t)
 {
 }
 

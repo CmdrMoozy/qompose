@@ -132,10 +132,11 @@ void newline(QTextCursor &cursor)
 	auto nonWhitespaceStart = std::find_if_not(
 	        lineStart.begin(), lineStart.end(), [](const QChar &c) -> bool
 	                                            {
-		                                            return c.isSpace();
-		                                    });
-	insert.resize(static_cast<int>(insert.length() +
-	              std::distance(lineStart.begin(), nonWhitespaceStart)));
+		        return c.isSpace();
+		});
+	insert.resize(static_cast<int>(
+	        insert.length() +
+	        std::distance(lineStart.begin(), nonWhitespaceStart)));
 	std::copy(lineStart.begin(), nonWhitespaceStart, insert.begin() + 1);
 
 	cursor.insertText(insert);

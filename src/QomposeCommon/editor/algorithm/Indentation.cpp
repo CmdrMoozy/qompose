@@ -39,10 +39,10 @@ namespace
  * \param width The indentation width to use.
  * \return True if at least one block was successfully de-indented.
  */
-bool deindentSelection(
-        QTextCursor &cursor,
-        qompose::editor::algorithm::CursorSelectionState const &state,
-        qompose::IndentationMode mode, std::size_t width)
+bool
+deindentSelection(QTextCursor &cursor,
+                  qompose::editor::algorithm::CursorSelectionState const &state,
+                  qompose::IndentationMode mode, std::size_t width)
 {
 	bool foundIndent = false;
 	QString indentStr =
@@ -59,7 +59,8 @@ bool deindentSelection(
 		           width)
 		        {
 			        c.movePosition(QTextCursor::NextCharacter,
-			                       QTextCursor::KeepAnchor, static_cast<int>(width));
+			                       QTextCursor::KeepAnchor,
+			                       static_cast<int>(width));
 		        }
 
 		        if(c.hasSelection() && (c.selectedText() == indentStr))
@@ -90,33 +91,33 @@ void dewhitespaceSelection(
 {
 	// Try to remove up to the indentation width's number of whitespace
 	// characters.
-	qompose::editor::algorithm::foreachBlock(
-	        cursor, state.startPosition, state.blockCount,
-	        [width](QTextCursor &c)
-	        {
-		        for(int j = 0; j < static_cast<int>(width); ++j)
-		        {
-			        QString text = c.block().text();
+	qompose::editor::algorithm::foreachBlock(cursor, state.startPosition,
+	                                         state.blockCount,
+	                                         [width](QTextCursor &c)
+	                                         {
+		for(int j = 0; j < static_cast<int>(width); ++j)
+		{
+			QString text = c.block().text();
 
-			        // If this block is already empty, just stop.
-			        if(text.length() <= 0)
-				        break;
+			// If this block is already empty, just stop.
+			if(text.length() <= 0)
+				break;
 
-			        QChar chr = text.at(0);
+			QChar chr = text.at(0);
 
-			        // Stop at the first non-whitespace char.
-			        if(!chr.isSpace())
-				        break;
+			// Stop at the first non-whitespace char.
+			if(!chr.isSpace())
+				break;
 
-			        // If this isn't the first char, and it's a
-			        // tab instead of a normal space, stop here.
-			        // We'll remove tabs on the next de-indent.
-			        if((j > 0) && (chr == '\t'))
-				        break;
+			// If this isn't the first char, and it's a
+			// tab instead of a normal space, stop here.
+			// We'll remove tabs on the next de-indent.
+			if((j > 0) && (chr == '\t'))
+				break;
 
-			        c.deleteChar();
-		        }
-		});
+			c.deleteChar();
+		}
+	});
 }
 }
 
@@ -151,8 +152,8 @@ void increaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
 	             static_cast<std::size_t>(state.blockCount),
 	             [&mode, &width](QTextCursor &c)
 	             {
-		             c.insertText(getIndentationString(mode, width));
-		     });
+		c.insertText(getIndentationString(mode, width));
+	});
 	cursor.endEditBlock();
 
 	setNormalizedSelection(cursor, state);

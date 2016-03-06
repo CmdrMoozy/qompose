@@ -188,8 +188,8 @@ TEST_CASE("Test HotkeyMap function lookup behavior", "[HotkeyMap]")
 	QKeyEvent ctrlAEvent(QKeyEvent::KeyPress, Qt::Key_A,
 	                     Qt::KeyboardModifiers(Qt::ControlModifier));
 
-	auto updateLastExecuted = [&hotkeys](const QKeyEvent &event)
-	                                  -> TestFunction
+	auto updateLastExecuted =
+	        [&hotkeys](const QKeyEvent &event) -> TestFunction
 	{
 		auto function = hotkeys.getHotkeyHandler(&event);
 

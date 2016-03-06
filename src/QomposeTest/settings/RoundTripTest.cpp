@@ -136,8 +136,8 @@ TEST_CASE("Test QFont round tripping", "[Settings]")
 TEST_CASE("Test string list round tripping", "[Settings]")
 {
 	const std::vector<std::string> TEST_VALUE{
-	        "foobar", "", "foo", "foofoofoofoofoofoofoofoofoofoofoo",
-	        "barbaz", ""};
+	        "foobar",                            "",       "foo",
+	        "foofoofoofoofoofoofoofoofoofoofoo", "barbaz", ""};
 
 	auto pair = performRoundTripTest(TEST_VALUE);
 	CHECK(pair.first == pair.second);

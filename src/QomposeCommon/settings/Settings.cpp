@@ -40,29 +40,30 @@ const std::string CONFIGURATION_FILE_NAME{"Qompose.conf"};
 #endif
 
 // clang-format off
-const std::map<std::string, qompose::settings::SerializedValue> DEFAULT_SETTINGS{
-	{"show-file-in-title", true},
-	{"show-status-bar", true},
-	{"recent-list-size", 10},
-	{"recent-list", std::vector<std::string>()},
-	{"window-save-attributes", true},
-	{"show-gutter", true},
-	{"save-strip-trailing-spaces", true},
-	{"editor-font", QFont("Courier", 11)},
-	{"editor-indentation-width", 8},
-	{"editor-indentation-mode", "tabs"},
-	{"editor-wrap-guide-visible", true},
-	{"editor-wrap-guide-width", 90},
-	{"editor-wrap-guide-color", QColor(127, 127, 127)},
-	{"editor-foreground", QColor(255, 255, 255)},
-	{"editor-background", QColor(39, 40, 34)},
-	{"editor-current-line", QColor(70, 72, 61)},
-	{"gutter-foreground", QColor(255, 255, 255)},
-	{"gutter-background", QColor(0, 0, 0)},
-	{"show-file-browser", false},
-	{"window-geometry", QByteArray()},
-	{"window-state", QByteArray()},
-};
+const std::map<std::string, qompose::settings::SerializedValue>
+        DEFAULT_SETTINGS{
+                {"show-file-in-title", true},
+                {"show-status-bar", true},
+                {"recent-list-size", 10},
+                {"recent-list", std::vector<std::string>()},
+                {"window-save-attributes", true},
+                {"show-gutter", true},
+                {"save-strip-trailing-spaces", true},
+                {"editor-font", QFont("Courier", 11)},
+                {"editor-indentation-width", 8},
+                {"editor-indentation-mode", "tabs"},
+                {"editor-wrap-guide-visible", true},
+                {"editor-wrap-guide-width", 90},
+                {"editor-wrap-guide-color", QColor(127, 127, 127)},
+                {"editor-foreground", QColor(255, 255, 255)},
+                {"editor-background", QColor(39, 40, 34)},
+                {"editor-current-line", QColor(70, 72, 61)},
+                {"gutter-foreground", QColor(255, 255, 255)},
+                {"gutter-background", QColor(0, 0, 0)},
+                {"show-file-browser", false},
+                {"window-geometry", QByteArray()},
+                {"window-state", QByteArray()},
+        };
 // clang-format on
 
 void initializeWithDefaults(leveldb::DB *db)

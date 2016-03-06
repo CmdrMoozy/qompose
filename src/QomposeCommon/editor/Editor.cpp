@@ -369,12 +369,15 @@ void Editor::paintEvent(QPaintEvent *e)
 	painter.setPen(QPen(QColor(255, 0, 0)));
 
 	painter.drawLine(static_cast<int>(contentOffset().x()), eventRect.top(),
-	                 static_cast<int>(contentOffset().x()), eventRect.bottom());
+	                 static_cast<int>(contentOffset().x()),
+	                 eventRect.bottom());
 
 	painter.setPen(QPen(QColor(0, 255, 0)));
 
-	painter.drawLine(static_cast<int>(document()->documentMargin()), eventRect.top(),
-	                 static_cast<int>(document()->documentMargin()), eventRect.bottom());
+	painter.drawLine(static_cast<int>(document()->documentMargin()),
+	                 eventRect.top(),
+	                 static_cast<int>(document()->documentMargin()),
+	                 eventRect.bottom());
 #endif
 
 // Draw lines at each character column, if debugging is enabled.
@@ -389,8 +392,8 @@ void Editor::paintEvent(QPaintEvent *e)
 		coff += contentOffset().x();
 		coff += document()->documentMargin();
 
-		painter.drawLine(static_cast<int>(coff), eventRect.top(), static_cast<int>(coff),
-		                 eventRect.bottom());
+		painter.drawLine(static_cast<int>(coff), eventRect.top(),
+		                 static_cast<int>(coff), eventRect.bottom());
 	}
 #endif
 
@@ -401,8 +404,8 @@ void Editor::paintEvent(QPaintEvent *e)
 		qreal offset = wrapGuideOffset();
 
 		painter.setPen(QPen(getWrapGuideColor()));
-		painter.drawLine(static_cast<int>(offset), eventRect.top(), static_cast<int>(offset),
-		                 eventRect.bottom());
+		painter.drawLine(static_cast<int>(offset), eventRect.top(),
+		                 static_cast<int>(offset), eventRect.bottom());
 	}
 }
 
@@ -464,7 +467,8 @@ QString Editor::getIndentString() const
 	switch(getIndentationMode())
 	{
 	case IndentationMode::Spaces:
-		return QString(" ").repeated(static_cast<int>(getIndentationWidth()));
+		return QString(" ")
+		        .repeated(static_cast<int>(getIndentationWidth()));
 
 	case IndentationMode::Tabs:
 		return QString("\t");
@@ -501,79 +505,75 @@ void Editor::initializeHotkeys()
 	addHotkey(Hotkey(Qt::Key_Backspace, 0, ~Qt::KeyboardModifiers(0)),
 	          [this]()
 	          {
-		          algorithm::applyAlgorithm(*this, algorithm::backspace,
-		                                    getIndentationMode(),
-		                                    getIndentationWidth());
-		  });
+		algorithm::applyAlgorithm(*this, algorithm::backspace,
+		                          getIndentationMode(),
+		                          getIndentationWidth());
+	});
 
 	// Delete
 
 	addHotkey(Hotkey(Qt::Key_Delete, 0, ~Qt::KeyboardModifiers(0)), [this]()
 	          {
-		          algorithm::applyAlgorithm(*this,
-		                                    algorithm::deleteCharacter);
-		  });
+		algorithm::applyAlgorithm(*this, algorithm::deleteCharacter);
+	});
 
 	// Enter
 
 	addHotkey(Hotkey(Qt::Key_Return, 0, ~Qt::KeyboardModifiers(0)), [this]()
 	          {
-		          algorithm::applyAlgorithm(*this, algorithm::newline);
-		  });
+		algorithm::applyAlgorithm(*this, algorithm::newline);
+	});
 
 	addHotkey(Hotkey(Qt::Key_Enter, 0, ~Qt::KeyboardModifiers(0)), [this]()
 	          {
-		          algorithm::applyAlgorithm(*this, algorithm::newline);
-		  });
+		algorithm::applyAlgorithm(*this, algorithm::newline);
+	});
 
 	// Tab
 
 	addHotkey(Hotkey(Qt::Key_Tab), [this]()
 	          {
-		          algorithm::applyAlgorithm(*this, algorithm::tab,
-		                                    getIndentationMode(),
-		                                    getIndentationWidth());
-		  });
+		algorithm::applyAlgorithm(*this, algorithm::tab,
+		                          getIndentationMode(),
+		                          getIndentationWidth());
+	});
 
 	// Shift + Tab
 
 	addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier), [this]()
 	          {
-		          algorithm::applyAlgorithm(
-		                  *this, algorithm::decreaseSelectionIndent,
-		                  getIndentationMode(), getIndentationWidth());
-		  });
+		algorithm::applyAlgorithm(
+		        *this, algorithm::decreaseSelectionIndent,
+		        getIndentationMode(), getIndentationWidth());
+	});
 
 	addHotkey(Hotkey(Qt::Key_Backtab, Qt::ShiftModifier), [this]()
 	          {
-		          algorithm::applyAlgorithm(
-		                  *this, algorithm::decreaseSelectionIndent,
-		                  getIndentationMode(), getIndentationWidth());
-		  });
+		algorithm::applyAlgorithm(
+		        *this, algorithm::decreaseSelectionIndent,
+		        getIndentationMode(), getIndentationWidth());
+	});
 
 	// Home
 
 	addHotkey(Hotkey(Qt::Key_Home), [this]()
 	          {
-		          algorithm::applyAlgorithm(*this, algorithm::home,
-		                                    true);
-		  });
+		algorithm::applyAlgorithm(*this, algorithm::home, true);
+	});
 
 	// Shift + Home
 
 	addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier), [this]()
 	          {
-		          algorithm::applyAlgorithm(*this, algorithm::home,
-		                                    false);
-		  });
+		algorithm::applyAlgorithm(*this, algorithm::home, false);
+	});
 
 	// Ctrl+D
 
 	addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier), [this]()
 	          {
-		          algorithm::applyAlgorithm(*this,
-		                                    algorithm::duplicateBlock);
-		  });
+		algorithm::applyAlgorithm(*this, algorithm::duplicateBlock);
+	});
 
 	// Ctrl+(Zero)
 
@@ -585,7 +585,7 @@ void Editor::initializeHotkeys()
 	addHotkey(Hotkey(Qt::Key_Left, Qt::ControlModifier | Qt::ShiftModifier),
 	          []()
 	          {
-		  });
+	});
 
 	// Ctrl+Shift+Right
 
@@ -599,25 +599,25 @@ void Editor::initializeHotkeys()
 
 	addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier), []()
 	          {
-		  });
+	});
 
 	// Ctrl+K
 
 	addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier), []()
 	          {
-		  });
+	});
 
 	// Shift+Insert
 
 	addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier), []()
 	          {
-		  });
+	});
 
 	// Shift+Delete
 
 	addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier), []()
 	          {
-		  });
+	});
 }
 
 void Editor::gutterPaintEvent(QPaintEvent *e)

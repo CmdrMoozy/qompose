@@ -41,8 +41,9 @@ std::string getErrnoError(int error = 0,
  * \param error The error number to interpret. Default is 0, meaning use errno.
  * \param defaultMessage The default error message to return.
  */
-[[noreturn]] void throwErrnoError(int error = 0,
-                     const std::string &defaultMessage = "Unknown error.");
+[[noreturn]] void
+throwErrnoError(int error = 0,
+                const std::string &defaultMessage = "Unknown error.");
 
 #ifdef _WIN32
 /*!
