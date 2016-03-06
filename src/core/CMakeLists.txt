@@ -5,6 +5,15 @@ set(qompose-core_SOURCES
 	Utf8String.cpp
 	Utf8String.hpp
 
+	document/Cursor.cpp
+	document/Cursor.hpp
+	document/Document.cpp
+	document/Document.hpp
+	document/DocumentHistory.cpp
+	document/DocumentHistory.hpp
+	document/PieceTable.cpp
+	document/PieceTable.hpp
+
 )
 
 add_library(qompose-core STATIC ${qompose-core_SOURCES})
