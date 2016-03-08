@@ -19,8 +19,8 @@
 #ifndef qompose_core_document_Cursor_HPP
 #define qompose_core_document_Cursor_HPP
 
-#include "core/Utf8String.hpp"
 #include "core/document/PieceTable.hpp"
+#include "core/string/Utf8Iterator.hpp"
 
 namespace qompose
 {
@@ -30,10 +30,11 @@ namespace document
 {
 struct Cursor
 {
-	PieceTable::const_iterator piece;
-	Utf8String::const_iterator position;
+	PieceTable::PieceContainer::const_iterator piece;
+	qompose::core::string::Utf8Iterator position;
 
-	Cursor(PieceTable::const_iterator pi, Utf8String::const_iterator po);
+	Cursor(PieceTable::PieceContainer::const_iterator pi,
+	       qompose::core::string::Utf8Iterator po);
 	Cursor();
 
 	Cursor(Cursor const &) = default;

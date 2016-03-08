@@ -19,10 +19,12 @@
 #ifndef qompose_core_document_PieceTable_HPP
 #define qompose_core_document_PieceTable_HPP
 
+#include <cstdint>
 #include <list>
+#include <memory>
 #include <utility>
 
-#include "core/Utf8String.hpp"
+#include "core/string/Utf8Iterator.hpp"
 
 namespace qompose
 {
@@ -32,11 +34,63 @@ namespace document
 {
 struct Cursor;
 
-typedef std::pair<Utf8String::const_iterator, Utf8String::const_iterator> Piece;
-typedef std::list<Piece> PieceTable;
+class Piece
+{
+private:
+	std::shared_ptr<void> resource;
+
+public:
+	qompose::core::string::Utf8Iterator begin;
+	qompose::core::string::Utf8Iterator end;
+
+	template <typename TextResource>
+	Piece(TextResource &&r, qompose::core::string::Utf8Iterator b,
+	      qompose::core::string::Utf8Iterator e);
+
+	Piece(Piece const &) = default;
+	Piece(Piece &&) = default;
+	Piece &operator=(Piece const &) = default;
+	Piece &operator=(Piece &&) = default;
+
+	~Piece() = default;
+};
+
+struct PieceTable
+{
+	typedef std::list<Piece> PieceContainer;
+
+	PieceContainer pieces;
+
+	template <typename TextResource> PieceTable(TextResource &&resource);
+
+	PieceTable(PieceTable const &) = default;
+	PieceTable(PieceTable &&) = default;
+	PieceTable &operator=(PieceTable const &) = default;
+	PieceTable &operator=(PieceTable &&) = default;
+};
 
 PieceTable remove(PieceTable const &pieces, Cursor const &begin,
                   Cursor const &end);
+
+template <typename TextResource>
+Piece::Piece(TextResource &&r, qompose::core::string::Utf8Iterator b,
+             qompose::core::string::Utf8Iterator e)
+        : resource(std::make_shared<TextResource>(std::move(r))),
+          begin(b),
+          end(e)
+{
+}
+
+template <typename TextResource>
+PieceTable::PieceTable(TextResource &&resource)
+        : pieces()
+{
+	auto b = resource.data();
+	auto e = resource.data() + resource.size();
+	pieces.emplace_back(std::move(resource),
+	                    qompose::core::string::Utf8Iterator(b, e),
+	                    qompose::core::string::Utf8Iterator(b, e, e));
+}
 }
 }
 }

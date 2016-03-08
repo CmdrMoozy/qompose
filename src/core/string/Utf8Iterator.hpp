@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef qompose_core_string_Utf8Iterator_HPP
+#define qompose_core_string_Utf8Iterator_HPP
+
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
@@ -23,6 +26,8 @@
 namespace qompose
 {
 namespace core
+{
+namespace string
 {
 struct Utf8DecodeResult
 {
@@ -112,3 +117,6 @@ private:
 };
 }
 }
+}
+
+#endif

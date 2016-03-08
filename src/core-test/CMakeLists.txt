@@ -2,7 +2,7 @@ set(qompose-core-test_SOURCES
 
 	qompose-core-test.cpp
 
-	Utf8StringTest.cpp
+	string/Utf8StringTest.cpp
 
 )
 

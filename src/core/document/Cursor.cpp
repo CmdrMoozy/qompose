@@ -28,7 +28,8 @@ Cursor::Cursor() : piece(), position()
 {
 }
 
-Cursor::Cursor(PieceTable::const_iterator pi, Utf8String::const_iterator po)
+Cursor::Cursor(PieceTable::PieceContainer::const_iterator pi,
+               qompose::core::string::Utf8Iterator po)
         : piece(pi), position(po)
 {
 }

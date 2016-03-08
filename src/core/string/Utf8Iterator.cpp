@@ -205,7 +205,7 @@ void throwOnInvalidUtf8Character(uint32_t character, uint8_t bytesUsed)
  * position is nullptr, or is at or after end, then an "end" structure is
  * returned (namely, {0, nullptr, nullptr}).
  */
-qompose::core::Utf8DecodeResult
+qompose::core::string::Utf8DecodeResult
 decodeUtf8(uint8_t const *begin, uint8_t const *current, uint8_t const *end)
 {
 	assert(begin != nullptr);
@@ -276,6 +276,8 @@ uint8_t const *findPrevious(uint8_t const *begin, uint8_t const *current,
 namespace qompose
 {
 namespace core
+{
+namespace string
 {
 Utf8Iterator::Utf8Iterator(uint8_t const *b, uint8_t const *e, uint8_t const *c)
         : begin(b), end(e), value({0, nullptr, nullptr})
@@ -401,6 +403,7 @@ Utf8ReverseIterator::reference Utf8ReverseIterator::operator*() const
 Utf8ReverseIterator::pointer Utf8ReverseIterator::operator->() const
 {
 	return iterator.operator->();
+}
 }
 }
 }

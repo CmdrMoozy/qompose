@@ -32,7 +32,7 @@ Document::Document(PieceTable const &p, Cursor const &c) : pieces(p), cursor(c)
 }
 
 Document::Document(PieceTable const &p)
-        : Document(p, Cursor(p.begin(), p.begin()->first))
+        : Document(p, Cursor(p.pieces.begin(), p.pieces.begin()->begin))
 {
 }
 }

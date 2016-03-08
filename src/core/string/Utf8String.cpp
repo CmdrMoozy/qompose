@@ -49,6 +49,8 @@ namespace qompose
 {
 namespace core
 {
+namespace string
+{
 Utf8String::Utf8String() noexcept
         : bytes(),
           bytesBegin(bytes.get().data()),
@@ -69,6 +71,11 @@ Utf8String::Utf8String(bdrck::string::StringRef const &str)
         : Utf8String(
                   reinterpret_cast<uint8_t const *>(str.data()),
                   reinterpret_cast<uint8_t const *>(str.data() + str.length()))
+{
+}
+
+Utf8String::Utf8String(Utf8StringRef const &str)
+        : Utf8String(str.data(), str.data() + str.dataSize())
 {
 }
 
@@ -168,6 +175,7 @@ Utf8String::iterator::reference Utf8String::front() const
 Utf8String::iterator::reference Utf8String::back() const
 {
 	return *rbegin();
+}
 }
 }
 }

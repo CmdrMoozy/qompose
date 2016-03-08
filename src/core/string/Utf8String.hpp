@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef qompose_core_Utf8String_HPP
-#define qompose_core_Utf8String_HPP
+#ifndef qompose_core_string_Utf8String_HPP
+#define qompose_core_string_Utf8String_HPP
 
 #include <cstddef>
 #include <cstdint>
@@ -28,11 +28,14 @@
 
 #include <bdrck/string/StringRef.hpp>
 
-#include "core/Utf8Iterator.hpp"
+#include "core/string/Utf8Iterator.hpp"
+#include "core/string/Utf8StringRef.hpp"
 
 namespace qompose
 {
 namespace core
+{
+namespace string
 {
 class Utf8String
 {
@@ -58,6 +61,7 @@ public:
 	Utf8String(uint8_t const *begin, uint8_t const *end);
 
 	Utf8String(bdrck::string::StringRef const &str);
+	Utf8String(Utf8StringRef const &str);
 
 	Utf8String(Utf8String const &) = default;
 	Utf8String(Utf8String &&) = default;
@@ -138,6 +142,7 @@ private:
 	uint8_t const *const bytesEnd;
 	mutable std::experimental::optional<const size_type> characterLength;
 };
+}
 }
 }
 

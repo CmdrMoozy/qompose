@@ -1,10 +1,5 @@
 set(qompose-core_SOURCES
 
-	Utf8Iterator.cpp
-	Utf8Iterator.hpp
-	Utf8String.cpp
-	Utf8String.hpp
-
 	document/Cursor.cpp
 	document/Cursor.hpp
 	document/Document.cpp
@@ -13,6 +8,13 @@ set(qompose-core_SOURCES
 	document/DocumentHistory.hpp
 	document/PieceTable.cpp
 	document/PieceTable.hpp
+
+	string/Utf8Iterator.cpp
+	string/Utf8Iterator.hpp
+	string/Utf8String.cpp
+	string/Utf8String.hpp
+	string/Utf8StringRef.cpp
+	string/Utf8StringRef.hpp
 
 )
 
