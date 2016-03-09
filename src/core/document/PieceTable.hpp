@@ -34,6 +34,22 @@ namespace document
 {
 struct Cursor;
 
+/*!
+ * \brief A Piece is a text segment within a piece table.
+ *
+ * Pieces own a reference-counted instance of the underlying text data.
+ * The underlying data is not copied when Pieces are copied, so copies are
+ * relatively cheap.
+ *
+ * The Concept both Piece and PieceTable rely upon to denote the
+ * underlying data is a TextResource. This concept is any type which
+ * provides the following member functions:
+ *
+ *     uint8_t const* data() const;
+ *     size_type size() const;
+ *
+ * Where size_type is something analogous to std::size_t.
+ */
 class Piece
 {
 private:
