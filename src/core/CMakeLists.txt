@@ -9,6 +9,11 @@ set(qompose-core_SOURCES
 	document/PieceTable.cpp
 	document/PieceTable.hpp
 
+	file/InMemoryFile.cpp
+	file/InMemoryFile.hpp
+	file/MMIOFile.cpp
+	file/MMIOFile.hpp
+
 	string/Utf8Iterator.cpp
 	string/Utf8Iterator.hpp
 	string/Utf8String.cpp

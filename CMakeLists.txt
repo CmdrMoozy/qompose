@@ -88,6 +88,9 @@ set(qompose_LIBRARIES
 	${LEVELDB_LIBRARIES}
 	${HUNSPELL_LIBRARIES}
 	${LIBGIT2_LIBRARIES}
+	bdrck-fs
+	bdrck-string
+	bdrck-util
 
 )
 
