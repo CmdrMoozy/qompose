@@ -56,9 +56,13 @@ InMemoryFile::InMemoryFile(std::string const &path) : contents()
 	if(s == -1)
 		bdrck::util::error::throwErrnoError();
 
-	contents.reserve(static_cast<std::size_t>(s));
-	std::size_t read = fread(contents.data(), contents.size(),
-	                         sizeof(uint8_t), f.get());
+	ret = fseek(f.get(), 0L, SEEK_SET);
+	if(ret != 0)
+		bdrck::util::error::throwErrnoError();
+
+	contents.resize(static_cast<std::size_t>(s));
+	std::size_t read = fread(contents.data(), sizeof(uint8_t),
+	                         contents.size(), f.get());
 	if(read != static_cast<std::size_t>(s))
 		throw std::runtime_error("Reading file contents failed.");
 }

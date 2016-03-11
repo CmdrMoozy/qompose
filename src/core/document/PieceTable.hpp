@@ -34,6 +34,23 @@ namespace document
 {
 struct Cursor;
 
+template <typename TextResource>
+qompose::core::string::Utf8Iterator
+beginIteratorFrom(TextResource const &resource)
+{
+	return qompose::core::string::Utf8Iterator(
+	        resource.data(), resource.data() + resource.size());
+}
+
+template <typename TextResource>
+qompose::core::string::Utf8Iterator
+endIteratorFrom(TextResource const &resource)
+{
+	return qompose::core::string::Utf8Iterator(
+	        resource.data(), resource.data() + resource.size(),
+	        resource.data() + resource.size());
+}
+
 /*!
  * \brief A Piece is a text segment within a piece table.
  *

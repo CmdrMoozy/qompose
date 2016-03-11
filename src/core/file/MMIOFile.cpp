@@ -48,6 +48,7 @@ struct MMIOFileImpl
 		int ret = open(path.c_str(), O_RDWR);
 		if(ret == -1)
 			bdrck::util::error::throwErrnoError();
+		fd = ret;
 
 		ret = fstat(fd, &stats);
 		if(ret == -1)

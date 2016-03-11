@@ -24,4 +24,4 @@ set(qompose-core_SOURCES
 )
 
 add_library(qompose-core STATIC ${qompose-core_SOURCES})
-target_link_libraries(qompose-core ${Qompose_LIBS})
+target_link_libraries(qompose-core ${qompose_LIBRARIES})
