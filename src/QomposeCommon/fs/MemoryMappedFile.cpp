@@ -26,7 +26,8 @@
 
 #include <stdexcept>
 
-#include "QomposeCommon/fs/Paths.h"
+#include <bdrck/fs/Util.hpp>
+
 #include "QomposeCommon/util/Errno.h"
 
 namespace qompose
@@ -34,12 +35,12 @@ namespace qompose
 MemoryMappedFile::MemoryMappedFile(const std::string &path)
         : fileDescriptor(-1), file(nullptr), length(0)
 {
-	std::string stripped = path_utils::stripSymlink(path);
-	length = path_utils::getSize(stripped);
+	std::string canonical = bdrck::fs::resolvePath(path);
+	length = static_cast<std::size_t>(bdrck::fs::fileSize(canonical));
 
 	if(length > 0)
 	{
-		fileDescriptor = open(stripped.c_str(), O_RDONLY | O_NOFOLLOW);
+		fileDescriptor = open(canonical.c_str(), O_RDONLY | O_NOFOLLOW);
 		if(fileDescriptor == -1)
 			throw std::runtime_error(
 			        "Opening the specified file failed.");

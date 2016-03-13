@@ -87,8 +87,6 @@ set(QomposeCommon_SOURCES
 	fs/DocumentWriter.h
 	fs/MemoryMappedFile.cpp
 	fs/MemoryMappedFile.h
-	fs/Paths.cpp
-	fs/Paths.h
 
 	git/AbstractGitObject.h
 	git/Buffer.cpp

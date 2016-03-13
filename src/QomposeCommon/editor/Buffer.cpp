@@ -32,10 +32,11 @@
 #include <QTextStream>
 #include <QVariant>
 
+#include <bdrck/fs/Util.hpp>
+
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/editor/pane/Pane.h"
 #include "QomposeCommon/fs/DocumentWriter.h"
-#include "QomposeCommon/fs/Paths.h"
 #include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/util/Settings.h"
 
@@ -177,6 +178,7 @@ void Buffer::saveAs()
 	if(savePath.length() <= 0)
 		return;
 
+	bdrck::fs::createFile(savePath.toStdString());
 	setPath(savePath);
 	write();
 }
@@ -308,7 +310,8 @@ void Buffer::print(QPrinter *p)
 
 bool Buffer::setPath(const QString &p)
 {
-	QString canonicalPath = path_utils::getCanonicalPath(p);
+	QString canonicalPath =
+	        QString::fromStdString(bdrck::fs::resolvePath(p.toStdString()));
 	if(canonicalPath.isEmpty())
 		return false;
 	path = canonicalPath;

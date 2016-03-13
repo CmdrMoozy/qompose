@@ -25,9 +25,10 @@
 #include <QDir>
 #include <QFileInfo>
 
+#include <bdrck/fs/Util.hpp>
+
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/editor/pane/Pane.h"
-#include "QomposeCommon/fs/Paths.h"
 
 namespace qompose
 {
@@ -75,7 +76,7 @@ std::vector<std::string> PaneModel::getOpenPaths() const
 QString PaneModel::getCommonParentPath() const
 {
 	return QString::fromStdString(
-	        path_utils::getCommonParentPath(getOpenPaths()));
+	        bdrck::fs::commonParentPath(getOpenPaths()));
 }
 
 QString PaneModel::getDefaultDirectory(Pane *current) const

@@ -31,7 +31,6 @@
 #include "QomposeCommon/Types.h"
 #include "QomposeCommon/editor/search/Find.h"
 #include "QomposeCommon/editor/search/Query.h"
-#include "QomposeCommon/fs/Paths.h"
 
 class QGridLayout;
 class QTabWidget;

@@ -39,29 +39,6 @@ namespace string_utils
  * \return The converted string.
  */
 std::string wstringToString(const std::wstring &s);
-
-/*!
- * This function returns the size of the smallest string in the given iterator
- * range. It is assumed that the Iterator type is such that the type it
- * dereferences to has std::string-style functions.
- *
- * \param s The starting iterator.
- * \param e The ending iterator.
- * \return The size of the smallest string in the iterator range.
- */
-template <typename Iterator>
-std::size_t getMaxCommonSize(Iterator s, Iterator e)
-{
-	if(s == e)
-		return 0;
-	std::size_t maxCommonSize = std::numeric_limits<std::size_t>::max();
-	std::accumulate(s, e, maxCommonSize,
-	                [](std::size_t max, const std::string &str)
-	                {
-		return std::min(max, str.length());
-	});
-	return maxCommonSize;
-}
 }
 }
 

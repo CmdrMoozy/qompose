@@ -26,6 +26,8 @@
 #include <QSet>
 #include <QTabWidget>
 
+#include <bdrck/fs/Util.hpp>
+
 #include "QomposeCommon/dialogs/FileDialog.h"
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/editor/pane/Pane.h"
@@ -197,7 +199,7 @@ QString BufferWidget::getDefaultDirectory() const
 
 std::string BufferWidget::getCommonParentPath() const
 {
-	return path_utils::getCommonParentPath(getOpenPaths());
+	return bdrck::fs::commonParentPath(getOpenPaths());
 }
 
 Pane *BufferWidget::newPane()
