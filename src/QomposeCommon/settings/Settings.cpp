@@ -173,13 +173,12 @@ bool Settings::contains(std::string const &k) const
 	return s.ok();
 }
 
-std::experimental::optional<std::string>
-Settings::tryGet(std::string const &k) const
+boost::optional<std::string> Settings::tryGet(std::string const &k) const
 {
 	std::string v;
 	leveldb::Status s = impl->db->Get(leveldb::ReadOptions(), k, &v);
 	if(!s.ok())
-		return std::experimental::nullopt;
+		return boost::none;
 	return v;
 }
 

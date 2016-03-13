@@ -18,9 +18,10 @@
 
 #include <catch/catch.hpp>
 
+#include <boost/optional/optional.hpp>
+
 #include <QDir>
 
-#include "QomposeCommon/compat/Optional.h"
 #include "QomposeCommon/fs/TemporaryStorage.h"
 #include "QomposeCommon/settings/Settings.h"
 #include "QomposeCommon/util/ScopeExit.h"
@@ -30,11 +31,11 @@ namespace
 struct SettingsTestState
 {
 	qompose::TemporaryStorage directory;
-	std::experimental::optional<qompose::ScopeExit> cleanup;
+	boost::optional<qompose::ScopeExit> cleanup;
 
 	SettingsTestState()
 	        : directory(qompose::TemporaryStorageType::DIRECTORY),
-	          cleanup(std::experimental::nullopt)
+	          cleanup(boost::none)
 	{
 		QString path =
 		        directory.getPath() + QDir::separator() + "test.conf";

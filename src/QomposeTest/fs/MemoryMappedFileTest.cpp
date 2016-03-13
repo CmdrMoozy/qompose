@@ -18,9 +18,10 @@
 
 #include <catch/catch.hpp>
 
+#include <boost/optional/optional.hpp>
+
 #include <QFileInfo>
 
-#include "QomposeCommon/compat/Optional.h"
 #include "QomposeCommon/fs/MemoryMappedFile.h"
 #include "QomposeCommon/fs/TemporaryStorage.h"
 
@@ -33,7 +34,7 @@ TEST_CASE("Memory mapping an empty file should work as expected",
 	CHECK(info.isFile());
 	CHECK(info.size() == 0);
 
-	std::experimental::optional<qompose::MemoryMappedFile> memoryFile;
+	boost::optional<qompose::MemoryMappedFile> memoryFile;
 	CHECK_NOTHROW(memoryFile.emplace(file.getPath().toStdString()));
 	CHECK(nullptr == memoryFile->getData());
 	CHECK(0 == memoryFile->getLength());

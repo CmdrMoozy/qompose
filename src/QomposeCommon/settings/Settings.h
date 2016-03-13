@@ -23,7 +23,8 @@
 #include <mutex>
 #include <string>
 
-#include "QomposeCommon/compat/Optional.h"
+#include <boost/optional/optional.hpp>
+
 #include "QomposeCommon/settings/Deserializer.h"
 #include "QomposeCommon/settings/Serializer.h"
 
@@ -51,8 +52,7 @@ public:
 
 	bool contains(std::string const &k) const;
 
-	std::experimental::optional<std::string>
-	tryGet(std::string const &k) const;
+	boost::optional<std::string> tryGet(std::string const &k) const;
 	std::string get(std::string const &k) const;
 
 	template <typename T> T getAs(std::string const &k) const;

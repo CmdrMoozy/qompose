@@ -740,7 +740,7 @@ search::FindResult Editor::replaceSelection(search::ReplaceQuery const &q)
 search::FindResult Editor::replaceAll(search::ReplaceQuery const &q)
 {
 	return search::applyAlgorithm(*this, search::batchReplace, q, 0,
-	                              std::experimental::nullopt);
+	                              boost::none);
 }
 
 void Editor::goToLine(int l)

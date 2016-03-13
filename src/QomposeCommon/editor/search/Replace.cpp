@@ -51,9 +51,8 @@ FindResult replace(QTextCursor &cursor, QTextDocument const &document,
 }
 
 FindResult batchReplace(QTextCursor &cursor, QTextDocument const &document,
-                        ReplaceQuery const &query,
-                        std::experimental::optional<int> start,
-                        std::experimental::optional<int> end)
+                        ReplaceQuery const &query, boost::optional<int> start,
+                        boost::optional<int> end)
 {
 	// If we weren't given a start position, use the current cursor.
 	if(!start)

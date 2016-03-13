@@ -19,10 +19,11 @@
 #ifndef INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_REPLACE_H
 #define INCLUDE_QOMPOSECOMMON_EDITOR_SEARCH_REPLACE_H
 
+#include <boost/optional/optional.hpp>
+
 #include <QTextCursor>
 #include <QTextDocument>
 
-#include "QomposeCommon/compat/Optional.h"
 #include "QomposeCommon/editor/search/Query.h"
 
 namespace qompose
@@ -56,11 +57,10 @@ FindResult replace(QTextCursor &cursor, QTextDocument const &document,
  * \param end The end of the range to replace in.
  * \return Found if any matches were found, or the first find result otherwise.
  */
-FindResult batchReplace(
-        QTextCursor &cursor, QTextDocument const &document,
-        ReplaceQuery const &query,
-        std::experimental::optional<int> start = std::experimental::nullopt,
-        std::experimental::optional<int> end = std::experimental::nullopt);
+FindResult batchReplace(QTextCursor &cursor, QTextDocument const &document,
+                        ReplaceQuery const &query,
+                        boost::optional<int> start = boost::none,
+                        boost::optional<int> end = boost::none);
 }
 }
 }
