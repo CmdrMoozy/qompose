@@ -19,6 +19,8 @@
 #ifndef qompose_core_document_Document_HPP
 #define qompose_core_document_Document_HPP
 
+#include <boost/optional/optional.hpp>
+
 #include "core/document/Cursor.hpp"
 #include "core/document/PieceTable.hpp"
 
@@ -33,8 +35,7 @@ struct Document
 	PieceTable pieces;
 	Cursor cursor;
 
-	Document(PieceTable const &p, Cursor const &c);
-	explicit Document(PieceTable const &p);
+	Document(PieceTable const &p, boost::optional<Cursor> c = boost::none);
 
 	Document(Document const &) = default;
 	Document(Document &&) = default;

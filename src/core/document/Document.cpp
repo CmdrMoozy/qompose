@@ -27,12 +27,8 @@ namespace core
 {
 namespace document
 {
-Document::Document(PieceTable const &p, Cursor const &c) : pieces(p), cursor(c)
-{
-}
-
-Document::Document(PieceTable const &p)
-        : Document(p, Cursor(p.pieces.begin(), p.pieces.begin()->begin))
+Document::Document(PieceTable const &p, boost::optional<Cursor> c)
+        : pieces(p), cursor(!!c ? *c : pieces.begin())
 {
 }
 }

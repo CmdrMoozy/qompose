@@ -2,6 +2,8 @@ set(qompose-core-test_SOURCES
 
 	qompose-core-test.cpp
 
+	document/CursorTest.cpp
+
 	file/InMemoryFileTest.cpp
 	file/MMIOFileTest.cpp
 

@@ -19,7 +19,9 @@
 #ifndef qompose_core_document_Cursor_HPP
 #define qompose_core_document_Cursor_HPP
 
-#include "core/document/PieceTable.hpp"
+#include <iterator>
+
+#include "core/document/Piece.hpp"
 #include "core/string/Utf8Iterator.hpp"
 
 namespace qompose
@@ -28,14 +30,25 @@ namespace core
 {
 namespace document
 {
-struct Cursor
+namespace detail
 {
-	PieceTable::PieceContainer::const_iterator piece;
-	qompose::core::string::Utf8Iterator position;
+typedef std::iterator<std::bidirectional_iterator_tag,
+                      qompose::core::string::Utf8Iterator::value_type,
+                      qompose::core::string::Utf8Iterator::difference_type,
+                      qompose::core::string::Utf8Iterator::pointer,
+                      qompose::core::string::Utf8Iterator::reference>
+        CursorTraits;
+}
 
-	Cursor(PieceTable::PieceContainer::const_iterator pi,
-	       qompose::core::string::Utf8Iterator po);
+class Cursor : public detail::CursorTraits
+{
+public:
+	typedef PieceContainer::const_iterator PieceIterator;
+	typedef qompose::core::string::Utf8Iterator PositionIterator;
+
 	Cursor();
+	Cursor(PieceIterator piBegin, PieceIterator pi, PieceIterator piEnd,
+	       PositionIterator po);
 
 	Cursor(Cursor const &) = default;
 	Cursor(Cursor &&) = default;
@@ -43,6 +56,52 @@ struct Cursor
 	Cursor &operator=(Cursor &&) = default;
 
 	~Cursor() = default;
+
+	bool operator==(Cursor const &o) const;
+	bool operator!=(Cursor const &o) const;
+
+	Cursor &operator++();
+	Cursor &operator--();
+	Cursor operator++(int);
+	Cursor operator--(int);
+
+	reference operator*() const;
+	pointer operator->() const;
+
+private:
+	PieceIterator pieceBegin;
+	PieceIterator piece;
+	PieceIterator pieceEnd;
+	PositionIterator position;
+};
+
+class ReverseCursor : public detail::CursorTraits
+{
+public:
+	ReverseCursor();
+	ReverseCursor(Cursor const &o);
+
+	ReverseCursor(ReverseCursor const &) = default;
+	ReverseCursor(ReverseCursor &&) = default;
+	ReverseCursor &operator=(ReverseCursor const &) = default;
+	ReverseCursor &operator=(ReverseCursor &&) = default;
+
+	~ReverseCursor() = default;
+
+	bool operator==(ReverseCursor const &o) const;
+	bool operator!=(ReverseCursor const &o) const;
+
+	ReverseCursor &operator++();
+	ReverseCursor &operator--();
+	ReverseCursor operator++(int);
+	ReverseCursor operator--(int);
+
+	reference operator*() const;
+	pointer operator->() const;
+
+private:
+	bool preBegin;
+	Cursor cursor;
 };
 }
 }

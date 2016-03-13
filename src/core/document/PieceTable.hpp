@@ -19,12 +19,10 @@
 #ifndef qompose_core_document_PieceTable_HPP
 #define qompose_core_document_PieceTable_HPP
 
-#include <cstdint>
-#include <list>
-#include <memory>
 #include <utility>
 
-#include "core/string/Utf8Iterator.hpp"
+#include "core/document/Cursor.hpp"
+#include "core/document/Piece.hpp"
 
 namespace qompose
 {
@@ -32,65 +30,12 @@ namespace core
 {
 namespace document
 {
-struct Cursor;
-
-template <typename TextResource>
-qompose::core::string::Utf8Iterator
-beginIteratorFrom(TextResource const &resource)
-{
-	return qompose::core::string::Utf8Iterator(
-	        resource.data(), resource.data() + resource.size());
-}
-
-template <typename TextResource>
-qompose::core::string::Utf8Iterator
-endIteratorFrom(TextResource const &resource)
-{
-	return qompose::core::string::Utf8Iterator(
-	        resource.data(), resource.data() + resource.size(),
-	        resource.data() + resource.size());
-}
-
-/*!
- * \brief A Piece is a text segment within a piece table.
- *
- * Pieces own a reference-counted instance of the underlying text data.
- * The underlying data is not copied when Pieces are copied, so copies are
- * relatively cheap.
- *
- * The Concept both Piece and PieceTable rely upon to denote the
- * underlying data is a TextResource. This concept is any type which
- * provides the following member functions:
- *
- *     uint8_t const* data() const;
- *     size_type size() const;
- *
- * Where size_type is something analogous to std::size_t.
- */
-class Piece
-{
-private:
-	std::shared_ptr<void> resource;
-
-public:
-	qompose::core::string::Utf8Iterator begin;
-	qompose::core::string::Utf8Iterator end;
-
-	template <typename TextResource>
-	Piece(TextResource &&r, qompose::core::string::Utf8Iterator b,
-	      qompose::core::string::Utf8Iterator e);
-
-	Piece(Piece const &) = default;
-	Piece(Piece &&) = default;
-	Piece &operator=(Piece const &) = default;
-	Piece &operator=(Piece &&) = default;
-
-	~Piece() = default;
-};
-
 struct PieceTable
 {
-	typedef std::list<Piece> PieceContainer;
+	typedef Cursor iterator;
+	typedef Cursor const_iterator;
+	typedef ReverseCursor reverse_iterator;
+	typedef ReverseCursor const_reverse_iterator;
 
 	PieceContainer pieces;
 
@@ -100,19 +45,12 @@ struct PieceTable
 	PieceTable(PieceTable &&) = default;
 	PieceTable &operator=(PieceTable const &) = default;
 	PieceTable &operator=(PieceTable &&) = default;
+
+	Cursor begin() const;
+	Cursor end() const;
+	ReverseCursor rbegin() const;
+	ReverseCursor rend() const;
 };
-
-PieceTable remove(PieceTable const &pieces, Cursor const &begin,
-                  Cursor const &end);
-
-template <typename TextResource>
-Piece::Piece(TextResource &&r, qompose::core::string::Utf8Iterator b,
-             qompose::core::string::Utf8Iterator e)
-        : resource(std::make_shared<TextResource>(std::move(r))),
-          begin(b),
-          end(e)
-{
-}
 
 template <typename TextResource>
 PieceTable::PieceTable(TextResource &&resource)

@@ -22,18 +22,18 @@
 #include <cstring>
 #include <fstream>
 #include <iterator>
+#include <utility>
 #include <vector>
 
 #include <bdrck/fs/TemporaryStorage.hpp>
 
+#include "core/document/Cursor.hpp"
 #include "core/document/PieceTable.hpp"
 #include "core/file/InMemoryFile.hpp"
-#include "core/string/Utf8Iterator.hpp"
 
-TEST_CASE("Test in-memory file loading", "[InMemoryFile]")
+TEST_CASE("Test PieceTable iteration with cursors", "[Cursor]")
 {
 	constexpr char const *TEST_CONTENTS = "this is a test file.";
-
 	bdrck::fs::TemporaryStorage file(bdrck::fs::TemporaryStorageType::FILE);
 
 	{
@@ -44,17 +44,50 @@ TEST_CASE("Test in-memory file loading", "[InMemoryFile]")
 		out.write(TEST_CONTENTS, std::strlen(TEST_CONTENTS));
 	}
 
-	qompose::core::file::InMemoryFile loadedFile(file.getPath());
-	auto begin = qompose::core::document::beginIteratorFrom(loadedFile);
-	auto end = qompose::core::document::endIteratorFrom(loadedFile);
+	qompose::core::file::InMemoryFile inMemoryFile(file.getPath());
+	qompose::core::document::PieceTable pieceTable(std::move(inMemoryFile));
 
-	using Character = qompose::core::string::Utf8Iterator::value_type;
+	using Character =
+	        qompose::core::document::PieceTable::iterator::value_type;
 	std::vector<Character> characters;
-	std::copy(begin, end, std::back_inserter(characters));
+	std::copy(pieceTable.begin(), pieceTable.end(),
+	          std::back_inserter(characters));
 
 	std::vector<Character> expectedCharacters;
 	for(char const *it = TEST_CONTENTS;
 	    it < TEST_CONTENTS + std::strlen(TEST_CONTENTS); ++it)
+	{
+		expectedCharacters.emplace_back(static_cast<Character>(*it));
+	}
+
+	CHECK(characters == expectedCharacters);
+}
+
+TEST_CASE("Test PieceTable iterator with reverse cursors", "[Cursor]")
+{
+	constexpr char const *TEST_CONTENTS = "this is a test file.";
+	bdrck::fs::TemporaryStorage file(bdrck::fs::TemporaryStorageType::FILE);
+
+	{
+		std::ofstream out(file.getPath(),
+		                  std::ios_base::out | std::ios_base::binary |
+		                          std::ios_base::trunc);
+		REQUIRE(out.is_open());
+		out.write(TEST_CONTENTS, std::strlen(TEST_CONTENTS));
+	}
+
+	qompose::core::file::InMemoryFile inMemoryFile(file.getPath());
+	qompose::core::document::PieceTable pieceTable(std::move(inMemoryFile));
+
+	using Character =
+	        qompose::core::document::PieceTable::iterator::value_type;
+	std::vector<Character> characters;
+	std::copy(pieceTable.rbegin(), pieceTable.rend(),
+	          std::back_inserter(characters));
+
+	std::vector<Character> expectedCharacters;
+	for(char const *it = TEST_CONTENTS + std::strlen(TEST_CONTENTS) - 1;
+	    it >= TEST_CONTENTS; --it)
 	{
 		expectedCharacters.emplace_back(static_cast<Character>(*it));
 	}

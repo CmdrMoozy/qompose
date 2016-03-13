@@ -18,19 +18,35 @@
 
 #include "PieceTable.hpp"
 
-#include "core/document/Cursor.hpp"
-
 namespace qompose
 {
 namespace core
 {
 namespace document
 {
-PieceTable remove(PieceTable const &pieces, Cursor const &, Cursor const &)
+Cursor PieceTable::begin() const
 {
-	PieceTable copy(pieces);
+	auto beginPiece = pieces.begin();
+	auto endPiece = pieces.end();
+	return Cursor(beginPiece, beginPiece, endPiece,
+	              beginPiece == endPiece ? Cursor::PositionIterator()
+	                                     : beginPiece->begin);
+}
 
-	return copy;
+Cursor PieceTable::end() const
+{
+	return Cursor(pieces.begin(), pieces.end(), pieces.end(),
+	              Cursor::PositionIterator());
+}
+
+ReverseCursor PieceTable::rbegin() const
+{
+	return ReverseCursor(end());
+}
+
+ReverseCursor PieceTable::rend() const
+{
+	return ReverseCursor(begin());
 }
 }
 }
