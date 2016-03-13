@@ -51,7 +51,6 @@ set(CMAKE_AUTOMOC ON)
 find_package(Boost REQUIRED)
 find_package(Leveldb REQUIRED)
 find_package(HUNSPELL REQUIRED)
-find_package(Libgit2 REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -87,7 +86,6 @@ set(qompose_LIBRARIES
 	${Qt5PrintSupport_LIBRARIES}
 	${LEVELDB_LIBRARIES}
 	${HUNSPELL_LIBRARIES}
-	${LIBGIT2_LIBRARIES}
 	bdrck-fs
 	bdrck-string
 	bdrck-util

@@ -88,26 +88,6 @@ set(QomposeCommon_SOURCES
 	fs/MemoryMappedFile.cpp
 	fs/MemoryMappedFile.h
 
-	git/AbstractGitObject.h
-	git/Buffer.cpp
-	git/Buffer.h
-	git/Diff.cpp
-	git/Diff.h
-	git/DiffStats.cpp
-	git/DiffStats.h
-	git/GitAPI.cpp
-	git/GitAPI.h
-	git/Reference.cpp
-	git/Reference.h
-	git/Repository.cpp
-	git/Repository.h
-	git/RepositoryWatcher.cpp
-	git/RepositoryWatcher.h
-	git/Tree.cpp
-	git/Tree.h
-	git/Utils.cpp
-	git/Utils.h
-
 	gui/BufferWidget.cpp
 	gui/BufferWidget.h
 	gui/ColorPickerButton.cpp
