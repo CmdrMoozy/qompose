@@ -22,7 +22,8 @@
 
 #include <QDir>
 
-#include "QomposeCommon/fs/TemporaryStorage.h"
+#include <bdrck/fs/TemporaryStorage.hpp>
+
 #include "QomposeCommon/settings/Settings.h"
 #include "QomposeCommon/util/ScopeExit.h"
 
@@ -30,15 +31,15 @@ namespace
 {
 struct SettingsTestState
 {
-	qompose::TemporaryStorage directory;
+	bdrck::fs::TemporaryStorage directory;
 	boost::optional<qompose::ScopeExit> cleanup;
 
 	SettingsTestState()
-	        : directory(qompose::TemporaryStorageType::DIRECTORY),
+	        : directory(bdrck::fs::TemporaryStorageType::DIRECTORY),
 	          cleanup(boost::none)
 	{
-		QString path =
-		        directory.getPath() + QDir::separator() + "test.conf";
+		QString path = QString::fromStdString(directory.getPath()) +
+		               QDir::separator() + "test.conf";
 		qompose::settings::Settings::initialize(path.toStdString());
 		cleanup.emplace([]()
 		                {

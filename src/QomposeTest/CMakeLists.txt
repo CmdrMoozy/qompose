@@ -12,7 +12,6 @@ set(QomposeTest_SOURCES
 	editor/algorithm/MovementTest.cpp
 
 	fs/MemoryMappedFileTest.cpp
-	fs/TemporaryStorageTest.cpp
 
 	hotkey/HotkeyMapTest.cpp
 	hotkey/HotkeyTest.cpp

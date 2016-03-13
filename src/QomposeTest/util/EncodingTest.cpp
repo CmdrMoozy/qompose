@@ -18,13 +18,14 @@
 
 #include <catch/catch.hpp>
 
-#include "QomposeCommon/fs/TemporaryStorage.h"
+#include <bdrck/fs/TemporaryStorage.hpp>
+
 #include "QomposeCommon/util/Encoding.h"
 
 TEST_CASE("Test empty files default to UTF-8 encoding", "[Encoding]")
 {
-	qompose::TemporaryStorage file(qompose::TemporaryStorageType::FILE);
-	QString encoding =
-	        qompose::encoding_utils::detectTextCodec(file.getPath());
+	bdrck::fs::TemporaryStorage file(bdrck::fs::TemporaryStorageType::FILE);
+	QString encoding = qompose::encoding_utils::detectTextCodec(
+	        QString::fromStdString(file.getPath()));
 	CHECK("UTF-8" == encoding);
 }

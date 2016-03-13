@@ -22,20 +22,21 @@
 
 #include <QFileInfo>
 
+#include <bdrck/fs/TemporaryStorage.hpp>
+
 #include "QomposeCommon/fs/MemoryMappedFile.h"
-#include "QomposeCommon/fs/TemporaryStorage.h"
 
 TEST_CASE("Memory mapping an empty file should work as expected",
           "[MemoryMappedFile]")
 {
-	qompose::TemporaryStorage file(qompose::TemporaryStorageType::FILE);
-	QFileInfo info(file.getPath());
+	bdrck::fs::TemporaryStorage file(bdrck::fs::TemporaryStorageType::FILE);
+	QFileInfo info(QString::fromStdString(file.getPath()));
 	CHECK(info.exists());
 	CHECK(info.isFile());
 	CHECK(info.size() == 0);
 
 	boost::optional<qompose::MemoryMappedFile> memoryFile;
-	CHECK_NOTHROW(memoryFile.emplace(file.getPath().toStdString()));
+	CHECK_NOTHROW(memoryFile.emplace(file.getPath()));
 	CHECK(nullptr == memoryFile->getData());
 	CHECK(0 == memoryFile->getLength());
 }
