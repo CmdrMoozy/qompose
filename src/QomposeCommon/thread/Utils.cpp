@@ -28,8 +28,8 @@
 #include <sys/syscall.h>
 #endif
 
-#include "QomposeCommon/util/Errno.h"
-#include "QomposeCommon/util/Windows.h"
+#include <bdrck/util/Error.hpp>
+#include <bdrck/util/Windows.hpp>
 
 namespace qompose
 {
@@ -40,7 +40,7 @@ long ioprio_get(IOPrioWho which, int who)
 {
 	long r = syscall(SYS_ioprio_get, which, who);
 	if(r == -1)
-		util::throwErrnoError();
+		bdrck::util::error::throwErrnoError();
 	return r;
 }
 
@@ -48,7 +48,7 @@ void ioprio_set(IOPrioWho which, int who, int ioprio)
 {
 	long r = syscall(SYS_ioprio_set, which, who, ioprio);
 	if(r != 0)
-		util::throwErrnoError();
+		bdrck::util::error::throwErrnoError();
 }
 #endif
 
@@ -60,7 +60,7 @@ void setThreadPriority(uint32_t c, HANDLE thread)
 
 	bool ret = SetThreadPriority(thread, static_cast<DWORD>(c)) != 0;
 	if(!ret)
-		util::throwLastWindowsError();
+		bdrck::util::error::throwLastWindowsError();
 }
 
 void setPriorityClass(uint32_t c, HANDLE process)
@@ -70,7 +70,7 @@ void setPriorityClass(uint32_t c, HANDLE process)
 
 	bool ret = SetPriorityClass(process, static_cast<DWORD>(c)) != 0;
 	if(!ret)
-		util::throwLastWindowsError();
+		bdrck::util::error::throwLastWindowsError();
 }
 #endif
 }

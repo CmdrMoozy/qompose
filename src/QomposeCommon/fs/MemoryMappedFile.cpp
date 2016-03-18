@@ -27,8 +27,7 @@
 #include <stdexcept>
 
 #include <bdrck/fs/Util.hpp>
-
-#include "QomposeCommon/util/Errno.h"
+#include <bdrck/util/Error.hpp>
 
 namespace qompose
 {
@@ -49,11 +48,8 @@ MemoryMappedFile::MemoryMappedFile(const std::string &path)
 		               fileDescriptor, 0);
 		if(f == MAP_FAILED)
 		{
-			int ret = close(fileDescriptor);
-			if(ret != 0)
-				util::throwErrnoError();
-
-			util::throwErrnoError();
+			close(fileDescriptor);
+			bdrck::util::error::throwErrnoError();
 		}
 		file = reinterpret_cast<uint8_t *>(f);
 	}
@@ -65,14 +61,14 @@ MemoryMappedFile::~MemoryMappedFile()
 	{
 		int ret = munmap(file, length);
 		if(ret != 0)
-			util::throwErrnoError();
+			bdrck::util::error::throwErrnoError();
 	}
 
 	if(fileDescriptor != -1)
 	{
 		int ret = close(fileDescriptor);
 		if(ret != 0)
-			util::throwErrnoError();
+			bdrck::util::error::throwErrnoError();
 	}
 }
 

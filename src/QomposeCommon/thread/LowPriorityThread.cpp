@@ -28,8 +28,9 @@
 #include <QObject>
 #include <QThread>
 
+#include <bdrck/util/Error.hpp>
+
 #include "QomposeCommon/thread/Utils.h"
-#include "QomposeCommon/util/Errno.h"
 
 namespace
 {
@@ -46,7 +47,7 @@ void setLowCPUPriority()
 
 	int ret = pthread_setschedparam(pthread_self(), SCHED_OTHER, &param);
 	if(ret != 0)
-		qompose::util::throwErrnoError(ret);
+		bdrck::util::error::throwErrnoError(ret);
 #else
 	static_assert(false, "CPU priority unsupported on this platform.");
 #endif

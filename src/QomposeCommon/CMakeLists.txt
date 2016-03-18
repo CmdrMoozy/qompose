@@ -145,17 +145,10 @@ set(QomposeCommon_SOURCES
 
 	util/Encoding.cpp
 	util/Encoding.h
-	util/Errno.cpp
-	util/Errno.h
 	util/FontMetrics.cpp
 	util/FontMetrics.h
-	util/ScopeExit.cpp
-	util/ScopeExit.h
 	util/Settings.cpp
 	util/Settings.h
-	util/Strings.cpp
-	util/Strings.h
-	util/Windows.h
 
 )
 

@@ -23,16 +23,16 @@
 #include <QDir>
 
 #include <bdrck/fs/TemporaryStorage.hpp>
+#include <bdrck/util/ScopeExit.hpp>
 
 #include "QomposeCommon/settings/Settings.h"
-#include "QomposeCommon/util/ScopeExit.h"
 
 namespace
 {
 struct SettingsTestState
 {
 	bdrck::fs::TemporaryStorage directory;
-	boost::optional<qompose::ScopeExit> cleanup;
+	boost::optional<bdrck::util::ScopeExit> cleanup;
 
 	SettingsTestState()
 	        : directory(bdrck::fs::TemporaryStorageType::DIRECTORY),
