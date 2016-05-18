@@ -24,6 +24,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <boost/optional/optional.hpp>
+
 #include <bdrck/fs/ExclusiveFileLock.hpp>
 #include <bdrck/util/Error.hpp>
 
@@ -35,43 +37,62 @@ namespace file
 {
 namespace detail
 {
+struct FileDescriptorHandle
+{
+	int fd;
+
+	FileDescriptorHandle(std::string const &path) : fd(-1)
+	{
+		fd = open(path.c_str(), O_RDWR);
+		if(fd == -1)
+			bdrck::util::error::throwErrnoError();
+	}
+
+	~FileDescriptorHandle()
+	{
+		close(fd);
+	}
+};
+
+struct MmapHandle
+{
+	void *handle;
+
+	MmapHandle(int fd, struct stat const &stats) : handle(nullptr)
+	{
+		handle = mmap(nullptr, static_cast<std::size_t>(stats.st_size),
+		              PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+		if(handle == MAP_FAILED)
+		{
+		}
+	}
+};
+
 struct MMIOFileImpl
 {
 	bdrck::fs::ExclusiveFileLock lock;
-	int fd;
+	FileDescriptorHandle fdHandle;
 	struct stat stats;
-	void *file;
+	boost::optional<MmapHandle> fileHandle;
 
 	MMIOFileImpl(std::string const &path)
-	        : lock(path), fd(-1), stats(), file(nullptr)
+	        : lock(path), fdHandle(path), stats(), fileHandle(boost::none)
 	{
-		int ret = open(path.c_str(), O_RDWR);
+		int ret = fstat(fdHandle.fd, &stats);
 		if(ret == -1)
 			bdrck::util::error::throwErrnoError();
-		fd = ret;
 
-		ret = fstat(fd, &stats);
-		if(ret == -1)
+		if(stats.st_size > 0)
 		{
-			close(fd);
-			bdrck::util::error::throwErrnoError();
-		}
+			fileHandle.emplace(fdHandle.fd, stats);
 
-		file = mmap(nullptr, static_cast<std::size_t>(stats.st_size),
-		            PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-		if(file == MAP_FAILED)
-		{
-			close(fd);
-			bdrck::util::error::throwErrnoError();
-		}
-
-		ret = madvise(file, static_cast<std::size_t>(stats.st_size),
-		              MADV_RANDOM);
-		if(ret == -1)
-		{
-			munmap(file, static_cast<std::size_t>(stats.st_size));
-			close(fd);
-			bdrck::util::error::throwErrnoError();
+			ret = madvise(fileHandle->handle,
+			              static_cast<std::size_t>(stats.st_size),
+			              MADV_RANDOM);
+			if(ret == -1)
+			{
+				bdrck::util::error::throwErrnoError();
+			}
 		}
 	}
 
@@ -80,15 +101,13 @@ struct MMIOFileImpl
 	MMIOFileImpl &operator=(MMIOFileImpl const &) = delete;
 	MMIOFileImpl &operator=(MMIOFileImpl &&) = default;
 
-	~MMIOFileImpl()
-	{
-		munmap(file, static_cast<std::size_t>(stats.st_size));
-		close(fd);
-	}
+	~MMIOFileImpl() = default;
 
 	uint8_t const *data() const
 	{
-		return static_cast<uint8_t const *>(file);
+		if(!fileHandle)
+			return nullptr;
+		return static_cast<uint8_t const *>(fileHandle->handle);
 	}
 
 	std::size_t size() const

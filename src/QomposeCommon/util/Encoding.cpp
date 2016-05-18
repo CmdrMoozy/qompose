@@ -23,7 +23,7 @@
 #include <utility>
 #include <vector>
 
-#include "QomposeCommon/fs/MemoryMappedFile.h"
+#include "core/file/MMIOFile.hpp"
 
 namespace
 {
@@ -50,13 +50,12 @@ const std::vector<std::pair<QString, std::vector<uint8_t>>> BOM_TYPES = {
  * \return Whether or not the given BOM is present in the given file.
  */
 bool bomPresent(const std::vector<uint8_t> &bytes,
-                const qompose::MemoryMappedFile &file)
+                const qompose::core::file::MMIOFile &file)
 {
-	if(file.getLength() < bytes.size())
+	if(file.size() < bytes.size())
 		return false;
-
 	return std::equal(bytes.data(), bytes.data() + bytes.size(),
-	                  file.getData());
+	                  file.data());
 }
 
 /**
@@ -103,7 +102,7 @@ bool isValidUTF8CodePoint(const uint8_t *&codepoint, std::size_t length,
  * \param file The file whose contents will be examined.
  * \return Whether or not the given file contains only valid UTF-8 codepoints.
  */
-bool isValidUTF8(const qompose::MemoryMappedFile &file)
+bool isValidUTF8(const qompose::core::file::MMIOFile &file)
 {
 	// UTF-8 code points can be up to six bytes long. They follow one of
 	// the following formats:
@@ -118,8 +117,8 @@ bool isValidUTF8(const qompose::MemoryMappedFile &file)
 	// If we encounter any sequence of bytes which do not follow this
 	// pattern, then we know that the given file contains non-UTF8 data.
 
-	const uint8_t *byte = file.getData();
-	const uint8_t *end = file.getData() + file.getLength();
+	const uint8_t *byte = file.data();
+	const uint8_t *end = file.data() + file.size();
 	while(byte < end)
 	{
 		if((*byte & 0x80) == 0x00) // 0x0xxxxxxx (1 byte)
@@ -170,10 +169,10 @@ QString detectTextCodec(const QString &f)
 {
 	try
 	{
-		MemoryMappedFile file(f.toStdString());
+		core::file::MMIOFile file(f.toStdString());
 
 		// If the file is empty, just default to UTF-8.
-		if(file.getLength() == 0)
+		if(file.size() == 0)
 			return QString("UTF-8");
 
 		// First, test if a BOM is present in the given file.

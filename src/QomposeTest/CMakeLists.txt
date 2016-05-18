@@ -11,8 +11,6 @@ set(QomposeTest_SOURCES
 	editor/algorithm/IndentationTest.cpp
 	editor/algorithm/MovementTest.cpp
 
-	fs/MemoryMappedFileTest.cpp
-
 	hotkey/HotkeyMapTest.cpp
 	hotkey/HotkeyTest.cpp
 

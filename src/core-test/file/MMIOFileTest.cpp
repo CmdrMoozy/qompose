@@ -24,13 +24,29 @@
 #include <iterator>
 #include <vector>
 
+#include <boost/optional/optional.hpp>
+
 #include <bdrck/fs/TemporaryStorage.hpp>
+#include <bdrck/fs/Util.hpp>
 
 #include "core/document/PieceTable.hpp"
 #include "core/file/MMIOFile.hpp"
 #include "core/string/Utf8Iterator.hpp"
 
-TEST_CASE("Test MMIO file loading", "[InMemoryFile]")
+TEST_CASE("Memory mapping empty files should work as expected", "[MMIOFile]")
+{
+	bdrck::fs::TemporaryStorage file(bdrck::fs::TemporaryStorageType::FILE);
+	REQUIRE(bdrck::fs::exists(file.getPath()));
+	REQUIRE(bdrck::fs::isFile(file.getPath()));
+	REQUIRE(bdrck::fs::fileSize(file.getPath()) == 0);
+
+	boost::optional<qompose::core::file::MMIOFile> mmioFile;
+	CHECK_NOTHROW(mmioFile.emplace(file.getPath()));
+	CHECK(nullptr == mmioFile->data());
+	CHECK(0 == mmioFile->size());
+}
+
+TEST_CASE("Test MMIO file loading", "[MMIOFile]")
 {
 	constexpr char const *TEST_CONTENTS = "this is a test file.";
 

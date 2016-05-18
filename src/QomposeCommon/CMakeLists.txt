@@ -85,8 +85,6 @@ set(QomposeCommon_SOURCES
 
 	fs/DocumentWriter.cpp
 	fs/DocumentWriter.h
-	fs/MemoryMappedFile.cpp
-	fs/MemoryMappedFile.h
 
 	gui/BufferWidget.cpp
 	gui/BufferWidget.h
@@ -160,5 +158,5 @@ add_library(QomposeCommon STATIC
 	${QomposeCommon_SOURCES}
 
 )
-target_link_libraries(QomposeCommon ${qompose_LIBRARIES})
+target_link_libraries(QomposeCommon qompose-core ${qompose_LIBRARIES})
 qt5_use_modules(QomposeCommon Core Gui Widgets Network PrintSupport)
