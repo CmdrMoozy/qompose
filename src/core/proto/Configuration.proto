@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package qompose.core.messages;
+
+message Color {
+	int64 alpha = 1;
+	int64 red = 2;
+	int64 green = 3;
+	int64 blue = 4;
+}
+
+message Font {
+	string family = 1;
+	int64 point_size = 2;
+}
+
+message Configuration {
+	enum IndentationMode {
+		INDENTATION_SPACES = 0;
+		INDENTATION_TABS = 1;
+	}
+
+	bool show_file_in_title = 1;
+	bool show_status_bar = 2;
+	uint64 recent_list_size_max = 3;
+	repeated string recent_list = 4;
+	bool window_save_attributes = 5;
+	bool show_gutter = 6;
+	bool save_strip_trailing_spaces = 7;
+	Font editor_font = 8;
+	uint64 editor_indentation_width = 9;
+	IndentationMode editor_indentation_mode = 10;
+	bool editor_wrap_guide_visible = 11;
+	uint64 editor_wrap_guide_width = 12;
+	Color editor_wrap_guide_color = 13;
+	Color editor_foreground = 14;
+	Color editor_background = 15;
+	Color editor_current_line = 16;
+	Color gutter_foreground = 17;
+	Color gutter_background = 18;
+	bool show_file_browser = 19;
+	bytes window_geometry = 20;
+	bytes window_state = 21;
+}

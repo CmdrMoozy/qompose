@@ -1,5 +1,8 @@
 set(qompose-core_SOURCES
 
+	config/Configuration.cpp
+	config/Configuration.hpp
+
 	document/Cursor.cpp
 	document/Cursor.hpp
 	document/Document.cpp
@@ -23,5 +26,10 @@ set(qompose-core_SOURCES
 
 )
 
-add_library(qompose-core STATIC ${qompose-core_SOURCES})
+add_definitions(-DPROTOBUF_INLINE_NOT_IN_HEADERS=0)
+file(GLOB proto_FILES "${CMAKE_CURRENT_SOURCE_DIR}/proto/*.proto")
+PROTOBUF_GENERATE_CPP(proto_SOURCES proto_HEADERS ${proto_FILES})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+add_library(qompose-core STATIC ${qompose-core_SOURCES} ${proto_SOURCES} ${proto_HEADERS})
 target_link_libraries(qompose-core ${qompose_LIBRARIES})

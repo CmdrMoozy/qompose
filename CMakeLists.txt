@@ -49,6 +49,7 @@ string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
 set(CMAKE_AUTOMOC ON)
 
 find_package(Boost REQUIRED)
+find_package(Protobuf REQUIRED)
 find_package(Leveldb REQUIRED)
 find_package(HUNSPELL REQUIRED)
 find_package(Qt5Core REQUIRED)
@@ -73,7 +74,12 @@ if(CMAKE_BUILD_TYPE_LOWER MATCHES debug)
 endif()
 
 include_directories("src")
-include_directories(SYSTEM "3rdparty/include")
+include_directories(SYSTEM
+
+	"3rdparty/include"
+	${PROTOBUF_INCLUDE_DIRS}
+
+)
 
 # Define the libraries Qompose uses.
 
@@ -84,6 +90,7 @@ set(qompose_LIBRARIES
 	${Qt5Widgets_LIBRARIES}
 	${Qt5Network_LIBRARIES}
 	${Qt5PrintSupport_LIBRARIES}
+	${PROTOBUF_LIBRARIES}
 	${LEVELDB_LIBRARIES}
 	${HUNSPELL_LIBRARIES}
 	bdrck-fs
