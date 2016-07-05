@@ -24,48 +24,36 @@
 #include <QStringList>
 #include <QVariant>
 
+#include "core/config/Configuration.hpp"
+
 #include "QomposeCommon/gui/GUIUtils.h"
-#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
 RecentMenu::RecentMenu(QObject *p)
         : QObject(p),
+          configWatcher(new qompose::util::ConfigurationWatcher(this)),
           capacity(0),
           menu(nullptr),
           menuActions(QList<QAction *>()),
           recentList(QQueue<QString>())
 {
 	// Initialize our menu.
-
 	menu = new QMenu(tr("Open Recent"));
 	menu->setIcon(gui_utils::getIconFromTheme("document-open"));
 
 	// Load our list's size from the settings instance.
-
-	bool ok;
-	QVariant vcap = Settings::instance().getSetting("recent-list-size");
-
-	int cap = vcap.toInt(&ok);
-
-	if(!ok)
-	{
-		Settings::instance().resetDefault("recent-list-size");
-		vcap = Settings::instance().getSetting("recent-list-size");
-		cap = vcap.toInt(&ok);
-
-		if(!ok)
-			cap = 10;
-	}
-
-	setCapacity(cap);
+	setCapacity(
+	        qompose::core::config::instance().get().recent_list_size_max());
 
 	// Load our list's contents from the settings instance.
+	auto items = qompose::core::config::instance().get().recent_list();
+	setListContents(items.begin(), items.end());
 
-	QVariant vcontents = Settings::instance().getSetting("recent-list");
-
-	if(vcontents.canConvert(QMetaType::QStringList))
-		setListContents(vcontents.toStringList());
+	QObject::connect(
+	        configWatcher,
+	        &qompose::util::ConfigurationWatcher::configurationFieldChanged,
+	        this, &RecentMenu::doSettingChanged);
 }
 
 RecentMenu::~RecentMenu()
@@ -85,12 +73,11 @@ QMenu *RecentMenu::getMenu() const
 
 void RecentMenu::saveContents()
 {
-	QStringList l;
-
+	auto config = qompose::core::config::instance().get();
+	config.clear_recent_list();
 	for(int i = 0; i < recentList.count(); ++i)
-		l.append(recentList.at(i));
-
-	Settings::instance().setSetting("recent-list", QVariant(l));
+		config.add_recent_list(recentList.at(i).toStdString());
+	qompose::core::config::instance().set(config);
 }
 
 void RecentMenu::addPath(const QString &p)
@@ -186,32 +173,6 @@ void RecentMenu::renderListContents()
 	}
 }
 
-void RecentMenu::setListContents(const QStringList &l)
-{
-	// Set our recent list's contents to the given list.
-
-	recentList.clear();
-
-	for(int i = 0; i < l.count(); ++i)
-		recentList.enqueue(l.at(i));
-
-	while(recentList.count() > capacity)
-	{
-		if(recentList.isEmpty())
-			break;
-
-		recentList.dequeue();
-	}
-
-	// Update our menu actions list size.
-
-	updateActionsListSize();
-
-	// set our contents to the items in the list.
-
-	renderListContents();
-}
-
 void RecentMenu::doActionClicked()
 {
 	// Get the action that was clicked.
@@ -236,20 +197,19 @@ void RecentMenu::doActionClicked()
 	Q_EMIT recentClicked(recentList.at(i));
 }
 
-void RecentMenu::doSettingChanged(const QString &k, const QVariant &v)
+void RecentMenu::doSettingChanged(std::string const &name)
 {
-	if(k == "recent-list-size")
+	if(name == "recent_list_size_max")
 	{
-		bool ok;
-		int cap = v.toInt(&ok);
-
-		if(ok)
-			setCapacity(cap);
+		setCapacity(qompose::core::config::instance()
+		                    .get()
+		                    .recent_list_size_max());
 	}
-	else if(k == "recent-list")
+	else if(name == "recent_list")
 	{
-		if(v.canConvert(QMetaType::QStringList))
-			setListContents(v.toStringList());
+		auto items =
+		        qompose::core::config::instance().get().recent_list();
+		setListContents(items.begin(), items.end());
 	}
 }
 

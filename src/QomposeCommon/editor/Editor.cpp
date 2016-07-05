@@ -42,7 +42,7 @@ Editor::Editor(QWidget *p)
           originalFontSize(11.0),
           currentFontZoom(1),
           indentationWidth(8),
-          indentationMode(IndentationMode::Tabs),
+          indentationMode(qompose::core::IndentationMode::Tabs),
           wrapGuideVisible(false),
           wrapGuideWidth(0),
           wrapGuideColor(QColor(255, 255, 255)),
@@ -193,24 +193,12 @@ void Editor::setIndentationWidth(int w)
 	document()->setDefaultTextOption(opt);
 }
 
-IndentationMode Editor::getIndentationMode() const
+qompose::core::IndentationMode Editor::getIndentationMode() const
 {
 	return indentationMode;
 }
 
-void Editor::setIndentationMode(const QString &mode)
-{
-	IndentationMode m = IndentationMode::Tabs;
-
-	if(mode == "tabs")
-		m = IndentationMode::Tabs;
-	else if(mode == "spaces")
-		m = IndentationMode::Spaces;
-
-	setIndentationMode(m);
-}
-
-void Editor::setIndentationMode(IndentationMode mode)
+void Editor::setIndentationMode(qompose::core::IndentationMode mode)
 {
 	indentationMode = mode;
 }
@@ -466,11 +454,11 @@ QString Editor::getIndentString() const
 {
 	switch(getIndentationMode())
 	{
-	case IndentationMode::Spaces:
+	case qompose::core::IndentationMode::Spaces:
 		return QString(" ").repeated(
 		        static_cast<int>(getIndentationWidth()));
 
-	case IndentationMode::Tabs:
+	case qompose::core::IndentationMode::Tabs:
 		return QString("\t");
 	}
 }

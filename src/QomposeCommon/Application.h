@@ -22,6 +22,8 @@
 #include <QApplication>
 #include <QList>
 
+#include "core/config/Configuration.hpp"
+
 class QLocalServer;
 
 namespace qompose
@@ -65,6 +67,7 @@ public:
 private:
 	QLocalServer *sappServer;
 	QList<Window *> windows;
+	qompose::core::config::ConfigurationInstance config;
 
 	/*!
 	 * This function cleans up our local "single application server".

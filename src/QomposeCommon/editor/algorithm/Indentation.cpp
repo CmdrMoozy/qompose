@@ -42,7 +42,7 @@ namespace
 bool deindentSelection(
         QTextCursor &cursor,
         qompose::editor::algorithm::CursorSelectionState const &state,
-        qompose::IndentationMode mode, std::size_t width)
+        qompose::core::IndentationMode mode, std::size_t width)
 {
 	bool foundIndent = false;
 	QString indentStr =
@@ -125,19 +125,21 @@ namespace editor
 {
 namespace algorithm
 {
-QString getIndentationString(IndentationMode mode, std::size_t width)
+QString getIndentationString(qompose::core::IndentationMode mode,
+                             std::size_t width)
 {
 	switch(mode)
 	{
-	case IndentationMode::Spaces:
+	case qompose::core::IndentationMode::Spaces:
 		return QString(" ").repeated(static_cast<int>(width));
 
-	case IndentationMode::Tabs:
+	case qompose::core::IndentationMode::Tabs:
 		return QString("\t");
 	}
 }
 
-void increaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
+void increaseSelectionIndent(QTextCursor &cursor,
+                             qompose::core::IndentationMode mode,
                              std::size_t width)
 {
 	if(!cursor.hasSelection())
@@ -156,7 +158,8 @@ void increaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
 	setNormalizedSelection(cursor, state);
 }
 
-void decreaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
+void decreaseSelectionIndent(QTextCursor &cursor,
+                             qompose::core::IndentationMode mode,
                              std::size_t width)
 {
 	if(!cursor.hasSelection())
@@ -171,7 +174,8 @@ void decreaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
 	setNormalizedSelection(cursor, state);
 }
 
-void tab(QTextCursor &cursor, IndentationMode mode, std::size_t width)
+void tab(QTextCursor &cursor, qompose::core::IndentationMode mode,
+         std::size_t width)
 {
 	if(!cursor.hasSelection())
 		cursor.insertText(getIndentationString(mode, width));

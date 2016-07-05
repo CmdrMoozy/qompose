@@ -24,15 +24,6 @@
 namespace qompose
 {
 /*!
- * \brief This enumeration denotes an editor indentation mode.
- */
-enum class IndentationMode
-{
-	Tabs,
-	Spaces
-};
-
-/*!
  * \brief This structure stores a filename and its detected character encoding.
  */
 struct FileDescriptor

@@ -23,7 +23,7 @@
 
 #include <QTextCursor>
 
-#include "QomposeCommon/Types.h"
+#include "core/Types.hpp"
 
 namespace qompose
 {
@@ -36,7 +36,8 @@ namespace algorithm
  * \param width The width of a single indentation, in spaces.
  * \return A string containing a "single indentation" for the given params.
  */
-QString getIndentationString(IndentationMode mode, std::size_t width);
+QString getIndentationString(qompose::core::IndentationMode mode,
+                             std::size_t width);
 
 /*!
  * This function increases the indent of all the lines in the given cursor's
@@ -53,7 +54,8 @@ QString getIndentationString(IndentationMode mode, std::size_t width);
  * \param mode The indentation mode to use.
  * \param width The indentation width to use.
  */
-void increaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
+void increaseSelectionIndent(QTextCursor &cursor,
+                             qompose::core::IndentationMode mode,
                              std::size_t width);
 
 /*!
@@ -76,7 +78,8 @@ void increaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
  * \param mode The indentation mode to use.
  * \param width The indentation width to use.
  */
-void decreaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
+void decreaseSelectionIndent(QTextCursor &cursor,
+                             qompose::core::IndentationMode mode,
                              std::size_t width);
 
 /*!
@@ -89,7 +92,8 @@ void decreaseSelectionIndent(QTextCursor &cursor, IndentationMode mode,
  * \param mode The indentation mode to use.
  * \param width The indentation width to use.
  */
-void tab(QTextCursor &cursor, IndentationMode mode, std::size_t width);
+void tab(QTextCursor &cursor, qompose::core::IndentationMode mode,
+         std::size_t width);
 }
 }
 }

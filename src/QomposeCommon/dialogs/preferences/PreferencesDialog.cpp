@@ -23,13 +23,14 @@
 #include <QPushButton>
 #include <QStackedWidget>
 
+#include "core/config/Configuration.hpp"
+
 #include "QomposeCommon/dialogs/preferences/PreferencesListModel.h"
 #include "QomposeCommon/dialogs/preferences/PreferencesListView.h"
 #include "QomposeCommon/dialogs/preferences/widgets/EditorPreferencesWidget.h"
 #include "QomposeCommon/dialogs/preferences/widgets/GeneralPreferencesWidget.h"
 #include "QomposeCommon/dialogs/preferences/widgets/OpenSavePreferencesWidget.h"
 #include "QomposeCommon/dialogs/preferences/widgets/PreferencesScrollArea.h"
-#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -157,7 +158,7 @@ void PreferencesDialog::doDefaults()
 	if(ret != QMessageBox::Yes)
 		return;
 
-	Settings::instance().resetDefaults();
+	qompose::core::config::instance().resetAll();
 
 	for(int i = 0; i < preferencesModel->rowCount(); ++i)
 		preferencesModel->widgetAt(i)->discardChanges();

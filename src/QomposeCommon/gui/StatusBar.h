@@ -19,7 +19,11 @@
 #ifndef INCLUDE_QOMPOSECOMMON_GUI_STATUS_BAR_H
 #define INCLUDE_QOMPOSECOMMON_GUI_STATUS_BAR_H
 
+#include <string>
+
 #include <QStatusBar>
+
+#include "QomposeCommon/util/ConfigurationWatcher.hpp"
 
 class QGridLayout;
 class QLabel;
@@ -68,6 +72,8 @@ public Q_SLOTS:
 	void setCursorPosition(int l, int c);
 
 private:
+	qompose::util::ConfigurationWatcher *configWatcher;
+
 	QWidget *statusWidget;
 	QGridLayout *statusLayout;
 
@@ -79,10 +85,9 @@ private Q_SLOTS:
 	/*!
 	 * This function handles a setting changed by applying that change.
 	 *
-	 * \param k The setting key that was changed.
-	 * \param v The new value for the given setting.
+	 * \param name The name of the setting which changed.
 	 */
-	void doSettingChanged(const QString &k, const QVariant &v);
+	void doSettingChanged(std::string const &name);
 };
 }
 

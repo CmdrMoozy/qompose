@@ -19,6 +19,10 @@
 #ifndef INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_WIDGETS_EDITOR_PREFERENCES_WIDGET_H
 #define INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_WIDGETS_EDITOR_PREFERENCES_WIDGET_H
 
+#include <string>
+
+#include "Configuration.pb.h"
+
 #include "QomposeCommon/dialogs/preferences/widgets/PreferencesWidget.h"
 
 class QGroupBox;
@@ -117,7 +121,8 @@ private:
 	 *
 	 * \return The currently selected indentation mode as a string.
 	 */
-	QString getSelectedIndentationMode() const;
+	qompose::core::messages::Configuration::IndentationMode
+	getSelectedIndentationMode() const;
 
 	/*!
 	 * This is a small utility function which sets the currently selected
@@ -125,7 +130,7 @@ private:
 	 *
 	 * \param mode The new indentation mode.
 	 */
-	void setSelectedIndentaionMode(const QString &mode);
+	void setSelectedIndentationMode(std::string const &mode);
 };
 }
 

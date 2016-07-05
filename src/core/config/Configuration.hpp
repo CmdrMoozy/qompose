@@ -23,6 +23,9 @@
 
 #include <boost/optional/optional.hpp>
 
+#include <QColor>
+#include <QFont>
+
 #include <bdrck/config/Configuration.hpp>
 
 #include "Configuration.pb.h"
@@ -47,6 +50,14 @@ private:
 
 bdrck::config::Configuration<qompose::core::messages::Configuration> &
 instance();
+
+QColor toQColor(qompose::core::messages::Color const &c);
+QFont toQFont(qompose::core::messages::Font const &f);
+void fromQColor(qompose::core::messages::Color *dest, QColor const &c);
+void fromQFont(qompose::core::messages::Font *dest, QFont const &f);
+
+std::string
+toString(qompose::core::messages::Configuration::IndentationMode im);
 }
 }
 }

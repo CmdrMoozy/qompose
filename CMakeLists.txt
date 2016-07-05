@@ -76,8 +76,9 @@ endif()
 include_directories("src")
 include_directories(SYSTEM
 
-	"3rdparty/include"
+	3rdparty/include
 	${PROTOBUF_INCLUDE_DIRS}
+	${CMAKE_BINARY_DIR}/src/core
 
 )
 
@@ -93,6 +94,7 @@ set(qompose_LIBRARIES
 	${PROTOBUF_LIBRARIES}
 	${LEVELDB_LIBRARIES}
 	${HUNSPELL_LIBRARIES}
+	bdrck-config
 	bdrck-fs
 	bdrck-string
 	bdrck-util

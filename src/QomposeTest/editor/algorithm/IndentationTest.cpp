@@ -156,7 +156,7 @@ void goToBlock(QTextCursor &cursor, int block,
 }
 
 bool tryIndentSelection(QTextDocument const &document, QTextCursor &cursor,
-                        qompose::IndentationMode mode)
+                        qompose::core::IndentationMode mode)
 {
 	int originalCharacterCount = document.characterCount();
 	qompose::editor::algorithm::increaseSelectionIndent(
@@ -164,14 +164,14 @@ bool tryIndentSelection(QTextDocument const &document, QTextCursor &cursor,
 	int charactersChanged =
 	        document.characterCount() - originalCharacterCount;
 	int expectedChanged =
-	        mode == qompose::IndentationMode::Tabs
+	        mode == qompose::core::IndentationMode::Tabs
 	                ? INDENT_SELECTION_BLOCK_COUNT
 	                : INDENT_SELECTION_BLOCK_COUNT * TEST_INDENTATION_WIDTH;
 	return charactersChanged == expectedChanged;
 }
 
 bool tryDeindentSelection(QTextDocument const &document, QTextCursor &cursor,
-                          qompose::IndentationMode mode)
+                          qompose::core::IndentationMode mode)
 {
 	int originalCharacterCount = document.characterCount();
 
@@ -200,7 +200,7 @@ bool tryDeindentSelection(QTextDocument const &document, QTextCursor &cursor,
 	int charactersChanged =
 	        document.characterCount() - originalCharacterCount;
 	int expectedChanged =
-	        mode == qompose::IndentationMode::Tabs
+	        mode == qompose::core::IndentationMode::Tabs
 	                ? blocksToDeindent
 	                : blocksToDeindent *
 	                          static_cast<int>(TEST_INDENTATION_WIDTH);
@@ -251,7 +251,7 @@ TEST_CASE("Test increasing full forward selection tab indent", "[Indentation]")
 	          BlockRelativePosition::END, false);
 
 	CHECK(tryIndentSelection(document, cursor,
-	                         qompose::IndentationMode::Tabs));
+	                         qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -273,7 +273,7 @@ TEST_CASE("Test increasing partial forward selection tab indent",
 	                        cursor.position()));
 
 	CHECK(tryIndentSelection(document, cursor,
-	                         qompose::IndentationMode::Tabs));
+	                         qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -291,7 +291,7 @@ TEST_CASE("Test increasing full forward selection space indent",
 	          BlockRelativePosition::END, false);
 
 	CHECK(tryIndentSelection(document, cursor,
-	                         qompose::IndentationMode::Tabs));
+	                         qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -313,7 +313,7 @@ TEST_CASE("Test increasing partial forward selection space indent",
 	                        cursor.position()));
 
 	CHECK(tryIndentSelection(document, cursor,
-	                         qompose::IndentationMode::Tabs));
+	                         qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -330,7 +330,7 @@ TEST_CASE("Test increasing full backward selection tab indent", "[Indentation]")
 	          BlockRelativePosition::START, false);
 
 	CHECK(tryIndentSelection(document, cursor,
-	                         qompose::IndentationMode::Tabs));
+	                         qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -352,7 +352,7 @@ TEST_CASE("Test increasing partial backward selection tab indent",
 	                        cursor.position()));
 
 	CHECK(tryIndentSelection(document, cursor,
-	                         qompose::IndentationMode::Tabs));
+	                         qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -370,7 +370,7 @@ TEST_CASE("Test increasing full backward selection space indent",
 	          BlockRelativePosition::START, false);
 
 	CHECK(tryIndentSelection(document, cursor,
-	                         qompose::IndentationMode::Tabs));
+	                         qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -392,7 +392,7 @@ TEST_CASE("Test increasing partial backward selection space indent",
 	                        cursor.position()));
 
 	CHECK(tryIndentSelection(document, cursor,
-	                         qompose::IndentationMode::Tabs));
+	                         qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -409,7 +409,7 @@ TEST_CASE("Test decreasing full forward selection tab indent", "[Indentation]")
 	          BlockRelativePosition::END, false);
 
 	CHECK(tryDeindentSelection(document, cursor,
-	                           qompose::IndentationMode::Tabs));
+	                           qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -431,7 +431,7 @@ TEST_CASE("Test decreasing partial forward selection tab indent",
 	                        cursor.position()));
 
 	CHECK(tryDeindentSelection(document, cursor,
-	                           qompose::IndentationMode::Tabs));
+	                           qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -449,7 +449,7 @@ TEST_CASE("Test decreasing full forward selection space indent",
 	          BlockRelativePosition::END, false);
 
 	CHECK(tryDeindentSelection(document, cursor,
-	                           qompose::IndentationMode::Spaces));
+	                           qompose::core::IndentationMode::Spaces));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -471,7 +471,7 @@ TEST_CASE("Test decreasing partial forward selection space indent",
 	                        cursor.position()));
 
 	CHECK(tryDeindentSelection(document, cursor,
-	                           qompose::IndentationMode::Spaces));
+	                           qompose::core::IndentationMode::Spaces));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -488,7 +488,7 @@ TEST_CASE("Test decreasing full backward selection tab indent", "[Indentation]")
 	          BlockRelativePosition::START, false);
 
 	CHECK(tryDeindentSelection(document, cursor,
-	                           qompose::IndentationMode::Tabs));
+	                           qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -510,7 +510,7 @@ TEST_CASE("Test decreasing partial backward selection tab indent",
 	                        cursor.position()));
 
 	CHECK(tryDeindentSelection(document, cursor,
-	                           qompose::IndentationMode::Tabs));
+	                           qompose::core::IndentationMode::Tabs));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -528,7 +528,7 @@ TEST_CASE("Test decreasing full backward selection space indent",
 	          BlockRelativePosition::START, false);
 
 	CHECK(tryDeindentSelection(document, cursor,
-	                           qompose::IndentationMode::Spaces));
+	                           qompose::core::IndentationMode::Spaces));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }
@@ -550,7 +550,7 @@ TEST_CASE("Test decreasing partial backward selection space indent",
 	                        cursor.position()));
 
 	CHECK(tryDeindentSelection(document, cursor,
-	                           qompose::IndentationMode::Spaces));
+	                           qompose::core::IndentationMode::Spaces));
 
 	CHECK(postIndentAlgorithmCursorIsCorrect(cursor));
 }

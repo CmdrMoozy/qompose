@@ -19,9 +19,11 @@
 #ifndef INCLUDE_QOMPOSECOMMON_EDITOR_BUFFER_H
 #define INCLUDE_QOMPOSECOMMON_EDITOR_BUFFER_H
 
-#include "QomposeCommon/editor/Editor.h"
+#include <string>
 
 #include "QomposeCommon/Types.h"
+#include "QomposeCommon/editor/Editor.h"
+#include "QomposeCommon/util/ConfigurationWatcher.hpp"
 
 class QPrinter;
 
@@ -196,6 +198,8 @@ public Q_SLOTS:
 	void print(QPrinter *p);
 
 private:
+	qompose::util::ConfigurationWatcher *configWatcher;
+
 	Pane *parentPane;
 
 	QString path;
@@ -245,10 +249,9 @@ private Q_SLOTS:
 	 * this widget cares about, updating our object's properties
 	 * accordingly.
 	 *
-	 * \param k The setting key whose value was changed.
-	 * \param v The new value for this particular setting.
+	 * \param name The name of the setting which changed.
 	 */
-	void doSettingChanged(const QString &k, const QVariant &v);
+	void doSettingChanged(std::string const &name);
 
 Q_SIGNALS:
 	void titleChanged(const QString &);

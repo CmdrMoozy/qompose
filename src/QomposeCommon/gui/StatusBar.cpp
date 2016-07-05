@@ -24,13 +24,15 @@
 #include <QString>
 #include <QVariant>
 
+#include "core/config/Configuration.hpp"
+
 #include "QomposeCommon/gui/EllipsizedLabel.h"
-#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
 StatusBar::StatusBar(QWidget *p)
         : QStatusBar(p),
+          configWatcher(new qompose::util::ConfigurationWatcher(this)),
           statusWidget(nullptr),
           statusLayout(nullptr),
           filePathLabel(nullptr),
@@ -59,10 +61,12 @@ StatusBar::StatusBar(QWidget *p)
 
 	addPermanentWidget(statusWidget, 1);
 
-	setVisible(Settings::instance().getSetting("show-status-bar").toBool());
+	setVisible(qompose::core::config::instance().get().show_status_bar());
 
-	QObject::connect(&Settings::instance(), &Settings::settingChanged, this,
-	                 &StatusBar::doSettingChanged);
+	QObject::connect(
+	        configWatcher,
+	        &qompose::util::ConfigurationWatcher::configurationFieldChanged,
+	        this, &StatusBar::doSettingChanged);
 }
 
 void StatusBar::setFilePath(const QString &p)
@@ -88,9 +92,13 @@ void StatusBar::setCursorPosition(int l, int c)
 	columnLabel->setText(QString("C %1").arg(c));
 }
 
-void StatusBar::doSettingChanged(const QString &k, const QVariant &v)
+void StatusBar::doSettingChanged(std::string const &name)
 {
-	if(k == "show-status-bar")
-		setVisible(v.toBool());
+	if(name == "show_status_bar")
+	{
+		setVisible(qompose::core::config::instance()
+		                   .get()
+		                   .show_status_bar());
+	}
 }
 }

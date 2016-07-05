@@ -29,13 +29,14 @@
 #include <mapbox_variant/recursive_wrapper.hpp>
 #include <mapbox_variant/variant.hpp>
 
+#include "core/config/Configuration.hpp"
+
 #include "QomposeCommon/Window.h"
 #include "QomposeCommon/editor/Buffer.h"
 #include "QomposeCommon/gui/BufferWidget.h"
 #include "QomposeCommon/gui/GUIUtils.h"
 #include "QomposeCommon/gui/menus/EncodingMenu.h"
 #include "QomposeCommon/gui/menus/RecentMenu.h"
-#include "QomposeCommon/util/Settings.h"
 
 namespace
 {
@@ -175,10 +176,9 @@ QMenu *createViewMenu(QWidget *parent)
 	         MenuItemDescriptor(
 	                 "Show File &Browser",
 	                 parentConn(SLOT(doShowBrowser(bool))), QKeySequence(),
-	                 QString(), true,
-	                 qompose::Settings::instance()
-	                         .getSetting("show-file-browser")
-	                         .toBool(),
+	                 QString(), true, qompose::core::config::instance()
+	                                          .get()
+	                                          .show_file_browser(),
 	                 parentConn(SIGNAL(
 	                         browserWidgetVisibilityChanged(bool))))});
 	return buildMenu(parent, "&View", items);
@@ -376,6 +376,8 @@ void MainMenu::doFileOpened(const QString &p)
 
 void MainMenu::doShowBrowser(bool s)
 {
-	Settings::instance().setSetting("show-file-browser", s);
+	auto config = qompose::core::config::instance().get();
+	config.set_show_file_browser(s);
+	qompose::core::config::instance().set(config);
 }
 }

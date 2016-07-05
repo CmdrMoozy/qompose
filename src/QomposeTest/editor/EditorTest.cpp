@@ -73,7 +73,8 @@ TEST_CASE("Verify Editor default state", "[Editor]")
 	REQUIRE(editor->fontZoom() == 0);
 	REQUIRE(editor->fontZoomSize() == Approx(11.0));
 	REQUIRE(editor->getIndentationWidth() == 8);
-	REQUIRE(editor->getIndentationMode() == qompose::IndentationMode::Tabs);
+	REQUIRE(editor->getIndentationMode() ==
+	        qompose::core::IndentationMode::Tabs);
 	REQUIRE(editor->isWrapGuideVisible());
 	REQUIRE(editor->getWrapGuideColumnWidth() == 100);
 	REQUIRE(editor->getWrapGuideColor() == QColor(127, 127, 127));

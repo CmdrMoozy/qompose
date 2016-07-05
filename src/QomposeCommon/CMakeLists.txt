@@ -121,15 +121,6 @@ set(QomposeCommon_SOURCES
 	hotkey/HotkeyMap.cpp
 	hotkey/HotkeyMap.h
 
-	settings/Deserializer.cpp
-	settings/Deserializer.h
-	settings/RecentList.cpp
-	settings/RecentList.h
-	settings/Serializer.cpp
-	settings/Serializer.h
-	settings/Settings.cpp
-	settings/Settings.h
-
 	syntax/Lexer.cpp
 	syntax/Lexer.h
 	syntax/SyntaxHighlighter.cpp
@@ -141,12 +132,12 @@ set(QomposeCommon_SOURCES
 	thread/Utils.cpp
 	thread/Utils.h
 
+	util/ConfigurationWatcher.cpp
+	util/ConfigurationWatcher.hpp
 	util/Encoding.cpp
 	util/Encoding.h
 	util/FontMetrics.cpp
 	util/FontMetrics.h
-	util/Settings.cpp
-	util/Settings.h
 
 )
 

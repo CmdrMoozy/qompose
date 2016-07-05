@@ -16,36 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_QOMPOSECOMMON_SETTINGS_RECENT_LIST_H
-#define INCLUDE_QOMPOSECOMMON_SETTINGS_RECENT_LIST_H
+#ifndef INCLUDE_QOMPOSECOMMON_UTIL_CONFIGURATION_WATCHER_H
+#define INCLUDE_QOMPOSECOMMON_UTIL_CONFIGURATION_WATCHER_H
 
-#include <cstddef>
-#include <deque>
-#include <string>
+#include <boost/signals2/connection.hpp>
+
+#include <QObject>
 
 namespace qompose
 {
-namespace settings
+namespace util
 {
-class RecentList
+class ConfigurationWatcher : public QObject
 {
+	Q_OBJECT
+
 public:
-	RecentList();
+	ConfigurationWatcher(QObject *p = nullptr);
 
-	RecentList(RecentList const &) = delete;
-	RecentList(RecentList &&) = delete;
-	RecentList &operator=(RecentList const &) = delete;
-	RecentList &operator=(RecentList &&) = delete;
+	ConfigurationWatcher(ConfigurationWatcher const &) = delete;
+	ConfigurationWatcher(ConfigurationWatcher &&) = default;
+	ConfigurationWatcher &operator=(ConfigurationWatcher const &) = delete;
+	ConfigurationWatcher &operator=(ConfigurationWatcher &&) = default;
 
-	~RecentList() = default;
-
-	std::size_t getCapacity() const;
-
-	void addPath(std::string const &p);
+	virtual ~ConfigurationWatcher() = default;
 
 private:
-	std::deque<std::string> recentList;
-	std::size_t capacity;
+	boost::signals2::scoped_connection slot;
+
+Q_SIGNALS:
+	void configurationFieldChanged(std::string const &);
 };
 }
 }

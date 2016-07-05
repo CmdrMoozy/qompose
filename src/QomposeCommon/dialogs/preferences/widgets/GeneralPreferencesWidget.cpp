@@ -18,13 +18,16 @@
 
 #include "GeneralPreferencesWidget.h"
 
+#include <cstdint>
+
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QLabel>
 #include <QSpinBox>
 
+#include "core/config/Configuration.hpp"
+
 #include "QomposeCommon/gui/GUIUtils.h"
-#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -46,62 +49,28 @@ GeneralPreferencesWidget::GeneralPreferencesWidget(QWidget *p,
 
 void GeneralPreferencesWidget::apply()
 {
-	// Show File In Title
-
-	Settings::instance().setSetting(
-	        "show-file-in-title",
-	        QVariant(showFileInTitleCheckBox->checkState() == Qt::Checked));
-
-	// Show Status Bar
-
-	Settings::instance().setSetting(
-	        "show-status-bar",
-	        QVariant(statusBarCheckBox->checkState() == Qt::Checked));
-
-	// Recently Opened List Size
-
-	Settings::instance().setSetting(
-	        "recent-list-size", QVariant(recentListSizeSpinBox->value()));
-
-	// Save Window Attributes
-
-	Settings::instance().setSetting(
-	        "window-save-attributes",
-	        QVariant(saveWindowAttribsCheckBox->checkState() ==
-	                 Qt::Checked));
+	auto config = qompose::core::config::instance().get();
+	config.set_show_file_in_title(showFileInTitleCheckBox->checkState() ==
+	                              Qt::Checked);
+	config.set_show_status_bar(statusBarCheckBox->checkState() ==
+	                           Qt::Checked);
+	config.set_recent_list_size_max(
+	        static_cast<uint64_t>(recentListSizeSpinBox->value()));
+	config.set_window_save_attributes(
+	        saveWindowAttribsCheckBox->checkState() == Qt::Checked);
+	qompose::core::config::instance().set(config);
 }
 
 void GeneralPreferencesWidget::discardChanges()
 {
-	// Show File In Title
-
-	bool showFileInTitle =
-	        Settings::instance().getSetting("show-file-in-title").toBool();
-
-	showFileInTitleCheckBox->setCheckState(showFileInTitle ? Qt::Checked
-	                                                       : Qt::Unchecked);
-
-	// Show Status Bar
-
-	bool showStatusBar =
-	        Settings::instance().getSetting("show-status-bar").toBool();
-
-	statusBarCheckBox->setCheckState(showStatusBar ? Qt::Checked
-	                                               : Qt::Unchecked);
-
-	// Recently Opened List Size
-
-	recentListSizeSpinBox->setValue(
-	        Settings::instance().getSetting("recent-list-size").toInt());
-
-	// Save Window Attributes
-
-	bool saveWindowAttribs = Settings::instance()
-	                                 .getSetting("window-save-attributes")
-	                                 .toBool();
-
+	auto const &config = qompose::core::config::instance().get();
+	showFileInTitleCheckBox->setCheckState(
+	        config.show_file_in_title() ? Qt::Checked : Qt::Unchecked);
+	statusBarCheckBox->setCheckState(
+	        config.show_status_bar() ? Qt::Checked : Qt::Unchecked);
+	recentListSizeSpinBox->setValue(config.recent_list_size_max());
 	saveWindowAttribsCheckBox->setCheckState(
-	        saveWindowAttribs ? Qt::Checked : Qt::Unchecked);
+	        config.window_save_attributes() ? Qt::Checked : Qt::Unchecked);
 }
 
 void GeneralPreferencesWidget::initializeGUI()

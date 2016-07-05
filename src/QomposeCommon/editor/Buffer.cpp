@@ -34,59 +34,51 @@
 
 #include <bdrck/fs/Util.hpp>
 
+#include "core/Types.hpp"
+#include "core/config/Configuration.hpp"
+
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/editor/pane/Pane.h"
 #include "QomposeCommon/fs/DocumentWriter.h"
 #include "QomposeCommon/gui/BufferWidget.h"
-#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
 namespace editor
 {
 Buffer::Buffer(Pane *pp, QWidget *p)
-        : Editor(p), parentPane(pp), path(QString()), codec("UTF-8")
+        : Editor(p),
+          configWatcher(new qompose::util::ConfigurationWatcher(this)),
+          parentPane(pp),
+          path(QString()),
+          codec("UTF-8")
 {
 	// Load our initial settings, and connect our settings object.
 
-	setGutterVisible(
-	        Settings::instance().getSetting("show-gutter").toBool());
-	setFont(Settings::instance().getSetting("editor-font").value<QFont>());
-	setIndentationWidth(Settings::instance()
-	                            .getSetting("editor-indentation-width")
-	                            .toInt());
-	setIndentationMode(Settings::instance()
-	                           .getSetting("editor-indentation-mode")
-	                           .value<QString>());
-	setWrapGuideVisible(Settings::instance()
-	                            .getSetting("editor-wrap-guide-visible")
-	                            .toBool());
-	setWrapGuideColumnWidth(Settings::instance()
-	                                .getSetting("editor-wrap-guide-width")
-	                                .toInt());
-	setWrapGuideColor(Settings::instance()
-	                          .getSetting("editor-wrap-guide-color")
-	                          .value<QColor>());
-	setEditorForeground(Settings::instance()
-	                            .getSetting("editor-foreground")
-	                            .value<QColor>());
-	setEditorBackground(Settings::instance()
-	                            .getSetting("editor-background")
-	                            .value<QColor>());
-	setCurrentLineColor(Settings::instance()
-	                            .getSetting("editor-current-line")
-	                            .value<QColor>());
-	setGutterForeground(Settings::instance()
-	                            .getSetting("gutter-foreground")
-	                            .value<QColor>());
-	setGutterBackground(Settings::instance()
-	                            .getSetting("gutter-background")
-	                            .value<QColor>());
+	auto const &config = qompose::core::config::instance().get();
+	setGutterVisible(config.show_gutter());
+	setFont(qompose::core::config::toQFont(config.editor_font()));
+	setIndentationWidth(config.editor_indentation_width());
+	setIndentationMode(qompose::core::indentationModeFromMessage(
+	        config.editor_indentation_mode()));
+	setWrapGuideVisible(config.editor_wrap_guide_visible());
+	setWrapGuideColumnWidth(config.editor_wrap_guide_width());
+	setWrapGuideColor(qompose::core::config::toQColor(
+	        config.editor_wrap_guide_color()));
+	setEditorForeground(
+	        qompose::core::config::toQColor(config.editor_foreground()));
+	setEditorBackground(
+	        qompose::core::config::toQColor(config.editor_background()));
+	setCurrentLineColor(
+	        qompose::core::config::toQColor(config.editor_current_line()));
+	setGutterForeground(
+	        qompose::core::config::toQColor(config.gutter_foreground()));
+	setGutterBackground(
+	        qompose::core::config::toQColor(config.gutter_background()));
 
-	QObject::connect(
-	        &Settings::instance(),
-	        SIGNAL(settingChanged(const QString &, const QVariant &)), this,
-	        SLOT(doSettingChanged(const QString &, const QVariant &)));
+	QObject::connect(configWatcher,
+	                 SIGNAL(configurationFieldChanged(std::string const &)),
+	                 this, SLOT(doSettingChanged(std::string const &)));
 
 	// Connect other various signals.
 
@@ -370,10 +362,9 @@ bool Buffer::write()
 	DocumentWriter writer(&file);
 
 	writer.setCodec(c);
-	writer.setWhitespaceTrimmed(
-	        Settings::instance()
-	                .getSetting("save-strip-trailing-spaces")
-	                .toBool());
+	writer.setWhitespaceTrimmed(qompose::core::config::instance()
+	                                    .get()
+	                                    .save_strip_trailing_spaces());
 
 	bool r = writer.write(document());
 
@@ -390,32 +381,64 @@ void Buffer::doModificationChanged(bool QUNUSED(c))
 	Q_EMIT titleChanged(getTitle());
 }
 
-void Buffer::doSettingChanged(const QString &k, const QVariant &v)
+void Buffer::doSettingChanged(std::string const &name)
 {
-	if(k == "show-gutter")
-		setGutterVisible(v.toBool());
-	else if(k == "editor-font")
-		setFont(v.value<QFont>());
-	else if(k == "editor-indentation-width")
-		setIndentationWidth(v.toInt());
-	else if(k == "editor-indentation-mode")
-		setIndentationMode(v.value<QString>());
-	else if(k == "editor-wrap-guide-visible")
-		setWrapGuideVisible(v.toBool());
-	else if(k == "editor-wrap-guide-width")
-		setWrapGuideColumnWidth(v.toInt());
-	else if(k == "editor-wrap-guide-color")
-		setWrapGuideColor(v.value<QColor>());
-	else if(k == "editor-foreground")
-		setEditorForeground(v.value<QColor>());
-	else if(k == "editor-background")
-		setEditorBackground(v.value<QColor>());
-	else if(k == "editor-current-line")
-		setCurrentLineColor(v.value<QColor>());
-	else if(k == "gutter-foreground")
-		setGutterForeground(v.value<QColor>());
-	else if(k == "gutter-background")
-		setGutterBackground(v.value<QColor>());
+	auto const &config = qompose::core::config::instance().get();
+	if(name == "show_gutter")
+	{
+		setGutterVisible(config.show_gutter());
+	}
+	else if(name == "editor_font")
+	{
+		setFont(qompose::core::config::toQFont(config.editor_font()));
+	}
+	else if(name == "editor_indentation_width")
+	{
+		setIndentationWidth(config.editor_indentation_width());
+	}
+	else if(name == "editor_indentation_mode")
+	{
+		setIndentationMode(qompose::core::indentationModeFromMessage(
+		        config.editor_indentation_mode()));
+	}
+	else if(name == "editor_wrap_guide_visible")
+	{
+		setWrapGuideVisible(config.editor_wrap_guide_visible());
+	}
+	else if(name == "editor_wrap_guide_width")
+	{
+		setWrapGuideColumnWidth(config.editor_wrap_guide_width());
+	}
+	else if(name == "editor_wrap_guide_color")
+	{
+		setWrapGuideColor(qompose::core::config::toQColor(
+		        config.editor_wrap_guide_color()));
+	}
+	else if(name == "editor_foreground")
+	{
+		setEditorForeground(qompose::core::config::toQColor(
+		        config.editor_foreground()));
+	}
+	else if(name == "editor_background")
+	{
+		setEditorBackground(qompose::core::config::toQColor(
+		        config.editor_background()));
+	}
+	else if(name == "editor_current_line")
+	{
+		setCurrentLineColor(qompose::core::config::toQColor(
+		        config.editor_current_line()));
+	}
+	else if(name == "gutter_foreground")
+	{
+		setGutterForeground(qompose::core::config::toQColor(
+		        config.gutter_foreground()));
+	}
+	else if(name == "gutter_background")
+	{
+		setGutterBackground(qompose::core::config::toQColor(
+		        config.gutter_background()));
+	}
 }
 }
 }

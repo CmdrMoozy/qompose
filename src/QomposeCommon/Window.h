@@ -19,12 +19,14 @@
 #ifndef INCLUDE_QOMPOSECOMMON_WINDOW_H
 #define INCLUDE_QOMPOSECOMMON_WINDOW_H
 
+#include <string>
 #include <vector>
 
 #include <QIcon>
 #include <QMainWindow>
 
 #include "QomposeCommon/editor/search/Find.h"
+#include "QomposeCommon/util/ConfigurationWatcher.hpp"
 
 class QCloseEvent;
 class QPrinter;
@@ -82,6 +84,8 @@ protected:
 	void closeEvent(QCloseEvent *e);
 
 private:
+	qompose::util::ConfigurationWatcher *configWatcher;
+
 	PreferencesDialog *preferencesDialog;
 	FindDialog *findDialog;
 	ReplaceDialog *replaceDialog;
@@ -252,10 +256,9 @@ private Q_SLOTS:
 	 * This function handles a setting changed by applying that change to
 	 * our window.
 	 *
-	 * \param k The setting key that was changed.
-	 * \param v The new value for the given setting.
+	 * \param name The name of the setting that changed.
 	 */
-	void doSettingChanged(const QString &k, const QVariant &v);
+	void doSettingChanged(std::string const &name);
 
 Q_SIGNALS:
 	void browserWidgetVisibilityChanged(bool);

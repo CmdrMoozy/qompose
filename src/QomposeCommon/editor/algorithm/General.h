@@ -25,7 +25,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
-#include "QomposeCommon/Types.h"
+#include "core/Types.hpp"
 
 namespace qompose
 {
@@ -127,7 +127,8 @@ void applyAlgorithm(E &editor, A algorithm, Arg... arg)
  * \param mode The indentation mode to use.
  * \param width The indentation width to use.
  */
-void backspace(QTextCursor &cursor, IndentationMode mode, std::size_t width);
+void backspace(QTextCursor &cursor, qompose::core::IndentationMode mode,
+               std::size_t width);
 
 /*!
  * This function performs a standard "delete" action, either by deleting the

@@ -21,6 +21,8 @@
 
 #include <QPlainTextEdit>
 
+#include "core/Types.hpp"
+
 #include "QomposeCommon/Types.h"
 #include "QomposeCommon/editor/search/Query.h"
 #include "QomposeCommon/hotkey/HotkeyedWidget.h"
@@ -156,7 +158,7 @@ public:
 	 *
 	 * \return Our current indentation mode.
 	 */
-	IndentationMode getIndentationMode() const;
+	qompose::core::IndentationMode getIndentationMode() const;
 
 	/*!
 	 * This function sets the indentation mode this editor should use,
@@ -164,14 +166,7 @@ public:
 	 *
 	 * \param mode The new indentation mode.
 	 */
-	void setIndentationMode(const QString &mode);
-
-	/*!
-	 * This function sets the indentation mode this editor should use.
-	 *
-	 * \param mode The new indentation mode.
-	 */
-	void setIndentationMode(IndentationMode mode);
+	void setIndentationMode(qompose::core::IndentationMode mode);
 
 	/*!
 	 * This function returns whether or not our line wrap guide is
@@ -444,7 +439,7 @@ private:
 	int currentFontZoom;
 
 	int indentationWidth;
-	IndentationMode indentationMode;
+	qompose::core::IndentationMode indentationMode;
 
 	bool wrapGuideVisible;
 	int wrapGuideWidth;

@@ -27,6 +27,8 @@
 #include <QPrintPreviewDialog>
 #include <QPrinter>
 
+#include "core/config/Configuration.hpp"
+
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/dialogs/AboutDialog.h"
 #include "QomposeCommon/dialogs/FindDialog.h"
@@ -38,7 +40,6 @@
 #include "QomposeCommon/gui/GUIUtils.h"
 #include "QomposeCommon/gui/dock/BrowserDockWidget.h"
 #include "QomposeCommon/gui/menus/MainMenu.h"
-#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -53,6 +54,7 @@ void Window::openNewWindow()
 
 Window::Window(QWidget *p, Qt::WindowFlags f)
         : QMainWindow(p, f),
+          configWatcher(new qompose::util::ConfigurationWatcher(this)),
           preferencesDialog(nullptr),
           findDialog(nullptr),
           replaceDialog(nullptr),
@@ -92,17 +94,13 @@ void Window::closeEvent(QCloseEvent *e)
 {
 	if(buffers->prepareCloseParent())
 	{
-		// Save our window geometry and state.
-
-		Settings::instance().setSetting("window-geometry",
-		                                QVariant(saveGeometry()));
-
-		Settings::instance().setSetting(
-		        "window-state",
-		        QVariant(saveState(QOMPOSE_VERSION_MAJ)));
+		auto config = qompose::core::config::instance().get();
+		config.set_window_geometry(saveGeometry().toStdString());
+		config.set_window_state(
+		        saveState(QOMPOSE_VERSION_MAJ).toStdString());
+		qompose::core::config::instance().set(config);
 
 		// Close the window.
-
 		e->accept();
 	}
 	else
@@ -187,7 +185,7 @@ void Window::initializeDockWidgets()
 	browserWidget = new BrowserDockWidget(this);
 	addDockWidget(Qt::RightDockWidgetArea, browserWidget);
 	browserWidget->setVisible(
-	        Settings::instance().getSetting("show-file-browser").toBool());
+	        qompose::core::config::instance().get().show_file_browser());
 
 	QObject::connect(browserWidget, SIGNAL(visibilityChanged(bool)), this,
 	                 SLOT(doBrowserWidgetVisibilityChanged(bool)));
@@ -197,35 +195,33 @@ void Window::applyExistingSettings()
 {
 	// Load our initial settings, and connect our settings object.
 
-	QObject::connect(
-	        &Settings::instance(),
-	        SIGNAL(settingChanged(const QString &, const QVariant &)), this,
-	        SLOT(doSettingChanged(const QString &, const QVariant &)));
+	QObject::connect(configWatcher,
+	                 SIGNAL(configurationFieldChanged(std::string const &)),
+	                 this, SLOT(doSettingChanged(std::string const &)));
 
 	// Restore our window's geometry and state.
 
-	QByteArray winGeometry = Settings::instance()
-	                                 .getSetting("window-geometry")
-	                                 .toByteArray();
-
-	if(!winGeometry.isNull())
+	QByteArray winGeometry = QByteArray::fromStdString(
+	        qompose::core::config::instance().get().window_geometry());
+	if(!winGeometry.isEmpty())
 	{
 		if(!restoreGeometry(winGeometry))
 		{
-			Settings::instance().setSetting("window-geometry",
-			                                QVariant(QByteArray()));
+			auto config = qompose::core::config::instance().get();
+			config.clear_window_geometry();
+			qompose::core::config::instance().set(config);
 		}
 	}
 
-	QByteArray winState =
-	        Settings::instance().getSetting("window-state").toByteArray();
-
-	if(!winState.isNull())
+	QByteArray winState = QByteArray::fromStdString(
+	        qompose::core::config::instance().get().window_state());
+	if(!winState.isEmpty())
 	{
 		if(!restoreState(winState, QOMPOSE_VERSION_MAJ))
 		{
-			Settings::instance().setSetting("window-state",
-			                                QVariant(QByteArray()));
+			auto config = qompose::core::config::instance().get();
+			config.clear_window_state();
+			qompose::core::config::instance().set(config);
 		}
 	}
 }
@@ -274,10 +270,7 @@ void Window::doUpdateWindowTitle()
 {
 	QString title("Qompose");
 
-	bool showFile =
-	        Settings::instance().getSetting("show-file-in-title").toBool();
-
-	if(showFile)
+	if(qompose::core::config::instance().get().show_file_in_title())
 	{
 		editor::Buffer *buf = buffers->currentBuffer();
 
@@ -358,7 +351,9 @@ void Window::doShowBrowser(bool s)
 
 void Window::doBrowserWidgetVisibilityChanged(bool v)
 {
-	Settings::instance().setSetting("show-file-browser", v);
+	auto config = qompose::core::config::instance().get();
+	config.set_show_file_browser(v);
+	qompose::core::config::instance().set(config);
 	Q_EMIT browserWidgetVisibilityChanged(v);
 }
 
@@ -420,11 +415,17 @@ void Window::doDebug()
 }
 #endif
 
-void Window::doSettingChanged(const QString &k, const QVariant &v)
+void Window::doSettingChanged(std::string const &name)
 {
-	if(k == "show-file-in-title")
+	if(name == "show_file_in_title")
+	{
 		doUpdateWindowTitle();
-	else if(k == "show-file-browser")
-		doShowBrowser(v.toBool());
+	}
+	else if(name == "show_file_browser")
+	{
+		doShowBrowser(qompose::core::config::instance()
+		                      .get()
+		                      .show_file_browser());
+	}
 }
 }

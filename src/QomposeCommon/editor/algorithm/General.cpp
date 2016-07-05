@@ -66,9 +66,11 @@ void setNormalizedSelection(QTextCursor &cursor,
 	cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
 }
 
-void backspace(QTextCursor &cursor, IndentationMode mode, std::size_t width)
+void backspace(QTextCursor &cursor, qompose::core::IndentationMode mode,
+               std::size_t width)
 {
-	if((mode == IndentationMode::Spaces) && !cursor.hasSelection())
+	if((mode == qompose::core::IndentationMode::Spaces) &&
+	   !cursor.hasSelection())
 	{
 		// If we're using space indentation, and we don't have a
 		// selection, then we may want to remove "one indentation"

@@ -25,6 +25,7 @@
 #include <QString>
 
 #include "QomposeCommon/gui/menus/MenuDescriptors.h"
+#include "QomposeCommon/util/ConfigurationWatcher.hpp"
 
 class QMenu;
 class QAction;
@@ -97,6 +98,8 @@ public Q_SLOTS:
 	void addPath(const QString &p);
 
 private:
+	qompose::util::ConfigurationWatcher *configWatcher;
+
 	int capacity;
 
 	QMenu *menu;
@@ -146,9 +149,11 @@ private:
 	 * are all added to our list then we will remove the oldest item(s)
 	 * until the recent list size is the same as our capacity.
 	 *
-	 * \param l Our new list of items.
+	 * \param begin The start of the range of std::strings to add.
+	 * \param end The end of the range of std::strings to add.
 	 */
-	void setListContents(const QStringList &l);
+	template <typename Iterator>
+	void setListContents(Iterator begin, Iterator end);
 
 private Q_SLOTS:
 	/*!
@@ -164,10 +169,9 @@ private Q_SLOTS:
 	 * settings), then we will update our internal state to match that
 	 * setting's new value.
 	 *
-	 * \param k The key of the setting that was changed.
-	 * \param v The setting's new value.
+	 * \param name The name of the setting which changed.
 	 */
-	void doSettingChanged(const QString &k, const QVariant &v);
+	void doSettingChanged(std::string const &name);
 
 Q_SIGNALS:
 	void recentClicked(const QString &);
@@ -223,6 +227,24 @@ struct RecentMenuDescriptor
 template <>
 void constructDescriptor(QObject *parent, QMenu *menu,
                          const RecentMenuDescriptor &descriptor);
+}
+
+template <typename Iterator>
+void RecentMenu::setListContents(Iterator begin, Iterator end)
+{
+	recentList.clear();
+	for(auto it = begin; it != end; ++it)
+		recentList.enqueue(QString::fromStdString(*it));
+
+	while(recentList.count() > capacity)
+	{
+		if(recentList.isEmpty())
+			break;
+		recentList.dequeue();
+	}
+
+	updateActionsListSize();
+	renderListContents();
 }
 }
 

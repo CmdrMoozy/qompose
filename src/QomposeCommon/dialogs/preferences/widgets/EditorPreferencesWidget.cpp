@@ -18,6 +18,8 @@
 
 #include "EditorPreferencesWidget.h"
 
+#include <cstdint>
+
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QGridLayout>
@@ -26,10 +28,11 @@
 #include <QRadioButton>
 #include <QSpinBox>
 
+#include "core/config/Configuration.hpp"
+
 #include "QomposeCommon/gui/ColorPickerButton.h"
 #include "QomposeCommon/gui/FontPickerButton.h"
 #include "QomposeCommon/gui/GUIUtils.h"
-#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -76,163 +79,62 @@ EditorPreferencesWidget::EditorPreferencesWidget(QWidget *p, Qt::WindowFlags f)
 
 void EditorPreferencesWidget::apply()
 {
-	// Show Gutter
+	auto config = qompose::core::config::instance().get();
+	config.set_show_gutter(showGutterCheckBox->checkState() == Qt::Checked);
+	qompose::core::config::fromQFont(config.mutable_editor_font(),
+	                                 editorFontButton->getSelectedFont());
+	config.set_editor_indentation_width(
+	        static_cast<uint64_t>(indentationWidthSpinBox->value()));
+	config.set_editor_indentation_mode(getSelectedIndentationMode());
+	config.set_editor_wrap_guide_visible(
+	        lineWrapGuideCheckBox->checkState() == Qt::Checked);
+	config.set_editor_wrap_guide_width(
+	        static_cast<uint64_t>(lineWrapGuideWidthSpinBox->value()));
+	qompose::core::config::fromQColor(
+	        config.mutable_editor_wrap_guide_color(),
+	        lineWrapGuideColorButton->getSelectedColor());
+	qompose::core::config::fromQColor(config.mutable_editor_foreground(),
+	                                  editorFGButton->getSelectedColor());
+	qompose::core::config::fromQColor(config.mutable_editor_background(),
+	                                  editorBGButton->getSelectedColor());
+	qompose::core::config::fromQColor(
+	        config.mutable_editor_current_line(),
+	        currentLineBGButton->getSelectedColor());
+	qompose::core::config::fromQColor(config.mutable_gutter_foreground(),
+	                                  gutterFGButton->getSelectedColor());
+	qompose::core::config::fromQColor(config.mutable_gutter_background(),
+	                                  gutterBGButton->getSelectedColor());
 
-	Settings::instance().setSetting(
-	        "show-gutter",
-	        QVariant(showGutterCheckBox->checkState() == Qt::Checked));
-
-	// Editor Font
-
-	Settings::instance().setSetting(
-	        "editor-font", QVariant(editorFontButton->getSelectedFont()));
-
-	// Indentation Width
-
-	Settings::instance().setSetting(
-	        "editor-indentation-width",
-	        QVariant(indentationWidthSpinBox->value()));
-
-	// Indentation Mode
-
-	Settings::instance().setSetting("editor-indentation-mode",
-	                                QVariant(getSelectedIndentationMode()));
-
-	// Wrap Guide Visible
-
-	Settings::instance().setSetting(
-	        "editor-wrap-guide-visible",
-	        QVariant(lineWrapGuideCheckBox->checkState() == Qt::Checked));
-
-	// Wrap Guide Width
-
-	Settings::instance().setSetting(
-	        "editor-wrap-guide-width",
-	        QVariant(lineWrapGuideWidthSpinBox->value()));
-
-	// Wrap Guide Color
-
-	Settings::instance().setSetting(
-	        "editor-wrap-guide-color",
-	        QVariant(lineWrapGuideColorButton->getSelectedColor()));
-
-	// Editor Foreground
-
-	Settings::instance().setSetting(
-	        "editor-foreground",
-	        QVariant(editorFGButton->getSelectedColor()));
-
-	// Editor Background
-
-	Settings::instance().setSetting(
-	        "editor-background",
-	        QVariant(editorBGButton->getSelectedColor()));
-
-	// Current Line Background
-
-	Settings::instance().setSetting(
-	        "editor-current-line",
-	        QVariant(currentLineBGButton->getSelectedColor()));
-
-	// Gutter Foreground
-
-	Settings::instance().setSetting(
-	        "gutter-foreground",
-	        QVariant(gutterFGButton->getSelectedColor()));
-
-	// Gutter Background
-
-	Settings::instance().setSetting(
-	        "gutter-background",
-	        QVariant(gutterBGButton->getSelectedColor()));
+	qompose::core::config::instance().set(config);
 }
 
 void EditorPreferencesWidget::discardChanges()
 {
-	// Show Gutter
-
-	bool showGutter =
-	        Settings::instance().getSetting("show-gutter").toBool();
-
-	showGutterCheckBox->setCheckState(showGutter ? Qt::Checked
-	                                             : Qt::Unchecked);
-
-	// Editor Font
-
-	editorFontButton->setSelectedFont(
-	        Settings::instance().getSetting("editor-font").value<QFont>());
-
-	// Indentation Width
-
-	indentationWidthSpinBox->setValue(
-	        Settings::instance()
-	                .getSetting("editor-indentation-width")
-	                .toInt());
-
-	// Indentation Mode
-
-	setSelectedIndentaionMode(Settings::instance()
-	                                  .getSetting("editor-indentation-mode")
-	                                  .value<QString>());
-
-	// Wrap Guide Visible
-
-	bool showLineWrapGuide =
-	        Settings::instance()
-	                .getSetting("editor-wrap-guide-visible")
-	                .toBool();
-
-	lineWrapGuideCheckBox->setCheckState(showLineWrapGuide ? Qt::Checked
+	auto const &config = qompose::core::config::instance().get();
+	showGutterCheckBox->setCheckState(config.show_gutter() ? Qt::Checked
 	                                                       : Qt::Unchecked);
-
-	// Wrap Guide Width
-
-	lineWrapGuideWidthSpinBox->setValue(
-	        Settings::instance()
-	                .getSetting("editor-wrap-guide-width")
-	                .toInt());
-
-	// Wrap Guide Color
-
+	editorFontButton->setSelectedFont(
+	        qompose::core::config::toQFont(config.editor_font()));
+	indentationWidthSpinBox->setValue(config.editor_indentation_width());
+	setSelectedIndentationMode(qompose::core::config::toString(
+	        config.editor_indentation_mode()));
+	lineWrapGuideCheckBox->setCheckState(config.editor_wrap_guide_visible()
+	                                             ? Qt::Checked
+	                                             : Qt::Unchecked);
+	lineWrapGuideWidthSpinBox->setValue(config.editor_wrap_guide_width());
 	lineWrapGuideColorButton->setSelectedColor(
-	        Settings::instance()
-	                .getSetting("editor-wrap-guide-color")
-	                .value<QColor>());
-
-	// Editor Foreground
-
+	        qompose::core::config::toQColor(
+	                config.editor_wrap_guide_color()));
 	editorFGButton->setSelectedColor(
-	        Settings::instance()
-	                .getSetting("editor-foreground")
-	                .value<QColor>());
-
-	// Editor Background
-
+	        qompose::core::config::toQColor(config.editor_foreground()));
 	editorBGButton->setSelectedColor(
-	        Settings::instance()
-	                .getSetting("editor-background")
-	                .value<QColor>());
-
-	// Current Line Background
-
+	        qompose::core::config::toQColor(config.editor_background()));
 	currentLineBGButton->setSelectedColor(
-	        Settings::instance()
-	                .getSetting("editor-current-line")
-	                .value<QColor>());
-
-	// Gutter Foreground
-
+	        qompose::core::config::toQColor(config.editor_current_line()));
 	gutterFGButton->setSelectedColor(
-	        Settings::instance()
-	                .getSetting("gutter-foreground")
-	                .value<QColor>());
-
-	// Gutter Background
-
+	        qompose::core::config::toQColor(config.gutter_foreground()));
 	gutterBGButton->setSelectedColor(
-	        Settings::instance()
-	                .getSetting("gutter-background")
-	                .value<QColor>());
+	        qompose::core::config::toQColor(config.gutter_background()));
 }
 
 void EditorPreferencesWidget::initializeGUI()
@@ -372,17 +274,26 @@ void EditorPreferencesWidget::initializeGUI()
 	setLayout(layout);
 }
 
-QString EditorPreferencesWidget::getSelectedIndentationMode() const
+qompose::core::messages::Configuration::IndentationMode
+EditorPreferencesWidget::getSelectedIndentationMode() const
 {
 	if(indentationModeTabsRadioButton->isChecked())
-		return "tabs";
+	{
+		return qompose::core::messages::Configuration::INDENTATION_TABS;
+	}
 	else if(indentationModeSpacesRadioButton->isChecked())
-		return "spaces";
+	{
+		return qompose::core::messages::Configuration::
+		        INDENTATION_SPACES;
+	}
 	else
-		return "tabs";
+	{
+		return qompose::core::messages::Configuration::INDENTATION_TABS;
+	}
 }
 
-void EditorPreferencesWidget::setSelectedIndentaionMode(const QString &mode)
+void EditorPreferencesWidget::setSelectedIndentationMode(
+        std::string const &mode)
 {
 	if(mode == "tabs")
 		indentationModeTabsRadioButton->setChecked(true);

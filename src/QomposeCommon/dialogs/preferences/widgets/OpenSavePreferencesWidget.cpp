@@ -23,8 +23,9 @@
 #include <QGroupBox>
 #include <QVariant>
 
+#include "core/config/Configuration.hpp"
+
 #include "QomposeCommon/gui/GUIUtils.h"
-#include "QomposeCommon/util/Settings.h"
 
 namespace qompose
 {
@@ -44,24 +45,18 @@ OpenSavePreferencesWidget::OpenSavePreferencesWidget(QWidget *p,
 
 void OpenSavePreferencesWidget::apply()
 {
-	// Strip Trailing Spaces
-
-	Settings::instance().setSetting(
-	        "save-strip-trailing-spaces",
-	        QVariant(stripTrailingSpacesCheckBox->checkState() ==
-	                 Qt::Checked));
+	auto config = qompose::core::config::instance().get();
+	config.set_save_strip_trailing_spaces(
+	        stripTrailingSpacesCheckBox->checkState() == Qt::Checked);
+	qompose::core::config::instance().set(config);
 }
 
 void OpenSavePreferencesWidget::discardChanges()
 {
-	// Strip Trailing Spaces
-
-	bool stripSpaces = Settings::instance()
-	                           .getSetting("save-strip-trailing-spaces")
-	                           .toBool();
-
-	stripTrailingSpacesCheckBox->setCheckState(stripSpaces ? Qt::Checked
-	                                                       : Qt::Unchecked);
+	auto const &config = qompose::core::config::instance().get();
+	stripTrailingSpacesCheckBox->setCheckState(
+	        config.save_strip_trailing_spaces() ? Qt::Checked
+	                                            : Qt::Unchecked);
 }
 
 void OpenSavePreferencesWidget::initializeGUI()

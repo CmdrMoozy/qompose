@@ -20,6 +20,8 @@
 
 #include <mutex>
 
+#include <QString>
+
 namespace
 {
 constexpr char const *CONFIG_ID_APPLICATION = "qompose";
@@ -106,6 +108,46 @@ bdrck::config::Configuration<qompose::core::messages::Configuration> &instance()
 	return bdrck::config::
 	        Configuration<qompose::core::messages::Configuration>::instance(
 	                getConfigurationIdentifier());
+}
+
+QColor toQColor(qompose::core::messages::Color const &c)
+{
+	return QColor(c.red(), c.green(), c.blue(), c.alpha());
+}
+
+QFont toQFont(qompose::core::messages::Font const &f)
+{
+	return QFont(QString::fromStdString(f.family()), f.point_size());
+}
+
+void fromQColor(qompose::core::messages::Color *dest, QColor const &c)
+{
+	dest->set_alpha(c.alpha());
+	dest->set_red(c.red());
+	dest->set_green(c.green());
+	dest->set_blue(c.blue());
+}
+
+void fromQFont(qompose::core::messages::Font *dest, QFont const &f)
+{
+	dest->set_family(f.family().toStdString());
+	dest->set_point_size(f.pointSize());
+}
+
+std::string toString(qompose::core::messages::Configuration::IndentationMode im)
+{
+	if(im == qompose::core::messages::Configuration::INDENTATION_SPACES)
+	{
+		return "spaces";
+	}
+	else if(im == qompose::core::messages::Configuration::INDENTATION_TABS)
+	{
+		return "tabs";
+	}
+	else
+	{
+		return "";
+	}
 }
 }
 }

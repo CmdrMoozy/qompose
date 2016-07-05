@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QTextDocument>
 
-#include "QomposeCommon/util/Settings.h"
+#include "core/config/Configuration.hpp"
 
 namespace qompose
 {
