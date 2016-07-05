@@ -41,10 +41,8 @@ struct SettingsTestState
 		QString path = QString::fromStdString(directory.getPath()) +
 		               QDir::separator() + "test.conf";
 		qompose::settings::Settings::initialize(path.toStdString());
-		cleanup.emplace([]()
-		                {
-			                qompose::settings::Settings::destroy();
-			        });
+		cleanup.emplace(
+		        []() { qompose::settings::Settings::destroy(); });
 	}
 };
 }

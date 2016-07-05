@@ -130,10 +130,8 @@ void newline(QTextCursor &cursor)
 	QString lineStart = indentCursor.selectedText();
 
 	auto nonWhitespaceStart = std::find_if_not(
-	        lineStart.begin(), lineStart.end(), [](const QChar &c) -> bool
-	                                            {
-		        return c.isSpace();
-		});
+	        lineStart.begin(), lineStart.end(),
+	        [](const QChar &c) -> bool { return c.isSpace(); });
 	insert.resize(static_cast<int>(
 	        insert.length() +
 	        std::distance(lineStart.begin(), nonWhitespaceStart)));

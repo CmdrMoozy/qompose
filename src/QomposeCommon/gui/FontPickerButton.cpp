@@ -18,9 +18,9 @@
 
 #include "FontPickerButton.h"
 
-#include <QString>
-#include <QIcon>
 #include <QFontDialog>
+#include <QIcon>
+#include <QString>
 
 namespace qompose
 {

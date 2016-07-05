@@ -20,9 +20,9 @@
 
 #include <cstddef>
 
-#include <QStringList>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QStringList>
 
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/dialogs/EncodingDialog.h"
@@ -113,7 +113,8 @@ bool FileDialog::fileIsGood(const QString &f, QWidget *p)
 	{
 		QString text =
 		        QString("The file '%1' is relatively large. Do you "
-		                "really want to open it?").arg(file.fileName());
+		                "really want to open it?")
+		                .arg(file.fileName());
 
 		QMessageBox::StandardButton result = QMessageBox::question(
 		        p, "Qompose - Large File", text,

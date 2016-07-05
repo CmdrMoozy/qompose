@@ -18,12 +18,12 @@
 
 #include "ColorPickerButton.h"
 
-#include <QString>
-#include <QIcon>
 #include <QColorDialog>
+#include <QIcon>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QRect>
+#include <QString>
 
 #include "QomposeCommon/Defines.h"
 

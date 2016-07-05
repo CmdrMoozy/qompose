@@ -19,9 +19,9 @@
 #include <catch/catch.hpp>
 
 #include <cmath>
+#include <functional>
 #include <list>
 #include <memory>
-#include <functional>
 
 #include <QColor>
 #include <QString>
@@ -98,8 +98,7 @@ TEST_CASE("Verify Editor font zooming functionality", "[Editor]")
 
 	// Make sure that offsets are always evenly divisible by column widths.
 
-	auto computeOffsetColumnRemainder = [&](int column) -> double
-	{
+	auto computeOffsetColumnRemainder = [&](int column) -> double {
 		double offset = static_cast<double>(
 		        editor->columnOffset(column) - editor->contentMargin());
 		double single =
@@ -107,8 +106,7 @@ TEST_CASE("Verify Editor font zooming functionality", "[Editor]")
 		return std::fmod(offset, single);
 	};
 
-	auto computeTestOffsetColumnRemainders = [&]() -> std::list<double>
-	{
+	auto computeTestOffsetColumnRemainders = [&]() -> std::list<double> {
 		return {computeOffsetColumnRemainder(80),
 		        computeOffsetColumnRemainder(40),
 		        computeOffsetColumnRemainder(120),

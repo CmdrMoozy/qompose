@@ -21,10 +21,10 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include <QWidget>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QShowEvent>
-#include <QMessageBox>
+#include <QWidget>
 
 #include "QomposeCommon/Defines.h"
 

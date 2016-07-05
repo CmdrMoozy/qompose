@@ -37,12 +37,9 @@ void home(QTextCursor &cursor, bool moveAnchor)
 	positionCursor.movePosition(QTextCursor::StartOfBlock,
 	                            QTextCursor::KeepAnchor);
 	QString preCursorText = positionCursor.selectedText();
-	auto whitespaceEnd =
-	        std::find_if_not(preCursorText.begin(), preCursorText.end(),
-	                         [](const QChar &c) -> bool
-	                         {
-		        return c.isSpace();
-		});
+	auto whitespaceEnd = std::find_if_not(
+	        preCursorText.begin(), preCursorText.end(),
+	        [](const QChar &c) -> bool { return c.isSpace(); });
 
 	// Move the cursor to the end of the whitespace if there are any
 	// non-whitespace characters before it, or to the start of the block

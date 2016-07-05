@@ -53,8 +53,7 @@ struct PieceTable
 };
 
 template <typename TextResource>
-PieceTable::PieceTable(TextResource &&resource)
-        : pieces()
+PieceTable::PieceTable(TextResource &&resource) : pieces()
 {
 	auto b = resource.data();
 	auto e = resource.data() + resource.size();

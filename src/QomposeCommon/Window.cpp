@@ -19,13 +19,13 @@
 #include "Window.h"
 
 #include <QApplication>
-#include <QFile>
 #include <QCloseEvent>
+#include <QFile>
+#include <QIcon>
 #include <QMessageBox>
 #include <QPrintDialog>
-#include <QPrinter>
 #include <QPrintPreviewDialog>
-#include <QIcon>
+#include <QPrinter>
 
 #include "QomposeCommon/Defines.h"
 #include "QomposeCommon/dialogs/AboutDialog.h"

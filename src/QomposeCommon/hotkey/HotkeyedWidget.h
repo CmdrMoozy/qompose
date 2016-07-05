@@ -40,8 +40,7 @@ template <typename T> class HotkeyedWidget : public T
 {
 public:
 	template <typename... Arg>
-	HotkeyedWidget(Arg... arg)
-	        : T(std::forward<Arg>(arg)...), hotkeys()
+	HotkeyedWidget(Arg... arg) : T(std::forward<Arg>(arg)...), hotkeys()
 	{
 	}
 

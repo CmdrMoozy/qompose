@@ -24,8 +24,8 @@
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
-#include <unistd.h>
 #include <sys/syscall.h>
+#include <unistd.h>
 #endif
 
 #include <bdrck/util/Error.hpp>

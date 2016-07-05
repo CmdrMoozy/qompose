@@ -18,13 +18,13 @@
 
 #include "EditorPreferencesWidget.h"
 
+#include <QButtonGroup>
+#include <QCheckBox>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QCheckBox>
-#include <QSpinBox>
 #include <QRadioButton>
-#include <QButtonGroup>
+#include <QSpinBox>
 
 #include "QomposeCommon/gui/ColorPickerButton.h"
 #include "QomposeCommon/gui/FontPickerButton.h"

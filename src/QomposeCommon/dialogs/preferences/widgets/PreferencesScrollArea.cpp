@@ -18,10 +18,10 @@
 
 #include "PreferencesScrollArea.h"
 
-#include <QShowEvent>
-#include <QScrollBar>
-#include <QLayout>
 #include <QEvent>
+#include <QLayout>
+#include <QScrollBar>
+#include <QShowEvent>
 
 namespace qompose
 {

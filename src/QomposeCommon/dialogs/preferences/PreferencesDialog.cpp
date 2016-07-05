@@ -19,9 +19,9 @@
 #include "PreferencesDialog.h"
 
 #include <QGridLayout>
-#include <QStackedWidget>
-#include <QPushButton>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QStackedWidget>
 
 #include "QomposeCommon/dialogs/preferences/PreferencesListModel.h"
 #include "QomposeCommon/dialogs/preferences/PreferencesListView.h"

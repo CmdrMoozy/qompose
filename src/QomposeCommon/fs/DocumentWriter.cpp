@@ -19,10 +19,10 @@
 #include "DocumentWriter.h"
 
 #include <QIODevice>
+#include <QRegExp>
+#include <QStringList>
 #include <QTextCodec>
 #include <QTextDocument>
-#include <QStringList>
-#include <QRegExp>
 
 namespace qompose
 {

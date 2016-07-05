@@ -25,9 +25,9 @@
 #include "QomposeCommon/editor/algorithm/General.h"
 #include "QomposeCommon/editor/algorithm/Indentation.h"
 #include "QomposeCommon/editor/algorithm/Movement.h"
-#include "QomposeCommon/editor/search/applyAlgorithm.h"
 #include "QomposeCommon/editor/search/Find.h"
 #include "QomposeCommon/editor/search/Replace.h"
+#include "QomposeCommon/editor/search/applyAlgorithm.h"
 #include "QomposeCommon/util/FontMetrics.h"
 
 namespace qompose
@@ -467,8 +467,8 @@ QString Editor::getIndentString() const
 	switch(getIndentationMode())
 	{
 	case IndentationMode::Spaces:
-		return QString(" ")
-		        .repeated(static_cast<int>(getIndentationWidth()));
+		return QString(" ").repeated(
+		        static_cast<int>(getIndentationWidth()));
 
 	case IndentationMode::Tabs:
 		return QString("\t");
@@ -503,36 +503,35 @@ void Editor::initializeHotkeys()
 	// Backspace
 
 	addHotkey(Hotkey(Qt::Key_Backspace, 0, ~Qt::KeyboardModifiers(0)),
-	          [this]()
-	          {
-		algorithm::applyAlgorithm(*this, algorithm::backspace,
-		                          getIndentationMode(),
-		                          getIndentationWidth());
-	});
+	          [this]() {
+		          algorithm::applyAlgorithm(*this, algorithm::backspace,
+		                                    getIndentationMode(),
+		                                    getIndentationWidth());
+		  });
 
 	// Delete
 
-	addHotkey(Hotkey(Qt::Key_Delete, 0, ~Qt::KeyboardModifiers(0)), [this]()
-	          {
-		algorithm::applyAlgorithm(*this, algorithm::deleteCharacter);
-	});
+	addHotkey(Hotkey(Qt::Key_Delete, 0, ~Qt::KeyboardModifiers(0)),
+	          [this]() {
+		          algorithm::applyAlgorithm(*this,
+		                                    algorithm::deleteCharacter);
+		  });
 
 	// Enter
 
-	addHotkey(Hotkey(Qt::Key_Return, 0, ~Qt::KeyboardModifiers(0)), [this]()
-	          {
-		algorithm::applyAlgorithm(*this, algorithm::newline);
-	});
+	addHotkey(Hotkey(Qt::Key_Return, 0, ~Qt::KeyboardModifiers(0)),
+	          [this]() {
+		          algorithm::applyAlgorithm(*this, algorithm::newline);
+		  });
 
-	addHotkey(Hotkey(Qt::Key_Enter, 0, ~Qt::KeyboardModifiers(0)), [this]()
-	          {
-		algorithm::applyAlgorithm(*this, algorithm::newline);
-	});
+	addHotkey(Hotkey(Qt::Key_Enter, 0, ~Qt::KeyboardModifiers(0)),
+	          [this]() {
+		          algorithm::applyAlgorithm(*this, algorithm::newline);
+		  });
 
 	// Tab
 
-	addHotkey(Hotkey(Qt::Key_Tab), [this]()
-	          {
+	addHotkey(Hotkey(Qt::Key_Tab), [this]() {
 		algorithm::applyAlgorithm(*this, algorithm::tab,
 		                          getIndentationMode(),
 		                          getIndentationWidth());
@@ -540,15 +539,13 @@ void Editor::initializeHotkeys()
 
 	// Shift + Tab
 
-	addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier), [this]()
-	          {
+	addHotkey(Hotkey(Qt::Key_Tab, Qt::ShiftModifier), [this]() {
 		algorithm::applyAlgorithm(
 		        *this, algorithm::decreaseSelectionIndent,
 		        getIndentationMode(), getIndentationWidth());
 	});
 
-	addHotkey(Hotkey(Qt::Key_Backtab, Qt::ShiftModifier), [this]()
-	          {
+	addHotkey(Hotkey(Qt::Key_Backtab, Qt::ShiftModifier), [this]() {
 		algorithm::applyAlgorithm(
 		        *this, algorithm::decreaseSelectionIndent,
 		        getIndentationMode(), getIndentationWidth());
@@ -556,22 +553,19 @@ void Editor::initializeHotkeys()
 
 	// Home
 
-	addHotkey(Hotkey(Qt::Key_Home), [this]()
-	          {
+	addHotkey(Hotkey(Qt::Key_Home), [this]() {
 		algorithm::applyAlgorithm(*this, algorithm::home, true);
 	});
 
 	// Shift + Home
 
-	addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier), [this]()
-	          {
+	addHotkey(Hotkey(Qt::Key_Home, Qt::ShiftModifier), [this]() {
 		algorithm::applyAlgorithm(*this, algorithm::home, false);
 	});
 
 	// Ctrl+D
 
-	addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier), [this]()
-	          {
+	addHotkey(Hotkey(Qt::Key_D, Qt::ControlModifier), [this]() {
 		algorithm::applyAlgorithm(*this, algorithm::duplicateBlock);
 	});
 
@@ -583,41 +577,29 @@ void Editor::initializeHotkeys()
 	// Ctrl+Shift+Left
 
 	addHotkey(Hotkey(Qt::Key_Left, Qt::ControlModifier | Qt::ShiftModifier),
-	          []()
-	          {
-	});
+	          []() {});
 
 	// Ctrl+Shift+Right
 
 	addHotkey(
 	        Hotkey(Qt::Key_Right, Qt::ControlModifier | Qt::ShiftModifier),
-	        []()
-	        {
-		});
+	        []() {});
 
 	// Ctrl+Insert
 
-	addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier), []()
-	          {
-	});
+	addHotkey(Hotkey(Qt::Key_Insert, Qt::ControlModifier), []() {});
 
 	// Ctrl+K
 
-	addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier), []()
-	          {
-	});
+	addHotkey(Hotkey(Qt::Key_K, Qt::ControlModifier), []() {});
 
 	// Shift+Insert
 
-	addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier), []()
-	          {
-	});
+	addHotkey(Hotkey(Qt::Key_Insert, Qt::ShiftModifier), []() {});
 
 	// Shift+Delete
 
-	addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier), []()
-	          {
-	});
+	addHotkey(Hotkey(Qt::Key_Delete, Qt::ShiftModifier), []() {});
 }
 
 void Editor::gutterPaintEvent(QPaintEvent *e)

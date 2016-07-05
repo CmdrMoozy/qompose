@@ -18,9 +18,9 @@
 
 #include "OpenSavePreferencesWidget.h"
 
+#include <QCheckBox>
 #include <QGridLayout>
 #include <QGroupBox>
-#include <QCheckBox>
 #include <QVariant>
 
 #include "QomposeCommon/gui/GUIUtils.h"

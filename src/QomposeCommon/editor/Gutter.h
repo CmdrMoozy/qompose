@@ -19,8 +19,8 @@
 #ifndef INCLUDE_QOMPOSECOMMON_EDITOR_GUTTER_H
 #define INCLUDE_QOMPOSECOMMON_EDITOR_GUTTER_H
 
-#include <QWidget>
 #include <QSize>
+#include <QWidget>
 
 class QPaintEvent;
 

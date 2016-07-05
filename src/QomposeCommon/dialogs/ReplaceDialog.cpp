@@ -18,14 +18,14 @@
 
 #include "ReplaceDialog.h"
 
+#include <QCheckBox>
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QWidget>
 #include <QPushButton>
 #include <QShowEvent>
+#include <QWidget>
 
 namespace qompose
 {

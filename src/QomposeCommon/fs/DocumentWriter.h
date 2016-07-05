@@ -19,8 +19,8 @@
 #ifndef INCLUDE_QOMPOSECOMMON_UTIL_DOCUMENT_WRITER_H
 #define INCLUDE_QOMPOSECOMMON_UTIL_DOCUMENT_WRITER_H
 
-#include <QTextStream>
 #include <QString>
+#include <QTextStream>
 
 class QIODevice;
 class QTextCodec;

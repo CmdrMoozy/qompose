@@ -18,9 +18,9 @@
 
 #include "SyntaxHighlighter.h"
 
+#include <QList>
 #include <QObject>
 #include <QTextDocument>
-#include <QList>
 
 #include "QomposeCommon/util/Settings.h"
 

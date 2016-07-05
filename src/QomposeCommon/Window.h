@@ -21,8 +21,8 @@
 
 #include <vector>
 
-#include <QMainWindow>
 #include <QIcon>
+#include <QMainWindow>
 
 #include "QomposeCommon/editor/search/Find.h"
 

@@ -18,14 +18,14 @@
 
 #include "FindDialog.h"
 
+#include <QCheckBox>
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QWidget>
 #include <QPushButton>
 #include <QShowEvent>
+#include <QWidget>
 
 #include "QomposeCommon/Defines.h"
 

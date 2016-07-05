@@ -18,16 +18,16 @@
 
 #include "AboutDialog.h"
 
+#include <QFile>
+#include <QFont>
 #include <QGridLayout>
+#include <QLabel>
+#include <QPixmap>
+#include <QPushButton>
 #include <QTabWidget>
 #include <QTextEdit>
-#include <QPushButton>
-#include <QFile>
 #include <QTextStream>
-#include <QFont>
-#include <QLabel>
 #include <QWidget>
-#include <QPixmap>
 
 #include "QomposeCommon/Defines.h"
 

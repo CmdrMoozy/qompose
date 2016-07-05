@@ -19,8 +19,8 @@
 #ifndef INCLUDE_QOMPOSECOMMON_GUI_FONT_PICKER_BUTTON_H
 #define INCLUDE_QOMPOSECOMMON_GUI_FONT_PICKER_BUTTON_H
 
-#include <QPushButton>
 #include <QFont>
+#include <QPushButton>
 
 class QString;
 class QIcon;

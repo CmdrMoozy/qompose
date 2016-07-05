@@ -18,10 +18,10 @@
 
 #include "RecentMenu.h"
 
-#include <QMenu>
-#include <QStringList>
 #include <QAction>
 #include <QFileInfo>
+#include <QMenu>
+#include <QStringList>
 #include <QVariant>
 
 #include "QomposeCommon/gui/GUIUtils.h"

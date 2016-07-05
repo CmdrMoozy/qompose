@@ -18,8 +18,8 @@
 
 #include "GeneralPreferencesWidget.h"
 
-#include <QGridLayout>
 #include <QCheckBox>
+#include <QGridLayout>
 #include <QLabel>
 #include <QSpinBox>
 

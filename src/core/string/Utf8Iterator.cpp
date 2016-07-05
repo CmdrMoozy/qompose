@@ -20,8 +20,8 @@
 
 #include <cassert>
 #include <climits>
-#include <stdexcept>
 #include <experimental/optional>
+#include <stdexcept>
 
 namespace
 {

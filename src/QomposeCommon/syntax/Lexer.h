@@ -19,8 +19,8 @@
 #ifndef INCLUDE_QOMPOSECOMMON_SYNTAX_LEXER_H
 #define INCLUDE_QOMPOSECOMMON_SYNTAX_LEXER_H
 
-#include <QObject>
 #include <QList>
+#include <QObject>
 
 namespace qompose
 {

@@ -21,8 +21,8 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <vector>
 #include <experimental/optional>
+#include <vector>
 
 #include <boost/flyweight.hpp>
 

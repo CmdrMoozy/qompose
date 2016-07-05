@@ -74,8 +74,7 @@ operator()(std::vector<std::string> const &v) const
 	std::string::size_type totalLength =
 	        std::accumulate<decltype(v.begin()), std::string::size_type>(
 	                v.begin(), v.end(), 0,
-	                [](std::string::size_type total, std::string const &s)
-	                {
+	                [](std::string::size_type total, std::string const &s) {
 		                return total + s.length();
 		        });
 	assert(oss.tellp() >= 0);

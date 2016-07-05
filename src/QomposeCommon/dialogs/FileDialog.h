@@ -20,8 +20,8 @@
 #define INCLUDE_QOMPOSECOMMON_DIALOGS_FILE_DIALOG_H
 
 #include <QFileDialog>
-#include <QString>
 #include <QList>
+#include <QString>
 
 #include "QomposeCommon/Types.h"
 

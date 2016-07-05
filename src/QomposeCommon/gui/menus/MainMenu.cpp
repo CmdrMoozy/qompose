@@ -44,9 +44,10 @@ using qompose::menu_desc::MenuItemDescriptor;
 using qompose::menu_desc::RecentMenuDescriptor;
 using qompose::menu_desc::SeparatorDescriptor;
 
-typedef std::vector<mapbox::util::variant<
-        MenuItemDescriptor, RecentMenuDescriptor, EncodingMenuDescriptor,
-        SeparatorDescriptor>> DescriptorList;
+typedef std::vector<
+        mapbox::util::variant<MenuItemDescriptor, RecentMenuDescriptor,
+                              EncodingMenuDescriptor, SeparatorDescriptor>>
+        DescriptorList;
 
 template <typename VariantType>
 QMenu *buildMenu(QWidget *parent, const std::string &title,
@@ -252,7 +253,7 @@ QMenu *createHelpMenu(QWidget *parent)
 	                            parentConn(SIGNAL(aboutQtTriggered(bool))),
 	                            QKeySequence(), "help-about")
 #ifdef QOMPOSE_DEBUG
-	         ,
+	                 ,
 	         SeparatorDescriptor(),
 	         MenuItemDescriptor("Debugging...",
 	                            parentConn(SIGNAL(debugTriggered(bool))))

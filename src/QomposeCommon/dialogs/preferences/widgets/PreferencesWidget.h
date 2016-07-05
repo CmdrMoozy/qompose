@@ -19,9 +19,9 @@
 #ifndef INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_WIDGETS_PREFERENCES_WIDGET_H
 #define INCLUDE_QOMPOSECOMMON_DIALOGS_PREFERENCES_WIDGETS_PREFERENCES_WIDGET_H
 
-#include <QWidget>
 #include <QIcon>
 #include <QString>
+#include <QWidget>
 
 namespace qompose
 {

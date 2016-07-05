@@ -21,9 +21,9 @@
 
 #include <QAbstractListModel>
 
+#include <QList>
 #include <QModelIndex>
 #include <QVariant>
-#include <QList>
 
 namespace qompose
 {

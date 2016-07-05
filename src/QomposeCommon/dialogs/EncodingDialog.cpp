@@ -18,14 +18,14 @@
 
 #include "EncodingDialog.h"
 
+#include <QByteArray>
 #include <QGridLayout>
 #include <QLabel>
-#include <QListWidget>
-#include <QPushButton>
 #include <QList>
-#include <QByteArray>
-#include <QTextCodec>
+#include <QListWidget>
 #include <QListWidgetItem>
+#include <QPushButton>
+#include <QTextCodec>
 
 #include "QomposeCommon/Defines.h"
 

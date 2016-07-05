@@ -189,8 +189,7 @@ TEST_CASE("Test HotkeyMap function lookup behavior", "[HotkeyMap]")
 	                     Qt::KeyboardModifiers(Qt::ControlModifier));
 
 	auto updateLastExecuted =
-	        [&hotkeys](const QKeyEvent &event) -> TestFunction
-	{
+	        [&hotkeys](const QKeyEvent &event) -> TestFunction {
 		auto function = hotkeys.getHotkeyHandler(&event);
 
 		if(function == nullptr)
