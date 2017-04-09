@@ -14,6 +14,7 @@
 
 use std::os::unix::io::RawFd;
 
+pub mod esc;
 pub mod key;
 pub mod mode;
 

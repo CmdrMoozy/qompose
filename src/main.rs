@@ -17,25 +17,29 @@ extern crate qompose;
 extern crate termios;
 
 use qompose::error::*;
+use qompose::term::esc;
 use qompose::term::key;
 use qompose::term::mode::RawModeHandle;
 use std::io::{self, Write};
+
+fn paint() -> Result<()> {
+    esc::apply(esc::erase_display(esc::EraseDisplayMode::All))?;
+    esc::apply(esc::move_cursor(None, None))?;
+    esc::flush()?;
+    Ok(())
+}
 
 fn run() -> Result<()> {
     let _raw_mode_handle = RawModeHandle::new()?;
 
     loop {
+        paint()?;
+
         if let Some(c) = key::read_key()? {
-            let mut bytes = [0; 4];
-            c.encode_utf8(&mut bytes);
-
-            if c.is_control() {
-                print!("{:?}\r\n", &bytes[0..c.len_utf8()]);
-            } else {
-                print!("{:?} ('{}')\r\n", &bytes[0..c.len_utf8()], c);
-            }
-
             if c == key::get_ctrl_key('q')? {
+                esc::apply(esc::erase_display(esc::EraseDisplayMode::All))?;
+                esc::apply(esc::move_cursor(None, None))?;
+                esc::flush()?;
                 break;
             }
         }
