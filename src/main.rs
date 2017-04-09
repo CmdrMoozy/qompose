@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#[macro_use]
 extern crate error_chain;
 extern crate qompose;
 extern crate termios;
@@ -21,30 +20,32 @@ use qompose::error::*;
 use qompose::term::mode::RawModeHandle;
 use std::io::{self, Read, Write};
 
-fn read_char_stdin() -> Result<char> {
-    Ok(char::from(match io::stdin().bytes().next() {
-        Some(c) => c?,
-        None => bail!("STDIN returned EOF"),
-    }))
+fn read_char_stdin() -> Result<Option<char>> {
+    let byte: Option<u8> = match io::stdin().bytes().next() {
+        Some(b) => Some(b?),
+        None => None,
+    };
+
+    Ok(byte.map(|b| char::from(b)))
 }
 
 fn run() -> Result<()> {
     let _raw_mode_handle = RawModeHandle::new()?;
 
     loop {
-        let c = read_char_stdin()?;
+        if let Some(c) = read_char_stdin()? {
+            let mut bytes = [0; 4];
+            c.encode_utf8(&mut bytes);
 
-        let mut bytes = [0; 4];
-        c.encode_utf8(&mut bytes);
+            if c.is_control() {
+                print!("{:?}\r\n", &bytes[0..c.len_utf8()]);
+            } else {
+                print!("{:?} ('{}')\r\n", &bytes[0..c.len_utf8()], c);
+            }
 
-        if c.is_control() {
-            print!("{:?}\r\n", &bytes[0..c.len_utf8()]);
-        } else {
-            print!("{:?} ('{}')\r\n", &bytes[0..c.len_utf8()], c);
-        }
-
-        if c == 'q' {
-            break;
+            if c == 'q' {
+                break;
+            }
         }
     }
 

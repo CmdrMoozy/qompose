@@ -37,6 +37,11 @@ impl RawModeHandle {
         // Ctrl-V (which sends the next character literally), and some signals.
         raw.c_lflag &= !(termios::ECHO | termios::ICANON | termios::IEXTEN | termios::ISIG);
 
+        // Return each byte from read(), or timeout on 0 bytes.
+        raw.c_cc[termios::VMIN] = 0;
+        // Timeout read() after 100ms of no bytes.
+        raw.c_cc[termios::VTIME] = 1;
+
         termios::tcsetattr(STDIN_FILENO, termios::TCSAFLUSH, &raw)?;
 
         Ok(RawModeHandle { original_termios: original })
