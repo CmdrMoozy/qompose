@@ -14,6 +14,7 @@
 
 use std::os::unix::io::RawFd;
 
+pub mod key;
 pub mod mode;
 
 pub const STDIN_FILENO: RawFd = 0;

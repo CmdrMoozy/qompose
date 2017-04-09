@@ -17,23 +17,15 @@ extern crate qompose;
 extern crate termios;
 
 use qompose::error::*;
+use qompose::term::key;
 use qompose::term::mode::RawModeHandle;
-use std::io::{self, Read, Write};
-
-fn read_char_stdin() -> Result<Option<char>> {
-    let byte: Option<u8> = match io::stdin().bytes().next() {
-        Some(b) => Some(b?),
-        None => None,
-    };
-
-    Ok(byte.map(|b| char::from(b)))
-}
+use std::io::{self, Write};
 
 fn run() -> Result<()> {
     let _raw_mode_handle = RawModeHandle::new()?;
 
     loop {
-        if let Some(c) = read_char_stdin()? {
+        if let Some(c) = key::read_key()? {
             let mut bytes = [0; 4];
             c.encode_utf8(&mut bytes);
 
@@ -43,7 +35,7 @@ fn run() -> Result<()> {
                 print!("{:?} ('{}')\r\n", &bytes[0..c.len_utf8()], c);
             }
 
-            if c == 'q' {
+            if c == key::get_ctrl_key('q')? {
                 break;
             }
         }
