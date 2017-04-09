@@ -33,6 +33,16 @@ fn run() -> Result<()> {
 
     loop {
         let c = read_char_stdin()?;
+
+        let mut bytes = [0; 4];
+        c.encode_utf8(&mut bytes);
+
+        if c.is_control() {
+            println!("{:?}", &bytes[0..c.len_utf8()]);
+        } else {
+            println!("{:?} ('{}')", &bytes[0..c.len_utf8()], c);
+        }
+
         if c == 'q' {
             break;
         }

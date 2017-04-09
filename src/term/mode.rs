@@ -25,7 +25,7 @@ impl RawModeHandle {
         let mut raw = Termios::from_fd(STDIN_FILENO)?;
         let original = raw.clone();
 
-        raw.c_lflag &= !termios::ECHO;
+        raw.c_lflag &= !(termios::ECHO | termios::ICANON);
 
         termios::tcsetattr(STDIN_FILENO, termios::TCSAFLUSH, &raw)?;
 
