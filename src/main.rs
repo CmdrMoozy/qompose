@@ -18,19 +18,8 @@ extern crate qompose;
 extern crate termios;
 
 use qompose::error::*;
+use qompose::term::mode::RawModeHandle;
 use std::io::{self, Read, Write};
-use std::os::unix::io::RawFd;
-use termios::Termios;
-
-const STDIN_FILENO: RawFd = 0;
-
-fn enable_raw_mode() -> Result<()> {
-    let mut raw = Termios::from_fd(STDIN_FILENO)?;
-
-    raw.c_lflag &= !termios::ECHO;
-
-    Ok(termios::tcsetattr(STDIN_FILENO, termios::TCSAFLUSH, &raw)?)
-}
 
 fn read_char_stdin() -> Result<char> {
     Ok(char::from(match io::stdin().bytes().next() {
@@ -40,7 +29,7 @@ fn read_char_stdin() -> Result<char> {
 }
 
 fn run() -> Result<()> {
-    enable_raw_mode()?;
+    let _raw_mode_handle = RawModeHandle::new()?;
 
     loop {
         let c = read_char_stdin()?;

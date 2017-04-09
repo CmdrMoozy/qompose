@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#[macro_use]
-extern crate error_chain;
-extern crate termios;
+use std::os::unix::io::RawFd;
 
-pub mod error;
-pub mod term;
+pub mod mode;
+
+pub const STDIN_FILENO: RawFd = 0;
