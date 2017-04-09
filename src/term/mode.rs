@@ -25,7 +25,17 @@ impl RawModeHandle {
         let mut raw = Termios::from_fd(STDIN_FILENO)?;
         let original = raw.clone();
 
-        raw.c_lflag &= !(termios::ECHO | termios::ICANON);
+        // Turn off break, '\r' translation, parity check, strip char, and software
+        // flow control (Ctrl-{S,Q}).
+        raw.c_iflag &= !(termios::BRKINT | termios::ICRNL | termios::INPCK | termios::ISTRIP |
+                         termios::IXON);
+        // Turn off all output post-processing.
+        raw.c_oflag &= !(termios::OPOST);
+        // Set 8 bit chars explicitly.
+        raw.c_cflag |= termios::CS8;
+        // Turn off character echoing, canonical mode (wait for 'enter' to read),
+        // Ctrl-V (which sends the next character literally), and some signals.
+        raw.c_lflag &= !(termios::ECHO | termios::ICANON | termios::IEXTEN | termios::ISIG);
 
         termios::tcsetattr(STDIN_FILENO, termios::TCSAFLUSH, &raw)?;
 

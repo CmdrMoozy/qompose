@@ -38,9 +38,9 @@ fn run() -> Result<()> {
         c.encode_utf8(&mut bytes);
 
         if c.is_control() {
-            println!("{:?}", &bytes[0..c.len_utf8()]);
+            print!("{:?}\r\n", &bytes[0..c.len_utf8()]);
         } else {
-            println!("{:?} ('{}')", &bytes[0..c.len_utf8()], c);
+            print!("{:?} ('{}')\r\n", &bytes[0..c.len_utf8()], c);
         }
 
         if c == 'q' {
