@@ -26,18 +26,23 @@ use std::io::{self, Write};
 fn paint() -> Result<()> {
     let (lines, _) = util::get_terminal_size()?;
 
-    esc::apply(esc::erase_display(esc::EraseDisplayMode::All))?;
-    esc::apply(esc::move_cursor(None, None))?;
+    let mut buf: Vec<u8> = vec![];
+
+    esc::apply_write(&mut buf, esc::hide_cursor())?;
+    esc::apply_write(&mut buf, esc::erase_display(esc::EraseDisplayMode::All))?;
+    esc::apply_write(&mut buf, esc::move_cursor(None, None))?;
 
     for l in 0..lines {
-        write!(io::stdout(), "~")?;
+        write!(buf, "~")?;
         if l < lines - 1 {
-            write!(io::stdout(), "\r\n")?;
+            write!(buf, "\r\n")?;
         }
     }
-    esc::apply(esc::move_cursor(None, None))?;
+    esc::apply_write(&mut buf, esc::move_cursor(None, None))?;
+    esc::apply_write(&mut buf, esc::show_cursor())?;
 
-    esc::flush()?;
+    io::stdout().write_all(buf.as_slice())?;
+    io::stdout().flush()?;
     Ok(())
 }
 

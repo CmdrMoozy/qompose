@@ -25,8 +25,6 @@ pub enum EraseDisplayMode {
     All,
 }
 
-pub fn cursor_position_report() -> Vec<u8> { escape_sequence("6n") }
-
 pub fn erase_display(mode: EraseDisplayMode) -> Vec<u8> {
     match mode {
         EraseDisplayMode::PositionToEnd => escape_sequence("0J"),
@@ -34,6 +32,12 @@ pub fn erase_display(mode: EraseDisplayMode) -> Vec<u8> {
         EraseDisplayMode::All => escape_sequence("2J"),
     }
 }
+
+pub fn hide_cursor() -> Vec<u8> { escape_sequence("?25l") }
+
+pub fn show_cursor() -> Vec<u8> { escape_sequence("?25h") }
+
+pub fn cursor_position_report() -> Vec<u8> { escape_sequence("6n") }
 
 pub fn move_cursor(line: Option<usize>, column: Option<usize>) -> Vec<u8> {
     escape_sequence(format!("{};{}H", line.unwrap_or(1), column.unwrap_or(1)).as_str())
@@ -45,10 +49,11 @@ pub fn move_cursor_forward(columns: usize) -> Vec<u8> {
     escape_sequence(format!("{}C", columns).as_str())
 }
 
-pub fn apply(seq: Vec<u8>) -> Result<()> {
-    let mut stdout = io::stdout();
-    Ok(stdout.write_all(seq.as_slice())?)
+pub fn apply_write<W: Write>(w: &mut W, seq: Vec<u8>) -> Result<()> {
+    Ok(w.write_all(seq.as_slice())?)
 }
+
+pub fn apply(seq: Vec<u8>) -> Result<()> { apply_write(&mut io::stdout(), seq) }
 
 pub fn flush() -> Result<()> {
     let mut stdout = io::stdout();
