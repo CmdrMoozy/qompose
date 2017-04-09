@@ -25,6 +25,8 @@ pub enum EraseDisplayMode {
     All,
 }
 
+pub fn cursor_position_report() -> Vec<u8> { escape_sequence("6n") }
+
 pub fn erase_display(mode: EraseDisplayMode) -> Vec<u8> {
     match mode {
         EraseDisplayMode::PositionToEnd => escape_sequence("0J"),
@@ -35,6 +37,12 @@ pub fn erase_display(mode: EraseDisplayMode) -> Vec<u8> {
 
 pub fn move_cursor(line: Option<usize>, column: Option<usize>) -> Vec<u8> {
     escape_sequence(format!("{};{}H", line.unwrap_or(1), column.unwrap_or(1)).as_str())
+}
+
+pub fn move_cursor_down(lines: usize) -> Vec<u8> { escape_sequence(format!("{}B", lines).as_str()) }
+
+pub fn move_cursor_forward(columns: usize) -> Vec<u8> {
+    escape_sequence(format!("{}C", columns).as_str())
 }
 
 pub fn apply(seq: Vec<u8>) -> Result<()> {

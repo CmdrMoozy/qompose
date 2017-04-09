@@ -20,11 +20,23 @@ use qompose::error::*;
 use qompose::term::esc;
 use qompose::term::key;
 use qompose::term::mode::RawModeHandle;
+use qompose::term::util;
 use std::io::{self, Write};
 
 fn paint() -> Result<()> {
+    let (lines, _) = util::get_terminal_size()?;
+
     esc::apply(esc::erase_display(esc::EraseDisplayMode::All))?;
     esc::apply(esc::move_cursor(None, None))?;
+
+    for l in 0..lines {
+        write!(io::stdout(), "~")?;
+        if l < lines - 1 {
+            write!(io::stdout(), "\r\n")?;
+        }
+    }
+    esc::apply(esc::move_cursor(None, None))?;
+
     esc::flush()?;
     Ok(())
 }
