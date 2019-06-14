@@ -12,10 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-extern crate error_chain;
-extern crate qompose;
-extern crate termios;
-
 use qompose::error::*;
 use qompose::term::esc;
 use qompose::term::key;
@@ -67,8 +63,7 @@ fn run() -> Result<()> {
 
 fn main() {
     if let Err(e) = run() {
-        use error_chain::ChainedError;
         let mut stderr = io::stderr();
-        writeln!(stderr, "{}", e.display()).expect("Error writing to STDERR");
+        writeln!(stderr, "{}", e).expect("Error writing to STDERR");
     }
 }

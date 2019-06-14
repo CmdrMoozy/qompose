@@ -12,9 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-error_chain! {
-    foreign_links {
-        Io(::std::io::Error);
-        ParseInt(::std::num::ParseIntError);
+use failure::Fail;
+
+#[derive(Debug, Fail)]
+pub enum Error {
+    #[fail(display = "{}", _0)]
+    Io(#[cause] ::std::io::Error),
+
+    #[fail(display = "{}", _0)]
+    ParseInt(#[cause] ::std::num::ParseIntError),
+}
+
+impl From<::std::io::Error> for Error {
+    fn from(e: ::std::io::Error) -> Self {
+        Error::Io(e)
     }
 }
+
+impl From<::std::num::ParseIntError> for Error {
+    fn from(e: ::std::num::ParseIntError) -> Self {
+        Error::ParseInt(e)
+    }
+}
+
+pub type Result<T> = ::std::result::Result<T, ::failure::Error>;

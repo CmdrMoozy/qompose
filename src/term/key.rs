@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use error::*;
+use crate::error::*;
+use failure::bail;
 use std::io;
 
 /// Given a character c, return the character we would read on STDIN when the

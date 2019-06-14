@@ -2,7 +2,8 @@
 name = "qompose"
 version = "0.1.0"
 authors = ["Axel Rasmussen <axel.rasmussen1@gmail.com>"]
+edition = "2018"
 
 [dependencies]
-error-chain = "0.10"
-termios = "0.2"
+failure = "0.1"
+termios = "0.3"

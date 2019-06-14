@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use error::*;
-use term::STDIN_FILENO;
+use crate::error::*;
+use crate::term::STDIN_FILENO;
 use termios::{self, Termios};
 
 pub struct RawModeHandle {
@@ -27,8 +27,8 @@ impl RawModeHandle {
 
         // Turn off break, '\r' translation, parity check, strip char, and software
         // flow control (Ctrl-{S,Q}).
-        raw.c_iflag &= !(termios::BRKINT | termios::ICRNL | termios::INPCK | termios::ISTRIP |
-                         termios::IXON);
+        raw.c_iflag &=
+            !(termios::BRKINT | termios::ICRNL | termios::INPCK | termios::ISTRIP | termios::IXON);
         // Turn off all output post-processing.
         raw.c_oflag &= !(termios::OPOST);
         // Set 8 bit chars explicitly.
@@ -44,7 +44,9 @@ impl RawModeHandle {
 
         termios::tcsetattr(STDIN_FILENO, termios::TCSAFLUSH, &raw)?;
 
-        Ok(RawModeHandle { original_termios: original })
+        Ok(RawModeHandle {
+            original_termios: original,
+        })
     }
 }
 

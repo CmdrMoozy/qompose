@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use error::*;
+use crate::error::*;
+use crate::term::esc;
+use failure::bail;
 use std::io::{self, Read};
 use std::iter::FromIterator;
-use term::esc;
 
 const MAX_CURSOR_POSITION_REPORT_LENGTH: usize = 1024;
 
@@ -48,8 +49,12 @@ pub fn get_cursor_position() -> Result<(usize, usize)> {
         }
     }
 
-    if split_idx == 0 || chars.len() < 6 || chars[0] != char::from(0x1b_u8) || chars[1] != '[' ||
-       chars[chars.len() - 1] != 'R' {
+    if split_idx == 0
+        || chars.len() < 6
+        || chars[0] != char::from(0x1b_u8)
+        || chars[1] != '['
+        || chars[chars.len() - 1] != 'R'
+    {
         bail!("Cursor position report format is invalid");
     }
 
